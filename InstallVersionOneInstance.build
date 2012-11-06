@@ -1,0 +1,45 @@
+<project name='VersionOne.Installation' default='preparation'>
+	<target name='preparation'>
+		<call target='init' />
+		<call target='uninstallv1' />
+		<call target='restoredb' />
+		<call target='installv1' />
+	</target>
+
+	<target name='init'>
+		<loadtasks path="Common\NAnt" />
+		<property name='v1ultimate.setup.exe' value='Common\Data\VersionOne.Setup-Ultimate.exe' />
+		<property name='test.backup.file' value='Common\Data\V1SDKTests.bak' />
+		<property name='test.sqlserver.name' value='(local)' overwrite='false' />
+		<property name='test.license.file' value='Common\Data\Licenses\VersionOne.Ultimate.lic' />
+		<property name='test.instance.name' value='V1JavaSDKTests' />
+	</target>
+
+	<target name='uninstallv1'>
+		<echo message="Unisnstall instance before reinstalling..."/>
+		<echo message='${v1ultimate.setup.exe} -DeleteDatabase -Quiet:2 -u ${test.instance.name}' />
+		<exec program='${v1ultimate.setup.exe}' commandline='-DeleteDatabase -Quiet:2 -u ${test.instance.name}' failonerror='false' />
+		<echo message="Uninstall completed"/>
+	</target>
+
+	<target name='restoredb'>
+		<echo message='Restoring database file...' />
+		<restoredb verbose='true' echosql='true' 
+			connstring="Provider=sqloledb;Data Source=${test.sqlserver.name};Initial Catalog=master;Integrated Security=SSPI;" 
+			backupfilename="${path::get-full-path(test.backup.file)}"
+			databasename="${test.instance.name}"
+			replace="true"
+			shrinkdb="true"
+			simplerecovery="true"
+		/>
+		<echo message='Restore completed' />
+	</target>
+	
+	<target name='installv1'>
+		<echo message='Installing instance...' />
+		<echo message='${v1ultimate.setup.exe} -Quiet:2 ${test.instance.name} DbServer:${test.sqlserver.name} -DBName:${test.instance.name}' />
+		<exec program='${v1ultimate.setup.exe}' commandline='-Quiet:2 ${test.instance.name} -Edition:Scrum -DbServer:${test.sqlserver.name} -DBName:${test.instance.name}' />
+		<echo message='Install completed' />
+	</target>
+</project>
+
