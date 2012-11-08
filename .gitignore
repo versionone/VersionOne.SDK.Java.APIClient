@@ -1,9 +1,29 @@
+## Java Compiled/Package Files##
 *.class
-
-# Package Files #
 *.jar
 *.war
 *.ear
 
+## Eclipse Files ##
+.metadata/
+.settings/
+.externalToolBuilders/
+bin/
+*.launch
+local.properties
+
+## Maven Files ##
 target/
+
+## Temp Files##
+tmp/
+*.bak
+*.tmp
+*.swp
+~$*
+[Tt]humbs.db
+*.DS_Store
+
+## Subversion files ##
+.svn
 
