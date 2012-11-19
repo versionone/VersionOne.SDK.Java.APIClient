@@ -14,19 +14,15 @@
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <test.websiteurl>http://localhost/V1SDKTests</test.websiteurl>
   </properties>
-<repositories>
+<distributionManagement>
     <repository>
-        <id>java.net-Public</id>
-        <name>Maven Java Net Snapshots and Releases</name>
-        <url>https://maven.java.net/content/groups/public/</url>
-      
+        <id>BUILDSERVER1</id>
+        <name>BUILDSERVER1-releases</name>
+        <url>http://buildserver1:8081/artifactory/libs-release-local</url>
     </repository>
-    <repository>
-      <id>repository.jboss.org-public</id>
-      <name>JBoss.org Maven repository</name>
-      <url>https://repository.jboss.org/nexus/content/groups/public</url>
-    </repository>  
-</repositories>
+</distributionManagement>
+ 
+
 
   <ciManagement>
   	<url>http://localhost/V1SDKTests</url>
