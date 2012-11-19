@@ -3,12 +3,12 @@
   <modelVersion>4.0.0</modelVersion>
 
   <groupId>com.versionone</groupId>
-  <artifactId>VersionOne.SDK.Java.API</artifactId>
-  <version>0.0.1</version>
+  <artifactId>VersionOne.SDK.Java.APIClient</artifactId>
+  <version>1.0.0.0</version>
   <packaging>jar</packaging>
 
-  <name>VersionOne.SDK.Java.API</name>
-  <url>http://maven.apache.org</url>
+  <name>VersionOne.SDK.Java.APIClient</name>
+  <url>https://github.com/versionone/VersionOne.SDK.Java.APIClient</url>
 
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
