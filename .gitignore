@@ -3,6 +3,7 @@
 *.jar
 *.war
 *.ear
+.project
 
 ## Eclipse Files ##
 .metadata/
