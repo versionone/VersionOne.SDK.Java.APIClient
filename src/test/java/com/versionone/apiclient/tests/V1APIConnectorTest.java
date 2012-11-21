@@ -35,11 +35,8 @@ import com.versionone.apiclient.V1APIConnector;
  * @author jerry
  */
 public class V1APIConnectorTest {
-	//private static final String V1_PATH = "http://nitrogen/apiclienttest/";
-	//private static final String V1_PATH = "http://integsrv01.internal.corp/versiononetest/";
-	//private static final String V1_PATH = System.getProperty("test.websiteurl"); //"http://localhost/V1SDKTests/";
-	private static final String V1_PATH = "http://localhost/V1SDKTests/";
-	
+
+	private static final String V1_PATH = "http://localhost/VersionOne.SDK.Java.APIClient.Tests/";	
 
 	@Before
 	public void clearCookes() {

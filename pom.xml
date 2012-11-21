@@ -12,7 +12,7 @@
 
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    <test.websiteurl>http://localhost/V1SDKTests</test.websiteurl>
+    <test.websiteurl>http://localhost/VersionOne.SDK.Java.APIClient.Tests</test.websiteurl>
   </properties>
 <distributionManagement>
     <repository>
@@ -25,7 +25,7 @@
 
 
   <ciManagement>
-  	<url>http://localhost/V1SDKTests</url>
+  	<url>http://localhost/VersionOne.SDK.Java.APIClient.Tests</url>
   </ciManagement>
   <dependencies>
   	<dependency>
