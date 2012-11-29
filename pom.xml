@@ -21,9 +21,6 @@
         <url>http://buildserver1:8081/artifactory/libs-release-local</url>
     </repository>
 </distributionManagement>
- 
-
-
   <ciManagement>
   	<url>http://localhost/VersionOne.SDK.Java.APIClient.Tests</url>
   </ciManagement>
@@ -33,7 +30,6 @@
   		<artifactId>fitnesse</artifactId>
   		<version>20111025</version>
   	</dependency>
-
   	<dependency>
   		<groupId>org.jmock</groupId>
   		<artifactId>jmock-junit4</artifactId>
