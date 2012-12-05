@@ -15,7 +15,7 @@ public class LocalizerTester extends LocalizerTesterBase {
 	{
         System.out.println("Def encoding: "+System.getProperty("file.encoding"));
 		Assert.assertEquals("Resolve To Simple", getLoc().resolve("Simple"));
-		Assert.assertEquals("Это по-руccки", getLoc().resolve("Russian"));
+		Assert.assertEquals("Это по-русски", getLoc().resolve("Russian"));
 	}
 	
 	@Test public void ReturnInput()
