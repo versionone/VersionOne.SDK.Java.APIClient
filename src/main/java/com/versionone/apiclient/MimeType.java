@@ -12,12 +12,13 @@ import java.util.Properties;
 public class MimeType {
     static FileNameMap fileNameMap = URLConnection.getFileNameMap();
     static Properties customMap = new Properties();
+    static String MAPPING_FILE = "MimeType.properties";
 
     static {
         try {
-            customMap.load(MimeType.class.getResourceAsStream("MimeType.properties"));
+            customMap.load(MimeType.class.getResourceAsStream(MAPPING_FILE));
         } catch (IOException e) {
-            //do nothing
+            throw new RuntimeException("Cannot find mime type mapping file: " + MAPPING_FILE, e);
         }
     }
 
