@@ -12,6 +12,9 @@ bin/
 *.launch
 local.properties
 
+## InteliJ IDEA Files ##
+.idea/
+
 ## Maven Files ##
 target/
 
