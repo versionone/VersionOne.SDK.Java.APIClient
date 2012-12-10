@@ -9,61 +9,49 @@ import java.util.Iterator;
 import java.util.List;
 
 import com.versionone.Oid;
-import com.versionone.apiclient.APIException;
-import com.versionone.apiclient.Asset;
-import com.versionone.apiclient.AssetState;
-import com.versionone.apiclient.ConnectionException;
-import com.versionone.apiclient.FilterTerm;
-import com.versionone.apiclient.IAPIConnector;
-import com.versionone.apiclient.IAssetType;
-import com.versionone.apiclient.IAttributeDefinition;
-import com.versionone.apiclient.IMetaModel;
-import com.versionone.apiclient.IOperation;
-import com.versionone.apiclient.IServices;
-import com.versionone.apiclient.MetaModel;
-import com.versionone.apiclient.OidException;
-import com.versionone.apiclient.OrderBy;
-import com.versionone.apiclient.ProxyProvider;
-import com.versionone.apiclient.Query;
-import com.versionone.apiclient.QueryResult;
-import com.versionone.apiclient.Services;
-import com.versionone.apiclient.V1APIConnector;
+import com.versionone.apiclient.*;
 
 /**
  * This class contains the examples used : the API documentation
- *
- * @author Jerry D. Odenwelder Jr.
  */
 public class DataExamples {
-    private final String v1Url = "http://localhost/VersionOne/";
+    private final String v1Url = "https://www14.v1host.com/v1sdktesting/";
     private final String dataUrl = v1Url + "rest-1.v1/";
     private final String metaUrl = v1Url + "meta.v1/";
     private final String username = "admin";
     private final String password = "admin";
-    private final static String proxyAddress = "http://proxy:3128";
+    private final static String proxyAddress = "https://myProxyServer:3128";
     private final static String proxyUserName = "user1";
-    private final static String proxyPassword = "user1";
+    private final static String proxyPassword = "pw1";
     private IMetaModel metaModel;
     private IServices services;
 
+    private V1APIConnector getDataConnector() {
+        return new V1APIConnector(dataUrl, username, password);
+    }
+
+    private V1APIConnector getMetaConnector() {
+        return new V1APIConnector(metaUrl);
+    }
+
     public DataExamples() {
-        V1APIConnector dataConnector = new V1APIConnector(dataUrl, username, password);
-        V1APIConnector metaConnector = new V1APIConnector(metaUrl);
+        V1APIConnector dataConnector = getDataConnector();
+        V1APIConnector metaConnector = getMetaConnector();
         metaModel = new MetaModel(metaConnector);
         services = new Services(metaModel, dataConnector);
     }
 
     public void SetUpServicesV1Authentication() {
-        V1APIConnector dataConnector = new V1APIConnector("http://server/v1instance/rest-1.v1/", "username", "password");
-        V1APIConnector metaConnector = new V1APIConnector("http://server/v1instance/meta.v1/");
+        V1APIConnector dataConnector = getDataConnector();
+        V1APIConnector metaConnector = getMetaConnector();
         IMetaModel metaModel = new MetaModel(metaConnector);
         @SuppressWarnings("unused")
         IServices services = new Services(metaModel, dataConnector);
     }
 
     public void SetUpServicesWindowsAuthenticationLoggedInUser() {
-        V1APIConnector dataConnector = new V1APIConnector("http://server/v1instance/rest-1.v1/");
-        V1APIConnector metaConnector = new V1APIConnector("http://server/v1instance/meta.v1/");
+        V1APIConnector dataConnector = getDataConnector();
+        V1APIConnector metaConnector = getMetaConnector();
         IMetaModel metaModel = new MetaModel(metaConnector);
         @SuppressWarnings("unused")
         IServices services = new Services(metaModel, dataConnector);
@@ -106,6 +94,21 @@ public class DataExamples {
         return member;
     }
 
+    public void GetV1configuration()
+    {
+        V1Configuration configuration = new V1Configuration(new V1APIConnector("https://www14.v1host.com/v1sdktesting/config.v1/"));
+    }
+
+    public boolean IsEffortTrackingEnabled() throws Exception
+    {
+        V1Configuration configuration = new V1Configuration(new V1APIConnector("https://www14.v1host.com/v1sdktesting/config.v1/"));
+        return configuration.isEffortTracking();
+
+        /***** OUTPUT *****
+         False
+         ******************/
+    }
+
     public Asset[] ListOfAssets() throws Exception {
         IAssetType storyType = metaModel.getAssetType("Story");
         Query query = new Query(storyType);
@@ -129,6 +132,37 @@ public class DataExamples {
          Story:1554
          Multi-View Customer Calendar
          1 ...
+         ******************/
+
+        return result.getAssets();
+    }
+
+    public Asset[] FindListOfAssets() throws Exception
+    {
+        IAssetType requestType = metaModel.getAssetType("Request");
+        Query query = new Query(requestType);
+        IAttributeDefinition nameAttribute = requestType.getAttributeDefinition("Name");
+
+        query.getSelection().add(nameAttribute);
+
+        AttributeSelection selection = new AttributeSelection();
+        selection.add(nameAttribute);
+        query.setFind(new QueryFind("Urgent", selection));
+
+        QueryResult result = services.retrieve(query);
+
+        for (Asset request : result.getAssets())
+        {
+            System.out.println(request.getOid().getToken());
+            System.out.println(request.getAttribute(nameAttribute).getValue());
+            System.out.println();
+        }
+        /***** OUTPUT *****
+         Request:1195
+         Urgent!  Filter by owner
+
+         Task:1244
+         Urgent: improve search performance ...
          ******************/
 
         return result.getAssets();
@@ -295,6 +329,18 @@ public class DataExamples {
         return memberHistory;
     }
 
+    public void StoryAndDefectTrackingLevel() throws Exception
+    {
+        V1Configuration configuration = new V1Configuration(new V1APIConnector("https://www14.v1host.com/v1sdktesting/config.v1/"));
+
+        System.out.println(configuration.getStoryTrackingLevel());
+        System.out.println(configuration.getDefectTrackingLevel());
+
+        /***** OUTPUT *****
+         Off
+         On
+         ******************/
+    }
     public Asset[] HistoryAsOfTime() throws Exception {
         IAssetType storyType = metaModel.getAssetType("Story");
         Query query = new Query(storyType, true);

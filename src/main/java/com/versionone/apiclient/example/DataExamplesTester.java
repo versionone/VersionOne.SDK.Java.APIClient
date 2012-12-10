@@ -18,6 +18,11 @@ public class DataExamplesTester {
     }
 
     @Test
+    public void TestIsEffortTrackingEnabled() throws Exception{
+        Assert.assertFalse(docExamples.IsEffortTrackingEnabled());
+    }
+
+    @Test
     public void TestSingleAsset() throws Exception {
         Asset member = docExamples.SingleAsset();
         Assert.assertNotNull(member);
@@ -73,6 +78,13 @@ public class DataExamplesTester {
         Assert.assertNotNull(members);
         Assert.assertTrue(members.length > 0);
     }
+
+    @Test
+    public void TestGetV1Configuration() throws Exception {
+        docExamples.GetV1configuration();
+    }
+
+
 
     @Test
     public void TestUpdateScalarAttribute() throws Exception {
