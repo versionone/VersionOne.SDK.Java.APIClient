@@ -4,16 +4,42 @@
 
   <groupId>com.versionone</groupId>
   <artifactId>VersionOne.SDK.Java.APIClient</artifactId>
-  <version>1.0.0.0</version>
+  <version>1.1.0</version>
   <packaging>jar</packaging>
 
   <name>VersionOne.SDK.Java.APIClient</name>
   <url>https://github.com/versionone/VersionOne.SDK.Java.APIClient</url>
-
+  <description>VersionOne, Inc. Java APIClient</description>
+  <licenses>      
+        <license>
+            <name>VersionOne, Inc.</name>
+            <url>https://github.com/versionone/VersionOne.SDK.Java.APIClient/blob/master/LICENSE.md</url>
+            <distribution>repo</distribution>
+        </license>
+  </licenses>
+  <scm>
+      <url>https://github.com/versionone/VersionOne.SDK.Java.ObjectModel</url>
+      <connection>NA</connection>
+  </scm>
+  <developers>
+      <developer>
+          <name>Ian Buchanan</name>
+          <email>ian.buchanan@versionone.com</email>
+      </developer>
+      <developer>
+          <name>Greg Johnson</name>
+          <email>greg.johnson@versionone.com</email>
+      </developer>
+  </developers>
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
   </properties>
 <distributionManagement>
+    <snapshotRepository>
+        <id>BUILDSERVER1</id>
+        <name>BUILDSERVER1-snapshots</name>
+        <url>http://buildserver1:8081/artifactory/libs-snapshot-local</url>
+    </snapshotRepository>
     <repository>
         <id>BUILDSERVER1</id>
         <name>BUILDSERVER1-releases</name>
