@@ -19,17 +19,20 @@ built with a dependency on the  VersionOne SDK.Java can be commercial or
 open source, as the authors see fit.
 
 ## System Requirements ##
-* Java Development Kit 1.6
+* Java Development Kit 1.7
+
+## Supported IDEs ##
+Eclipse or IntelliJ IDEA
 
 ## How to get the library as a precompiled package
 
 _Do this if you only want to use the functionality, but are not interested in compiling from source or in contributing code to the project._
 
-Use the NuGet package manager from Visual Studio or nuget.exe. Search for `VersionOne.SDK.Java.APIClient` to find the precompiled package. VersionOne tests packages distributed via NuGet against product releases as they become available. For details, see [the specific versions tested](https://github.com/versionone/VersionOne.SDK.Java.APIClient/wiki/Which-product-releases-has-the-APIClient-library-been-tested-against%3F). Learn more about NuGet from [the NuGet Overview](http://docs.nuget.org/docs/start-here/overview).
+You can edit the pom.xml file for your project to include the following XML in order to import the current version of the Java APIClient into your project.  More information on using Maven can be found here:  http://maven.apache.org/guides/introduction/introduction-to-the-pom.html.
 
 ## Learn By Example: APIClient Setup
 
-Using the APIClient is as simple as making a reference to the APIClient.dll in your .Net project, then providing connection information to the main service objects within the APIClient. There are three possible ways to connect to your VersionOne instance using the APIClient. Before you attempt to connect, find out whether your VersionOne instance uses VersionOne authentication or Windows Integrated Authentication. You need to create an instance of IMetaModel and and instance of IServices and provide them with connection information via instances of the V1APIConnector.
+Using the Java APIClient is as simple as making a reference to the VersionOne.SDK.Java.APIClient-XXX.jar in your Java project, then providing connection information to the main service objects within the APIClient. There are three possible ways to connect to your VersionOne instance using the APIClient. Before you attempt to connect, find out whether your VersionOne instance uses VersionOne authentication or Windows Integrated Authentication. You need to create an instance of IMetaModel and and instance of IServices and provide them with connection information via instances of the V1APIConnector.
 
 ### Setup using VersionOne Authentication
 
@@ -74,20 +77,19 @@ This section is a series of examples, starting with simpler queries and moving t
 Retrieve the Member with ID 20:
 
 ```java
-public Asset SingleAsset()
-{
-    Oid memberId = Oid.FromToken("Member:20", metaModel);
-    Query query = new Query(memberId);
-    QueryResult result = services.Retrieve(query);
-    Asset member = result.Assets[0];
+public Asset SingleAsset() throws Exception {
+        Oid memberId = Oid.fromToken("Member:20", metaModel);
+        Query query = new Query(memberId);
+        QueryResult result = services.retrieve(query);
+        Asset member = result.getAssets()[0];
 
-    Console.WriteLine(member.Oid.Token);
-    /***** OUTPUT *****
-        Member:20
-    ******************/
+        System.out.println(member.getOid().getToken());
+        /***** OUTPUT *****
+         Member:20
+         ******************/
 
-    return member;
-}
+        return member;
+    }
 ```
 
 In this example, the asset will have its Oid populated, but will not have any other attributes populated. This is to minimize the size of the data sets returned. The next example shows how to ask for an asset with specific attributes populated.
@@ -97,105 +99,100 @@ In this example, the asset will have its Oid populated, but will not have any ot
 Retrieve an asset with populated attributes by using the Selection property of the Query object.
 
 ```java
-public Asset SingleAssetWithAttributes()
-{
-    Oid memberId = Oid.FromToken("Member:20", metaModel);
-    Query query = new Query(memberId);
-    IAttributeDefinition nameAttribute = metaModel.GetAttributeDefinition("Member.Name");
-    IAttributeDefinition emailAttribute = metaModel.GetAttributeDefinition("Member.Email");
-    query.Selection.Add(nameAttribute);
-    query.Selection.Add(emailAttribute);
-    QueryResult result = services.Retrieve(query);
-    Asset member = result.Assets[0];
+public Asset SingleAssetWithAttributes() throws Exception {
+        Oid memberId = Oid.fromToken("Member:20", metaModel);
+        Query query = new Query(memberId);
+        IAttributeDefinition nameAttribute = metaModel.getAttributeDefinition("Member.Name");
+        IAttributeDefinition emailAttribute = metaModel.getAttributeDefinition("Member.Email");
+        query.getSelection().add(nameAttribute);
+        query.getSelection().add(emailAttribute);
+        QueryResult result = services.retrieve(query);
+        Asset member = result.getAssets()[0];
 
-    Console.WriteLine(member.Oid.Token);
-    Console.WriteLine(member.GetAttribute(nameAttribute).Value);
-    Console.WriteLine(member.GetAttribute(emailAttribute).Value);
-    /***** OUTPUT *****
-        Member:20
-        Administrator
-        admin@company.com
-    ******************/
+        System.out.println(member.getOid().getToken());
+        System.out.println(member.getAttribute(nameAttribute).getValue());
+        System.out.println(member.getAttribute(emailAttribute).getValue());
 
-    return member;
-}
+        /***** OUTPUT *****
+         Member:20
+         Administrator
+         admin@company.com
+         ******************/
+
+        return member;
+    }
 ```
 
 ### How to get a list of all Story assets
 
 ```java
-public AssetList ListOfAssets()
-{
-    IAssetType storyType = metaModel.GetAssetType("Story");
-    Query query = new Query(storyType);
-    IAttributeDefinition nameAttribute = storyType.GetAttributeDefinition("Name");
-    IAttributeDefinition estimateAttribute = storyType.GetAttributeDefinition("Estimate");
-    query.Selection.Add(nameAttribute);
-    query.Selection.Add(estimateAttribute);
-    QueryResult result = services.Retrieve(query);
+public Asset[] ListOfAssets() throws Exception {
+        IAssetType storyType = metaModel.getAssetType("Story");
+        Query query = new Query(storyType);
+        IAttributeDefinition nameAttribute = storyType.getAttributeDefinition("Name");
+        IAttributeDefinition estimateAttribute = storyType.getAttributeDefinition("Estimate");
+        query.getSelection().add(nameAttribute);
+        query.getSelection().add(estimateAttribute);
+        QueryResult result = services.retrieve(query);
 
-    foreach (Asset story in result.Assets)
-    {
-        Console.WriteLine(story.Oid.Token);
-        Console.WriteLine(story.GetAttribute(nameAttribute).Value);
-        Console.WriteLine(story.GetAttribute(estimateAttribute).Value);
-        Console.WriteLine();
+        for (Asset story : result.getAssets()) {
+            System.out.println(story.getOid().getToken());
+            System.out.println(story.getAttribute(nameAttribute).getValue());
+            System.out.println(story.getAttribute(estimateAttribute).getValue());
+            System.out.println();
+        }
+        /***** OUTPUT *****
+         Story:1083
+         View Daily Call Count
+         5
+
+         Story:1554
+         Multi-View Customer Calendar
+         1 ...
+         ******************/
+
+        return result.getAssets();
     }
-    /***** OUTPUT *****
-        Story:1083
-        View Daily Call Count
-        5
-
-        Story:1554
-        Multi-View Customer Calendar
-        1 ...
-    ******************/
-
-    return result.Assets;
-}
 ```
 
 Depending on your security role, you may not be able to see all the Story assets in the entire system.
 
 ### How to filter a query
 
-Use the Filter property of the Query object to filter the results that are returned. This query will retrieve only Story assets with a To Do of zero:
+Use the setFilter property of the Query object to filter the results that are returned. This query will retrieve only Story assets with a To Do of zero:
 
 ```java
-public AssetList FilterListOfAssets()
-{
-    IAssetType taskType = metaModel.GetAssetType("Task");
-    Query query = new Query(taskType);
-    IAttributeDefinition nameAttribute = taskType.GetAttributeDefinition("Name");
-    IAttributeDefinition todoAttribute = taskType.GetAttributeDefinition("ToDo");
-    query.Selection.Add(nameAttribute);
-    query.Selection.Add(todoAttribute);
+public Asset[] FilterListOfAssets() throws Exception {
+        IAssetType taskType = metaModel.getAssetType("Task");
+        Query query = new Query(taskType);
+        IAttributeDefinition nameAttribute = taskType.getAttributeDefinition("Name");
+        IAttributeDefinition todoAttribute = taskType.getAttributeDefinition("ToDo");
+        query.getSelection().add(nameAttribute);
+        query.getSelection().add(todoAttribute);
 
-    FilterTerm term = new FilterTerm(todoAttribute);
-    term.Equal(0);
-    query.Filter = term;
+        FilterTerm toDoTerm = new FilterTerm(todoAttribute);
+        toDoTerm.equal(0);
+        query.setFilter(toDoTerm);
+        QueryResult result = services.retrieve(query);
 
-    QueryResult result = services.Retrieve(query);
+        for (Asset task : result.getAssets()) {
+            System.out.println(task.getOid().getToken());
+            System.out.println(task.getAttribute(nameAttribute).getValue());
+            System.out.println(task.getAttribute(todoAttribute).getValue());
+            System.out.println();
+        }
+        /***** OUTPUT *****
+         Task:1153
+         Code Review
+         0
 
-    foreach (Asset task in result.Assets)
-    {
-        Console.WriteLine(task.Oid.Token);
-        Console.WriteLine(task.GetAttribute(nameAttribute).Value);
-        Console.WriteLine(task.GetAttribute(todoAttribute).Value);
-        Console.WriteLine();
+         Task:1154
+         Design Component
+         0 ...
+         ******************/
+
+        return result.getAssets();
     }
-    /***** OUTPUT *****
-        Task:1153
-        Code Review
-        0
-
-        Task:1154
-        Design Component
-        0 ...
-    ******************/
-
-    return result.Assets;
-}
 ```
 
 ### How to use find in a query
@@ -203,33 +200,36 @@ public AssetList FilterListOfAssets()
 Use the Find property of the Query object to search for text. This query will retrieve only Request assets with the word "Urgent" in the name:
 
 ```java
-public AssetList FilterListOfAssets()
-{
-    IAssetType requestType = metaModel.GetAssetType("Request");
-    Query query = new Query(requestType);
-    IAttributeDefinition nameAttribute = requestType.GetAttributeDefinition("Name");
-    query.Selection.Add(nameAttribute);
-
-    query.Find = new QueryFind("Urgent", new AttributeSelection(nameAttribute));
-
-    QueryResult result = services.Retrieve(query);
-
-    foreach (Asset request in result.Assets)
+public Asset[] FindListOfAssets() throws Exception
     {
-        Console.WriteLine(request.Oid.Token);
-        Console.WriteLine(request.GetAttribute(nameAttribute).Value);
-        Console.WriteLine();
+        IAssetType requestType = metaModel.getAssetType("Request");
+        Query query = new Query(requestType);
+        IAttributeDefinition nameAttribute = requestType.getAttributeDefinition("Name");
+
+        query.getSelection().add(nameAttribute);
+
+        AttributeSelection selection = new AttributeSelection();
+        selection.add(nameAttribute);
+        query.setFind(new QueryFind("Urgent", selection));
+
+        QueryResult result = services.retrieve(query);
+
+        for (Asset request : result.getAssets())
+        {
+            System.out.println(request.getOid().getToken());
+            System.out.println(request.getAttribute(nameAttribute).getValue());
+            System.out.println();
+        }
+        /***** OUTPUT *****
+         Request:1195
+         Urgent!  Filter by owner
+
+         Task:1244
+         Urgent: improve search performance ...
+         ******************/
+
+        return result.getAssets();
     }
-    /***** OUTPUT *****
-        Request:1195
-        Urgent!  Filter by owner
-
-        Task:1244
-        Urgent: improve search performance ...
-    ******************/
-
-    return result.Assets;
-}
 ```
 
 ### How to sort a query
@@ -237,36 +237,34 @@ public AssetList FilterListOfAssets()
 Use the OrderBy property of the Query object to sort the results. This query will retrieve Story assets sorted by increasing Estimate:
 
 ```java
-public AssetList SortListOfAssets()
-{
-    IAssetType storyType = metaModel.GetAssetType("Story");
-    Query query = new Query(storyType);
-    IAttributeDefinition nameAttribute = storyType.GetAttributeDefinition("Name");
-    IAttributeDefinition estimateAttribute = storyType.GetAttributeDefinition("Estimate");
-    query.Selection.Add(nameAttribute);
-    query.Selection.Add(estimateAttribute);
-    query.OrderBy.MinorSort(estimateAttribute, OrderBy.Order.Ascending);
-    QueryResult result = services.Retrieve(query);
+public Asset[] SortListOfAssets() throws Exception {
+        IAssetType storyType = metaModel.getAssetType("Story");
+        Query query = new Query(storyType);
+        IAttributeDefinition nameAttribute = storyType.getAttributeDefinition("Name");
+        IAttributeDefinition estimateAttribute = storyType.getAttributeDefinition("Estimate");
+        query.getSelection().add(nameAttribute);
+        query.getSelection().add(estimateAttribute);
+        query.getOrderBy().minorSort(estimateAttribute, OrderBy.Order.Ascending);
+        QueryResult result = services.retrieve(query);
 
-    foreach (Asset story in result.Assets)
-    {
-        Console.WriteLine(story.Oid.Token);
-        Console.WriteLine(story.GetAttribute(nameAttribute).Value);
-        Console.WriteLine(story.GetAttribute(estimateAttribute).Value);
-        Console.WriteLine();
+        for (Asset story : result.getAssets()) {
+            System.out.println(story.getOid().getToken());
+            System.out.println(story.getAttribute(nameAttribute).getValue());
+            System.out.println(story.getAttribute(estimateAttribute).getValue());
+            System.out.println();
+        }
+        /***** OUTPUT *****
+         Story:1073
+         Add Order Line
+         1
+
+         Story:1068
+         Update Member
+         2 ...
+         ******************/
+
+        return result.getAssets();
     }
-    /***** OUTPUT *****
-        Story:1073
-        Add Order Line
-        1
-
-        Story:1068
-        Update Member
-        2 ...
-    ******************/
-
-    return result.Assets;
-}
 ```
 
 There are two methods you can call on the OrderBy class to sort your results: MinorSort and MajorSort. If you are sorting by only one field, it does not matter which one you use. If you want to sort by multiple fields, you need to call either MinorSort or MajorSort multiple times. The difference is: Each time you call MinorSort, the parameter will be added to the end of the OrderBy statement. Each time you call MajorSort, the parameter will be inserted at the beginning of the OrderBy statement.
@@ -276,41 +274,39 @@ There are two methods you can call on the OrderBy class to sort your results: Mi
 Retrieve a "page" of query results by using the Paging propery of the Query object. This query will retrieve the first 3 Story assets:
 
 ```java
-public AssetList PageListOfAssets()
-{
-    IAssetType storyType = metaModel.GetAssetType("Story");
-    Query query = new Query(storyType);
-    IAttributeDefinition nameAttribute = storyType.GetAttributeDefinition("Name");
-    IAttributeDefinition estimateAttribute = storyType.GetAttributeDefinition("Estimate");
-    query.Selection.Add(nameAttribute);
-    query.Selection.Add(estimateAttribute);
-    query.Paging.PageSize = 3;
-    query.Paging.Start = 0;
-    QueryResult result = services.Retrieve(query);
+public Asset[] PageListOfAssets() throws Exception {
+        IAssetType storyType = metaModel.getAssetType("Story");
+        Query query = new Query(storyType);
+        IAttributeDefinition nameAttribute = storyType.getAttributeDefinition("Name");
+        IAttributeDefinition estimateAttribute = storyType.getAttributeDefinition("Estimate");
+        query.getSelection().add(nameAttribute);
+        query.getSelection().add(estimateAttribute);
+        query.getPaging().setPageSize(3);
+        query.getPaging().setStart(0);
+        QueryResult result = services.retrieve(query);
 
-    foreach (Asset story in result.Assets)
-    {
-        Console.WriteLine(story.Oid.Token);
-        Console.WriteLine(story.GetAttribute(nameAttribute).Value);
-        Console.WriteLine(story.GetAttribute(estimateAttribute).Value);
-        Console.WriteLine();
+        for (Asset story : result.getAssets()) {
+            System.out.println(story.getOid().getToken());
+            System.out.println(story.getAttribute(nameAttribute).getValue());
+            System.out.println(story.getAttribute(estimateAttribute).getValue());
+            System.out.println();
+        }
+        /***** OUTPUT *****
+         Story:1063
+         Logon
+         2
+
+         Story:1064
+         Add Customer Details
+         2
+
+         Story:1065
+         Add Customer Header
+         3
+         ******************/
+
+        return result.getAssets();
     }
-    /***** OUTPUT *****
-        Story:1063
-        Logon
-        2
-
-        Story:1064
-        Add Customer Details
-        2
-
-        Story:1065
-        Add Customer Header
-        3
-    ******************/
-
-    return result.Assets;
-}
 ```
 
 The PageSize property shown asks for 3 items, and the Start property indicates to start at 0. The next 3 items can be retrieve with PageSize=3, Start=3.
@@ -320,38 +316,38 @@ The PageSize property shown asks for 3 items, and the Start property indicates t
 This query will retrieve the history of the Member asset with ID 1000.
 
 ```java
-public AssetList HistorySingleAsset()
-{
-    IAssetType memberType = metaModel.GetAssetType("Member");
-  Query query = new Query(Oid.FromToken("Member:1000", metamodel), true);
+public Asset[] HistorySingleAsset() throws Exception {
+        IAssetType memberType = metaModel.getAssetType("Member");
+        Query query = new Query(memberType, true);
+        IAttributeDefinition idAttribute = memberType.getAttributeDefinition("ID");
+        IAttributeDefinition changeDateAttribute = memberType.getAttributeDefinition("ChangeDate");
+        IAttributeDefinition emailAttribute = memberType.getAttributeDefinition("Email");
+        query.getSelection().add(changeDateAttribute);
+        query.getSelection().add(emailAttribute);
+        FilterTerm idTerm = new FilterTerm(idAttribute);
+        idTerm.equal("Member:1000");
+        query.setFilter(idTerm);
+        QueryResult result = services.retrieve(query);
+        Asset[] memberHistory = result.getAssets();
 
-  IAttributeDefinition changeDateAttribute = memberType.GetAttributeDefinition("ChangeDate");
-  IAttributeDefinition emailAttribute = memberType.GetAttributeDefinition("Email");
-  query.Selection.Add(changeDateAttribute);
-  query.Selection.Add(emailAttribute);
+        for (Asset member : memberHistory) {
+            System.out.println(member.getOid().getToken());
+            System.out.println(member.getAttribute(changeDateAttribute).getValue());
+            System.out.println(member.getAttribute(emailAttribute).getValue());
+            System.out.println();
+        }
+        /***** OUTPUT *****
+         Member:1000:105
+         4/2/2007 1:22:03 PM
+         andre.agile@company.com
 
-  QueryResult result = services.Retrieve(query);
-  AssetList memberHistory = result.Assets;
+         Member:1000:101
+         3/29/2007 4:10:29 PM
+         andre@company.net
+         ******************/
 
-  foreach (Asset member in memberHistory)
-  {
-    Console.WriteLine(member.Oid.Token);
-    Console.WriteLine(member.GetAttribute(changeDateAttribute).Value);
-    Console.WriteLine(member.GetAttribute(emailAttribute).Value);
-    Console.WriteLine();
-  }
-  /***** OUTPUT *****
-    Member:1000:105
-    4/2/2007 1:22:03 PM
-    andre.agile@company.com
-
-    Member:1000:101
-    3/29/2007 4:10:29 PM
-    andre@company.net
-  ******************/
-
-  return memberHistory;
-}
+        return memberHistory;
+    }
 ```
 
 To create a history query, provide a boolean "true" second argument to the Query constructor.
@@ -361,40 +357,38 @@ To create a history query, provide a boolean "true" second argument to the Query
 This query will retrieve history for all Member assets:
 
 ```java
-public AssetList HistoryListOfAssets()
-{
-    IAssetType memberType = metaModel.GetAssetType("Member");
-    Query query = new Query(memberType, true);
-    IAttributeDefinition changeDateAttribute = memberType.GetAttributeDefinition("ChangeDate");
-    IAttributeDefinition emailAttribute = memberType.GetAttributeDefinition("Email");
-    query.Selection.Add(changeDateAttribute);
-    query.Selection.Add(emailAttribute);
-    QueryResult result = services.Retrieve(query);
-    AssetList memberHistory = result.Assets;
+public Asset[] HistoryListOfAssets() throws Exception {
+        IAssetType memberType = metaModel.getAssetType("Member");
+        Query query = new Query(memberType, true);
+        IAttributeDefinition changeDateAttribute = memberType.getAttributeDefinition("ChangeDate");
+        IAttributeDefinition emailAttribute = memberType.getAttributeDefinition("Email");
+        query.getSelection().add(changeDateAttribute);
+        query.getSelection().add(emailAttribute);
+        QueryResult result = services.retrieve(query);
+        Asset[] memberHistory = result.getAssets();
 
-    foreach (Asset member in memberHistory)
-    {
-        Console.WriteLine(member.Oid.Token);
-        Console.WriteLine(member.GetAttribute(changeDateAttribute).Value);
-        Console.WriteLine(member.GetAttribute(emailAttribute).Value);
-        Console.WriteLine();
+        for (Asset member : memberHistory) {
+            System.out.println(member.getOid().getToken());
+            System.out.println(member.getAttribute(changeDateAttribute).getValue());
+            System.out.println(member.getAttribute(emailAttribute).getValue());
+            System.out.println();
+        }
+        /***** OUTPUT *****
+         Member:1010:106
+         4/2/2007 3:27:23 PM
+         tammy.coder@company.com
+
+         Member:1000:105
+         4/2/2007 1:22:03 PM
+         andre.agile@company.com
+
+         Member:1000:101
+         3/29/2007 4:10:29 PM
+         andre@company.net
+         ******************/
+
+        return memberHistory;
     }
-    /***** OUTPUT *****
-        Member:1010:106
-        4/2/2007 3:27:23 PM
-        tammy.coder@company.com
-
-        Member:1000:105
-        4/2/2007 1:22:03 PM
-        andre.agile@company.com
-
-        Member:1000:101
-        3/29/2007 4:10:29 PM
-        andre@company.net
-    ******************/
-
-    return memberHistory;
-}
 ```
 
 Again, the response is a list of historical assets. There will be multiple Asset objects returned for an asset that has changed previously.
@@ -406,40 +400,40 @@ All of the previously demonstrated query properties can be used with historical 
 Use the AsOf property of the Query object to retrieve data as it existed at some point in time. This query finds the version of each Story asset as it existed seven days ago:
 
 ```java
-public AssetList HistoryAsOfTime()
-{
-    IAssetType storyType = metaModel.GetAssetType("Story");
-    Query query = new Query(storyType, true);
-    IAttributeDefinition nameAttribute = storyType.GetAttributeDefinition("Name");
-    IAttributeDefinition estimateAttribute = storyType.GetAttributeDefinition("Estimate");
-    query.Selection.Add(nameAttribute);
-    query.Selection.Add(estimateAttribute);
-    query.AsOf = DateTime.Now.AddDays(-7); //7 days ago
-    QueryResult result = services.Retrieve(query);
+public Asset[] HistoryAsOfTime() throws Exception {
+        IAssetType storyType = metaModel.getAssetType("Story");
+        Query query = new Query(storyType, true);
+        IAttributeDefinition nameAttribute = storyType.getAttributeDefinition("Name");
+        IAttributeDefinition estimateAttribute = storyType.getAttributeDefinition("Estimate");
+        query.getSelection().add(nameAttribute);
+        query.getSelection().add(estimateAttribute);
+        Calendar c = Calendar.getInstance();
+        c.add(Calendar.DAY_OF_MONTH, -7);
+        query.setAsOf(c.getTime()); // query.AsOf = DateTime.Now.AddDays(-7); //7 days ago
+        QueryResult result = services.retrieve(query);
 
-    foreach (Asset story in result.Assets)
-    {
-        Console.WriteLine(story.Oid.Token);
-        Console.WriteLine(story.GetAttribute(nameAttribute).Value);
-        Console.WriteLine(story.GetAttribute(estimateAttribute).Value);
-        Console.WriteLine();
+        for (Asset story : result.getAssets()) {
+            System.out.println(story.getOid().getToken());
+            System.out.println(story.getAttribute(nameAttribute).getValue());
+            System.out.println(story.getAttribute(estimateAttribute).getValue());
+            System.out.println();
+        }
+        /***** OUTPUT *****
+         Story:1063
+         Logon
+         3
+
+         Story:1064
+         Add Customer Details
+         1
+
+         Story:1065
+         Add Customer Header
+         3
+         ******************/
+
+        return result.getAssets();
     }
-    /***** OUTPUT *****
-        Story:1063
-        Logon
-        3
-
-        Story:1064
-        Add Customer Details
-        1
-
-        Story:1065
-        Add Customer Header
-        3
-    ******************/
-
-    return result.Assets;
-}
 ```
 
 ## Learn By Example: Updates
@@ -451,30 +445,29 @@ Updating assets through the APIClient involves calling the Save method on the IS
 Updating a scalar attribute on an asset is accomplished by calling the SetAttribute method on an asset, specifying the IAttributeDefinition of the attribute you wish to change and the new scalar value. This code will update the Name attribute on the Story with ID 1094:
 
 ```java
-public Asset UpdateScalarAttribute()
-{
-    Oid storyId = Oid.FromToken("Story:1094", metaModel);
-    Query query = new Query(storyId);
-    IAssetType storyType = metaModel.GetAssetType("Story");
-    IAttributeDefinition nameAttribute = storyType.GetAttributeDefinition("Name");
-    query.Selection.Add(nameAttribute);
-    QueryResult result = services.Retrieve(query);
-    Asset story = result.Assets[0];
-    string oldName = story.GetAttribute(nameAttribute).Value.ToString();
-    story.SetAttributeValue(nameAttribute, GetNewName());
-    services.Save(story);
+ public Asset UpdateScalarAttribute() throws Exception {
+        Oid storyId = Oid.fromToken("Story:1094", metaModel);
+        Query query = new Query(storyId);
+        IAssetType storyType = metaModel.getAssetType("Story");
+        IAttributeDefinition nameAttribute = storyType.getAttributeDefinition("Name");
+        query.getSelection().add(nameAttribute);
+        QueryResult result = services.retrieve(query);
+        Asset story = result.getAssets()[0];
+        String oldName = story.getAttribute(nameAttribute).getValue().toString();
+        story.setAttributeValue(nameAttribute, GetNewName());
+        services.save(story);
 
-    Console.WriteLine(story.Oid.Token);
-    Console.WriteLine(oldName);
-    Console.WriteLine(story.GetAttribute(nameAttribute).Value);
-    /***** OUTPUT *****
-        Story:1094:1446
-        Logon
-        New Name
-    ******************/
+        System.out.println(story.getOid().getToken());
+        System.out.println(oldName);
+        System.out.println(story.getAttribute(nameAttribute).getValue());
+        /***** OUTPUT *****
+         Story:1094:1446
+         Logon
+         New Name
+         ******************/
 
-    return story;
-}
+        return story;
+    }
 ```
 
 ### How to update a single-value relation on an asset
@@ -482,30 +475,29 @@ public Asset UpdateScalarAttribute()
 Updating a single-value relation is accomplished by calling the SetAttribute method on an asset, specifying the IAttributeDefinition of the attribute you wish to change and the ID for the new relation. This code will change the source of the Story with ID 1094:
 
 ```java
-public Asset UpdateSingleValueRelation()
-{
-    Oid storyId = Oid.FromToken("Story:1094", metaModel);
-    Query query = new Query(storyId);
-    IAssetType storyType = metaModel.GetAssetType("Story");
-    IAttributeDefinition sourceAttribute = storyType.GetAttributeDefinition("Source");
-    query.Selection.Add(sourceAttribute);
-    QueryResult result = services.Retrieve(query);
-    Asset story = result.Assets[0];
-    string oldSource = story.GetAttribute(sourceAttribute).Value.ToString();
-    story.SetAttributeValue(sourceAttribute, GetNextSourceID(oldSource));
-    services.Save(story);
+public Asset UpdateSingleValueRelation() throws Exception {
+        Oid storyId = Oid.fromToken("Story:1094", metaModel);
+        Query query = new Query(storyId);
+        IAssetType storyType = metaModel.getAssetType("Story");
+        IAttributeDefinition sourceAttribute = storyType.getAttributeDefinition("Source");
+        query.getSelection().add(sourceAttribute);
+        QueryResult result = services.retrieve(query);
+        Asset story = result.getAssets()[0];
+        String oldSource = story.getAttribute(sourceAttribute).getValue().toString();
+        story.setAttributeValue(sourceAttribute, GetNextSourceID(oldSource));
+        services.save(story);
 
-    Console.WriteLine(story.Oid.Token);
-    Console.WriteLine(oldSource);
-    Console.WriteLine(story.GetAttribute(sourceAttribute).Value);
-    /***** OUTPUT *****
-        Story:1094:1446
-        StorySource:148
-        StorySource:149
-    ******************/
+        System.out.println(story.getOid().getToken());
+        System.out.println(oldSource);
+        System.out.println(story.getAttribute(sourceAttribute).getValue());
+        /***** OUTPUT *****
+         Story:1094:1446
+         StorySource:148
+         StorySource:149
+         ******************/
 
-    return story;
-}
+        return story;
+    }
 ```
 
 ### How to add and remove values from a multi-value relation
@@ -513,38 +505,38 @@ public Asset UpdateSingleValueRelation()
 Updating a multi-value relation is accomplished by calling either the RemoveAttributeValue or AddAttributeValue method on an asset, specifying the IAttributeDefinition of the attribute you wish to change and the ID of the relation you wish to add or remove. This code will add one Member and remove another Member from the Story with ID 1094:
 
 ```java
-public Asset UpdateMultiValueRelation()
-{
-    Oid storyId = Oid.FromToken("Story:1094", metaModel);
-    Query query = new Query(storyId);
-    IAssetType storyType = metaModel.GetAssetType("Story");
-    IAttributeDefinition ownersAttribute = storyType.GetAttributeDefinition("Owners");
-    query.Selection.Add(ownersAttribute);
-    QueryResult result = services.Retrieve(query);
-    Asset story = result.Assets[0];
-    ArrayList oldOwners = new ArrayList();
-    oldOwners.AddRange(story.GetAttribute(ownersAttribute).Values);
-    story.RemoveAttributeValue(ownersAttribute, GetOwnerToRemove(oldOwners));
-    story.AddAttributeValue(ownersAttribute, GetOwnerToAdd(oldOwners));
-    services.Save(story);
+public Asset UpdateMultiValueRelation() throws Exception {
+        Oid storyId = Oid.fromToken("Story:1094", metaModel);
+        Query query = new Query(storyId);
+        IAssetType storyType = metaModel.getAssetType("Story");
+        IAttributeDefinition ownersAttribute = storyType.getAttributeDefinition("Owners");
+        query.getSelection().add(ownersAttribute);
+        QueryResult result = services.retrieve(query);
+        Asset story = result.getAssets()[0];
+        List<Object> oldOwners = new ArrayList<Object>();
+        oldOwners.addAll(Arrays.asList(story.getAttribute(ownersAttribute).getValues()));
+        story.removeAttributeValue(ownersAttribute, getOwnerToRemove(oldOwners));
+        story.addAttributeValue(ownersAttribute, getOwnerToAdd(oldOwners));
+        services.save(story);
 
-    Console.WriteLine(story.Oid.Token);
-    foreach (Oid oid in oldOwners)
-    {
-        Console.WriteLine(oid.Token);
-    }
-    foreach (Oid oid in story.GetAttribute(ownersAttribute).Values)
-    {
-        Console.WriteLine(oid.Token);
-    }
-    /***** OUTPUT *****
-        Story:1094:1446
-        Member:1003
-        Member:1000
-    ******************/
+        System.out.println(story.getOid().getToken());
+        Iterator<Object> iter = oldOwners.iterator();
+        while (iter.hasNext()) {
+            Oid oid = (Oid) iter.next();
+            System.out.println(oid.getToken());
+        }
+        for (Object o : story.getAttribute(ownersAttribute).getValues()) {
+            Oid oid = (Oid) o;
+            System.out.println(oid.getToken());
+        }
+        /***** OUTPUT *****
+         Story:1094:1446
+         Member:1003
+         Member:1000
+         ******************/
 
-    return story;
-}
+        return story;
+    }
 ```
 
 ## Learn By Example: New Asset
@@ -555,26 +547,25 @@ How to get a new Story asset template in the context of a Scope asset
 This code will create a Story asset in the context of Scope with ID 1012:
 
 ```java
-public Asset AddNewAsset()
-{
-    Oid projectId = Oid.FromToken("Scope:1012", metaModel);
-    IAssetType storyType = metaModel.GetAssetType("Story");
-    Asset newStory = services.New(storyType, projectId);
-    IAttributeDefinition nameAttribute = storyType.GetAttributeDefinition("Name");
-    newStory.SetAttributeValue(nameAttribute, "My New Story");
-    services.Save(newStory);
+public Asset AddNewAsset() throws Exception {
+        Oid projectId = Oid.fromToken("Scope:1012", metaModel);
+        IAssetType storyType = metaModel.getAssetType("Story");
+        Asset newStory = services.createNew(storyType, projectId);
+        IAttributeDefinition nameAttribute = storyType.getAttributeDefinition("Name");
+        newStory.setAttributeValue(nameAttribute, "My New Story");
+        services.save(newStory);
 
-    Console.WriteLine(newStory.Oid.Token);
-    Console.WriteLine(newStory.GetAttribute(storyType.GetAttributeDefinition("Scope")).Value);
-    Console.WriteLine(newStory.GetAttribute(nameAttribute).Value);
-    /***** OUTPUT *****
-        Story:1094
-        Scope:1012
-        My New Story
-    ******************/
+        System.out.println(newStory.getOid().getToken());
+        System.out.println(newStory.getAttribute(storyType.getAttributeDefinition("Scope")).getValue());
+        System.out.println(newStory.getAttribute(nameAttribute).getValue());
+        /***** OUTPUT *****
+         Story:1094
+         Scope:1012
+         My New Story
+         ******************/
 
-    return newStory;
-}
+        return newStory;
+    }
 ```
 
 ## Learn By Example: Operations
@@ -590,26 +581,25 @@ https://www1/VersionOne/meta.v1/Story?xsl=api.xsl
 Get the Delete operation from the IMetaModel, and use IServices to execute it against a story Oid.
 
 ```java
-public Oid DeleteAsset()
-{
-    Asset story = AddNewAsset();
-    IOperation deleteOperation = metaModel.GetOperation("Story.Delete");
-    Oid deletedID = services.ExecuteOperation(deleteOperation, story.Oid);
-    try
-    {
-        Query query = new Query(deletedID.Momentless);
-        services.Retrieve(query);
-    }
-    catch(WebException)
-    {
-        Console.WriteLine("Story has been deleted: " + story.Oid.Momentless);
-    }
-    /***** OUTPUT *****
-        Story has been deleted: Story:1049
-    ******************/
+public Oid DeleteAsset() throws Exception {
+        Asset story = AddNewAsset();
+        IOperation deleteOperation = metaModel.getOperation("Story.Delete");
+        Oid deletedID = services.executeOperation(deleteOperation, story.getOid());
+        Query query = new Query(deletedID.getMomentless());
+        try {
+            @SuppressWarnings("unused")
+            QueryResult result = services.retrieve(query);
+        } catch (ConnectionException e) {
+            if (404 == e.getServerResponseCode())
+                System.out.println("Story has been deleted: " + story.getOid().getMomentless());
+        }
 
-    return deletedID;
-}
+        /***** OUTPUT *****
+         Story has been deleted: Story:1049
+         ******************/
+
+        return deletedID;
+    }
 ```
 
 The delete operation returns the Oid, with the new Moment, of the deleted asset. Future current info queries will automatically exclude deleted assets from results.
@@ -621,28 +611,27 @@ Currently, there is no support for undeleting a deleted asset.
 Get the Inactivate operation from the IMetaModel, and use IServices to execute it against a story Oid.
 
 ```java
-public Asset CloseAsset()
-{
-    Asset story = AddNewAsset();
-    IOperation closeOperation = metaModel.GetOperation("Story.Inactivate");
-    Oid closeID = services.ExecuteOperation(closeOperation, story.Oid);
+public Asset CloseAsset() throws Exception {
+        Asset story = AddNewAsset();
+        IOperation closeOperation = metaModel.getOperation("Story.Inactivate");
+        Oid closeID = services.executeOperation(closeOperation, story.getOid());
 
-    Query query = new Query(closeID.Momentless);
-    IAttributeDefinition assetState = metaModel.GetAttributeDefinition("Story.AssetState");
-    query.Selection.Add(assetState);
-    QueryResult result = services.Retrieve(query);
-    Asset closeStory = result.Assets[0];
-    AssetState state = (AssetState) closeStory.GetAttribute(assetState).Value;
+        Query query = new Query(closeID.getMomentless());
+        IAttributeDefinition assetState = metaModel.getAttributeDefinition("Story.AssetState");
+        query.getSelection().add(assetState);
+        QueryResult result = services.retrieve(query);
+        Asset closeStory = result.getAssets()[0];
+        AssetState state = AssetState.valueOf(((Integer) closeStory.getAttribute(assetState).getValue()).intValue());
 
-    Console.WriteLine(closeStory.Oid);
-    Console.WriteLine(Enum.GetName(typeof(AssetState), state));
-    /***** OUTPUT *****
-        Story:1050
-        Closed
-    ******************/
+        System.out.println(closeStory.getOid());
+        System.out.println(state.toString());
+        /***** OUTPUT *****
+         Story:1050
+         Closed
+         ******************/
 
-    return closeStory;
-}
+        return closeStory;
+    }
 ```
 
 The AssetState attribute is the internal state of an asset.
@@ -652,28 +641,27 @@ The AssetState attribute is the internal state of an asset.
 Get the Reactivate operation from the IMetaModel, and use IServices to execute it against a story Oid.
 
 ```java
-public Asset ReOpenAsset()
-{
-    Asset story = CloseAsset();
-    IOperation activateOperation = metaModel.GetOperation("Story.Reactivate");
-    Oid activeID = services.ExecuteOperation(activateOperation, story.Oid);
+    public Asset ReOpenAsset() throws Exception {
+        Asset story = CloseAsset();
+        IOperation activateOperation = metaModel.getOperation("Story.Reactivate");
+        Oid activeID = services.executeOperation(activateOperation, story.getOid());
 
-    Query query = new Query(activeID.Momentless);
-    IAttributeDefinition assetState = metaModel.GetAttributeDefinition("Story.AssetState");
-    query.Selection.Add(assetState);
-    QueryResult result = services.Retrieve(query);
-    Asset activeStory = result.Assets[0];
-    AssetState state = (AssetState)activeStory.GetAttribute(assetState).Value;
+        Query query = new Query(activeID.getMomentless());
+        IAttributeDefinition assetState = metaModel.getAttributeDefinition("Story.AssetState");
+        query.getSelection().add(assetState);
+        QueryResult result = services.retrieve(query);
+        Asset activeStory = result.getAssets()[0];
+        @SuppressWarnings("unused")
+        AssetState state = AssetState.valueOf(((Integer) activeStory.getAttribute(assetState).getValue()).intValue());
 
-    Console.WriteLine(activeStory.Oid);
-    Console.WriteLine(Enum.GetName(typeof(AssetState), state));
-    /***** OUTPUT *****
-        Story:1051
-        Active
-    ******************/
+        System.out.println(activeStory.getOid());
+        /***** OUTPUT *****
+         Story:1051
+         Active
+         ******************/
 
-    return activeStory;
-}
+        return activeStory;
+    }
 ```
 
 ## Learn By Example: System Settings
@@ -718,18 +706,18 @@ Detail Estimate, ToDo and Effort can be entered for Stories and Defects, or for 
 In this example, the VersionOne instance is configured to take DetailEstimate, ToDo, and Effort at the Task/Test level for Stories (Off), and to take DetailEstimate, ToDo, and Effort at the Defect level for Defects (On):
 
 ```java
-public void StoryAndDefectTrackingLevel()
-{
-    V1Configuration configuration = new V1Configuration(new V1APIConnector("https://www14.v1host.com/v1sdktesting/config.v1/"));
+public void StoryAndDefectTrackingLevel() throws Exception
+    {
+        V1Configuration configuration = new V1Configuration(new V1APIConnector("https://www14.v1host.com/v1sdktesting/config.v1/"));
 
-    Console.Writeline(configuration.StoryTrackingLevel);
-    Console.Writeline(configuration.DefectTrackingLevel);
+        System.out.println(configuration.getStoryTrackingLevel());
+        System.out.println(configuration.getDefectTrackingLevel());
 
-    /***** OUTPUT *****
-        Off
-      On
-    ******************/
-}
+        /***** OUTPUT *****
+         Off
+         On
+         ******************/
+    }
 ```
 
 A value of "On" indicates that Detail Estimate, ToDo, and Effort input is accepted at the PrimaryWorkitem level only. A value of "Off" indicates that Detail Estimate, ToDo, and Effort input is accepted at the Task/Test level only. A value of "Mix" indicates that Detail Estimate, ToDo, and Effort input is accepted at both the PrimaryWorkitem and Task/Test level.
