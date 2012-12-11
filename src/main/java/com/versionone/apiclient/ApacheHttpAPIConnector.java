@@ -14,6 +14,7 @@ import java.util.Map;
 
 import org.apache.commons.io.output.ByteArrayOutputStream;
 import org.apache.commons.lang3.tuple.ImmutablePair;
+import org.apache.http.Header;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.auth.AuthScope;
@@ -38,16 +39,25 @@ import org.apache.http.impl.client.DefaultHttpClient;
 public class ApacheHttpAPIConnector implements IAPIConnector {
 	private String url;
 	private Credentials creds;
-	private DefaultHttpClient httpclient;
+	protected DefaultHttpClient httpclient;
 	private Map<String,ImmutablePair<String, ByteArrayOutputStream>> startedRequests;
+	private ProxyProvider proxy;
 
 	public ApacheHttpAPIConnector( String url) {
 		this(url, null, null);
 	}
 		
 	public ApacheHttpAPIConnector( String url, String username, String password) {
+		this(url, username, password, null);
+	}
+	
+	public ApacheHttpAPIConnector( String url, String username, String password, ProxyProvider proxy) {
 		this.url = url;
 		this.creds = new UsernamePasswordCredentials(username, password);
+		this.proxy = proxy;
+		if(this.proxy != null) {
+			throw new NotImplementedException();
+		}
 		this.httpclient = new DefaultHttpClient();
 		this.httpclient.getCredentialsProvider().setCredentials(AuthScope.ANY, creds);
 		this.startedRequests = new HashMap<String, ImmutablePair<String, ByteArrayOutputStream>>();
@@ -60,17 +70,23 @@ public class ApacheHttpAPIConnector implements IAPIConnector {
 	public Reader getData() throws ConnectionException {
 		return getData("");
 	}
-
+	
+	protected Header[] getCustomHeaders() {
+		return new Header[0];
+	}
+	
 	/* (non-Javadoc)
 	 * @see com.versionone.apiclient.IAPIConnector#getData(java.lang.String)
 	 */
 	@Override
 	public Reader getData(String path) throws ConnectionException {
 		String url = this.url + path;
-		HttpGet httpget = new HttpGet(url);
+		HttpGet request = new HttpGet(url);
+		request.setHeaders(getCustomHeaders());
+		
 		HttpResponse response;
 		try {
-			response = httpclient.execute(httpget);
+			response = httpclient.execute(request);
 			HttpEntity entity = response.getEntity();
 			if (entity != null) {
 				InputStream instream = entity.getContent();
