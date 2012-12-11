@@ -52,7 +52,7 @@ public class DataExamples {
     }
 
     private V1APIConnector getMetaConnector() {
-        return new V1APIConnector(_metaUrl);
+        return new V1APIConnector(_metaUrl, _username, _password);
     }
 
     private V1APIConnector getMetaConnectorWithProxy() throws URISyntaxException {
@@ -303,7 +303,7 @@ public class DataExamples {
         query.getSelection().add(changeDateAttribute);
         query.getSelection().add(emailAttribute);
         FilterTerm idTerm = new FilterTerm(idAttribute);
-        idTerm.equal("Member:1000");
+        idTerm.equal("Member:20");
         query.setFilter(idTerm);
         QueryResult result = _services.retrieve(query);
         Asset[] memberHistory = result.getAssets();
@@ -344,17 +344,21 @@ public class DataExamples {
             System.out.println();
         }
         /***** OUTPUT *****
-         Member:1010:106
-         4/2/2007 3:27:23 PM
-         tammy.coder@company.com
+         Member:20:0
+         Thu Nov 30 19:00:00 EST 1899
+         null
 
-         Member:1000:105
-         4/2/2007 1:22:03 PM
-         andre.agile@company.com
+         Member:20:17183
+         Fri Nov 09 09:46:25 EST 2012
+         versionone@mailinator.com
 
-         Member:1000:101
-         3/29/2007 4:10:29 PM
-         andre@company.net
+         Member:20:17190
+         Sun Nov 11 22:59:23 EST 2012
+         versionone@mailinator.com
+
+         Member:20:17191
+         Sun Nov 11 22:59:47 EST 2012
+         versionone@mailinator.com
          ******************/
 
         return memberHistory;

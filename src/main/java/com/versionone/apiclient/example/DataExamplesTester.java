@@ -10,6 +10,7 @@ import com.versionone.Oid;
 public class DataExamplesTester {
 
     private DataExamples _docExamples;
+    //ending slash in the URL is mandatory
     private String _v1Url = "https://www14.v1host.com/v1sdktesting/";
     private String _user = "admin";
     private String _password = "admin";
@@ -50,7 +51,7 @@ public class DataExamplesTester {
 
     @Test
     public void TestIsEffortTrackingEnabled() throws Exception{
-        Assert.assertFalse(_docExamples.IsEffortTrackingEnabled());
+        Assert.assertTrue(_docExamples.IsEffortTrackingEnabled());
     }
 
     @Test
@@ -114,8 +115,6 @@ public class DataExamplesTester {
     public void TestGetV1Configuration() throws Exception {
         _docExamples.getV1configuration();
     }
-
-
 
     @Test
     public void TestUpdateScalarAttribute() throws Exception {
@@ -216,7 +215,7 @@ public class DataExamplesTester {
         Assert.assertEquals(AssetState.Active.value(), activeStory.getAttribute(assetState).getValue());
     }
 
-    @Test
+    @Test @Ignore("Test won't run without a properly configured proxy.")
     public void createStoryThroughProxyTest() throws Exception {
         String storyName = "proxy story test " + new Date();
         String projectToken = "Scope:0";
