@@ -15,30 +15,61 @@ import com.versionone.apiclient.*;
  * This class contains the examples used : the API documentation
  */
 public class DataExamples {
-    private final String v1Url = "https://www14.v1host.com/v1sdktesting/";
-    private final String dataUrl = v1Url + "rest-1.v1/";
-    private final String metaUrl = v1Url + "meta.v1/";
-    private final String username = "admin";
-    private final String password = "admin";
-    private final static String proxyAddress = "https://myProxyServer:3128";
-    private final static String proxyUserName = "user1";
-    private final static String proxyPassword = "pw1";
-    private IMetaModel metaModel;
-    private IServices services;
+
+    private String _v1Url;
+    private String _username;
+    private String _password;
+    private String _dataUrl;
+    private String _metaUrl;
+
+    private final static String _proxyAddress = "https://myProxyServer:3128";
+    private final static String _proxyUserName = "user1";
+    private final static String _proxyPassword = "pw1";
+    private IMetaModel _metaModel;
+    private IServices _services;
+
+    public DataExamples(String v1Url, String userName, String password) {
+
+        if ( v1Url == null || userName == null)
+            throw new IllegalArgumentException("v1Url and username must be provided...");
+
+        _v1Url = v1Url;
+        _username = userName;
+        _password = password;
+
+        _dataUrl = _v1Url + "rest-1.v1/";
+        _metaUrl = _v1Url + "meta.v1/";
+
+        V1APIConnector dataConnector = getDataConnector();
+        V1APIConnector metaConnector = getMetaConnector();
+        _metaModel = new MetaModel(metaConnector);
+        _services = new Services(_metaModel, dataConnector);
+
+    }
 
     private V1APIConnector getDataConnector() {
-        return new V1APIConnector(dataUrl, username, password);
+        return new V1APIConnector(_dataUrl, _username, _password);
     }
 
     private V1APIConnector getMetaConnector() {
-        return new V1APIConnector(metaUrl);
+        return new V1APIConnector(_metaUrl);
     }
 
-    public DataExamples() {
-        V1APIConnector dataConnector = getDataConnector();
-        V1APIConnector metaConnector = getMetaConnector();
-        metaModel = new MetaModel(metaConnector);
-        services = new Services(metaModel, dataConnector);
+    private V1APIConnector getMetaConnectorWithProxy() throws URISyntaxException {
+        return new V1APIConnector(_metaUrl, getProxyProvider());
+    }
+
+    private MetaModel getMetaModelWithProxy() throws URISyntaxException {
+        return new MetaModel(getMetaConnectorWithProxy());
+    }
+
+    private ProxyProvider getProxyProvider() throws URISyntaxException {
+        URI proxy = new URI(_proxyAddress);
+        return new ProxyProvider(proxy, _proxyUserName, _proxyPassword);
+    }
+
+    private V1APIConnector getAPIConnectorWithProxy() throws URISyntaxException {
+        return new V1APIConnector(_dataUrl, _username, _password, getProxyProvider());
     }
 
     public void SetUpServicesV1Authentication() {
@@ -58,9 +89,9 @@ public class DataExamples {
     }
 
     public Asset SingleAsset() throws Exception {
-        Oid memberId = Oid.fromToken("Member:20", metaModel);
+        Oid memberId = Oid.fromToken("Member:20", _metaModel);
         Query query = new Query(memberId);
-        QueryResult result = services.retrieve(query);
+        QueryResult result = _services.retrieve(query);
         Asset member = result.getAssets()[0];
 
         System.out.println(member.getOid().getToken());
@@ -72,13 +103,13 @@ public class DataExamples {
     }
 
     public Asset SingleAssetWithAttributes() throws Exception {
-        Oid memberId = Oid.fromToken("Member:20", metaModel);
+        Oid memberId = Oid.fromToken("Member:20", _metaModel);
         Query query = new Query(memberId);
-        IAttributeDefinition nameAttribute = metaModel.getAttributeDefinition("Member.Name");
-        IAttributeDefinition emailAttribute = metaModel.getAttributeDefinition("Member.Email");
+        IAttributeDefinition nameAttribute = _metaModel.getAttributeDefinition("Member.Name");
+        IAttributeDefinition emailAttribute = _metaModel.getAttributeDefinition("Member.Email");
         query.getSelection().add(nameAttribute);
         query.getSelection().add(emailAttribute);
-        QueryResult result = services.retrieve(query);
+        QueryResult result = _services.retrieve(query);
         Asset member = result.getAssets()[0];
 
         System.out.println(member.getOid().getToken());
@@ -94,7 +125,7 @@ public class DataExamples {
         return member;
     }
 
-    public void GetV1configuration()
+    public void getV1configuration()
     {
         V1Configuration configuration = new V1Configuration(new V1APIConnector("https://www14.v1host.com/v1sdktesting/config.v1/"));
     }
@@ -110,13 +141,13 @@ public class DataExamples {
     }
 
     public Asset[] ListOfAssets() throws Exception {
-        IAssetType storyType = metaModel.getAssetType("Story");
+        IAssetType storyType = _metaModel.getAssetType("Story");
         Query query = new Query(storyType);
         IAttributeDefinition nameAttribute = storyType.getAttributeDefinition("Name");
         IAttributeDefinition estimateAttribute = storyType.getAttributeDefinition("Estimate");
         query.getSelection().add(nameAttribute);
         query.getSelection().add(estimateAttribute);
-        QueryResult result = services.retrieve(query);
+        QueryResult result = _services.retrieve(query);
 
         for (Asset story : result.getAssets()) {
             System.out.println(story.getOid().getToken());
@@ -139,7 +170,7 @@ public class DataExamples {
 
     public Asset[] FindListOfAssets() throws Exception
     {
-        IAssetType requestType = metaModel.getAssetType("Request");
+        IAssetType requestType = _metaModel.getAssetType("Request");
         Query query = new Query(requestType);
         IAttributeDefinition nameAttribute = requestType.getAttributeDefinition("Name");
 
@@ -149,7 +180,7 @@ public class DataExamples {
         selection.add(nameAttribute);
         query.setFind(new QueryFind("Urgent", selection));
 
-        QueryResult result = services.retrieve(query);
+        QueryResult result = _services.retrieve(query);
 
         for (Asset request : result.getAssets())
         {
@@ -169,7 +200,7 @@ public class DataExamples {
     }
 
     public Asset[] FilterListOfAssets() throws Exception {
-        IAssetType taskType = metaModel.getAssetType("Task");
+        IAssetType taskType = _metaModel.getAssetType("Task");
         Query query = new Query(taskType);
         IAttributeDefinition nameAttribute = taskType.getAttributeDefinition("Name");
         IAttributeDefinition todoAttribute = taskType.getAttributeDefinition("ToDo");
@@ -179,7 +210,7 @@ public class DataExamples {
         FilterTerm toDoTerm = new FilterTerm(todoAttribute);
         toDoTerm.equal(0);
         query.setFilter(toDoTerm);
-        QueryResult result = services.retrieve(query);
+        QueryResult result = _services.retrieve(query);
 
         for (Asset task : result.getAssets()) {
             System.out.println(task.getOid().getToken());
@@ -201,14 +232,14 @@ public class DataExamples {
     }
 
     public Asset[] SortListOfAssets() throws Exception {
-        IAssetType storyType = metaModel.getAssetType("Story");
+        IAssetType storyType = _metaModel.getAssetType("Story");
         Query query = new Query(storyType);
         IAttributeDefinition nameAttribute = storyType.getAttributeDefinition("Name");
         IAttributeDefinition estimateAttribute = storyType.getAttributeDefinition("Estimate");
         query.getSelection().add(nameAttribute);
         query.getSelection().add(estimateAttribute);
         query.getOrderBy().minorSort(estimateAttribute, OrderBy.Order.Ascending);
-        QueryResult result = services.retrieve(query);
+        QueryResult result = _services.retrieve(query);
 
         for (Asset story : result.getAssets()) {
             System.out.println(story.getOid().getToken());
@@ -230,7 +261,7 @@ public class DataExamples {
     }
 
     public Asset[] PageListOfAssets() throws Exception {
-        IAssetType storyType = metaModel.getAssetType("Story");
+        IAssetType storyType = _metaModel.getAssetType("Story");
         Query query = new Query(storyType);
         IAttributeDefinition nameAttribute = storyType.getAttributeDefinition("Name");
         IAttributeDefinition estimateAttribute = storyType.getAttributeDefinition("Estimate");
@@ -238,7 +269,7 @@ public class DataExamples {
         query.getSelection().add(estimateAttribute);
         query.getPaging().setPageSize(3);
         query.getPaging().setStart(0);
-        QueryResult result = services.retrieve(query);
+        QueryResult result = _services.retrieve(query);
 
         for (Asset story : result.getAssets()) {
             System.out.println(story.getOid().getToken());
@@ -264,7 +295,7 @@ public class DataExamples {
     }
 
     public Asset[] HistorySingleAsset() throws Exception {
-        IAssetType memberType = metaModel.getAssetType("Member");
+        IAssetType memberType = _metaModel.getAssetType("Member");
         Query query = new Query(memberType, true);
         IAttributeDefinition idAttribute = memberType.getAttributeDefinition("ID");
         IAttributeDefinition changeDateAttribute = memberType.getAttributeDefinition("ChangeDate");
@@ -274,7 +305,7 @@ public class DataExamples {
         FilterTerm idTerm = new FilterTerm(idAttribute);
         idTerm.equal("Member:1000");
         query.setFilter(idTerm);
-        QueryResult result = services.retrieve(query);
+        QueryResult result = _services.retrieve(query);
         Asset[] memberHistory = result.getAssets();
 
         for (Asset member : memberHistory) {
@@ -297,13 +328,13 @@ public class DataExamples {
     }
 
     public Asset[] HistoryListOfAssets() throws Exception {
-        IAssetType memberType = metaModel.getAssetType("Member");
+        IAssetType memberType = _metaModel.getAssetType("Member");
         Query query = new Query(memberType, true);
         IAttributeDefinition changeDateAttribute = memberType.getAttributeDefinition("ChangeDate");
         IAttributeDefinition emailAttribute = memberType.getAttributeDefinition("Email");
         query.getSelection().add(changeDateAttribute);
         query.getSelection().add(emailAttribute);
-        QueryResult result = services.retrieve(query);
+        QueryResult result = _services.retrieve(query);
         Asset[] memberHistory = result.getAssets();
 
         for (Asset member : memberHistory) {
@@ -342,7 +373,7 @@ public class DataExamples {
          ******************/
     }
     public Asset[] HistoryAsOfTime() throws Exception {
-        IAssetType storyType = metaModel.getAssetType("Story");
+        IAssetType storyType = _metaModel.getAssetType("Story");
         Query query = new Query(storyType, true);
         IAttributeDefinition nameAttribute = storyType.getAttributeDefinition("Name");
         IAttributeDefinition estimateAttribute = storyType.getAttributeDefinition("Estimate");
@@ -351,7 +382,7 @@ public class DataExamples {
         Calendar c = Calendar.getInstance();
         c.add(Calendar.DAY_OF_MONTH, -7);
         query.setAsOf(c.getTime()); // query.AsOf = DateTime.Now.AddDays(-7); //7 days ago
-        QueryResult result = services.retrieve(query);
+        QueryResult result = _services.retrieve(query);
 
         for (Asset story : result.getAssets()) {
             System.out.println(story.getOid().getToken());
@@ -377,16 +408,16 @@ public class DataExamples {
     }
 
     public Asset UpdateScalarAttribute() throws Exception {
-        Oid storyId = Oid.fromToken("Story:1094", metaModel);
+        Oid storyId = Oid.fromToken("Story:1094", _metaModel);
         Query query = new Query(storyId);
-        IAssetType storyType = metaModel.getAssetType("Story");
+        IAssetType storyType = _metaModel.getAssetType("Story");
         IAttributeDefinition nameAttribute = storyType.getAttributeDefinition("Name");
         query.getSelection().add(nameAttribute);
-        QueryResult result = services.retrieve(query);
+        QueryResult result = _services.retrieve(query);
         Asset story = result.getAssets()[0];
         String oldName = story.getAttribute(nameAttribute).getValue().toString();
         story.setAttributeValue(nameAttribute, GetNewName());
-        services.save(story);
+        _services.save(story);
 
         System.out.println(story.getOid().getToken());
         System.out.println(oldName);
@@ -401,16 +432,16 @@ public class DataExamples {
     }
 
     public Asset UpdateSingleValueRelation() throws Exception {
-        Oid storyId = Oid.fromToken("Story:1094", metaModel);
+        Oid storyId = Oid.fromToken("Story:1094", _metaModel);
         Query query = new Query(storyId);
-        IAssetType storyType = metaModel.getAssetType("Story");
+        IAssetType storyType = _metaModel.getAssetType("Story");
         IAttributeDefinition sourceAttribute = storyType.getAttributeDefinition("Source");
         query.getSelection().add(sourceAttribute);
-        QueryResult result = services.retrieve(query);
+        QueryResult result = _services.retrieve(query);
         Asset story = result.getAssets()[0];
         String oldSource = story.getAttribute(sourceAttribute).getValue().toString();
         story.setAttributeValue(sourceAttribute, GetNextSourceID(oldSource));
-        services.save(story);
+        _services.save(story);
 
         System.out.println(story.getOid().getToken());
         System.out.println(oldSource);
@@ -425,18 +456,18 @@ public class DataExamples {
     }
 
     public Asset UpdateMultiValueRelation() throws Exception {
-        Oid storyId = Oid.fromToken("Story:1094", metaModel);
+        Oid storyId = Oid.fromToken("Story:1094", _metaModel);
         Query query = new Query(storyId);
-        IAssetType storyType = metaModel.getAssetType("Story");
+        IAssetType storyType = _metaModel.getAssetType("Story");
         IAttributeDefinition ownersAttribute = storyType.getAttributeDefinition("Owners");
         query.getSelection().add(ownersAttribute);
-        QueryResult result = services.retrieve(query);
+        QueryResult result = _services.retrieve(query);
         Asset story = result.getAssets()[0];
         List<Object> oldOwners = new ArrayList<Object>();
         oldOwners.addAll(Arrays.asList(story.getAttribute(ownersAttribute).getValues()));
         story.removeAttributeValue(ownersAttribute, getOwnerToRemove(oldOwners));
         story.addAttributeValue(ownersAttribute, getOwnerToAdd(oldOwners));
-        services.save(story);
+        _services.save(story);
 
         System.out.println(story.getOid().getToken());
         Iterator<Object> iter = oldOwners.iterator();
@@ -458,12 +489,12 @@ public class DataExamples {
     }
 
     public Asset AddNewAsset() throws Exception {
-        Oid projectId = Oid.fromToken("Scope:1012", metaModel);
-        IAssetType storyType = metaModel.getAssetType("Story");
-        Asset newStory = services.createNew(storyType, projectId);
+        Oid projectId = Oid.fromToken("Scope:1012", _metaModel);
+        IAssetType storyType = _metaModel.getAssetType("Story");
+        Asset newStory = _services.createNew(storyType, projectId);
         IAttributeDefinition nameAttribute = storyType.getAttributeDefinition("Name");
         newStory.setAttributeValue(nameAttribute, "My New Story");
-        services.save(newStory);
+        _services.save(newStory);
 
         System.out.println(newStory.getOid().getToken());
         System.out.println(newStory.getAttribute(storyType.getAttributeDefinition("Scope")).getValue());
@@ -479,12 +510,12 @@ public class DataExamples {
 
     public Oid DeleteAsset() throws Exception {
         Asset story = AddNewAsset();
-        IOperation deleteOperation = metaModel.getOperation("Story.Delete");
-        Oid deletedID = services.executeOperation(deleteOperation, story.getOid());
+        IOperation deleteOperation = _metaModel.getOperation("Story.Delete");
+        Oid deletedID = _services.executeOperation(deleteOperation, story.getOid());
         Query query = new Query(deletedID.getMomentless());
         try {
             @SuppressWarnings("unused")
-            QueryResult result = services.retrieve(query);
+            QueryResult result = _services.retrieve(query);
         } catch (ConnectionException e) {
             if (404 == e.getServerResponseCode())
                 System.out.println("Story has been deleted: " + story.getOid().getMomentless());
@@ -499,13 +530,13 @@ public class DataExamples {
 
     public Asset CloseAsset() throws Exception {
         Asset story = AddNewAsset();
-        IOperation closeOperation = metaModel.getOperation("Story.Inactivate");
-        Oid closeID = services.executeOperation(closeOperation, story.getOid());
+        IOperation closeOperation = _metaModel.getOperation("Story.Inactivate");
+        Oid closeID = _services.executeOperation(closeOperation, story.getOid());
 
         Query query = new Query(closeID.getMomentless());
-        IAttributeDefinition assetState = metaModel.getAttributeDefinition("Story.AssetState");
+        IAttributeDefinition assetState = _metaModel.getAttributeDefinition("Story.AssetState");
         query.getSelection().add(assetState);
-        QueryResult result = services.retrieve(query);
+        QueryResult result = _services.retrieve(query);
         Asset closeStory = result.getAssets()[0];
         AssetState state = AssetState.valueOf(((Integer) closeStory.getAttribute(assetState).getValue()).intValue());
 
@@ -521,13 +552,13 @@ public class DataExamples {
 
     public Asset ReOpenAsset() throws Exception {
         Asset story = CloseAsset();
-        IOperation activateOperation = metaModel.getOperation("Story.Reactivate");
-        Oid activeID = services.executeOperation(activateOperation, story.getOid());
+        IOperation activateOperation = _metaModel.getOperation("Story.Reactivate");
+        Oid activeID = _services.executeOperation(activateOperation, story.getOid());
 
         Query query = new Query(activeID.getMomentless());
-        IAttributeDefinition assetState = metaModel.getAttributeDefinition("Story.AssetState");
+        IAttributeDefinition assetState = _metaModel.getAttributeDefinition("Story.AssetState");
         query.getSelection().add(assetState);
-        QueryResult result = services.retrieve(query);
+        QueryResult result = _services.retrieve(query);
         Asset activeStory = result.getAssets()[0];
         @SuppressWarnings("unused")
         AssetState state = AssetState.valueOf(((Integer) activeStory.getAttribute(assetState).getValue()).intValue());
@@ -542,12 +573,11 @@ public class DataExamples {
     }
 
     public IServices connectionWithProxy() throws URISyntaxException {
-        URI proxy = new URI(proxyAddress);
-        ProxyProvider proxyProvider = new ProxyProvider(proxy, proxyUserName, proxyPassword);
 
-        IAPIConnector metaConnectorWithProxy = new V1APIConnector(metaUrl, proxyProvider);
-        IMetaModel metaModelWithProxy = new MetaModel(metaConnectorWithProxy);
-        IAPIConnector dataConnectorWithProxy = new V1APIConnector(dataUrl, username, password, proxyProvider);
+
+        IAPIConnector metaConnectorWithProxy = getMetaConnectorWithProxy(); //new V1APIConnector(metaUrl, proxyProvider);
+        IMetaModel metaModelWithProxy = getMetaModelWithProxy(); //new MetaModel(metaConnectorWithProxy);
+        IAPIConnector dataConnectorWithProxy = getAPIConnectorWithProxy();// new V1APIConnector(dataUrl, _username, _password, proxyProvider);
         IServices servicesWithProxy = new Services(metaModelWithProxy, dataConnectorWithProxy);
 
         return servicesWithProxy;
@@ -567,11 +597,11 @@ public class DataExamples {
 
 
     IMetaModel getMetaModel() {
-        return metaModel;
+        return _metaModel;
     }
 
     IServices getServices() {
-        return services;
+        return _services;
     }
 
 
