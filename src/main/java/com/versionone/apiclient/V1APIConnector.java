@@ -22,7 +22,7 @@ public class V1APIConnector extends ApacheHttpAPIConnector {
 	}
 	
 	public V1APIConnector(String url, ProxyProvider proxy) {
-		super(url, null, null, proxy);
+		super(url, "admin", "admin", proxy);
 	}
 	
 	
