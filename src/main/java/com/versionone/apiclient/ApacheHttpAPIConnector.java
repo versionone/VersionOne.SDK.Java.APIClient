@@ -24,6 +24,7 @@ import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.BasicHttpEntity;
+import org.apache.http.entity.ByteArrayEntity;
 import org.apache.http.entity.ContentType;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
@@ -153,12 +154,9 @@ public class ApacheHttpAPIConnector implements IAPIConnector {
 		startedRequests.remove(path);
 		String contentType = startedRequest.left;
 		ByteArrayOutputStream outstream = startedRequest.right;
-		ByteArrayInputStream instream = new ByteArrayInputStream(outstream.toByteArray());
-		
+		ByteArrayEntity postbody = new ByteArrayEntity(outstream.toByteArray());
 		String url = this.url + path;
-		BasicHttpEntity postbody = new BasicHttpEntity();
 		postbody.setContentType(contentType);
-		postbody.setContent(instream);
 		HttpPost request = new HttpPost(url);
 		request.setEntity(postbody);
 		try {
