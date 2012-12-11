@@ -100,6 +100,21 @@
   		<artifactId>jmock-legacy</artifactId>
   		<version>2.6.0-RC2</version>
   	</dependency>
+  	<dependency>
+  		<groupId>org.apache.httpcomponents</groupId>
+  		<artifactId>httpclient</artifactId>
+  		<version>4.2.2</version>
+  	</dependency>
+  	<dependency>
+  		<groupId>org.apache.commons</groupId>
+  		<artifactId>commons-io</artifactId>
+  		<version>1.3.2</version>
+  	</dependency>
+  	<dependency>
+  		<groupId>org.apache.commons</groupId>
+  		<artifactId>commons-lang3</artifactId>
+  		<version>3.1</version>
+  	</dependency>
   </dependencies>
   <organization>
   	<name>Version One, Inc.</name>
