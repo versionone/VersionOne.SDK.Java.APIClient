@@ -25,6 +25,7 @@ import org.apache.http.auth.UsernamePasswordCredentials;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
+import org.apache.http.client.methods.HttpUriRequest;
 import org.apache.http.entity.ByteArrayEntity;
 import org.apache.http.entity.ContentType;
 import org.apache.http.entity.StringEntity;
@@ -158,12 +159,23 @@ public class ApacheHttpAPIConnector implements IAPIConnector {
 		startedRequests.remove(path);
 		String contentType = startedRequest.left;
 		ByteArrayOutputStream outstream = startedRequest.right;
-		ByteArrayEntity postbody = new ByteArrayEntity(outstream.toByteArray());
+		
 		String url = this.url + path;
-		postbody.setContentType(contentType);
-		HttpPost request = new HttpPost(url);
-		request.setEntity(postbody);
+		
+		HttpUriRequest request;
+		
+		if(outstream.size() > 0) {
+			// TODO: How the hell do we determine the difference between wanting to truncate the file (writing a zero-length file) and wanting to GET the content?????
+			ByteArrayEntity postbody = new ByteArrayEntity(outstream.toByteArray());
+			postbody.setContentType(contentType);
+			request = new HttpPost(url);
+			((HttpPost) request).setEntity(postbody);
+		} else {
+			request = new HttpGet(url);
+		}
+		
 		try {
+			
 			HttpResponse response = this.httpclient.execute(request);
 			HttpEntity responsebody = response.getEntity();
 			if(responsebody == null) {
@@ -171,7 +183,7 @@ public class ApacheHttpAPIConnector implements IAPIConnector {
 			}
 			return responsebody.getContent();
 		} catch (IOException e) {
-			throw new ConnectionException("Unable to send attachment", e);
+			throw new ConnectionException("Unable to execute web request", e);
 		}
 	}
 }
