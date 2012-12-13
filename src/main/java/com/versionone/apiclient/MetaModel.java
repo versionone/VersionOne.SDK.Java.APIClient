@@ -2,6 +2,8 @@ package com.versionone.apiclient;
 
 import java.io.IOException;
 import java.io.Reader;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -163,7 +165,7 @@ public class MetaModel implements IMetaModel {
 	}
 
 	private IAttributeDefinition hookupAttributeDefinition(String assettypetoken, String name) throws Exception {
-		Document doc = createDocument(assettypetoken + "/" + name);
+		Document doc = createDocument(assettypetoken + "/" + URLEncoder.encode(name, "UTF-8")); // TODO fix this broken string slicing and dicing.
 		AttributeDefinition attribdef = new AttributeDefinition(this, doc.getDocumentElement());
 		saveAttributeDefinition(attribdef);
 		return attribdef;
@@ -202,15 +204,15 @@ public class MetaModel implements IMetaModel {
 		}
 	}
 	
-	private Document createDocument(String token) throws V1Exception {
+	private Document createDocument(String urlpart) throws V1Exception {
 		Reader reader = null;
 		Document rc = null;
 		try {
-			reader = _connector.getData(token);
-			rc = XMLHandler.buildDocument(reader, token);
+			reader = _connector.getData(urlpart);
+			rc = XMLHandler.buildDocument(reader, urlpart);
 			_versionString = rc.getDocumentElement().getAttribute("version").toString();
 		} catch (ConnectionException e) {
-			throw new MetaException("Error creating Document", token, e);
+			throw new MetaException("Error creating Document", urlpart, e);
 		}
 		finally {
 			if(null != reader){try {reader.close();} catch (IOException e) {}}
