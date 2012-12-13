@@ -9,6 +9,8 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.Reader;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -23,7 +25,6 @@ import org.apache.http.auth.UsernamePasswordCredentials;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
-import org.apache.http.entity.BasicHttpEntity;
 import org.apache.http.entity.ByteArrayEntity;
 import org.apache.http.entity.ContentType;
 import org.apache.http.entity.StringEntity;
@@ -67,7 +68,7 @@ public class ApacheHttpAPIConnector implements IAPIConnector {
 	/* (non-Javadoc)
 	 * @see com.versionone.apiclient.IAPIConnector#getData()
 	 */
-	@Override
+	
 	public Reader getData() throws ConnectionException {
 		return getData("");
 	}
@@ -79,7 +80,7 @@ public class ApacheHttpAPIConnector implements IAPIConnector {
 	/* (non-Javadoc)
 	 * @see com.versionone.apiclient.IAPIConnector#getData(java.lang.String)
 	 */
-	@Override
+	
 	public Reader getData(String path) throws ConnectionException {
 		String url = this.url + path;
 		HttpGet request = new HttpGet(url);
@@ -105,7 +106,7 @@ public class ApacheHttpAPIConnector implements IAPIConnector {
 	/* (non-Javadoc)
 	 * @see com.versionone.apiclient.IAPIConnector#sendData(java.lang.String, java.lang.String)
 	 */
-	@Override
+	
 	public Reader sendData(String path, String data) throws ConnectionException {
 		String url = this.url + path;
 		HttpPost request = new HttpPost(url);
@@ -133,7 +134,7 @@ public class ApacheHttpAPIConnector implements IAPIConnector {
 	/* (non-Javadoc)
 	 * @see com.versionone.apiclient.IAPIConnector#beginRequest(java.lang.String, java.lang.String)
 	 */
-	@Override
+	
 	public OutputStream beginRequest(String path, String contentType) throws ConnectionException {		
 		ByteArrayOutputStream outstream = new ByteArrayOutputStream();
 		ImmutablePair<String, ByteArrayOutputStream>
@@ -145,7 +146,7 @@ public class ApacheHttpAPIConnector implements IAPIConnector {
 	/* (non-Javadoc)
 	 * @see com.versionone.apiclient.IAPIConnector#endRequest(java.lang.String)
 	 */
-	@Override
+	
 	public InputStream endRequest(String path) throws ConnectionException {
 		ImmutablePair<String, ByteArrayOutputStream> startedRequest = startedRequests.get(path);
 		if(startedRequest == null) {
