@@ -86,13 +86,7 @@ public class ApacheHttpAPIConnector implements IAPIConnector {
 	 */
 	
 	public Reader getData(String path) throws ConnectionException {
-		String url;
-		try {
-			url = URLEncoder.encode(this.url + path, "UTF-8");
-		} catch (UnsupportedEncodingException e1) {
-			throw new ConnectionException("Url not in UTF-8 format", e1);
-		}
-		HttpGet request = new HttpGet(url);
+		HttpGet request = new HttpGet(this.url + path);
 		request.setHeaders(getCustomHeaders());
 		
 		HttpResponse response;
