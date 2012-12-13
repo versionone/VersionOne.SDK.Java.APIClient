@@ -37,7 +37,7 @@ public class FilterTerm implements IFilterTerm {
                 throw new APIException("Exists operator may not take values");
             }
 
-            return "%2B" + def.getToken();
+            return "+" + def.getToken();
         }
 
         if (operator == Operator.NotExists) {
