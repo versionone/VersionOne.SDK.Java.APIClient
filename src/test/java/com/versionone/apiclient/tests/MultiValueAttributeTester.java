@@ -5,8 +5,6 @@ import org.junit.Test;
 
 import com.versionone.Oid;
 import com.versionone.apiclient.Asset;
-import com.versionone.apiclient.Attribute;
-import com.versionone.apiclient.IAssetType;
 import com.versionone.apiclient.IAttributeDefinition;
 import com.versionone.apiclient.Query;
 import com.versionone.apiclient.QueryResult;

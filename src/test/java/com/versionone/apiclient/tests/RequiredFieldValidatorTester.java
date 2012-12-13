@@ -3,27 +3,19 @@ package com.versionone.apiclient.tests;
 import java.util.List;
 import java.util.Map;
 
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
-
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-import org.w3c.dom.Element;
 
 import com.versionone.apiclient.APIException;
 import com.versionone.apiclient.Asset;
 import com.versionone.apiclient.ConnectionException;
-import com.versionone.apiclient.IAPIConnector;
 import com.versionone.apiclient.IAssetType;
 import com.versionone.apiclient.IAttributeDefinition;
 import com.versionone.apiclient.MetaException;
-import com.versionone.apiclient.MetaModel;
 import com.versionone.apiclient.OidException;
 import com.versionone.apiclient.RequiredFieldValidator;
 import com.versionone.apiclient.Services;
-import com.versionone.apiclient.V1APIConnector;
 
 public class RequiredFieldValidatorTester extends ServicesTesterBase {
 

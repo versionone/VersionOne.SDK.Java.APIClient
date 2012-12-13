@@ -2,10 +2,10 @@ package com.versionone.apiclient.tests;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.Reader;
 import java.io.StringReader;
-import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
 
