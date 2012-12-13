@@ -555,7 +555,7 @@
         <RelatedAttribute href="/VersionOne//meta.v1/AssetType/Name" tokenref="AssetType.Name"/>
       </AttributeDefinition>
     </Response>
-    <Response path="rest-1.v1/Data/AttributeDefinition?sel=AttributeDefinition.Name&amp;where=AttributeDefinition.Asset.AssetTypesMeAndDown.Name='Defect'">
+    <Response path="rest-1.v1/Data/AttributeDefinition?sel=AttributeDefinition.Name&amp;where=AttributeDefinition.Asset.AssetTypesMeAndDown.Name%3D%27Defect%27">
       <Assets total="3" pageSize="2147483647" pageStart="0">
         <Asset href="/VersionOne/rest-1.v1/Data/HierarchyRelationDefinition/-5718" id="HierarchyRelationDefinition:-5718">
           <Attribute name="Name">Super</Attribute>

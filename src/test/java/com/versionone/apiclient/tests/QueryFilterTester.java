@@ -23,7 +23,7 @@ public class QueryFilterTester extends MetaTesterBase {
     public void toToken() throws Exception {
         FilterTerm term = new FilterTerm(getWorkitemScope());
         term.equal(new Object[]{getScopeOid(2)});
-        Assert.assertEquals("Workitem.Scope='Scope%3A2'", term.getToken());
+        Assert.assertEquals("Workitem.Scope='Scope:2'", term.getToken());
     }
 
     @Test
@@ -34,7 +34,7 @@ public class QueryFilterTester extends MetaTesterBase {
         FilterTerm term2 = new FilterTerm(getWorkitemScope());
         term2.equal(new Object[]{getScopeOid(2)});
 
-        Assert.assertEquals("(Workitem.Parent='Theme%3A48';Workitem.Scope='Scope%3A2')",
+        Assert.assertEquals("(Workitem.Parent='Theme:48';Workitem.Scope='Scope:2')",
                 new AndFilterTerm(new IFilterTerm[]{term1, term2}).getToken());
     }
 
@@ -59,7 +59,7 @@ public class QueryFilterTester extends MetaTesterBase {
 
         OrFilterTerm o = new OrFilterTerm(and1, and2);
 
-        Assert.assertEquals("((Workitem.Parent='Theme%3A5','Theme%3A6';Workitem.Scope='Scope%3A0')|(Workitem.Parent!='Theme%3A7','Theme%3A8';Workitem.Scope!='Scope%3A1'))",
+        Assert.assertEquals("((Workitem.Parent='Theme:5','Theme:6';Workitem.Scope='Scope:0')|(Workitem.Parent!='Theme:7','Theme:8';Workitem.Scope!='Scope:1'))",
                 o.getToken());
     }
 
