@@ -45,8 +45,12 @@ public class ApacheHttpAPIConnector implements IAPIConnector {
 	private Map<String,ImmutablePair<String, ByteArrayOutputStream>> startedRequests;
 	private ProxyProvider proxy;
 
+	/** Create a connector with credentials to be used for fetching (unauthenticated) metadata
+	 * 
+	 * @param url The VersionOne instance url.
+	 */
 	public ApacheHttpAPIConnector( String url) {
-		this(url, null, null);
+		this(url, "", "");
 	}
 		
 	public ApacheHttpAPIConnector( String url, String username, String password) {
