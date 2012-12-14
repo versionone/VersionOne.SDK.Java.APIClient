@@ -8,6 +8,13 @@ import org.junit.Test;
 
 public class IntegrationTests {
 
+    private String _v1Url;
+    private String _username;
+    private String _password;
+    private String _dataUrl;
+    private String _metaUrl;
+    private String _configUrl;
+
     private V1APIConnector _dataConnector;
     private V1APIConnector _metaConnector;
     private IMetaModel _metaModel;
@@ -15,10 +22,31 @@ public class IntegrationTests {
 
     @Before
     public void Setup(){
-        _dataConnector = EnvironmentContext.Connectors.getDataConnector();
-        _metaConnector = EnvironmentContext.Connectors.getMetaConnector();
-        _metaModel = EnvironmentContext.Models.getMetaModel();
-        _services = EnvironmentContext.Services.getServices();
+        //_dataConnector = EnvironmentContext.Connectors.getDataConnector();
+        //_metaConnector = EnvironmentContext.Connectors.getMetaConnector();
+        //_metaModel = EnvironmentContext.Models.getMetaModel();
+        //_services = EnvironmentContext.Services.getServices();
+
+        _v1Url = "https://www14.v1host.com/v1sdktesting/";
+        _username = "admin";
+        _password = "admin";
+
+        _dataUrl = _v1Url + "rest-1.v1/";
+        _metaUrl = _v1Url + "meta.v1/";
+        _configUrl = _v1Url + "config.v1/";
+
+        V1APIConnector dataConnector = getDataConnector();
+        V1APIConnector metaConnector = getMetaConnector();
+        _metaModel = new MetaModel(metaConnector);
+        _services = new Services(_metaModel, dataConnector);
+    }
+
+    private V1APIConnector getDataConnector() {
+        return new V1APIConnector(_dataUrl, _username, _password);
+    }
+
+    private V1APIConnector getMetaConnector() {
+        return new V1APIConnector(_metaUrl, _username, _password);
     }
 
     @Test @Ignore("WIP")
