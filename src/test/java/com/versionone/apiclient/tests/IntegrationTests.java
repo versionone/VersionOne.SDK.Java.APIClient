@@ -23,25 +23,10 @@ public class IntegrationTests {
 
     @Before
     public void Setup(){
-
         EnvironmentContext environment = new EnvironmentContext();
         EnvironmentContext.ModelsAndServices modelsAndServices = environment.new ModelsAndServices();
-
         _metaModel = modelsAndServices.getMetaModel();
         _services = modelsAndServices.getServices();
-
-        /*_v1Url = "https://www14.v1host.com/v1sdktesting/";
-        _username = "admin";
-        _password = "admin";
-
-        _dataUrl = _v1Url + "rest-1.v1/";
-        _metaUrl = _v1Url + "meta.v1/";
-        _configUrl = _v1Url + "config.v1/";
-
-        V1APIConnector dataConnector = getDataConnector();
-        V1APIConnector metaConnector = getMetaConnector();
-        _metaModel = new MetaModel(metaConnector);
-        _services = new Services(_metaModel, dataConnector);*/
     }
 
     private V1APIConnector getDataConnector() {
