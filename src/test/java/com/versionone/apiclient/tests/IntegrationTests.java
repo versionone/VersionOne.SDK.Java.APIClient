@@ -1,4 +1,5 @@
 package com.versionone.apiclient.tests;
+
 import com.versionone.Oid;
 import com.versionone.apiclient.*;
 import junit.framework.Assert;
@@ -22,12 +23,14 @@ public class IntegrationTests {
 
     @Before
     public void Setup(){
-        //_dataConnector = EnvironmentContext.Connectors.getDataConnector();
-        //_metaConnector = EnvironmentContext.Connectors.getMetaConnector();
-        //_metaModel = EnvironmentContext.Models.getMetaModel();
-        //_services = EnvironmentContext.Services.getServices();
 
-        _v1Url = "https://www14.v1host.com/v1sdktesting/";
+        EnvironmentContext environment = new EnvironmentContext();
+        EnvironmentContext.ModelsAndServices modelsAndServices = environment.new ModelsAndServices();
+
+        _metaModel = modelsAndServices.getMetaModel();
+        _services = modelsAndServices.getServices();
+
+        /*_v1Url = "https://www14.v1host.com/v1sdktesting/";
         _username = "admin";
         _password = "admin";
 
@@ -38,7 +41,7 @@ public class IntegrationTests {
         V1APIConnector dataConnector = getDataConnector();
         V1APIConnector metaConnector = getMetaConnector();
         _metaModel = new MetaModel(metaConnector);
-        _services = new Services(_metaModel, dataConnector);
+        _services = new Services(_metaModel, dataConnector);*/
     }
 
     private V1APIConnector getDataConnector() {
