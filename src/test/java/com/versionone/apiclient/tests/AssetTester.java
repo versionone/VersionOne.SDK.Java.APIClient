@@ -13,8 +13,11 @@ public class AssetTester {
     @Test
     public void SetValidOidOnAssetTest() throws V1Exception {
 
-        _metaModel = EnvironmentContext.Models.getMetaModel();
-        _services = EnvironmentContext.Services.getServices();
+        EnvironmentContext environment = new EnvironmentContext();
+        EnvironmentContext.ModelsAndServices modelsAndServices = environment.new ModelsAndServices();
+
+        _metaModel = modelsAndServices.getMetaModel();
+        _services = modelsAndServices.getServices();
 
         Oid projectId = Oid.fromToken("Scope:0", _metaModel);
         IAssetType assetType = _metaModel.getAssetType("Story");
