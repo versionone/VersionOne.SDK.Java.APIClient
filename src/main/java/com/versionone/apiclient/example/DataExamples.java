@@ -21,6 +21,7 @@ public class DataExamples {
     private String _password;
     private String _dataUrl;
     private String _metaUrl;
+    private String _configUrl;
 
     private final static String _proxyAddress = "https://myProxyServer:3128";
     private final static String _proxyUserName = "user1";
@@ -39,6 +40,7 @@ public class DataExamples {
 
         _dataUrl = _v1Url + "rest-1.v1/";
         _metaUrl = _v1Url + "meta.v1/";
+        _configUrl = _v1Url + "config.v1/";
 
         V1APIConnector dataConnector = getDataConnector();
         V1APIConnector metaConnector = getMetaConnector();
@@ -125,9 +127,9 @@ public class DataExamples {
         return member;
     }
 
-    public void getV1configuration()
+    public V1Configuration getV1configuration()
     {
-        V1Configuration configuration = new V1Configuration(new V1APIConnector("https://www14.v1host.com/v1sdktesting/config.v1/"));
+        return new V1Configuration(new V1APIConnector(_configUrl, _username, _password));
     }
 
     public boolean IsEffortTrackingEnabled() throws Exception
@@ -366,7 +368,7 @@ public class DataExamples {
 
     public void StoryAndDefectTrackingLevel() throws Exception
     {
-        V1Configuration configuration = new V1Configuration(new V1APIConnector("https://www14.v1host.com/v1sdktesting/config.v1/"));
+        V1Configuration configuration = getV1configuration(); //new V1Configuration(new V1APIConnector(_configUrl, _username, _password));
 
         System.out.println(configuration.getStoryTrackingLevel());
         System.out.println(configuration.getDefectTrackingLevel());
@@ -493,15 +495,15 @@ public class DataExamples {
     }
 
     public Asset AddNewAsset() throws Exception {
-        Oid projectId = Oid.fromToken("Scope:1012", _metaModel);
-        IAssetType storyType = _metaModel.getAssetType("Story");
-        Asset newStory = _services.createNew(storyType, projectId);
+        Oid projectId = Oid.fromToken("Scope:1012", metaModel);
+        IAssetType storyType = metaModel.getAssetType("Story");
+        Asset newStory = services.createNew(storyType, projectId);
         IAttributeDefinition nameAttribute = storyType.getAttributeDefinition("Name");
         newStory.setAttributeValue(nameAttribute, "My New Story");
         _services.save(newStory);
 
         System.out.println(newStory.getOid().getToken());
-        System.out.println(newStory.getAttribute(storyType.getAttributeDefinition("Scope")).getValue());
+        System.out.println(newStory.getAttribute(assetType.getAttributeDefinition("Scope")).getValue());
         System.out.println(newStory.getAttribute(nameAttribute).getValue());
         /***** OUTPUT *****
          Story:1094
