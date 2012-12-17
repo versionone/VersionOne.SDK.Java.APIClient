@@ -23,7 +23,7 @@ public final class EnvironmentContext {
         }
     }
 
-    public class ModelsAndServices implements IModelsAndServices  {
+    public final class ModelsAndServices implements IModelsAndServices  {
 
         private Connectors _connectors;
         private IMetaModel _metaModel;
