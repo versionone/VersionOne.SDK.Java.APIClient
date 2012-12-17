@@ -16,6 +16,9 @@ public class AssetTester {
     @Before
     public void Setup(){
         EnvironmentContext environment = new EnvironmentContext();
+        IModelsAndServices modelsAndServices = environment.new ModelsAndServices();
+        _metaModel = modelsAndServices.getMetaModel();
+        _services = modelsAndServices.getServices();
     }
 
     @Test @Ignore
@@ -27,7 +30,7 @@ public class AssetTester {
         Assert.assertNotNull(newStory.getOid());
     }
 
-    @Test @Ignore
+    @Test
     public void SetValidOidOnAssetTest() throws V1Exception {
 
         Oid projectId = Oid.fromToken("Scope:0", _metaModel);
