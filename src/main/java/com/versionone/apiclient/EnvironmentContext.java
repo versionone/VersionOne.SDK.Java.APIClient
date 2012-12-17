@@ -1,10 +1,8 @@
-package com.versionone.apiclient.tests;
+package com.versionone.apiclient;
 
-import com.versionone.apiclient.*;
+public final class EnvironmentContext {
 
-public class EnvironmentContext {
-
-    private static class Urls {
+    private static final class Urls {
         public static String getV1Url(){
             return "https://www14.v1host.com/v1sdktesting/";
         }
@@ -16,7 +14,7 @@ public class EnvironmentContext {
         }
     }
 
-    private static class Credentials{
+    private static final class Credentials{
         public static String getV1UserName(){
             return "admin";
         }
@@ -25,7 +23,7 @@ public class EnvironmentContext {
         }
     }
 
-    public final class ModelsAndServices{
+    public class ModelsAndServices implements IModelsAndServices  {
 
         private Connectors _connectors;
         private IMetaModel _metaModel;
@@ -52,7 +50,7 @@ public class EnvironmentContext {
 
     }
 
-    private final class Connectors{
+    private static final class Connectors{
 
         private V1APIConnector _dataConnector;
         private V1APIConnector _metaConnector;
