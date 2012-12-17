@@ -2,6 +2,7 @@ package com.versionone.apiclient.tests;
 
 import com.versionone.Oid;
 import com.versionone.apiclient.*;
+import com.versionone.apiclient.EnvironmentContext;
 import junit.framework.Assert;
 import org.junit.Before;
 import org.junit.Ignore;
@@ -15,9 +16,6 @@ public class AssetTester {
     @Before
     public void Setup(){
         EnvironmentContext environment = new EnvironmentContext();
-        EnvironmentContext.ModelsAndServices modelsAndServices = environment.new ModelsAndServices();
-        _metaModel = modelsAndServices.getMetaModel();
-        _services = modelsAndServices.getServices();
     }
 
     @Test @Ignore
@@ -29,8 +27,7 @@ public class AssetTester {
         Assert.assertNotNull(newStory.getOid());
     }
 
-
-    @Test
+    @Test @Ignore
     public void SetValidOidOnAssetTest() throws V1Exception {
 
         Oid projectId = Oid.fromToken("Scope:0", _metaModel);
