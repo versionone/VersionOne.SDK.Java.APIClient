@@ -495,15 +495,15 @@ public class DataExamples {
     }
 
     public Asset AddNewAsset() throws Exception {
-        Oid projectId = Oid.fromToken("Scope:1012", metaModel);
-        IAssetType storyType = metaModel.getAssetType("Story");
-        Asset newStory = services.createNew(storyType, projectId);
+        Oid projectId = Oid.fromToken("Scope:1012", _metaModel);
+        IAssetType storyType = _metaModel.getAssetType("Story");
+        Asset newStory = _services.createNew(storyType, projectId);
         IAttributeDefinition nameAttribute = storyType.getAttributeDefinition("Name");
         newStory.setAttributeValue(nameAttribute, "My New Story");
         _services.save(newStory);
 
         System.out.println(newStory.getOid().getToken());
-        System.out.println(newStory.getAttribute(assetType.getAttributeDefinition("Scope")).getValue());
+        System.out.println(newStory.getAttribute(storyType.getAttributeDefinition("Scope")).getValue());
         System.out.println(newStory.getAttribute(nameAttribute).getValue());
         /***** OUTPUT *****
          Story:1094
