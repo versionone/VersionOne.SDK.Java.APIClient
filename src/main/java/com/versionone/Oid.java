@@ -117,8 +117,20 @@ public class Oid {
 	 * @return true if it's null, false otherwise
 	 */
 	public boolean isNull() {
-		return this == Null;
+		return this.equals(Null);
 	}
+
+    private String BuildToken(){
+        if (_type == null) return NullOidToken;
+        String typeToken = _type.getToken();
+        StringBuilder res = new StringBuilder();
+        res.append(typeToken).append(SEPARATOR).append(_id);
+        if (hasMoment()) {
+            res.append(SEPARATOR).append(_moment);
+        }
+        return res.toString();
+    }
+
 
 	/**
 	 * Get the token for this object identifier
@@ -128,12 +140,7 @@ public class Oid {
         if (isNull()){
             return NullOidToken;
         }
-        StringBuilder res = new StringBuilder();
-        res.append(_type.getToken()).append(SEPARATOR).append(_id);
-        if (hasMoment()) {
-            res.append(SEPARATOR).append(_moment);
-        }
-        return res.toString();
+        return BuildToken();
     }
 
 	/**
@@ -185,25 +192,31 @@ public class Oid {
 		return _moment != null;
 	}
 
-	/**
-	 * Compare this instance to another oid
-	 */
+    /**
+     * Compare this instance to another oid
+     */
     @Override
     public boolean equals(Object obj) {
-        if (!(obj instanceof Oid)) {
-            return false;
-        } else if (obj == this) {
-            return true;
-        }
+
+        if (!(obj instanceof Oid)) return false;
+
         Oid other = (Oid) obj;
-        if (isNull() || other.isNull()) {
-            return false;
-        } else if (!_type.getToken().equals(other._type.getToken()) || _id != other._id) {
-            return false;
-        } else if (!hasMoment()) {
-            return !other.hasMoment();
-        }
-        return _moment.equals(other._moment);
+
+        //are the AssetTypes equal?
+        if (null == _type ^ null == other.getAssetType()) return false;
+        if (null == _type && null == other.getAssetType()) return true;
+        if (!_type.getToken().equals(other._type.getToken())) return false;
+
+        //are the id's equal?
+        if (_id != other._id) return false;
+
+        //are the moments equal?
+        if (hasMoment() ^ other.hasMoment()) return false;
+        if (null == this.getMoment() && null == other.getMoment()) return true;
+        if (!this.getMoment().equals(other.getMoment())) return false;
+
+        return true;
+
     }
 
     /**
