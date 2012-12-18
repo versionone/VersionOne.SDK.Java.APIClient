@@ -96,7 +96,7 @@ public class OidTester extends MetaTesterBase {
 		Oid o = new Oid(getStoryAssetType(),5,new DB.Int());
 		Assert.assertFalse(o.equals(null));
 	}
-	
+
 	@Test public void OidEqualSelf()
 	{
 		Oid o = new Oid(getStoryAssetType(),5,new DB.Int());
@@ -150,7 +150,7 @@ public class OidTester extends MetaTesterBase {
         Oid oid2 = Oid.fromToken("Story:5:555", getMeta());
         Oid anotherOid = Oid.fromToken("Story:5:666", getMeta());
         Oid momentlessOid = Oid.fromToken("Story:5", getMeta());
-        Assert.assertEquals(oid, oid2);
+        Assert.assertTrue(oid.equals(oid2));
         Assert.assertEquals(oid.hashCode(), oid2.hashCode());
         Assert.assertFalse(oid.equals(anotherOid));
         Assert.assertFalse(oid.equals(momentlessOid));

@@ -1,3 +1,4 @@
+package com.versionone.apiclient.tests;
 
 import com.versionone.Oid;
 import com.versionone.apiclient.*;
@@ -23,20 +24,11 @@ public class IntegrationTests {
     @Before
     public void Setup(){
         EnvironmentContext environment = new EnvironmentContext();
-        EnvironmentContext.ModelsAndServices modelsAndServices = environment.new ModelsAndServices();
-        _metaModel = modelsAndServices.getMetaModel();
-        _services = modelsAndServices.getServices();
+        _metaModel = environment.getMetaModel();
+        _services = environment.getServices();
     }
 
-    private V1APIConnector getDataConnector() {
-        return new V1APIConnector(_dataUrl, _username, _password);
-    }
-
-    private V1APIConnector getMetaConnector() {
-        return new V1APIConnector(_metaUrl, _username, _password);
-    }
-
-    @Test @Ignore("WIP")
+    @Test  @Ignore
     public void AddNewAssetWithNonExistentScopeContext() throws Exception {
         Oid projectId = Oid.fromToken("Scope:999999999", _metaModel);
         IAssetType assetType = _metaModel.getAssetType("Story");

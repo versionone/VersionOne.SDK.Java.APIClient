@@ -16,23 +16,20 @@ public class AssetTester {
     @Before
     public void Setup(){
         EnvironmentContext environment = new EnvironmentContext();
-        IModelsAndServices modelsAndServices = environment.new ModelsAndServices();
-        _metaModel = modelsAndServices.getMetaModel();
-        _services = modelsAndServices.getServices();
+        _metaModel = environment.getMetaModel();
+        _services = environment.getServices();
     }
 
-    @Test @Ignore
+    @Test(expected = OidException.class)
     public void SetInvalidOidOnAssetTest() throws V1Exception{
         Oid projectId = Oid.fromToken("Scope:0", _metaModel);
         IAssetType assetType = _metaModel.getAssetType("Story");
         Asset newStory = _services.createNew(assetType, projectId);
         newStory.setOid(Oid.fromToken("", _metaModel));
-        Assert.assertNotNull(newStory.getOid());
     }
 
     @Test
     public void SetValidOidOnAssetTest() throws V1Exception {
-
         Oid projectId = Oid.fromToken("Scope:0", _metaModel);
         IAssetType assetType = _metaModel.getAssetType("Story");
         Asset newStory = _services.createNew(assetType, projectId);
