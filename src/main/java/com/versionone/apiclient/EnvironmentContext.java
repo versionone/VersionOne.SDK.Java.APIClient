@@ -2,23 +2,23 @@ package com.versionone.apiclient;
 
 public final class EnvironmentContext {
 
-    private static final class Urls {
-        public static String getV1Url(){
+    private class Urls implements IUrls {
+        public String getV1Url(){
             return "https://www14.v1host.com/v1sdktesting/";
         }
-        public static String getDataUrl(){
-            return getV1Url().concat("rest-1.v1/");
-        }
-        public static String getMetaUrl(){
+        public String getMetaUrl(){
             return getV1Url().concat("meta.v1/");
+        }
+        public String getDataUrl(){
+            return getV1Url().concat("rest-1.v1/");
         }
     }
 
-    private static final class Credentials{
-        public static String getV1UserName(){
+    private class Credentials implements ICredentials {
+        public String getV1UserName(){
             return "admin";
         }
-        public static String getV1Password(){
+        public String getV1Password(){
             return "admin";
         }
     }
@@ -50,22 +50,24 @@ public final class EnvironmentContext {
 
     }
 
-    private static final class Connectors{
+    private class Connectors{
 
         private V1APIConnector _dataConnector;
         private V1APIConnector _metaConnector;
+        private IUrls _urls;
+        private ICredentials _credentials;
 
         public Connectors(){
+            _urls = new Urls();
+            _credentials = new Credentials();
             _dataConnector = new V1APIConnector(
-                    EnvironmentContext.Urls.getDataUrl(),
-                    EnvironmentContext.Credentials.getV1UserName(),
-                    EnvironmentContext.Credentials.getV1Password()
+                    _urls.getDataUrl(),
+                    _credentials.getV1UserName(),
+                    _credentials.getV1Password()
                     );
-            _metaConnector = new V1APIConnector(
-                    EnvironmentContext.Urls.getMetaUrl(),
-                    EnvironmentContext.Credentials.getV1UserName(),
-                    EnvironmentContext.Credentials.getV1Password()
-                    );
+
+            _metaConnector = new V1APIConnector(_urls.getMetaUrl());
+
         }
 
         private V1APIConnector getDataConnector(){

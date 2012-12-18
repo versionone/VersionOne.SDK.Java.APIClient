@@ -37,7 +37,7 @@ public class IntegrationTests {
         return new V1APIConnector(_metaUrl, _username, _password);
     }
 
-    @Test @Ignore
+    @Test
     public void AddNewAssetWithNonExistentScopeContext() throws Exception {
         Oid projectId = Oid.fromToken("Scope:999999999", _metaModel);
         IAssetType assetType = _metaModel.getAssetType("Story");
