@@ -15,6 +15,17 @@ public class Connectors implements IConnectors {
         createConnectors();
     }
 
+    public Connectors(IUrls urls, ICredentials credentials){
+
+        if (null == urls || null == credentials)
+            throw new IllegalArgumentException("Urls and credentials are required to be non-null.");
+        _urls = urls;
+        _credentials = credentials;
+
+        createConnectors();
+
+    }
+
     private void createConnectors(){
 
         _dataConnector = new V1APIConnector(
@@ -24,17 +35,6 @@ public class Connectors implements IConnectors {
         );
 
         _metaConnector = new V1APIConnector(_urls.getMetaUrl());
-
-    }
-
-    public Connectors(IUrls urls, ICredentials credentials){
-
-        if (null == urls || null == credentials)
-            throw new IllegalArgumentException("Urls and credentials are required to be non-null.");
-        _urls = urls;
-        _credentials = credentials;
-
-        createConnectors();
 
     }
 
