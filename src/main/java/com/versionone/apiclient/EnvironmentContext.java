@@ -8,8 +8,8 @@ public final class EnvironmentContext {
         _modelsAndServices = new ModelsAndServices();
     }
 
-    public EnvironmentContext(IUrls urls, IModelsAndServices modelsAndServices, IConnectors connectors){
-        _modelsAndServices = new ModelsAndServices();
+    public EnvironmentContext(IModelsAndServices modelsAndServices){
+        _modelsAndServices = modelsAndServices;
     }
 
     public IMetaModel getMetaModel(){
