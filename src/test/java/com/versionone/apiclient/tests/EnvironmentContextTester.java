@@ -24,6 +24,7 @@ public class EnvironmentContextTester {
         Assert.assertNotNull(model);
     }
 
+    @Test
     public void GetServicesTest(){
         IModelsAndServices modelsAndServices = _environment.new ModelsAndServices();
         IServices services = modelsAndServices.getServices();
