@@ -16,9 +16,8 @@ public class AssetTester {
     @Before
     public void Setup(){
         EnvironmentContext environment = new EnvironmentContext();
-        IModelsAndServices modelsAndServices = environment.new ModelsAndServices();
-        _metaModel = modelsAndServices.getMetaModel();
-        _services = modelsAndServices.getServices();
+        _metaModel = environment.getMetaModel();
+        _services = environment.getServices();
     }
 
     @Test(expected = OidException.class)

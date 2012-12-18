@@ -2,7 +2,6 @@ package com.versionone.apiclient.tests;
 
 import com.versionone.apiclient.EnvironmentContext;
 import com.versionone.apiclient.IMetaModel;
-import com.versionone.apiclient.IModelsAndServices;
 import com.versionone.apiclient.IServices;
 import junit.framework.Assert;
 import org.junit.Before;
@@ -19,15 +18,13 @@ public class EnvironmentContextTester {
 
     @Test
     public void GetMetaModelTest(){
-        IModelsAndServices modelsAndServices = _environment.new ModelsAndServices();
-        IMetaModel model = modelsAndServices.getMetaModel();
+        IMetaModel model = _environment.getMetaModel();
         Assert.assertNotNull(model);
     }
 
     @Test
     public void GetServicesTest(){
-        IModelsAndServices modelsAndServices = _environment.new ModelsAndServices();
-        IServices services = modelsAndServices.getServices();
+        IServices services = _environment.getServices();
         Assert.assertNotNull(services);
     }
 
