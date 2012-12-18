@@ -2,12 +2,16 @@ package com.versionone.apiclient;
 
 public final class ModelsAndServices implements IModelsAndServices  {
 
-    private Connectors _connectors;
+    private IConnectors _connectors;
     private IMetaModel _metaModel;
     private IServices _services;
 
     public ModelsAndServices(){
         _connectors = new Connectors();
+    }
+
+    public ModelsAndServices(IConnectors connectors){
+        _connectors = connectors;
     }
 
     public IMetaModel getMetaModel(){

@@ -1,6 +1,7 @@
 package com.versionone.apiclient;
 
 public class Urls implements IUrls {
+
     public String getV1Url(){
         return "https://www14.v1host.com/v1sdktesting/";
     }
