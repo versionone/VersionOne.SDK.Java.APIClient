@@ -9,22 +9,24 @@ import org.junit.Test;
 
 public class EnvironmentContextTester {
 
-    private EnvironmentContext _environment;
+    private EnvironmentContext _defaultTarget;
+    private EnvironmentContext _nonDefaultTarget;
 
     @Before
     public void Setup(){
-        _environment = new EnvironmentContext();
+        _defaultTarget = new EnvironmentContext();
+
     }
 
     @Test
     public void GetMetaModelTest(){
-        IMetaModel model = _environment.getMetaModel();
+        IMetaModel model = _defaultTarget.getMetaModel();
         Assert.assertNotNull(model);
     }
 
     @Test
     public void GetServicesTest(){
-        IServices services = _environment.getServices();
+        IServices services = _defaultTarget.getServices();
         Assert.assertNotNull(services);
     }
 

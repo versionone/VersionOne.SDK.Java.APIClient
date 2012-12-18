@@ -8,6 +8,10 @@ public final class EnvironmentContext {
         _modelsAndServices = new ModelsAndServices();
     }
 
+    public EnvironmentContext(IUrls urls, IModelsAndServices modelsAndServices, IConnectors connectors){
+        _modelsAndServices = new ModelsAndServices();
+    }
+
     public IMetaModel getMetaModel(){
         return _modelsAndServices.getMetaModel();
     }
