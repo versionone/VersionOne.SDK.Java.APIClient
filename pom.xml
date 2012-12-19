@@ -58,8 +58,7 @@
           </systemPropertyVariables>
           <skipTests>false</skipTests>
           <includes>
-            <include>**/*Tester.java</include>
-            <include>**/IntegrationTests.java</include>
+            <include>**/*Test*.java</include>
           </includes>
         </configuration>
       </plugin>

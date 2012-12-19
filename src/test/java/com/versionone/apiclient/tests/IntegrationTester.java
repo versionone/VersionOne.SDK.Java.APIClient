@@ -7,7 +7,7 @@ import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 
-public class IntegrationTests {
+public class IntegrationTester {
 
     private String _v1Url;
     private String _username;
