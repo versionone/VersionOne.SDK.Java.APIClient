@@ -4,7 +4,7 @@
 
   <groupId>com.versionone</groupId>
   <artifactId>VersionOne.SDK.Java.APIClient</artifactId>
-  <version>1.1.0</version>
+  <version>12.3.0</version>
   <packaging>jar</packaging>
 
   <name>VersionOne.SDK.Java.APIClient</name>
