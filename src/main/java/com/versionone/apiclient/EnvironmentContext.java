@@ -8,6 +8,7 @@ public final class EnvironmentContext {
         _modelsAndServices = new ModelsAndServices();
     }
 
+    //inject your own IModelsAndServices implementation if necessary
     public EnvironmentContext(IModelsAndServices modelsAndServices){
         _modelsAndServices = modelsAndServices;
     }

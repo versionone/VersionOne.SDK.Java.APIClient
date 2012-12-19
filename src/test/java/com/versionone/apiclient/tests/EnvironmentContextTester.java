@@ -44,6 +44,7 @@ public class EnvironmentContextTester {
             }
         };
 
+        //can implement your own IConnector implementation if needed.
         IConnectors connectors = new Connectors(urls, credentials);
         IModelsAndServices modelsAndServices = new ModelsAndServices(connectors);
 
@@ -51,6 +52,7 @@ public class EnvironmentContextTester {
 
     }
 
+    //retrieve meta model using environmentContext
     @Test
     public void GetMetaModelTest(){
         IMetaModel model = _defaultTarget.getMetaModel();
@@ -59,6 +61,7 @@ public class EnvironmentContextTester {
         Assert.assertNotNull(model);
     }
 
+    //retrieve services using environmentContext
     @Test
     public void GetServicesTest(){
         IServices services = _defaultTarget.getServices();
