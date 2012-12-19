@@ -44,7 +44,7 @@ public class EnvironmentContextTester {
             }
         };
 
-        //can implement your own IConnector implementation if needed.
+        //can implement your own IConnector if needed.
         IConnectors connectors = new Connectors(urls, credentials);
         IModelsAndServices modelsAndServices = new ModelsAndServices(connectors);
 
