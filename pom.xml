@@ -4,7 +4,7 @@
 
   <groupId>com.versionone</groupId>
   <artifactId>VersionOne.SDK.Java.APIClient</artifactId>
-  <version>12.3.0</version>
+  <version>12.3.0.114</version>
   <packaging>jar</packaging>
 
   <name>VersionOne.SDK.Java.APIClient</name>
@@ -18,8 +18,9 @@
         </license>
   </licenses>
   <scm>
-      <url>https://github.com/versionone/VersionOne.SDK.Java.ObjectModel</url>
-      <connection>NA</connection>
+      <connection>scm:git@github.com:versionone/VersionOne.SDK.Java.APIClient.git</connection>
+      <developerConnection>scm:git@github.com:versionone/VersionOne.SDK.Java.APIClient.git</developerConnection>
+      <url>git@github.com:versionone/VersionOne.SDK.Java.APIClient.git</url>
   </scm>
   <developers>
       <developer>
