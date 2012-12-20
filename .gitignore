@@ -26,6 +26,7 @@ tmp/
 ~$*
 [Tt]humbs.db
 *.DS_Store
+pom.xml.asc
 
 ## Subversion files ##
 .svn
