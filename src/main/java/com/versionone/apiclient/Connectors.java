@@ -1,6 +1,6 @@
 package com.versionone.apiclient;
 
-public class Connectors implements IConnectors {
+public final class Connectors implements IConnectors {
 
     private V1APIConnector _dataConnector;
     private V1APIConnector _metaConnector;

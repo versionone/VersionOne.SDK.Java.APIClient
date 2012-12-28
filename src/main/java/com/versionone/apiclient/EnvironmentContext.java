@@ -10,6 +10,7 @@ public final class EnvironmentContext {
 
     //inject your own IModelsAndServices implementation if necessary
     public EnvironmentContext(IModelsAndServices modelsAndServices){
+        if (null == modelsAndServices) throw new IllegalArgumentException("modelsAndServices cannot be null");
         _modelsAndServices = modelsAndServices;
     }
 

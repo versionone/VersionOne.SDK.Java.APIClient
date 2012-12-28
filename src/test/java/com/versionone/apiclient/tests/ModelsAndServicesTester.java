@@ -20,11 +20,13 @@ public class ModelsAndServicesTester {
     @Test
     public void GetServicesTest(){
         Assert.assertNotNull(_defaultTarget.getServices());
+        Assert.assertNotNull(_nonDefaultTarget.getServices());
     }
 
     @Test
     public void GetMetaModelTest(){
         Assert.assertNotNull(_defaultTarget.getMetaModel());
+        Assert.assertNotNull(_nonDefaultTarget.getMetaModel());
     }
 
 }
