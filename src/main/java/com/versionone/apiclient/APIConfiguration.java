@@ -1,6 +1,5 @@
 package com.versionone.apiclient;
 
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.Properties;
 
@@ -17,7 +16,6 @@ public class APIConfiguration implements IAPIConfiguration {
 
     public APIConfiguration() throws IOException {
         _properties = new Properties();
-        //_properties.load(new FileInputStream(ConfigurationProperties.ConfigFileName()));
         _properties.load(APIConfiguration.class.getResourceAsStream(ConfigurationProperties.ConfigFileName()));
     }
 
