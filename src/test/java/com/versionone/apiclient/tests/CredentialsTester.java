@@ -7,12 +7,14 @@ import junit.framework.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.io.IOException;
+
 public class CredentialsTester {
 
     private ICredentials _defaultTarget;
 
     @Before
-    public void Setup(){
+    public void Setup() throws IOException {
         _defaultTarget = new Credentials();
     }
 

@@ -1,11 +1,21 @@
 package com.versionone.apiclient;
 
-public class Credentials implements ICredentials {
-    public String getV1UserName(){
-        return "admin";
+import java.io.IOException;
+
+public final class Credentials implements ICredentials {
+
+    private IAPIConfiguration _config;
+
+    public Credentials() throws IOException {
+        _config = new APIConfiguration();
     }
+
+    public String getV1UserName(){
+        return _config.getUserName();
+    }
+
     public String getV1Password(){
-        return "admin";
+        return _config.getPassword();
     }
 }
 
