@@ -1,14 +1,22 @@
 package com.versionone.apiclient;
 
+import java.io.IOException;
+
 public class Urls implements IUrls {
 
+    private IAPIConfiguration _config;
+
+    public Urls() throws IOException {
+        _config = new APIConfiguration();
+    }
+
     public String getV1Url(){
-        return "https://www14.v1host.com/v1sdktesting/";
+        return _config.getV1Url();
     }
     public String getMetaUrl(){
-        return getV1Url().concat("meta.v1/");
+        return _config.getMetaUrl();
     }
     public String getDataUrl(){
-        return getV1Url().concat("rest-1.v1/");
+        return _config.getDataUrl();
     }
 }

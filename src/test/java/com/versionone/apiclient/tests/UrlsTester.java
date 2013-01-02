@@ -6,13 +6,15 @@ import junit.framework.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.io.IOException;
+
 public class UrlsTester {
 
     private IUrls _defaultTarget;
     private IUrls _nonDefaultTarget;
 
     @Before
-    public void Setup(){
+    public void Setup() throws IOException {
         _defaultTarget = new Urls();
     }
 

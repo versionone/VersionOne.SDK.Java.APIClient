@@ -7,6 +7,8 @@ import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 
+import java.io.IOException;
+
 public class IntegrationTester {
 
     private String _v1Url;
@@ -22,7 +24,7 @@ public class IntegrationTester {
     private IServices _services;
 
     @Before
-    public void Setup(){
+    public void Setup() throws IOException {
         EnvironmentContext environment = new EnvironmentContext();
         _metaModel = environment.getMetaModel();
         _services = environment.getServices();
