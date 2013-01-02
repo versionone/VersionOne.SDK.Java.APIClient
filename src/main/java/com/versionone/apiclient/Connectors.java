@@ -1,5 +1,7 @@
 package com.versionone.apiclient;
 
+import java.io.IOException;
+
 public final class Connectors implements IConnectors {
 
     private V1APIConnector _dataConnector;
@@ -7,7 +9,7 @@ public final class Connectors implements IConnectors {
     private IUrls _urls;
     private ICredentials _credentials;
 
-    public Connectors(){
+    public Connectors() throws IOException {
 
         _urls = new Urls();
         _credentials = new Credentials();

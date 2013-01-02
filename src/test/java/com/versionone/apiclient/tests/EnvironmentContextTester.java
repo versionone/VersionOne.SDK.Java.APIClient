@@ -5,13 +5,15 @@ import junit.framework.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.io.IOException;
+
 public class EnvironmentContextTester {
 
     private EnvironmentContext _defaultTarget;
     private EnvironmentContext _nonDefaultTarget;
 
     @Before
-    public void Setup(){
+    public void Setup() throws IOException {
 
         _defaultTarget = new EnvironmentContext();
 

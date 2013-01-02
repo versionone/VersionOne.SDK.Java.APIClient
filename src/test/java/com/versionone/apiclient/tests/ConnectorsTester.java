@@ -6,13 +6,15 @@ import junit.framework.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.io.IOException;
+
 public class ConnectorsTester {
 
     private IConnectors _defaultTarget;
     private IConnectors _nonDefaultTarget;
 
     @Before
-    public void SetUp(){
+    public void SetUp() throws IOException {
         _defaultTarget = new Connectors();
 
         IUrls urls = new IUrls() {

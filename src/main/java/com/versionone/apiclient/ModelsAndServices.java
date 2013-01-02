@@ -1,12 +1,14 @@
 package com.versionone.apiclient;
 
+import java.io.IOException;
+
 public final class ModelsAndServices implements IModelsAndServices  {
 
     private IConnectors _connectors;
     private IMetaModel _metaModel;
     private IServices _services;
 
-    public ModelsAndServices(){
+    public ModelsAndServices() throws IOException {
         _connectors = new Connectors();
     }
 

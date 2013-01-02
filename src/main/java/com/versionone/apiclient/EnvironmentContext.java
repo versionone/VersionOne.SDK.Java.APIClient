@@ -1,10 +1,12 @@
 package com.versionone.apiclient;
 
+import java.io.IOException;
+
 public final class EnvironmentContext {
 
     private IModelsAndServices _modelsAndServices;
 
-    public EnvironmentContext(){
+    public EnvironmentContext() throws IOException {
         _modelsAndServices = new ModelsAndServices();
     }
 
