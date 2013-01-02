@@ -2,7 +2,7 @@ package com.versionone.apiclient;
 
 import java.io.IOException;
 
-public class Urls implements IUrls {
+public final class Urls implements IUrls {
 
     private IAPIConfiguration _config;
 

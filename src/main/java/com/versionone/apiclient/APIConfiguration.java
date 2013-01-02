@@ -12,6 +12,8 @@ public class APIConfiguration implements IAPIConfiguration {
         static String V1Url(){return "V1Url";}
         static String DataUrl(){return "DataUrl";}
         static String MetaUrl() {return "MetaUrl";}
+        static String UserName(){return "UserName";}
+        static String Password(){return "Password";}
     }
 
     public APIConfiguration() throws IOException {
@@ -30,4 +32,13 @@ public class APIConfiguration implements IAPIConfiguration {
     public String getMetaUrl() {
         return getV1Url().concat(_properties.getProperty(ConfigurationProperties.MetaUrl()));
     }
+
+    public String getUserName() {
+        return _properties.getProperty(ConfigurationProperties.UserName());
+    }
+
+    public String getPassword() {
+        return _properties.getProperty(ConfigurationProperties.Password());
+    }
+
 }

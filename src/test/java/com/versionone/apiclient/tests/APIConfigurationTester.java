@@ -40,4 +40,17 @@ public class APIConfigurationTester {
         Assert.assertTrue(metaUrl.length() != 0);
         Assert.assertTrue(metaUrl.endsWith("meta.v1/"));  //reasonable assumption...for now
     }
+
+    @Test
+    public void GetUserNameTest(){
+        String userName = _target.getUserName();
+        Assert.assertTrue(userName.length() != 0);
+    }
+
+    @Test
+    public void GetPasswordTest(){
+        String password = _target.getPassword();
+        Assert.assertTrue(password.length() != 0);
+    }
+
 }
