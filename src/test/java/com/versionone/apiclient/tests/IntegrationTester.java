@@ -24,7 +24,7 @@ public class IntegrationTester {
     private IServices _services;
 
     @Before
-    public void Setup() throws IOException {
+    public void Setup() throws Exception {
         EnvironmentContext environment = new EnvironmentContext();
         _metaModel = environment.getMetaModel();
         _services = environment.getServices();

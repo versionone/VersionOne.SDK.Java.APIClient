@@ -2,10 +2,8 @@ package com.versionone.apiclient.tests;
 
 import com.versionone.apiclient.APIConfiguration;
 import com.versionone.apiclient.IAPIConfiguration;
-
 import junit.framework.Assert;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import java.io.IOException;
@@ -43,14 +41,38 @@ public class APIConfigurationTester {
 
     @Test
     public void GetUserNameTest(){
-        String userName = _target.getUserName();
+        String userName = _target.getV1UserName();
         Assert.assertTrue(userName.length() != 0);
     }
 
     @Test
     public void GetPasswordTest(){
-        String password = _target.getPassword();
+        String password = _target.getV1Password();
         Assert.assertTrue(password.length() != 0);
     }
 
+    @Test
+    public void GetConfigUrlTest(){
+        String configUrl = _target.getConfigUrl();
+        Assert.assertTrue(configUrl.length() != 0);
+    }
+
+    @Test
+    public void GetProxyUrlTest(){
+        String proxyUrl = _target.getProxyUrl();
+        Assert.assertTrue(proxyUrl.length() != 0);
+        Assert.assertTrue(proxyUrl.startsWith("http"));
+    }
+
+    @Test
+    public void GetProxyUserNameTest(){
+        String userName = _target.getProxyUserName();
+        Assert.assertTrue(userName.length() != 0);
+    }
+
+    @Test
+    public void GetProxyPasswordTest(){
+        String password = _target.getProxyPassword();
+        Assert.assertTrue(password.length() != 0);
+    }
 }

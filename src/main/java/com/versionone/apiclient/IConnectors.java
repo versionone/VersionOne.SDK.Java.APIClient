@@ -1,5 +1,7 @@
 package com.versionone.apiclient;
 
+import java.net.URISyntaxException;
+
 /**
  * Created with IntelliJ IDEA.
  * User: GJohnson
@@ -10,4 +12,7 @@ package com.versionone.apiclient;
 public interface IConnectors {
     V1APIConnector getDataConnector();
     V1APIConnector getMetaConnector();
+    V1APIConnector getMetaConnectorWithProxy() throws URISyntaxException;
+    V1APIConnector getDataConnectorWithProxy() throws URISyntaxException;
+    V1APIConnector getConfigConnector();
 }

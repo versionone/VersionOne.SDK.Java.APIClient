@@ -19,4 +19,10 @@ public final class Urls implements IUrls {
     public String getDataUrl(){
         return _config.getDataUrl();
     }
+    public String getConfigUrl(){
+        return _config.getConfigUrl();
+    }
+    public String getProxyUrl() {
+        return _config.getProxyUrl();
+    }
 }

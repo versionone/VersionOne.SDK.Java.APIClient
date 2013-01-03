@@ -11,11 +11,20 @@ public final class Credentials implements ICredentials {
     }
 
     public String getV1UserName(){
-        return _config.getUserName();
+        return _config.getV1UserName();
     }
 
     public String getV1Password(){
-        return _config.getPassword();
+        return _config.getV1Password();
     }
+
+    public String getProxyUserName(){
+        return _config.getProxyUserName();
+    }
+
+    public String getProxyPassword(){
+        return _config.getV1Password();
+    }
+
 }
 
