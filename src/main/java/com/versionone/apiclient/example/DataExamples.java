@@ -1,5 +1,6 @@
 package com.versionone.apiclient.example;
 
+import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
@@ -16,78 +17,23 @@ import com.versionone.apiclient.*;
  */
 public class DataExamples {
 
-    private String _v1Url;
-    private String _username;
-    private String _password;
-    private String _dataUrl;
-    private String _metaUrl;
-    private String _configUrl;
+    private EnvironmentContext _context;
 
-    private final static String _proxyAddress = "https://myProxyServer:3128";
-    private final static String _proxyUserName = "user1";
-    private final static String _proxyPassword = "pw1";
     private IMetaModel _metaModel;
+    private IMetaModel _metaModelWithProxy;
     private IServices _services;
+    private IServices _servicesWithProxy;
+    private V1Configuration _config;
 
-    public DataExamples(String v1Url, String userName, String password) {
+    public DataExamples() throws Exception {
 
-        if ( v1Url == null || userName == null)
-            throw new IllegalArgumentException("v1Url and username must be provided...");
+        _context = new EnvironmentContext();
 
-        _v1Url = v1Url;
-        _username = userName;
-        _password = password;
-
-        _dataUrl = _v1Url + "rest-1.v1/";
-        _metaUrl = _v1Url + "meta.v1/";
-        _configUrl = _v1Url + "config.v1/";
-
-        V1APIConnector dataConnector = getDataConnector();
-        V1APIConnector metaConnector = getMetaConnector();
-        _metaModel = new MetaModel(metaConnector);
-        _services = new Services(_metaModel, dataConnector);
-
-    }
-
-    private V1APIConnector getDataConnector() {
-        return new V1APIConnector(_dataUrl, _username, _password);
-    }
-
-    private V1APIConnector getMetaConnector() {
-        return new V1APIConnector(_metaUrl, _username, _password);
-    }
-
-    private V1APIConnector getMetaConnectorWithProxy() throws URISyntaxException {
-        return new V1APIConnector(_metaUrl, getProxyProvider());
-    }
-
-    private MetaModel getMetaModelWithProxy() throws URISyntaxException {
-        return new MetaModel(getMetaConnectorWithProxy());
-    }
-
-    private ProxyProvider getProxyProvider() throws URISyntaxException {
-        URI proxy = new URI(_proxyAddress);
-        return new ProxyProvider(proxy, _proxyUserName, _proxyPassword);
-    }
-
-    private V1APIConnector getAPIConnectorWithProxy() throws URISyntaxException {
-        return new V1APIConnector(_dataUrl, _username, _password, getProxyProvider());
-    }
-
-    public void SetUpServicesV1Authentication() {
-        V1APIConnector dataConnector = getDataConnector();
-        V1APIConnector metaConnector = getMetaConnector();
-        IMetaModel metaModel = new MetaModel(metaConnector);
-        @SuppressWarnings("unused")
-        IServices services = new Services(metaModel, dataConnector);
-    }
-
-    public void SetUpServicesWindowsAuthenticationLoggedInUser() {
-        V1APIConnector dataConnector = getDataConnector();
-        V1APIConnector metaConnector = getMetaConnector();
-        IMetaModel metaModel = new MetaModel(metaConnector);
-        @SuppressWarnings("unused")
-        IServices services = new Services(metaModel, dataConnector);
+        _metaModel = _context.getMetaModel();
+        _metaModelWithProxy = _context.getMetaModelWithProxy();
+        _services = _context.getServices();
+        _servicesWithProxy = _context.getSerivcesWithProxy();
+        _config = _context.getV1Configuration();
     }
 
     public Asset SingleAsset() throws Exception {
@@ -125,11 +71,6 @@ public class DataExamples {
          ******************/
 
         return member;
-    }
-
-    public V1Configuration getV1configuration()
-    {
-        return new V1Configuration(new V1APIConnector(_configUrl, _username, _password));
     }
 
     public boolean IsEffortTrackingEnabled() throws Exception
@@ -368,10 +309,9 @@ public class DataExamples {
 
     public void StoryAndDefectTrackingLevel() throws Exception
     {
-        V1Configuration configuration = getV1configuration(); //new V1Configuration(new V1APIConnector(_configUrl, _username, _password));
 
-        System.out.println(configuration.getStoryTrackingLevel());
-        System.out.println(configuration.getDefectTrackingLevel());
+        System.out.println(_config.getStoryTrackingLevel());
+        System.out.println(_config.getDefectTrackingLevel());
 
         /***** OUTPUT *****
          Off
@@ -578,26 +518,14 @@ public class DataExamples {
         return activeStory;
     }
 
-    public IServices connectionWithProxy() throws URISyntaxException {
-
-
-        IAPIConnector metaConnectorWithProxy = getMetaConnectorWithProxy(); //new V1APIConnector(metaUrl, proxyProvider);
-        IMetaModel metaModelWithProxy = getMetaModelWithProxy(); //new MetaModel(metaConnectorWithProxy);
-        IAPIConnector dataConnectorWithProxy = getAPIConnectorWithProxy();// new V1APIConnector(dataUrl, _username, _password, proxyProvider);
-        IServices servicesWithProxy = new Services(metaModelWithProxy, dataConnectorWithProxy);
-
-        return servicesWithProxy;
-    }
-
     public Asset createStoryThroughProxy(String storyName, String projectToken) throws APIException, URISyntaxException, ConnectionException, OidException {
-        IServices service = connectionWithProxy();
-        IAttributeDefinition nameDef = service.getAttributeDefinition("Story.Name");
-        IAttributeDefinition scopeDef = service.getAttributeDefinition("Story.Scope");
+        IAttributeDefinition nameDef = _servicesWithProxy.getAttributeDefinition("Story.Name");
+        IAttributeDefinition scopeDef = _servicesWithProxy.getAttributeDefinition("Story.Scope");
 
-        final Asset asset = new Asset(service.getAssetType("Story"));
+        final Asset asset = new Asset(_servicesWithProxy.getAssetType("Story"));
         asset.setAttributeValue(nameDef, storyName);
-        asset.setAttributeValue(scopeDef, service.getOid(projectToken));
-        service.save(asset);
+        asset.setAttributeValue(scopeDef, _servicesWithProxy.getOid(projectToken));
+        _servicesWithProxy.save(asset);
         return asset;
     }
 
@@ -637,3 +565,4 @@ public class DataExamples {
         return "Member:1000";
     }
 }
+
