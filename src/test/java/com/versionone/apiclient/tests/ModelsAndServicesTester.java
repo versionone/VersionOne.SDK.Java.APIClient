@@ -13,7 +13,7 @@ public class ModelsAndServicesTester {
     private IModelsAndServices _nonDefaultTarget;
 
     @Before
-    public void Setup() throws IOException {
+    public void Setup() throws Exception {
         _defaultTarget = new ModelsAndServices();
         IConnectors connectors = new Connectors();
         _nonDefaultTarget = new ModelsAndServices(connectors);

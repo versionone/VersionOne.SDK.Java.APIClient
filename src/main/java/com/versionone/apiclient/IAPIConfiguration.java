@@ -4,6 +4,10 @@ public interface IAPIConfiguration {
     String getV1Url();
     String getDataUrl();
     String getMetaUrl();
-    String getUserName();
-    String getPassword();
+    String getConfigUrl();
+    String getV1UserName();
+    String getV1Password();
+    String getProxyUrl();
+    String getProxyUserName();
+    String getProxyPassword();
 }

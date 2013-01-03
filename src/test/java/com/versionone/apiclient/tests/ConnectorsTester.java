@@ -14,7 +14,7 @@ public class ConnectorsTester {
     private IConnectors _nonDefaultTarget;
 
     @Before
-    public void SetUp() throws IOException {
+    public void SetUp() throws Exception {
         _defaultTarget = new Connectors();
 
         IUrls urls = new IUrls() {
@@ -32,6 +32,14 @@ public class ConnectorsTester {
             public String getDataUrl() {
                 return "jehosaphat55.3/";
             }
+
+            public String getProxyUrl() {
+                return null;  //To change body of implemented methods use File | Settings | File Templates.
+            }
+
+            public String getConfigUrl() {
+                return null;  //To change body of implemented methods use File | Settings | File Templates.
+            }
         };
 
         ICredentials credentials = new ICredentials() {
@@ -43,6 +51,14 @@ public class ConnectorsTester {
             @Override
             public String getV1Password() {
                 return "Jimmy123";
+            }
+
+            public String getProxyUserName() {
+                return null;  //To change body of implemented methods use File | Settings | File Templates.
+            }
+
+            public String getProxyPassword() {
+                return null;  //To change body of implemented methods use File | Settings | File Templates.
             }
         };
 
@@ -67,7 +83,7 @@ public class ConnectorsTester {
     }
 
     @Test(expected = IllegalArgumentException.class)
-    public void InvalidArgumentExceptionTest(){
+    public void InvalidArgumentExceptionTest() throws Exception {
         IConnectors connectors = new Connectors(null, null);
     }
 

@@ -12,8 +12,12 @@ public class APIConfiguration implements IAPIConfiguration {
         static String V1Url(){return "V1Url";}
         static String DataUrl(){return "DataUrl";}
         static String MetaUrl() {return "MetaUrl";}
-        static String UserName(){return "UserName";}
-        static String Password(){return "Password";}
+        static String ConfigUrl() {return "ConfigUrl";}
+        static String V1UserName(){return "V1UserName";}
+        static String V1Password(){return "V1Password";}
+        static String ProxyUrl(){return "ProxyUrl";}
+        static String ProxyUserName() {return "ProxyUserName";}
+        static String ProxyPassword() {return "ProxyPassword";}
     }
 
     public APIConfiguration() throws IOException {
@@ -33,12 +37,28 @@ public class APIConfiguration implements IAPIConfiguration {
         return getV1Url().concat(_properties.getProperty(ConfigurationProperties.MetaUrl()));
     }
 
-    public String getUserName() {
-        return _properties.getProperty(ConfigurationProperties.UserName());
+    public String getConfigUrl() {
+        return getV1Url().concat(_properties.getProperty(ConfigurationProperties.ConfigUrl()));
     }
 
-    public String getPassword() {
-        return _properties.getProperty(ConfigurationProperties.Password());
+    public String getV1UserName() {
+        return _properties.getProperty(ConfigurationProperties.V1UserName());
+    }
+
+    public String getV1Password() {
+        return _properties.getProperty(ConfigurationProperties.V1Password());
+    }
+
+    public String getProxyUrl() {
+        return _properties.getProperty(ConfigurationProperties.ProxyUrl());
+    }
+
+    public String getProxyUserName() {
+        return _properties.getProperty(ConfigurationProperties.ProxyUserName());
+    }
+
+    public String getProxyPassword() {
+        return _properties.getProperty(ConfigurationProperties.ProxyPassword());
     }
 
 }
