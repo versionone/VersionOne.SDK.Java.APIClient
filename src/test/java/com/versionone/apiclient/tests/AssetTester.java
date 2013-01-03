@@ -8,13 +8,15 @@ import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 
+import java.io.IOException;
+
 public class AssetTester {
 
     private IMetaModel _metaModel;
     private IServices _services;
 
     @Before
-    public void Setup(){
+    public void Setup() throws Exception {
         EnvironmentContext environment = new EnvironmentContext();
         _metaModel = environment.getMetaModel();
         _services = environment.getServices();
