@@ -6,6 +6,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import java.io.IOException;
+import java.net.URISyntaxException;
 
 public class ModelsAndServicesTester {
 
@@ -26,9 +27,29 @@ public class ModelsAndServicesTester {
     }
 
     @Test
+    public void GetServicesWithProxyTest() throws URISyntaxException {
+        Assert.assertNotNull(_defaultTarget.getServicesWithProxy());
+        Assert.assertNotNull(_nonDefaultTarget.getServicesWithProxy());
+    }
+
+    @Test
     public void GetMetaModelTest(){
         Assert.assertNotNull(_defaultTarget.getMetaModel());
         Assert.assertNotNull(_nonDefaultTarget.getMetaModel());
     }
+
+    @Test
+    public void GetMetaModelWithProxyTest() throws URISyntaxException {
+        Assert.assertNotNull(_defaultTarget.getMetaModelWithProxy());
+        Assert.assertNotNull(_nonDefaultTarget.getMetaModelWithProxy());
+    }
+
+    @Test
+    public void GetV1ConfigurationTest() {
+        Assert.assertNotNull(_defaultTarget.getV1Configuration());
+        Assert.assertNotNull(_nonDefaultTarget.getV1Configuration());
+    }
+
+
 
 }
