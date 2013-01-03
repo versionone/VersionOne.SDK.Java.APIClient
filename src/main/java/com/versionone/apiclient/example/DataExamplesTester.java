@@ -10,14 +10,10 @@ import com.versionone.Oid;
 public class DataExamplesTester {
 
     private DataExamples _docExamples;
-    //ending slash in the URL is mandatory
-    private String _v1Url = "https://www14.v1host.com/v1sdktesting/";
-    private String _user = "admin";
-    private String _password = "admin";
 
     @Before
-    public void SetUp() {
-        _docExamples = new DataExamples(_v1Url, _user, _password);
+    public void SetUp() throws Exception {
+        _docExamples = new DataExamples();
     }
 
     @Test
@@ -37,16 +33,6 @@ public class DataExamplesTester {
         Asset[] assets = _docExamples.FindListOfAssets();
         Assert.assertNotNull(assets);
         Assert.assertTrue(assets.length > 0);
-    }
-
-    @Test
-    public void TestSetUpServicesV1Authentication() throws Exception{
-        _docExamples.SetUpServicesV1Authentication();
-    }
-
-    @Test
-    public void TestSetUpServicesWindowsAuthenticationLoggedInUser() throws Exception{
-        _docExamples.SetUpServicesWindowsAuthenticationLoggedInUser();
     }
 
     @Test
@@ -109,11 +95,6 @@ public class DataExamplesTester {
         Asset[] members = _docExamples.HistoryListOfAssets();
         Assert.assertNotNull(members);
         Assert.assertTrue(members.length > 0);
-    }
-
-    @Test
-    public void TestGetV1Configuration() throws Exception {
-        _docExamples.getV1configuration();
     }
 
     @Test
