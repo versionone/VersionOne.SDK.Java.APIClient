@@ -11,7 +11,6 @@ import java.io.IOException;
 public class UrlsTester {
 
     private IUrls _defaultTarget;
-    private IUrls _nonDefaultTarget;
 
     @Before
     public void Setup() throws IOException {
@@ -28,8 +27,19 @@ public class UrlsTester {
         Assert.assertEquals("https://www14.v1host.com/v1sdktesting/meta.v1/", _defaultTarget.getMetaUrl());
     }
 
+    @Test
     public void GetDataUrlTest(){
         Assert.assertEquals("https://www14.v1host.com/v1sdktesting/rest-1.v1/", _defaultTarget.getDataUrl());
+    }
+
+    @Test
+    public void GetConfigUrlTest(){
+        Assert.assertEquals("https://www14.v1host.com/v1sdktesting/config.v1/", _defaultTarget.getConfigUrl());
+    }
+
+    @Test
+    public void GetProxyUrlTest(){
+        Assert.assertEquals("https://myProxyServer:3128", _defaultTarget.getProxyUrl());
     }
 
 }
