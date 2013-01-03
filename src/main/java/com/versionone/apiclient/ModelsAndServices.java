@@ -31,7 +31,7 @@ public final class ModelsAndServices implements IModelsAndServices  {
     public IMetaModel getMetaModelWithProxy() throws URISyntaxException {
         if (_metaModelWithProxy != null) return _metaModelWithProxy;
         _metaModelWithProxy = new MetaModel(_connectors.getMetaConnectorWithProxy());
-        return _metaModel;
+        return _metaModelWithProxy;
     }
 
     public IServices getServices(){
