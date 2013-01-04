@@ -96,22 +96,34 @@ public class DataExamples {
 
 If your VersionOne instance uses Windows Integrated Authentication, and you wish to connect to the API using the credentials of the user running your program, you can omit the username and password arguments in the APIConfiguration.properties file as mentioned above.
 
-### Setup using Windows Integrated Authentication, specifying credentials
-
-You may also explicitly identify the domain user you wish to use to authenticate to VersionOne, and provide an extra boolean argument indicating that you wish to use Windows Integrated Authentication:
-
-```java
-V1APIConnector dataConnector = new V1APIConnector("https://www14.v1host.com/v1sdktesting/rest-1.v1/", @"username@FullyQualifiedDomainName", "password", true);
-V1APIConnector metaConnector = new V1APIConnector("https://www14.v1host.com/v1sdktesting/meta.v1/");
-IMetaModel metaModel = new MetaModel(metaConnector);
-IServices services = new Services(metaModel, dataConnector);
-```
-
-Note that you must specify the windows domain account in the form "User@FullyQualifiedDomainName". If you are unsure what the fully qualified domain name is, see the Domain name shown on the 'Computer Name' tab in the My Computer...Properties dialog.
-
 ## Learn By Example: Queries
 
 This section is a series of examples, starting with simpler queries and moving to more advanced queries. You'll need to create an instance of both IMetaModel and IServices, as outlined above, to perform the queries.
+
+### Access configuration information
+
+```java
+public boolean IsEffortTrackingEnabled() throws Exception
+    {
+        return _config.isEffortTracking();
+
+        /***** OUTPUT *****
+         False
+         ******************/
+    }
+    
+public void StoryAndDefectTrackingLevel() throws Exception
+    {
+
+        System.out.println(_config.getStoryTrackingLevel());
+        System.out.println(_config.getDefectTrackingLevel());
+
+        /***** OUTPUT *****
+         Off
+         On
+         ******************/
+    }
+```
 
 ### How to query a single asset
 
@@ -119,9 +131,9 @@ Retrieve the Member with ID 20:
 
 ```java
 public Asset SingleAsset() throws Exception {
-        Oid memberId = Oid.fromToken("Member:20", metaModel);
+        Oid memberId = Oid.fromToken("Member:20", _metaModel);
         Query query = new Query(memberId);
-        QueryResult result = services.retrieve(query);
+        QueryResult result = _services.retrieve(query);
         Asset member = result.getAssets()[0];
 
         System.out.println(member.getOid().getToken());
@@ -141,13 +153,13 @@ Retrieve an asset with populated attributes by using the Selection property of t
 
 ```java
 public Asset SingleAssetWithAttributes() throws Exception {
-        Oid memberId = Oid.fromToken("Member:20", metaModel);
+        Oid memberId = Oid.fromToken("Member:20", _metaModel);
         Query query = new Query(memberId);
-        IAttributeDefinition nameAttribute = metaModel.getAttributeDefinition("Member.Name");
-        IAttributeDefinition emailAttribute = metaModel.getAttributeDefinition("Member.Email");
+        IAttributeDefinition nameAttribute = _metaModel.getAttributeDefinition("Member.Name");
+        IAttributeDefinition emailAttribute = _metaModel.getAttributeDefinition("Member.Email");
         query.getSelection().add(nameAttribute);
         query.getSelection().add(emailAttribute);
-        QueryResult result = services.retrieve(query);
+        QueryResult result = _services.retrieve(query);
         Asset member = result.getAssets()[0];
 
         System.out.println(member.getOid().getToken());
@@ -168,13 +180,13 @@ public Asset SingleAssetWithAttributes() throws Exception {
 
 ```java
 public Asset[] ListOfAssets() throws Exception {
-        IAssetType storyType = metaModel.getAssetType("Story");
+        IAssetType storyType = _metaModel.getAssetType("Story");
         Query query = new Query(storyType);
         IAttributeDefinition nameAttribute = storyType.getAttributeDefinition("Name");
         IAttributeDefinition estimateAttribute = storyType.getAttributeDefinition("Estimate");
         query.getSelection().add(nameAttribute);
         query.getSelection().add(estimateAttribute);
-        QueryResult result = services.retrieve(query);
+        QueryResult result = _services.retrieve(query);
 
         for (Asset story : result.getAssets()) {
             System.out.println(story.getOid().getToken());
@@ -204,7 +216,7 @@ Use the setFilter property of the Query object to filter the results that are re
 
 ```java
 public Asset[] FilterListOfAssets() throws Exception {
-        IAssetType taskType = metaModel.getAssetType("Task");
+        IAssetType taskType = _metaModel.getAssetType("Task");
         Query query = new Query(taskType);
         IAttributeDefinition nameAttribute = taskType.getAttributeDefinition("Name");
         IAttributeDefinition todoAttribute = taskType.getAttributeDefinition("ToDo");
@@ -214,7 +226,7 @@ public Asset[] FilterListOfAssets() throws Exception {
         FilterTerm toDoTerm = new FilterTerm(todoAttribute);
         toDoTerm.equal(0);
         query.setFilter(toDoTerm);
-        QueryResult result = services.retrieve(query);
+        QueryResult result = _services.retrieve(query);
 
         for (Asset task : result.getAssets()) {
             System.out.println(task.getOid().getToken());
@@ -243,7 +255,7 @@ Use the Find property of the Query object to search for text. This query will re
 ```java
 public Asset[] FindListOfAssets() throws Exception
     {
-        IAssetType requestType = metaModel.getAssetType("Request");
+        IAssetType requestType = _metaModel.getAssetType("Story");
         Query query = new Query(requestType);
         IAttributeDefinition nameAttribute = requestType.getAttributeDefinition("Name");
 
@@ -251,9 +263,9 @@ public Asset[] FindListOfAssets() throws Exception
 
         AttributeSelection selection = new AttributeSelection();
         selection.add(nameAttribute);
-        query.setFind(new QueryFind("Urgent", selection));
+        //query.setFind(new QueryFind("Urgent", selection)); //if you'd like find only stories marked as urgent, for example.
 
-        QueryResult result = services.retrieve(query);
+        QueryResult result = _services.retrieve(query);
 
         for (Asset request : result.getAssets())
         {
@@ -279,14 +291,14 @@ Use the OrderBy property of the Query object to sort the results. This query wil
 
 ```java
 public Asset[] SortListOfAssets() throws Exception {
-        IAssetType storyType = metaModel.getAssetType("Story");
+        IAssetType storyType = _metaModel.getAssetType("Story");
         Query query = new Query(storyType);
         IAttributeDefinition nameAttribute = storyType.getAttributeDefinition("Name");
         IAttributeDefinition estimateAttribute = storyType.getAttributeDefinition("Estimate");
         query.getSelection().add(nameAttribute);
         query.getSelection().add(estimateAttribute);
         query.getOrderBy().minorSort(estimateAttribute, OrderBy.Order.Ascending);
-        QueryResult result = services.retrieve(query);
+        QueryResult result = _services.retrieve(query);
 
         for (Asset story : result.getAssets()) {
             System.out.println(story.getOid().getToken());
@@ -316,7 +328,7 @@ Retrieve a "page" of query results by using the Paging propery of the Query obje
 
 ```java
 public Asset[] PageListOfAssets() throws Exception {
-        IAssetType storyType = metaModel.getAssetType("Story");
+        IAssetType storyType = _metaModel.getAssetType("Story");
         Query query = new Query(storyType);
         IAttributeDefinition nameAttribute = storyType.getAttributeDefinition("Name");
         IAttributeDefinition estimateAttribute = storyType.getAttributeDefinition("Estimate");
@@ -324,7 +336,7 @@ public Asset[] PageListOfAssets() throws Exception {
         query.getSelection().add(estimateAttribute);
         query.getPaging().setPageSize(3);
         query.getPaging().setStart(0);
-        QueryResult result = services.retrieve(query);
+        QueryResult result = _services.retrieve(query);
 
         for (Asset story : result.getAssets()) {
             System.out.println(story.getOid().getToken());
@@ -358,7 +370,7 @@ This query will retrieve the history of the Member asset with ID 1000.
 
 ```java
 public Asset[] HistorySingleAsset() throws Exception {
-        IAssetType memberType = metaModel.getAssetType("Member");
+        IAssetType memberType = _metaModel.getAssetType("Member");
         Query query = new Query(memberType, true);
         IAttributeDefinition idAttribute = memberType.getAttributeDefinition("ID");
         IAttributeDefinition changeDateAttribute = memberType.getAttributeDefinition("ChangeDate");
@@ -366,9 +378,9 @@ public Asset[] HistorySingleAsset() throws Exception {
         query.getSelection().add(changeDateAttribute);
         query.getSelection().add(emailAttribute);
         FilterTerm idTerm = new FilterTerm(idAttribute);
-        idTerm.equal("Member:1000");
+        idTerm.equal("Member:20");
         query.setFilter(idTerm);
-        QueryResult result = services.retrieve(query);
+        QueryResult result = _services.retrieve(query);
         Asset[] memberHistory = result.getAssets();
 
         for (Asset member : memberHistory) {
@@ -398,14 +410,14 @@ To create a history query, provide a boolean "true" second argument to the Query
 This query will retrieve history for all Member assets:
 
 ```java
-public Asset[] HistoryListOfAssets() throws Exception {
-        IAssetType memberType = metaModel.getAssetType("Member");
+ public Asset[] HistoryListOfAssets() throws Exception {
+        IAssetType memberType = _metaModel.getAssetType("Member");
         Query query = new Query(memberType, true);
         IAttributeDefinition changeDateAttribute = memberType.getAttributeDefinition("ChangeDate");
         IAttributeDefinition emailAttribute = memberType.getAttributeDefinition("Email");
         query.getSelection().add(changeDateAttribute);
         query.getSelection().add(emailAttribute);
-        QueryResult result = services.retrieve(query);
+        QueryResult result = _services.retrieve(query);
         Asset[] memberHistory = result.getAssets();
 
         for (Asset member : memberHistory) {
@@ -415,17 +427,21 @@ public Asset[] HistoryListOfAssets() throws Exception {
             System.out.println();
         }
         /***** OUTPUT *****
-         Member:1010:106
-         4/2/2007 3:27:23 PM
-         tammy.coder@company.com
+         Member:20:0
+         Thu Nov 30 19:00:00 EST 1899
+         null
 
-         Member:1000:105
-         4/2/2007 1:22:03 PM
-         andre.agile@company.com
+         Member:20:17183
+         Fri Nov 09 09:46:25 EST 2012
+         versionone@mailinator.com
 
-         Member:1000:101
-         3/29/2007 4:10:29 PM
-         andre@company.net
+         Member:20:17190
+         Sun Nov 11 22:59:23 EST 2012
+         versionone@mailinator.com
+
+         Member:20:17191
+         Sun Nov 11 22:59:47 EST 2012
+         versionone@mailinator.com
          ******************/
 
         return memberHistory;
@@ -441,8 +457,8 @@ All of the previously demonstrated query properties can be used with historical 
 Use the AsOf property of the Query object to retrieve data as it existed at some point in time. This query finds the version of each Story asset as it existed seven days ago:
 
 ```java
-public Asset[] HistoryAsOfTime() throws Exception {
-        IAssetType storyType = metaModel.getAssetType("Story");
+ public Asset[] HistoryAsOfTime() throws Exception {
+        IAssetType storyType = _metaModel.getAssetType("Story");
         Query query = new Query(storyType, true);
         IAttributeDefinition nameAttribute = storyType.getAttributeDefinition("Name");
         IAttributeDefinition estimateAttribute = storyType.getAttributeDefinition("Estimate");
@@ -451,7 +467,7 @@ public Asset[] HistoryAsOfTime() throws Exception {
         Calendar c = Calendar.getInstance();
         c.add(Calendar.DAY_OF_MONTH, -7);
         query.setAsOf(c.getTime()); // query.AsOf = DateTime.Now.AddDays(-7); //7 days ago
-        QueryResult result = services.retrieve(query);
+        QueryResult result = _services.retrieve(query);
 
         for (Asset story : result.getAssets()) {
             System.out.println(story.getOid().getToken());
@@ -475,6 +491,7 @@ public Asset[] HistoryAsOfTime() throws Exception {
 
         return result.getAssets();
     }
+
 ```
 
 ## Learn By Example: Updates
@@ -486,17 +503,17 @@ Updating assets through the APIClient involves calling the Save method on the IS
 Updating a scalar attribute on an asset is accomplished by calling the SetAttribute method on an asset, specifying the IAttributeDefinition of the attribute you wish to change and the new scalar value. This code will update the Name attribute on the Story with ID 1094:
 
 ```java
- public Asset UpdateScalarAttribute() throws Exception {
-        Oid storyId = Oid.fromToken("Story:1094", metaModel);
+public Asset UpdateScalarAttribute() throws Exception {
+        Oid storyId = Oid.fromToken("Story:1094", _metaModel);
         Query query = new Query(storyId);
-        IAssetType storyType = metaModel.getAssetType("Story");
+        IAssetType storyType = _metaModel.getAssetType("Story");
         IAttributeDefinition nameAttribute = storyType.getAttributeDefinition("Name");
         query.getSelection().add(nameAttribute);
-        QueryResult result = services.retrieve(query);
+        QueryResult result = _services.retrieve(query);
         Asset story = result.getAssets()[0];
         String oldName = story.getAttribute(nameAttribute).getValue().toString();
         story.setAttributeValue(nameAttribute, GetNewName());
-        services.save(story);
+        _services.save(story);
 
         System.out.println(story.getOid().getToken());
         System.out.println(oldName);
@@ -517,16 +534,16 @@ Updating a single-value relation is accomplished by calling the SetAttribute met
 
 ```java
 public Asset UpdateSingleValueRelation() throws Exception {
-        Oid storyId = Oid.fromToken("Story:1094", metaModel);
+        Oid storyId = Oid.fromToken("Story:1094", _metaModel);
         Query query = new Query(storyId);
-        IAssetType storyType = metaModel.getAssetType("Story");
+        IAssetType storyType = _metaModel.getAssetType("Story");
         IAttributeDefinition sourceAttribute = storyType.getAttributeDefinition("Source");
         query.getSelection().add(sourceAttribute);
-        QueryResult result = services.retrieve(query);
+        QueryResult result = _services.retrieve(query);
         Asset story = result.getAssets()[0];
         String oldSource = story.getAttribute(sourceAttribute).getValue().toString();
         story.setAttributeValue(sourceAttribute, GetNextSourceID(oldSource));
-        services.save(story);
+        _services.save(story);
 
         System.out.println(story.getOid().getToken());
         System.out.println(oldSource);
@@ -547,18 +564,18 @@ Updating a multi-value relation is accomplished by calling either the RemoveAttr
 
 ```java
 public Asset UpdateMultiValueRelation() throws Exception {
-        Oid storyId = Oid.fromToken("Story:1094", metaModel);
+        Oid storyId = Oid.fromToken("Story:1124", _metaModel);
         Query query = new Query(storyId);
-        IAssetType storyType = metaModel.getAssetType("Story");
+        IAssetType storyType = _metaModel.getAssetType("Story");
         IAttributeDefinition ownersAttribute = storyType.getAttributeDefinition("Owners");
         query.getSelection().add(ownersAttribute);
-        QueryResult result = services.retrieve(query);
+        QueryResult result = _services.retrieve(query);
         Asset story = result.getAssets()[0];
         List<Object> oldOwners = new ArrayList<Object>();
         oldOwners.addAll(Arrays.asList(story.getAttribute(ownersAttribute).getValues()));
         story.removeAttributeValue(ownersAttribute, getOwnerToRemove(oldOwners));
         story.addAttributeValue(ownersAttribute, getOwnerToAdd(oldOwners));
-        services.save(story);
+        _services.save(story);
 
         System.out.println(story.getOid().getToken());
         Iterator<Object> iter = oldOwners.iterator();
@@ -578,6 +595,7 @@ public Asset UpdateMultiValueRelation() throws Exception {
 
         return story;
     }
+
 ```
 
 ## Learn By Example: New Asset
@@ -589,12 +607,12 @@ This code will create a Story asset in the context of Scope with ID 1012:
 
 ```java
 public Asset AddNewAsset() throws Exception {
-        Oid projectId = Oid.fromToken("Scope:1012", metaModel);
-        IAssetType storyType = metaModel.getAssetType("Story");
-        Asset newStory = services.createNew(storyType, projectId);
+        Oid projectId = Oid.fromToken("Scope:0", _metaModel);
+        IAssetType storyType = _metaModel.getAssetType("Story");
+        Asset newStory = _services.createNew(storyType, projectId);
         IAttributeDefinition nameAttribute = storyType.getAttributeDefinition("Name");
         newStory.setAttributeValue(nameAttribute, "My New Story");
-        services.save(newStory);
+        _services.save(newStory);
 
         System.out.println(newStory.getOid().getToken());
         System.out.println(newStory.getAttribute(storyType.getAttributeDefinition("Scope")).getValue());
@@ -614,7 +632,7 @@ public Asset AddNewAsset() throws Exception {
 An operation is an action that is executed against a single asset. For example, to delete an asset you must execute the Delete operation on the asset. To close or inactivate a Workitem, you must use the Inactivate Operation. Available operations for each asset are listed at the bottom of the the meta data description for that asset, for instance:
 
 ```url
-https://www1/VersionOne/meta.v1/Story?xsl=api.xsl
+https://www.myserver.com/VersionOne/meta.v1/Story?xsl=api.xsl
 ```
 
 ### How to delete a Story asset
@@ -624,12 +642,12 @@ Get the Delete operation from the IMetaModel, and use IServices to execute it ag
 ```java
 public Oid DeleteAsset() throws Exception {
         Asset story = AddNewAsset();
-        IOperation deleteOperation = metaModel.getOperation("Story.Delete");
-        Oid deletedID = services.executeOperation(deleteOperation, story.getOid());
+        IOperation deleteOperation = _metaModel.getOperation("Story.Delete");
+        Oid deletedID = _services.executeOperation(deleteOperation, story.getOid());
         Query query = new Query(deletedID.getMomentless());
         try {
             @SuppressWarnings("unused")
-            QueryResult result = services.retrieve(query);
+            QueryResult result = _services.retrieve(query);
         } catch (ConnectionException e) {
             if (404 == e.getServerResponseCode())
                 System.out.println("Story has been deleted: " + story.getOid().getMomentless());
@@ -654,13 +672,13 @@ Get the Inactivate operation from the IMetaModel, and use IServices to execute i
 ```java
 public Asset CloseAsset() throws Exception {
         Asset story = AddNewAsset();
-        IOperation closeOperation = metaModel.getOperation("Story.Inactivate");
-        Oid closeID = services.executeOperation(closeOperation, story.getOid());
+        IOperation closeOperation = _metaModel.getOperation("Story.Inactivate");
+        Oid closeID = _services.executeOperation(closeOperation, story.getOid());
 
         Query query = new Query(closeID.getMomentless());
-        IAttributeDefinition assetState = metaModel.getAttributeDefinition("Story.AssetState");
+        IAttributeDefinition assetState = _metaModel.getAttributeDefinition("Story.AssetState");
         query.getSelection().add(assetState);
-        QueryResult result = services.retrieve(query);
+        QueryResult result = _services.retrieve(query);
         Asset closeStory = result.getAssets()[0];
         AssetState state = AssetState.valueOf(((Integer) closeStory.getAttribute(assetState).getValue()).intValue());
 
@@ -684,13 +702,13 @@ Get the Reactivate operation from the IMetaModel, and use IServices to execute i
 ```java
     public Asset ReOpenAsset() throws Exception {
         Asset story = CloseAsset();
-        IOperation activateOperation = metaModel.getOperation("Story.Reactivate");
-        Oid activeID = services.executeOperation(activateOperation, story.getOid());
+        IOperation activateOperation = _metaModel.getOperation("Story.Reactivate");
+        Oid activeID = _services.executeOperation(activateOperation, story.getOid());
 
         Query query = new Query(activeID.getMomentless());
-        IAttributeDefinition assetState = metaModel.getAttributeDefinition("Story.AssetState");
+        IAttributeDefinition assetState = _metaModel.getAttributeDefinition("Story.AssetState");
         query.getSelection().add(assetState);
-        QueryResult result = services.retrieve(query);
+        QueryResult result = _services.retrieve(query);
         Asset activeStory = result.getAssets()[0];
         @SuppressWarnings("unused")
         AssetState state = AssetState.valueOf(((Integer) activeStory.getAttribute(assetState).getValue()).intValue());
@@ -708,60 +726,6 @@ Get the Reactivate operation from the IMetaModel, and use IServices to execute i
 ## Learn By Example: System Settings
 
 Some system settings are exposed (read-only) to the APIClient, to allow client-side data validation. Specifically, the system settings for Effort Tracking, Story Tracking Level and Defect Tracking Level are now available to the APIClient, so that entry of Effort, Detail Estimate, and ToDo can be done consistently with the way VersionOne Enterprise is configured. In previous versions, there was no way for the APIClient to check these settings, and the developer would have to code with knowledge of the system's configured state.  Using the V1Configuration component, you can get the system's configured state, and apply these settings appropriately in code.
-
-### Getting VersionOne System Settings
-
-To get the system settings, create an instance of the V1Configuration class, using a V1APIConnector (directed to the "config.v1" http address):
-
-```java
-public void GetV1configuration()
-{
-    V1Configuration configuration = new V1Configuration(new V1APIConnector("https://www14.v1host.com/v1sdktesting/config.v1/"));
-}
-```
-
-### Effort Tracking setting
-
-The V1Configuration.EffortTracking property indicates whether or not Effort Tracking has been enabled in VersionOne Enterprise.  In this example, the VersionOne instance has Effort Tracking turned off:
-
-```java
-public void IsEffortTrackingEnabled()
-{
-    V1Configuration configuration = new V1Configuration(new V1APIConnector("https://www14.v1host.com/v1sdktesting/config.v1/"));
-
-    if(configuration.EffortTracking)
-      Console.WriteLine("Effort Tracking is enabled");
-    else
-      Console.WriteLine("Effort Tracking is disabled");
-
-    /***** OUTPUT *****
-        Effort Tracking is disabled
-    ******************/
-}
-```
-
-### Tracking Level settings
-
-Detail Estimate, ToDo and Effort can be entered for Stories and Defects, or for their child Tasks and Tests, depending on how the system is configured.  The V1Configuration.StoryTrackingLevel and V1Configuration.DefectTrackingLevel properties indicate where input of Detail Estimate, ToDo and Effort are taken.
-
-In this example, the VersionOne instance is configured to take DetailEstimate, ToDo, and Effort at the Task/Test level for Stories (Off), and to take DetailEstimate, ToDo, and Effort at the Defect level for Defects (On):
-
-```java
-public void StoryAndDefectTrackingLevel() throws Exception
-    {
-        V1Configuration configuration = new V1Configuration(new V1APIConnector("https://www14.v1host.com/v1sdktesting/config.v1/"));
-
-        System.out.println(configuration.getStoryTrackingLevel());
-        System.out.println(configuration.getDefectTrackingLevel());
-
-        /***** OUTPUT *****
-         Off
-         On
-         ******************/
-    }
-```
-
-A value of "On" indicates that Detail Estimate, ToDo, and Effort input is accepted at the PrimaryWorkitem level only. A value of "Off" indicates that Detail Estimate, ToDo, and Effort input is accepted at the Task/Test level only. A value of "Mix" indicates that Detail Estimate, ToDo, and Effort input is accepted at both the PrimaryWorkitem and Task/Test level.
 
 ## The VersionOne Information Model
 
