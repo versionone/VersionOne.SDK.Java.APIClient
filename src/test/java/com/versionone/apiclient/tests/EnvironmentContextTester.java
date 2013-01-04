@@ -6,6 +6,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import java.io.IOException;
+import java.net.URISyntaxException;
 
 public class EnvironmentContextTester {
 
@@ -31,11 +32,11 @@ public class EnvironmentContextTester {
             }
 
             public String getProxyUrl() {
-                return null;  //To change body of implemented methods use File | Settings | File Templates.
+                return "http://wwww.myproxy.com/";
             }
 
             public String getConfigUrl() {
-                return null;  //To change body of implemented methods use File | Settings | File Templates.
+                return "http://www14.v1.com/config1.1/";
             }
         };
 
@@ -49,11 +50,11 @@ public class EnvironmentContextTester {
             }
 
             public String getProxyUserName() {
-                return null;  //To change body of implemented methods use File | Settings | File Templates.
+                return "fred";
             }
 
             public String getProxyPassword() {
-                return null;  //To change body of implemented methods use File | Settings | File Templates.
+                return "Wx7123456Wx7";
             }
         };
 
@@ -81,6 +82,35 @@ public class EnvironmentContextTester {
         Assert.assertNotNull(services);
         services = _nonDefaultTarget.getServices();
         Assert.assertNotNull(services);
+    }
+
+    @Test
+    public void GetMetaModelWithProxyTest() throws URISyntaxException {
+        IMetaModel model = _defaultTarget.getMetaModelWithProxy();
+        Assert.assertNotNull(model);
+        model = _nonDefaultTarget.getMetaModelWithProxy();
+        Assert.assertNotNull(model);
+    }
+
+    @Test
+    public void GetServicesWithProxyTest() throws URISyntaxException {
+        IServices services = _defaultTarget.getSerivcesWithProxy();
+        Assert.assertNotNull(services);
+        services = _nonDefaultTarget.getSerivcesWithProxy();
+        Assert.assertNotNull(services);
+    }
+
+    @Test
+    public void GetV1ConfigurationTest() {
+        V1Configuration config = _defaultTarget.getV1Configuration();
+        Assert.assertNotNull(config);
+        config = _nonDefaultTarget.getV1Configuration();
+        Assert.assertNotNull(config);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void NullModelsAndServicesTest(){
+        EnvironmentContext context = new EnvironmentContext(null);
     }
 
 }
