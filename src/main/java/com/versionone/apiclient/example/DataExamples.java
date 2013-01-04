@@ -30,9 +30,9 @@ public class DataExamples {
         _context = new EnvironmentContext();
 
         _metaModel = _context.getMetaModel();
-        _metaModelWithProxy = _context.getMetaModelWithProxy();
+        _metaModelWithProxy = _context.getMetaModelWithProxy();  //if you use a proxy server
         _services = _context.getServices();
-        _servicesWithProxy = _context.getSerivcesWithProxy();
+        _servicesWithProxy = _context.getSerivcesWithProxy();  //if you use a proxy server
         _config = _context.getV1Configuration();
     }
 
