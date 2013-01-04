@@ -28,7 +28,7 @@ Eclipse or IntelliJ IDEA
 
 _Do this if you only want to use the functionality, but are not interested in compiling from source or in contributing code to the project._
 
-You can use maven to import the Java API Client and it's dependancies in your project by making use of Maven Central (http://search.maven.org).  You can edit the pom.xml file for your project in order to import the current version of the Java APIClient into your project.  More information on using Maven can be found here:  http://maven.apache.org/guides/introduction/introduction-to-the-pom.html.
+You can use maven to import the Java API Client and it's dependancies in your project by making use of Maven Central (http://search.maven.org).  You can edit the pom.xml file for your project in order to import the current version of the Java APIClient into your project.  More information on using Maven can be found here:  http://maven.apache.org/guides/introduction/introduction-to-the-pom.html.  If you wish, instead, to pull the source code down and integrate it with your project by cloning the git repository here:  https://github.com/versionone/VersionOne.SDK.Java.APIClient.
 
 ## Learn By Example: APIClient Setup
 
