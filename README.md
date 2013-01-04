@@ -28,32 +28,73 @@ Eclipse or IntelliJ IDEA
 
 _Do this if you only want to use the functionality, but are not interested in compiling from source or in contributing code to the project._
 
-You can edit the pom.xml file for your project to include the following XML in order to import the current version of the Java APIClient into your project.  More information on using Maven can be found here:  http://maven.apache.org/guides/introduction/introduction-to-the-pom.html.
+You can use maven to import the Java API Client and it's dependancies in your project by making use of Maven Central (http://search.maven.org).  You can edit the pom.xml file for your project in order to import the current version of the Java APIClient into your project.  More information on using Maven can be found here:  http://maven.apache.org/guides/introduction/introduction-to-the-pom.html.
 
 ## Learn By Example: APIClient Setup
 
 Using the Java APIClient is as simple as making a reference to the VersionOne.SDK.Java.APIClient-XXX.jar in your Java project, then providing connection information to the main service objects within the APIClient. There are three possible ways to connect to your VersionOne instance using the APIClient. Before you attempt to connect, find out whether your VersionOne instance uses VersionOne authentication or Windows Integrated Authentication. You need to create an instance of IMetaModel and and instance of IServices and provide them with connection information via instances of the V1APIConnector.
 
-### Setup using VersionOne Authentication
+### Configuration:  open the APIConfiguration.properties file in your .jar file.
 
-To use VersionOne authentication, specify the username and password:
+Open (not extract) the .jar file using an archiving tool such as 7zip or peaZip.  Navigate to "\com\versionone\apiclient\", and edit the APIConfiguration.properties file to reflect properly your environment.  By default, the samples will run against a temporary remote instance of VersionOne.
+
+Configuration Definitions:
+
+V1Url:  The URL of your instance of the VersionOne software.  It's the URL you use to login.
+
+V1UserName:  The VersionOne user name that the API will impersonate as it executes.  Must be an existing user in the system.
+
+***Important Note:  if you would like to use Windows authentication so that the API logs into VersionOne using the currently logged on user, please leave the V1UserName property blank.
+
+V1Password:  The VersionOne user password that the API will need to login to the instance.  Leave this blank if you are using Windows authentication.
+
+MetaUrl:  The URI path to meta.  You should not need to change this setting under normal circumstances.
+
+DataUrl:  The URI path to retrieve data.  You should not need to change this setting under normal circumstances.
+
+ConfigUrl:  The URI path to retrieve VersionOne configuration info through the API.  You should not need to change this setting under normal circumstances.
+
+ProxyUrl:  If you use a proxy server to logon to your VersionOne instance then provide the address here.
+
+ProxyUserName:  The user that should authenticate to the proxy server.
+
+ProxyPassword:  The password for the proxy user above.
+
+###Example Code Locations
+
+You can find fully compilable, functioning example code along with the associated unit tests in our public github repository here:  
+
+https://github.com/versionone/VersionOne.SDK.Java.APIClient/blob/master/src/main/java/com/versionone/apiclient/example/DataExamplesTester.java
+
+https://github.com/versionone/VersionOne.SDK.Java.APIClient/blob/master/src/main/java/com/versionone/apiclient/example/DataExamples.java
+
+### Retrieving your MetaModel and Services based on the config information you entered above.
 
 ```java
-V1APIConnector dataConnector = new V1APIConnector("https://www14.v1host.com/v1sdktesting/rest-1.v1/", "remote", "remote");
-V1APIConnector metaConnector = new V1APIConnector("https://www14.v1host.com/v1sdktesting/meta.v1/");
-IMetaModel metaModel = new MetaModel(metaConnector);
-IServices services = new Services(metaModel, dataConnector);
+public class DataExamples {
+
+    private EnvironmentContext _context;
+
+    private IMetaModel _metaModel;
+    private IMetaModel _metaModelWithProxy;
+    private IServices _services;
+    private IServices _servicesWithProxy;
+    private V1Configuration _config;
+
+    public DataExamples() throws Exception {
+
+        _context = new EnvironmentContext();
+
+        _metaModel = _context.getMetaModel();
+        _metaModelWithProxy = _context.getMetaModelWithProxy();  //if you use a proxy server
+        _services = _context.getServices();
+        _servicesWithProxy = _context.getSerivcesWithProxy();  //if you use a proxy server
+        _config = _context.getV1Configuration();
+    }
 ```
 ### Setup using Windows Integrated Authentication
 
-If your VersionOne instance uses Windows Integrated Authentication, and you wish to connect to the API using the credentials of the user running your program, you can omit the username and password arguments to the V1APIConnector:
-
-```java
-V1APIConnector dataConnector = new V1APIConnector("https://www14.v1host.com/v1sdktesting/rest-1.v1/");
-V1APIConnector metaConnector = new V1APIConnector("https://www14.v1host.com/v1sdktesting/meta.v1/");
-IMetaModel metaModel = new MetaModel(metaConnector);
-IServices services = new Services(metaModel, dataConnector);
-```
+If your VersionOne instance uses Windows Integrated Authentication, and you wish to connect to the API using the credentials of the user running your program, you can omit the username and password arguments in the APIConfiguration.properties file as mentioned above.
 
 ### Setup using Windows Integrated Authentication, specifying credentials
 
