@@ -36,6 +36,11 @@ public class DataExamples {
         _config = _context.getV1Configuration();
     }
 
+    public void GetV1configuration()
+    {
+        V1Configuration configuration = new V1Configuration(new V1APIConnector("https://www14.v1host.com/v1sdktesting/config.v1/"));
+    }
+
     public Asset SingleAsset() throws Exception {
         Oid memberId = Oid.fromToken("Member:20", _metaModel);
         Query query = new Query(memberId);
@@ -75,8 +80,7 @@ public class DataExamples {
 
     public boolean IsEffortTrackingEnabled() throws Exception
     {
-        V1Configuration configuration = new V1Configuration(new V1APIConnector("https://www14.v1host.com/v1sdktesting/config.v1/"));
-        return configuration.isEffortTracking();
+        return _config.isEffortTracking();
 
         /***** OUTPUT *****
          False
@@ -484,7 +488,7 @@ public class DataExamples {
         query.getSelection().add(assetState);
         QueryResult result = _services.retrieve(query);
         Asset closeStory = result.getAssets()[0];
-        AssetState state = AssetState.valueOf(((Integer) closeStory.getAttribute(assetState).getValue()).intValue());
+        AssetState state = AssetState.valueOf((Integer) closeStory.getAttribute(assetState).getValue());
 
         System.out.println(closeStory.getOid());
         System.out.println(state.toString());
