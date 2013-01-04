@@ -113,7 +113,7 @@ public class DataExamples {
 
     public Asset[] FindListOfAssets() throws Exception
     {
-        IAssetType requestType = _metaModel.getAssetType("Request");
+        IAssetType requestType = _metaModel.getAssetType("Story");
         Query query = new Query(requestType);
         IAttributeDefinition nameAttribute = requestType.getAttributeDefinition("Name");
 
@@ -121,7 +121,7 @@ public class DataExamples {
 
         AttributeSelection selection = new AttributeSelection();
         selection.add(nameAttribute);
-        query.setFind(new QueryFind("Urgent", selection));
+        //query.setFind(new QueryFind("Urgent", selection)); //if you'd like find only stories marked as urgent, for example.
 
         QueryResult result = _services.retrieve(query);
 
@@ -402,7 +402,7 @@ public class DataExamples {
     }
 
     public Asset UpdateMultiValueRelation() throws Exception {
-        Oid storyId = Oid.fromToken("Story:1094", _metaModel);
+        Oid storyId = Oid.fromToken("Story:1124", _metaModel);
         Query query = new Query(storyId);
         IAssetType storyType = _metaModel.getAssetType("Story");
         IAttributeDefinition ownersAttribute = storyType.getAttributeDefinition("Owners");
@@ -552,17 +552,17 @@ public class DataExamples {
     private String getOwnerToAdd(List<Object> oids) {
         for (Object o : oids.toArray()) {
             Oid oid = (Oid) o;
-            if (oid.getToken() == "Member:1003") return "Member:1000";
+            if (oid.getToken() == "Member:3722") return "Member:3710";
         }
-        return "Member:1003";
+        return "Member:3722";
     }
 
     private String getOwnerToRemove(List<Object> oids) {
         for (Object o : oids.toArray()) {
             Oid oid = (Oid) o;
-            if (oid.getToken() == "Member:1003") return "Member:1003";
+            if (oid.getToken() == "Member:3722") return "Member:3722";
         }
-        return "Member:1000";
+        return "Member:3710";
     }
 }
 
