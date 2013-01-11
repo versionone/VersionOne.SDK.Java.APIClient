@@ -1,7 +1,5 @@
 package com.versionone.apiclient.example;
 
-import java.io.IOException;
-import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -32,7 +30,7 @@ public class DataExamples {
         _metaModel = _context.getMetaModel();
         _metaModelWithProxy = _context.getMetaModelWithProxy();  //if you use a proxy server
         _services = _context.getServices();
-        _servicesWithProxy = _context.getSerivcesWithProxy();  //if you use a proxy server
+        _servicesWithProxy = _context.getServicesWithProxy();  //if you use a proxy server
         _config = _context.getV1Configuration();
     }
 

@@ -28,7 +28,7 @@ public final class EnvironmentContext {
         return _modelsAndServices.getServices();
     }
 
-    public IServices getSerivcesWithProxy() throws URISyntaxException {
+    public IServices getServicesWithProxy() throws URISyntaxException {
         return _modelsAndServices.getServicesWithProxy();
     }
 

@@ -5,7 +5,6 @@ import junit.framework.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.io.IOException;
 import java.net.URISyntaxException;
 
 public class EnvironmentContextTester {
@@ -94,9 +93,9 @@ public class EnvironmentContextTester {
 
     @Test
     public void GetServicesWithProxyTest() throws URISyntaxException {
-        IServices services = _defaultTarget.getSerivcesWithProxy();
+        IServices services = _defaultTarget.getServicesWithProxy();
         Assert.assertNotNull(services);
-        services = _nonDefaultTarget.getSerivcesWithProxy();
+        services = _nonDefaultTarget.getServicesWithProxy();
         Assert.assertNotNull(services);
     }
 
