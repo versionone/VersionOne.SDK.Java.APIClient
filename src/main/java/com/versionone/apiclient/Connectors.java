@@ -78,6 +78,14 @@ public final class Connectors implements IConnectors {
                 _credentials.getV1Password());
     }
 
+    public V1APIConnector getConfigConnectorWithProxy() throws URISyntaxException {
+        return new V1APIConnector(
+                _urls.getConfigUrl(),
+                _credentials.getV1UserName(),
+                _credentials.getV1Password(),
+                getProxyProvider());
+    }
+
     private ProxyProvider getProxyProvider() throws URISyntaxException {
         URI proxyUri = new URI(_urls.getProxyUrl());
         return new ProxyProvider(proxyUri, _credentials.getProxyUserName(), _credentials.getProxyPassword());

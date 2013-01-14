@@ -15,4 +15,5 @@ public interface IConnectors {
     V1APIConnector getMetaConnectorWithProxy() throws URISyntaxException;
     V1APIConnector getDataConnectorWithProxy() throws URISyntaxException;
     V1APIConnector getConfigConnector();
+    V1APIConnector getConfigConnectorWithProxy() throws URISyntaxException;
 }

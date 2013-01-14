@@ -7,6 +7,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import java.io.IOException;
+import java.net.URISyntaxException;
 
 public class ConnectorsTester {
 
@@ -82,10 +83,21 @@ public class ConnectorsTester {
         Assert.assertNotNull(connector);
     }
 
+    @Test
+    public void GetConfigConnectorTest() throws URISyntaxException {
+        V1APIConnector connector = _defaultTarget.getConfigConnector();
+        Assert.assertNotNull(connector);
+        connector = _nonDefaultTarget.getConfigConnector();
+        Assert.assertNotNull(connector);
+        connector = _defaultTarget.getConfigConnectorWithProxy();
+        Assert.assertNotNull(connector);
+    }
+
     @Test(expected = IllegalArgumentException.class)
     public void InvalidArgumentExceptionTest() throws Exception {
         IConnectors connectors = new Connectors(null, null);
     }
+
 
 
 }
