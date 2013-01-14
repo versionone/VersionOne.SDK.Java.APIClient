@@ -7,6 +7,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import java.io.IOException;
+import java.net.URISyntaxException;
 
 public class ConnectorsTester {
 
@@ -34,11 +35,11 @@ public class ConnectorsTester {
             }
 
             public String getProxyUrl() {
-                return null;  //To change body of implemented methods use File | Settings | File Templates.
+                return "http://192.168.100.1:9090/";
             }
 
             public String getConfigUrl() {
-                return null;  //To change body of implemented methods use File | Settings | File Templates.
+                return "noConfig.1/";
             }
         };
 
@@ -54,11 +55,11 @@ public class ConnectorsTester {
             }
 
             public String getProxyUserName() {
-                return null;  //To change body of implemented methods use File | Settings | File Templates.
+                return "Administrator";
             }
 
             public String getProxyPassword() {
-                return null;  //To change body of implemented methods use File | Settings | File Templates.
+                return "123456";
             }
         };
 
@@ -82,10 +83,21 @@ public class ConnectorsTester {
         Assert.assertNotNull(connector);
     }
 
+    @Test
+    public void GetConfigConnectorTest() throws URISyntaxException {
+        V1APIConnector connector = _defaultTarget.getConfigConnector();
+        Assert.assertNotNull(connector);
+        connector = _nonDefaultTarget.getConfigConnector();
+        Assert.assertNotNull(connector);
+        connector = _defaultTarget.getConfigConnectorWithProxy();
+        Assert.assertNotNull(connector);
+    }
+
     @Test(expected = IllegalArgumentException.class)
     public void InvalidArgumentExceptionTest() throws Exception {
         IConnectors connectors = new Connectors(null, null);
     }
+
 
 
 }

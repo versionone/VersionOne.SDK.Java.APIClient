@@ -13,6 +13,7 @@ public final class ModelsAndServices implements IModelsAndServices  {
     private IServices _services;
     private IServices _servicesWithProxy;
     private V1Configuration _v1Config;
+    private V1Configuration _v1ConfigWithProxy;
 
     public ModelsAndServices() throws Exception {
         _connectors = new Connectors();
@@ -58,5 +59,10 @@ public final class ModelsAndServices implements IModelsAndServices  {
         return _v1Config;
     }
 
+    public V1Configuration getV1ConfigurationWithProxy() throws URISyntaxException {
+        if (_v1Config != null) return _v1Config;
+        _v1Config = new V1Configuration(_connectors.getConfigConnectorWithProxy());
+        return _v1Config;
+    }
 
 }

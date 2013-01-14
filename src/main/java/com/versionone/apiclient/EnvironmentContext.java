@@ -36,4 +36,8 @@ public final class EnvironmentContext {
         return _modelsAndServices.getV1Configuration();
     }
 
+    public V1Configuration getV1ConfigurationWithProxy() throws URISyntaxException {
+        return _modelsAndServices.getV1ConfigurationWithProxy();
+    }
+
 }

@@ -8,4 +8,5 @@ public interface IModelsAndServices {
         IServices getServices();
         IServices getServicesWithProxy() throws URISyntaxException;
         V1Configuration getV1Configuration();
+        V1Configuration getV1ConfigurationWithProxy() throws URISyntaxException;
 }

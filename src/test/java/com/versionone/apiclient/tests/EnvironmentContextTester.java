@@ -107,6 +107,14 @@ public class EnvironmentContextTester {
         Assert.assertNotNull(config);
     }
 
+    @Test
+    public void GetV1ConfigurationWithProxyTest() throws URISyntaxException {
+        V1Configuration config = _defaultTarget.getV1ConfigurationWithProxy();
+        Assert.assertNotNull(config);
+        config = _nonDefaultTarget.getV1ConfigurationWithProxy();
+        Assert.assertNotNull(config);
+    }
+
     @Test(expected = IllegalArgumentException.class)
     public void NullModelsAndServicesTest(){
         EnvironmentContext context = new EnvironmentContext(null);
