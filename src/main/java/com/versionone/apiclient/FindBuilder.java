@@ -1,18 +1,28 @@
 package com.versionone.apiclient;
 
+import com.versionone.util.StringUtility;
+
+import java.net.URLEncoder;
+
 public class FindBuilder extends QueryBuilder {
+
+    private String _encoding = "UTF-8";
+
     @Override
     protected void doBuild(Query query, BuildResult result) {
-        if (query.getFind() != null) {
-            String findText = query.getFind().text;
 
-            if (findText != null && findText.trim().length()!=0) {
-                result.querystringParts.add("find=\"" + findText + "\"");
+        if (query == null || query.getFind() == null ||
+                StringUtility.IsNullOrEmpty(query.getFind().text) == true) return;
 
-                if (query.getFind().attributes.size() > 0) {
-                    result.querystringParts.add("findin=" + query.getFind().attributes.getToken());
-                }
-            }
-        }
+        String part = String.format("find=%s", URLEncoder.encode(query.getFind().text), _encoding); //temporary encoding solution until apache httpclient is brought in from beta.
+        result.querystringParts.add(part);
+
+        if (query.getFind().attributes == null ||
+                query.getFind().attributes.size() == 0 ||
+                StringUtility.IsNullOrEmpty(query.getFind().attributes.getToken())) return;
+
+        part = String.format("findin=%s", URLEncoder.encode(query.getFind().attributes.getToken()), _encoding); //temporary encoding solution until apache httpclient is brought in from beta.
+        result.querystringParts.add(part);
+
     }
 }
