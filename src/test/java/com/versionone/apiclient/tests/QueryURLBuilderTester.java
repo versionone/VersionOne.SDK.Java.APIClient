@@ -34,7 +34,7 @@ public class QueryURLBuilderTester {
         query.setFind(new QueryFind("TextToFind"));
 
         QueryURLBuilder testMe = new QueryURLBuilder(query);
-        Assert.assertEquals("Data/Mock?sel=&find=\"TextToFind\"", testMe.toString());
+        Assert.assertEquals("Data/Mock?sel=&find=TextToFind", testMe.toString());
     }
 
     @Test
@@ -46,7 +46,7 @@ public class QueryURLBuilderTester {
         query.setFind(new QueryFind("TextToFind", findin));
 
         QueryURLBuilder testMe = new QueryURLBuilder(query);
-        Assert.assertEquals("Data/Mock?sel=&find=\"TextToFind\"&findin=Mock.Name,Mock.Description", testMe.toString());
+        Assert.assertEquals("Data/Mock?sel=&find=TextToFind&findin=Mock.Name%2CMock.Description", testMe.toString());
     }
 
     @Test
