@@ -113,16 +113,19 @@
             <groupId>org.fitnesse</groupId>
             <artifactId>fitnesse</artifactId>
             <version>20111025</version>
+            <optional>true</optional>
         </dependency>
         <dependency>
             <groupId>org.jmock</groupId>
             <artifactId>jmock-junit4</artifactId>
             <version>2.6.0-RC2</version>
+            <optional>true</optional>
         </dependency>
         <dependency>
             <groupId>org.jmock</groupId>
             <artifactId>jmock-legacy</artifactId>
             <version>2.6.0-RC2</version>
+            <optional>true</optional>
         </dependency>
     </dependencies>
     <organization>
