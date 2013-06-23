@@ -19,17 +19,14 @@ public class ConnectorsTester {
         _defaultTarget = new Connectors();
 
         IUrls urls = new IUrls() {
-            @Override
             public String getV1Url() {
                 return "http://google.com/";
             }
 
-            @Override
             public String getMetaUrl() {
                 return "/blah1.1/";
             }
 
-            @Override
             public String getDataUrl() {
                 return "jehosaphat55.3/";
             }
@@ -44,12 +41,10 @@ public class ConnectorsTester {
         };
 
         ICredentials credentials = new ICredentials() {
-            @Override
             public String getV1UserName() {
                 return "BigPapa";
             }
 
-            @Override
             public String getV1Password() {
                 return "Jimmy123";
             }
