@@ -45,7 +45,7 @@ public class XmlApiWriterTester {
 		Date date = createDate();
 		asset.setAttributeValue(deadlineDefinition, date);
 
-		String expected = "<Asset><Attribute act=\"set\" name=\"Deadline\">2007-10-30T08:00:00</Attribute></Asset>";
+		String expected = "<Asset><Attribute act=\"set\" name=\"Deadline\">2007-10-30T08:00:00.450</Attribute></Asset>";
 		StringWriter assetData = new StringWriter();
 		XmlApiWriter testMe = new XmlApiWriter(true);
 		testMe.write(asset, assetData);
@@ -58,6 +58,7 @@ public class XmlApiWriterTester {
 
 	private Date createDate() {
 		Calendar c = Calendar.getInstance();
+		c.setTimeInMillis(450);
 		c.set(2007, 9, 30, 8, 0, 0);
 		return c.getTime();
 	}

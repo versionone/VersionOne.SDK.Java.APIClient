@@ -4,7 +4,7 @@
 
     <groupId>com.versionone</groupId>
     <artifactId>VersionOne.SDK.Java.APIClient</artifactId>
-    <version>12.3.3.138</version>
+    <version>13.0.0.146</version>
     <packaging>jar</packaging>
 
     <name>VersionOne.SDK.Java.APIClient</name>
@@ -40,18 +40,6 @@
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
-    <distributionManagement>
-        <snapshotRepository>
-            <id>BUILDSERVER1</id>
-            <name>BUILDSERVER1-snapshots</name>
-            <url>http://buildserver1:8081/artifactory/libs-snapshot-local</url>
-        </snapshotRepository>
-        <repository>
-            <id>BUILDSERVER1</id>
-            <name>BUILDSERVER1-releases</name>
-            <url>http://buildserver1:8081/artifactory/libs-release-local</url>
-        </repository>
-    </distributionManagement>
     <build>
         <plugins>
             <plugin>
@@ -90,11 +78,6 @@
     </reporting>
     <repositories>
         <repository>
-            <id>BUILDSERVER1</id>
-            <name>BUILDSERVER1-releases</name>
-            <url>http://buildserver1:8081/artifactory/libs-release-local</url>
-        </repository>
-        <repository>
             <id>java.net-Public</id>
             <name>Maven Java Net Snapshots and Releases</name>
             <url>https://maven.java.net/content/groups/public/</url>
@@ -105,9 +88,6 @@
             <url>https://repository.jboss.org/nexus/content/groups/public</url>
         </repository>
     </repositories>
-    <ciManagement>
-        <url>http://localhost/VersionOne.SDK.Java.APIClient.Tests</url>
-    </ciManagement>
     <dependencies>
         <dependency>
             <groupId>org.fitnesse</groupId>

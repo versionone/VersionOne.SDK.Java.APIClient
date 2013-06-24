@@ -16,7 +16,7 @@ import java.util.GregorianCalendar;
 public class DateTimeTester {
 	private Date _now;
 	private Date _notnow;
-	private final SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+	private final SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
 
 	@Before
 	public void Setup () {
@@ -65,7 +65,7 @@ public class DateTimeTester {
 		GregorianCalendar calendar = new GregorianCalendar(2001, 1, 3, 4, 5, 6);
 //        calendar.setTimeZone(TimeZone.getTimeZone("UTC"));
 		Date expectedDate = calendar.getTime();
-		String actualAsString = "2001-02-03T04:05:06";
+		String actualAsString = "2001-02-03T04:05:06.000";
 		ConstructAndTest(expectedDate, actualAsString);
 	}
 

@@ -463,9 +463,9 @@ public abstract class DB {
 	 */
 	public static class DateTime extends DB implements Comparable<DateTime> {
 
-        public static final SimpleDateFormat DAY_N_TIME_FORMAT = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
+        public static final SimpleDateFormat DAY_N_TIME_FORMAT = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS");
         public static final SimpleDateFormat DAY_FORMAT = new SimpleDateFormat("yyyy-MM-dd");
-        private static final SimpleDateFormat TO_STRIBG_FORMAT = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        private static final SimpleDateFormat TO_STRING_FORMAT = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
 
 		private Date value = null;
 
@@ -583,7 +583,7 @@ public abstract class DB {
 		 */
 		@Override
 		public String toString() {
-			return getValue() != null ? TO_STRIBG_FORMAT.format(getValue()) : "";
+			return getValue() != null ? TO_STRING_FORMAT.format(getValue()) : "";
 		}
 
 		/**

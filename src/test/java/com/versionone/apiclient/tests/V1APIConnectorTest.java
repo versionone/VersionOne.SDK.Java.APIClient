@@ -62,6 +62,7 @@ public class V1APIConnectorTest {
 	}
 
 	@Test
+	@Ignore("Requires VersionOne instance on localhost.")
 	public void testValidUser() throws ConnectionException {
 		V1APIConnector testMe = new V1APIConnector(V1_PATH, "admin", "admin");
 		Reader results = testMe.getData("rest-1.v1/Data/Scope/0");
