@@ -40,6 +40,18 @@
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
+    <distributionManagement>
+        <snapshotRepository>
+            <id>BUILDSERVER1</id>
+            <name>BUILDSERVER1-snapshots</name>
+            <url>http://buildserver1.corp.versionone.net:8081/artifactory/libs-snapshot-local</url>
+        </snapshotRepository>
+        <repository>
+            <id>BUILDSERVER1</id>
+            <name>BUILDSERVER1-releases</name>
+            <url>http://buildserver1.corp.versionone.net:8081/artifactory/libs-release-local</url>
+        </repository>
+    </distributionManagement>
     <build>
         <plugins>
             <plugin>
