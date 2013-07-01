@@ -201,7 +201,7 @@ public class Services implements IServices {
      * @see IServices#save(Asset, String)
      */
     public void save(Asset asset, String comment) throws APIException, ConnectionException {
-        if (asset.hasChanged()) {
+        if (asset.hasChanged() || asset.getOid().isNull()) {
 
             StringWriter assetData = new StringWriter();
             XmlApiWriter writer = new XmlApiWriter(true);
