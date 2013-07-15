@@ -1,0 +1,948 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset='utf-8'>
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <link href='https://fonts.googleapis.com/css?family=Chivo:900' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen" />
+    <link rel="stylesheet" type="text/css" href="stylesheets/pygment_trac.css" media="screen" />
+    <link rel="stylesheet" type="text/css" href="stylesheets/print.css" media="print" />
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <title>Versionone.sdk.java.apiclient by versionone</title>
+  </head>
+
+  <body>
+    <div id="container">
+      <div class="inner">
+
+        <header>
+          <h1>Versionone.sdk.java.apiclient</h1>
+          <h2>A library for custom Java development against the VersionOne Platform's REST-based API.</h2>
+        </header>
+
+        <section id="downloads" class="clearfix">
+          <a href="https://github.com/versionone/VersionOne.SDK.Java.APIClient/zipball/master" id="download-zip" class="button"><span>Download .zip</span></a>
+          <a href="https://github.com/versionone/VersionOne.SDK.Java.APIClient/tarball/master" id="download-tar-gz" class="button"><span>Download .tar.gz</span></a>
+          <a href="https://github.com/versionone/VersionOne.SDK.Java.APIClient" id="view-on-github" class="button"><span>View on GitHub</span></a>
+        </section>
+
+        <hr>
+
+        <section id="main_content">
+          <h1>
+<a name="versionone-sdkjava" class="anchor" href="#versionone-sdkjava"><span class="octicon octicon-link"></span></a>VersionOne SDK.Java</h1>
+
+<p>Copyright (c) 2008-2012 VersionOne, Inc.
+All rights reserved.</p>
+
+<p>For developers who have an itch that VersionOne doesn't scratch, the 
+VersionOne SDK.Java is a free, community-driven, open-source toolkit 
+written in Java that accelerates software development of tools that 
+tailor VersionOne to better fit with new practices and other tools. 
+Unlike direct use of the REST API, the VersionOne SDK.Java provides a 
+framework for application development on the JVM stack and tools to 
+make development of those applications fast and easy. The framework 
+and tools are driven from experience developing code to solve real 
+problems.</p>
+
+<p>This product includes software developed at VersionOne 
+(<a href="http://versionone.com/">http://versionone.com/</a>). This product is open source and is licensed 
+under a modified BSD license, which reflects our intent that software 
+built with a dependency on the  VersionOne SDK.Java can be commercial or 
+open source, as the authors see fit.</p>
+
+<h2>
+<a name="system-requirements" class="anchor" href="#system-requirements"><span class="octicon octicon-link"></span></a>System Requirements</h2>
+
+<ul>
+<li>Java Development Kit 1.7</li>
+</ul><h2>
+<a name="supported-ides" class="anchor" href="#supported-ides"><span class="octicon octicon-link"></span></a>Supported IDEs</h2>
+
+<p>Eclipse or IntelliJ IDEA</p>
+
+<h2>
+<a name="how-to-get-the-library-as-a-precompiled-package" class="anchor" href="#how-to-get-the-library-as-a-precompiled-package"><span class="octicon octicon-link"></span></a>How to get the library as a precompiled package</h2>
+
+<p><em>Do this if you only want to use the functionality, but are not interested in compiling from source or in contributing code to the project.</em></p>
+
+<p>You can use maven to import the Java API Client and it's dependancies in your project by making use of Maven Central (<a href="http://search.maven.org">http://search.maven.org</a>).  You can edit the pom.xml file for your project in order to import the current version of the Java APIClient into your project.  More information on using Maven can be found here:  <a href="http://maven.apache.org/guides/introduction/introduction-to-the-pom.html">http://maven.apache.org/guides/introduction/introduction-to-the-pom.html</a>.  If you wish, instead, to pull the source code down and integrate it with your project by cloning the git repository here:  <a href="https://github.com/versionone/VersionOne.SDK.Java.APIClient">https://github.com/versionone/VersionOne.SDK.Java.APIClient</a>.</p>
+
+<h2>
+<a name="learn-by-example-apiclient-setup" class="anchor" href="#learn-by-example-apiclient-setup"><span class="octicon octicon-link"></span></a>Learn By Example: APIClient Setup</h2>
+
+<p>Using the Java APIClient is as simple as making a reference to the VersionOne.SDK.Java.APIClient-XXX.jar in your Java project, then providing connection information to the main service objects within the APIClient. There are three possible ways to connect to your VersionOne instance using the APIClient. Before you attempt to connect, find out whether your VersionOne instance uses VersionOne authentication or Windows Integrated Authentication. You need to create an instance of IMetaModel and and instance of IServices and provide them with connection information via instances of the V1APIConnector.</p>
+
+<h3>
+<a name="configuration--open-the-apiconfigurationproperties-file-in-your-jar-file" class="anchor" href="#configuration--open-the-apiconfigurationproperties-file-in-your-jar-file"><span class="octicon octicon-link"></span></a>Configuration:  open the APIConfiguration.properties file in your .jar file.</h3>
+
+<p>Open (not extract) the .jar file using an archiving tool such as 7zip or peaZip.  Navigate to "\com\versionone\apiclient\", and edit the APIConfiguration.properties file to reflect properly your environment.  By default, the samples will run against a temporary remote instance of VersionOne.</p>
+
+<p>Configuration Definitions:</p>
+
+<p>V1Url:  The URL of your instance of the VersionOne software.  It's the URL you use to login.</p>
+
+<p>V1UserName:  The VersionOne user name that the API will impersonate as it executes.  Must be an existing user in the system.</p>
+
+<p>***Important Note:  if you would like to use Windows authentication so that the API logs into VersionOne using the currently logged on user, please leave the V1UserName property blank.</p>
+
+<p>V1Password:  The VersionOne user password that the API will need to login to the instance.  Leave this blank if you are using Windows authentication.</p>
+
+<p>MetaUrl:  The URI path to meta.  You should not need to change this setting under normal circumstances.</p>
+
+<p>DataUrl:  The URI path to retrieve data.  You should not need to change this setting under normal circumstances.</p>
+
+<p>ConfigUrl:  The URI path to retrieve VersionOne configuration info through the API.  You should not need to change this setting under normal circumstances.</p>
+
+<p>ProxyUrl:  If you use a proxy server to logon to your VersionOne instance then provide the address here.</p>
+
+<p>ProxyUserName:  The user that should authenticate to the proxy server.</p>
+
+<p>ProxyPassword:  The password for the proxy user above.</p>
+
+<h3>
+<a name="example-code-locations" class="anchor" href="#example-code-locations"><span class="octicon octicon-link"></span></a>Example Code Locations</h3>
+
+<p>You can find fully compilable, functioning example code along with the associated unit tests in our public github repository here:  </p>
+
+<p><a href="https://github.com/versionone/VersionOne.SDK.Java.APIClient/blob/master/src/main/java/com/versionone/apiclient/example/DataExamplesTester.java">https://github.com/versionone/VersionOne.SDK.Java.APIClient/blob/master/src/main/java/com/versionone/apiclient/example/DataExamplesTester.java</a></p>
+
+<p><a href="https://github.com/versionone/VersionOne.SDK.Java.APIClient/blob/master/src/main/java/com/versionone/apiclient/example/DataExamples.java">https://github.com/versionone/VersionOne.SDK.Java.APIClient/blob/master/src/main/java/com/versionone/apiclient/example/DataExamples.java</a></p>
+
+<h3>
+<a name="retrieving-your-metamodel-and-services-based-on-the-config-information-you-entered-above" class="anchor" href="#retrieving-your-metamodel-and-services-based-on-the-config-information-you-entered-above"><span class="octicon octicon-link"></span></a>Retrieving your MetaModel and Services based on the config information you entered above.</h3>
+
+<div class="highlight"><pre><span class="kd">public</span> <span class="kd">class</span> <span class="nc">DataExamples</span> <span class="o">{</span>
+
+    <span class="kd">private</span> <span class="n">EnvironmentContext</span> <span class="n">_context</span><span class="o">;</span>
+
+    <span class="kd">private</span> <span class="n">IMetaModel</span> <span class="n">_metaModel</span><span class="o">;</span>
+    <span class="kd">private</span> <span class="n">IMetaModel</span> <span class="n">_metaModelWithProxy</span><span class="o">;</span>
+    <span class="kd">private</span> <span class="n">IServices</span> <span class="n">_services</span><span class="o">;</span>
+    <span class="kd">private</span> <span class="n">IServices</span> <span class="n">_servicesWithProxy</span><span class="o">;</span>
+    <span class="kd">private</span> <span class="n">V1Configuration</span> <span class="n">_config</span><span class="o">;</span>
+
+    <span class="kd">public</span> <span class="nf">DataExamples</span><span class="o">()</span> <span class="kd">throws</span> <span class="n">Exception</span> <span class="o">{</span>
+
+        <span class="n">_context</span> <span class="o">=</span> <span class="k">new</span> <span class="n">EnvironmentContext</span><span class="o">();</span>
+
+        <span class="n">_metaModel</span> <span class="o">=</span> <span class="n">_context</span><span class="o">.</span><span class="na">getMetaModel</span><span class="o">();</span>
+        <span class="n">_metaModelWithProxy</span> <span class="o">=</span> <span class="n">_context</span><span class="o">.</span><span class="na">getMetaModelWithProxy</span><span class="o">();</span>  <span class="c1">//if you use a proxy server</span>
+        <span class="n">_services</span> <span class="o">=</span> <span class="n">_context</span><span class="o">.</span><span class="na">getServices</span><span class="o">();</span>
+        <span class="n">_servicesWithProxy</span> <span class="o">=</span> <span class="n">_context</span><span class="o">.</span><span class="na">getSerivcesWithProxy</span><span class="o">();</span>  <span class="c1">//if you use a proxy server</span>
+        <span class="n">_config</span> <span class="o">=</span> <span class="n">_context</span><span class="o">.</span><span class="na">getV1Configuration</span><span class="o">();</span>
+    <span class="o">}</span>
+</pre></div>
+
+<h3>
+<a name="setup-using-windows-integrated-authentication" class="anchor" href="#setup-using-windows-integrated-authentication"><span class="octicon octicon-link"></span></a>Setup using Windows Integrated Authentication</h3>
+
+<p>If your VersionOne instance uses Windows Integrated Authentication, and you wish to connect to the API using the credentials of the user running your program, you can omit the username and password arguments in the APIConfiguration.properties file as mentioned above.</p>
+
+<h2>
+<a name="learn-by-example-queries" class="anchor" href="#learn-by-example-queries"><span class="octicon octicon-link"></span></a>Learn By Example: Queries</h2>
+
+<p>This section is a series of examples, starting with simpler queries and moving to more advanced queries. You'll need to create an instance of both IMetaModel and IServices, as outlined above, to perform the queries.</p>
+
+<h3>
+<a name="access-configuration-information" class="anchor" href="#access-configuration-information"><span class="octicon octicon-link"></span></a>Access configuration information</h3>
+
+<div class="highlight"><pre><span class="kd">public</span> <span class="kt">boolean</span> <span class="nf">IsEffortTrackingEnabled</span><span class="o">()</span> <span class="kd">throws</span> <span class="n">Exception</span>
+    <span class="o">{</span>
+        <span class="k">return</span> <span class="n">_config</span><span class="o">.</span><span class="na">isEffortTracking</span><span class="o">();</span>
+
+        <span class="cm">/***** OUTPUT *****</span>
+<span class="cm">         False</span>
+<span class="cm">         ******************/</span>
+    <span class="o">}</span>
+
+<span class="kd">public</span> <span class="kt">void</span> <span class="nf">StoryAndDefectTrackingLevel</span><span class="o">()</span> <span class="kd">throws</span> <span class="n">Exception</span>
+    <span class="o">{</span>
+
+        <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">_config</span><span class="o">.</span><span class="na">getStoryTrackingLevel</span><span class="o">());</span>
+        <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">_config</span><span class="o">.</span><span class="na">getDefectTrackingLevel</span><span class="o">());</span>
+
+        <span class="cm">/***** OUTPUT *****</span>
+<span class="cm">         Off</span>
+<span class="cm">         On</span>
+<span class="cm">         ******************/</span>
+    <span class="o">}</span>
+</pre></div>
+
+<h3>
+<a name="how-to-query-a-single-asset" class="anchor" href="#how-to-query-a-single-asset"><span class="octicon octicon-link"></span></a>How to query a single asset</h3>
+
+<p>Retrieve the Member with ID 20:</p>
+
+<div class="highlight"><pre><span class="kd">public</span> <span class="n">Asset</span> <span class="nf">SingleAsset</span><span class="o">()</span> <span class="kd">throws</span> <span class="n">Exception</span> <span class="o">{</span>
+        <span class="n">Oid</span> <span class="n">memberId</span> <span class="o">=</span> <span class="n">Oid</span><span class="o">.</span><span class="na">fromToken</span><span class="o">(</span><span class="s">"Member:20"</span><span class="o">,</span> <span class="n">_metaModel</span><span class="o">);</span>
+        <span class="n">Query</span> <span class="n">query</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Query</span><span class="o">(</span><span class="n">memberId</span><span class="o">);</span>
+        <span class="n">QueryResult</span> <span class="n">result</span> <span class="o">=</span> <span class="n">_services</span><span class="o">.</span><span class="na">retrieve</span><span class="o">(</span><span class="n">query</span><span class="o">);</span>
+        <span class="n">Asset</span> <span class="n">member</span> <span class="o">=</span> <span class="n">result</span><span class="o">.</span><span class="na">getAssets</span><span class="o">()[</span><span class="mi">0</span><span class="o">];</span>
+
+        <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">member</span><span class="o">.</span><span class="na">getOid</span><span class="o">().</span><span class="na">getToken</span><span class="o">());</span>
+        <span class="cm">/***** OUTPUT *****</span>
+<span class="cm">         Member:20</span>
+<span class="cm">         ******************/</span>
+
+        <span class="k">return</span> <span class="n">member</span><span class="o">;</span>
+    <span class="o">}</span>
+</pre></div>
+
+<p>In this example, the asset will have its Oid populated, but will not have any other attributes populated. This is to minimize the size of the data sets returned. The next example shows how to ask for an asset with specific attributes populated.</p>
+
+<h3>
+<a name="how-to-query-for-specific-attributes" class="anchor" href="#how-to-query-for-specific-attributes"><span class="octicon octicon-link"></span></a>How to query for specific attributes</h3>
+
+<p>Retrieve an asset with populated attributes by using the Selection property of the Query object.</p>
+
+<div class="highlight"><pre><span class="kd">public</span> <span class="n">Asset</span> <span class="nf">SingleAssetWithAttributes</span><span class="o">()</span> <span class="kd">throws</span> <span class="n">Exception</span> <span class="o">{</span>
+        <span class="n">Oid</span> <span class="n">memberId</span> <span class="o">=</span> <span class="n">Oid</span><span class="o">.</span><span class="na">fromToken</span><span class="o">(</span><span class="s">"Member:20"</span><span class="o">,</span> <span class="n">_metaModel</span><span class="o">);</span>
+        <span class="n">Query</span> <span class="n">query</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Query</span><span class="o">(</span><span class="n">memberId</span><span class="o">);</span>
+        <span class="n">IAttributeDefinition</span> <span class="n">nameAttribute</span> <span class="o">=</span> <span class="n">_metaModel</span><span class="o">.</span><span class="na">getAttributeDefinition</span><span class="o">(</span><span class="s">"Member.Name"</span><span class="o">);</span>
+        <span class="n">IAttributeDefinition</span> <span class="n">emailAttribute</span> <span class="o">=</span> <span class="n">_metaModel</span><span class="o">.</span><span class="na">getAttributeDefinition</span><span class="o">(</span><span class="s">"Member.Email"</span><span class="o">);</span>
+        <span class="n">query</span><span class="o">.</span><span class="na">getSelection</span><span class="o">().</span><span class="na">add</span><span class="o">(</span><span class="n">nameAttribute</span><span class="o">);</span>
+        <span class="n">query</span><span class="o">.</span><span class="na">getSelection</span><span class="o">().</span><span class="na">add</span><span class="o">(</span><span class="n">emailAttribute</span><span class="o">);</span>
+        <span class="n">QueryResult</span> <span class="n">result</span> <span class="o">=</span> <span class="n">_services</span><span class="o">.</span><span class="na">retrieve</span><span class="o">(</span><span class="n">query</span><span class="o">);</span>
+        <span class="n">Asset</span> <span class="n">member</span> <span class="o">=</span> <span class="n">result</span><span class="o">.</span><span class="na">getAssets</span><span class="o">()[</span><span class="mi">0</span><span class="o">];</span>
+
+        <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">member</span><span class="o">.</span><span class="na">getOid</span><span class="o">().</span><span class="na">getToken</span><span class="o">());</span>
+        <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">member</span><span class="o">.</span><span class="na">getAttribute</span><span class="o">(</span><span class="n">nameAttribute</span><span class="o">).</span><span class="na">getValue</span><span class="o">());</span>
+        <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">member</span><span class="o">.</span><span class="na">getAttribute</span><span class="o">(</span><span class="n">emailAttribute</span><span class="o">).</span><span class="na">getValue</span><span class="o">());</span>
+
+        <span class="cm">/***** OUTPUT *****</span>
+<span class="cm">         Member:20</span>
+<span class="cm">         Administrator</span>
+<span class="cm">         admin@company.com</span>
+<span class="cm">         ******************/</span>
+
+        <span class="k">return</span> <span class="n">member</span><span class="o">;</span>
+    <span class="o">}</span>
+</pre></div>
+
+<h3>
+<a name="how-to-get-a-list-of-all-story-assets" class="anchor" href="#how-to-get-a-list-of-all-story-assets"><span class="octicon octicon-link"></span></a>How to get a list of all Story assets</h3>
+
+<div class="highlight"><pre><span class="kd">public</span> <span class="n">Asset</span><span class="o">[]</span> <span class="nf">ListOfAssets</span><span class="o">()</span> <span class="kd">throws</span> <span class="n">Exception</span> <span class="o">{</span>
+        <span class="n">IAssetType</span> <span class="n">storyType</span> <span class="o">=</span> <span class="n">_metaModel</span><span class="o">.</span><span class="na">getAssetType</span><span class="o">(</span><span class="s">"Story"</span><span class="o">);</span>
+        <span class="n">Query</span> <span class="n">query</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Query</span><span class="o">(</span><span class="n">storyType</span><span class="o">);</span>
+        <span class="n">IAttributeDefinition</span> <span class="n">nameAttribute</span> <span class="o">=</span> <span class="n">storyType</span><span class="o">.</span><span class="na">getAttributeDefinition</span><span class="o">(</span><span class="s">"Name"</span><span class="o">);</span>
+        <span class="n">IAttributeDefinition</span> <span class="n">estimateAttribute</span> <span class="o">=</span> <span class="n">storyType</span><span class="o">.</span><span class="na">getAttributeDefinition</span><span class="o">(</span><span class="s">"Estimate"</span><span class="o">);</span>
+        <span class="n">query</span><span class="o">.</span><span class="na">getSelection</span><span class="o">().</span><span class="na">add</span><span class="o">(</span><span class="n">nameAttribute</span><span class="o">);</span>
+        <span class="n">query</span><span class="o">.</span><span class="na">getSelection</span><span class="o">().</span><span class="na">add</span><span class="o">(</span><span class="n">estimateAttribute</span><span class="o">);</span>
+        <span class="n">QueryResult</span> <span class="n">result</span> <span class="o">=</span> <span class="n">_services</span><span class="o">.</span><span class="na">retrieve</span><span class="o">(</span><span class="n">query</span><span class="o">);</span>
+
+        <span class="k">for</span> <span class="o">(</span><span class="n">Asset</span> <span class="n">story</span> <span class="o">:</span> <span class="n">result</span><span class="o">.</span><span class="na">getAssets</span><span class="o">())</span> <span class="o">{</span>
+            <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">story</span><span class="o">.</span><span class="na">getOid</span><span class="o">().</span><span class="na">getToken</span><span class="o">());</span>
+            <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">story</span><span class="o">.</span><span class="na">getAttribute</span><span class="o">(</span><span class="n">nameAttribute</span><span class="o">).</span><span class="na">getValue</span><span class="o">());</span>
+            <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">story</span><span class="o">.</span><span class="na">getAttribute</span><span class="o">(</span><span class="n">estimateAttribute</span><span class="o">).</span><span class="na">getValue</span><span class="o">());</span>
+            <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">();</span>
+        <span class="o">}</span>
+        <span class="cm">/***** OUTPUT *****</span>
+<span class="cm">         Story:1083</span>
+<span class="cm">         View Daily Call Count</span>
+<span class="cm">         5</span>
+
+<span class="cm">         Story:1554</span>
+<span class="cm">         Multi-View Customer Calendar</span>
+<span class="cm">         1 ...</span>
+<span class="cm">         ******************/</span>
+
+        <span class="k">return</span> <span class="n">result</span><span class="o">.</span><span class="na">getAssets</span><span class="o">();</span>
+    <span class="o">}</span>
+</pre></div>
+
+<p>Depending on your security role, you may not be able to see all the Story assets in the entire system.</p>
+
+<h3>
+<a name="how-to-filter-a-query" class="anchor" href="#how-to-filter-a-query"><span class="octicon octicon-link"></span></a>How to filter a query</h3>
+
+<p>Use the setFilter property of the Query object to filter the results that are returned. This query will retrieve only Story assets with a To Do of zero:</p>
+
+<div class="highlight"><pre><span class="kd">public</span> <span class="n">Asset</span><span class="o">[]</span> <span class="nf">FilterListOfAssets</span><span class="o">()</span> <span class="kd">throws</span> <span class="n">Exception</span> <span class="o">{</span>
+        <span class="n">IAssetType</span> <span class="n">taskType</span> <span class="o">=</span> <span class="n">_metaModel</span><span class="o">.</span><span class="na">getAssetType</span><span class="o">(</span><span class="s">"Task"</span><span class="o">);</span>
+        <span class="n">Query</span> <span class="n">query</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Query</span><span class="o">(</span><span class="n">taskType</span><span class="o">);</span>
+        <span class="n">IAttributeDefinition</span> <span class="n">nameAttribute</span> <span class="o">=</span> <span class="n">taskType</span><span class="o">.</span><span class="na">getAttributeDefinition</span><span class="o">(</span><span class="s">"Name"</span><span class="o">);</span>
+        <span class="n">IAttributeDefinition</span> <span class="n">todoAttribute</span> <span class="o">=</span> <span class="n">taskType</span><span class="o">.</span><span class="na">getAttributeDefinition</span><span class="o">(</span><span class="s">"ToDo"</span><span class="o">);</span>
+        <span class="n">query</span><span class="o">.</span><span class="na">getSelection</span><span class="o">().</span><span class="na">add</span><span class="o">(</span><span class="n">nameAttribute</span><span class="o">);</span>
+        <span class="n">query</span><span class="o">.</span><span class="na">getSelection</span><span class="o">().</span><span class="na">add</span><span class="o">(</span><span class="n">todoAttribute</span><span class="o">);</span>
+
+        <span class="n">FilterTerm</span> <span class="n">toDoTerm</span> <span class="o">=</span> <span class="k">new</span> <span class="n">FilterTerm</span><span class="o">(</span><span class="n">todoAttribute</span><span class="o">);</span>
+        <span class="n">toDoTerm</span><span class="o">.</span><span class="na">equal</span><span class="o">(</span><span class="mi">0</span><span class="o">);</span>
+        <span class="n">query</span><span class="o">.</span><span class="na">setFilter</span><span class="o">(</span><span class="n">toDoTerm</span><span class="o">);</span>
+        <span class="n">QueryResult</span> <span class="n">result</span> <span class="o">=</span> <span class="n">_services</span><span class="o">.</span><span class="na">retrieve</span><span class="o">(</span><span class="n">query</span><span class="o">);</span>
+
+        <span class="k">for</span> <span class="o">(</span><span class="n">Asset</span> <span class="n">task</span> <span class="o">:</span> <span class="n">result</span><span class="o">.</span><span class="na">getAssets</span><span class="o">())</span> <span class="o">{</span>
+            <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">task</span><span class="o">.</span><span class="na">getOid</span><span class="o">().</span><span class="na">getToken</span><span class="o">());</span>
+            <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">task</span><span class="o">.</span><span class="na">getAttribute</span><span class="o">(</span><span class="n">nameAttribute</span><span class="o">).</span><span class="na">getValue</span><span class="o">());</span>
+            <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">task</span><span class="o">.</span><span class="na">getAttribute</span><span class="o">(</span><span class="n">todoAttribute</span><span class="o">).</span><span class="na">getValue</span><span class="o">());</span>
+            <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">();</span>
+        <span class="o">}</span>
+        <span class="cm">/***** OUTPUT *****</span>
+<span class="cm">         Task:1153</span>
+<span class="cm">         Code Review</span>
+<span class="cm">         0</span>
+
+<span class="cm">         Task:1154</span>
+<span class="cm">         Design Component</span>
+<span class="cm">         0 ...</span>
+<span class="cm">         ******************/</span>
+
+        <span class="k">return</span> <span class="n">result</span><span class="o">.</span><span class="na">getAssets</span><span class="o">();</span>
+    <span class="o">}</span>
+</pre></div>
+
+<h3>
+<a name="how-to-use-find-in-a-query" class="anchor" href="#how-to-use-find-in-a-query"><span class="octicon octicon-link"></span></a>How to use find in a query</h3>
+
+<p>Use the Find property of the Query object to search for text. This query will retrieve only Request assets with the word "Urgent" in the name:</p>
+
+<div class="highlight"><pre><span class="kd">public</span> <span class="n">Asset</span><span class="o">[]</span> <span class="nf">FindListOfAssets</span><span class="o">()</span> <span class="kd">throws</span> <span class="n">Exception</span>
+    <span class="o">{</span>
+        <span class="n">IAssetType</span> <span class="n">requestType</span> <span class="o">=</span> <span class="n">_metaModel</span><span class="o">.</span><span class="na">getAssetType</span><span class="o">(</span><span class="s">"Story"</span><span class="o">);</span>
+        <span class="n">Query</span> <span class="n">query</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Query</span><span class="o">(</span><span class="n">requestType</span><span class="o">);</span>
+        <span class="n">IAttributeDefinition</span> <span class="n">nameAttribute</span> <span class="o">=</span> <span class="n">requestType</span><span class="o">.</span><span class="na">getAttributeDefinition</span><span class="o">(</span><span class="s">"Name"</span><span class="o">);</span>
+
+        <span class="n">query</span><span class="o">.</span><span class="na">getSelection</span><span class="o">().</span><span class="na">add</span><span class="o">(</span><span class="n">nameAttribute</span><span class="o">);</span>
+
+        <span class="n">AttributeSelection</span> <span class="n">selection</span> <span class="o">=</span> <span class="k">new</span> <span class="n">AttributeSelection</span><span class="o">();</span>
+        <span class="n">selection</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="n">nameAttribute</span><span class="o">);</span>
+        <span class="c1">//query.setFind(new QueryFind("Urgent", selection)); //if you'd like find only stories marked as urgent, for example.</span>
+
+        <span class="n">QueryResult</span> <span class="n">result</span> <span class="o">=</span> <span class="n">_services</span><span class="o">.</span><span class="na">retrieve</span><span class="o">(</span><span class="n">query</span><span class="o">);</span>
+
+        <span class="k">for</span> <span class="o">(</span><span class="n">Asset</span> <span class="n">request</span> <span class="o">:</span> <span class="n">result</span><span class="o">.</span><span class="na">getAssets</span><span class="o">())</span>
+        <span class="o">{</span>
+            <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">request</span><span class="o">.</span><span class="na">getOid</span><span class="o">().</span><span class="na">getToken</span><span class="o">());</span>
+            <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">request</span><span class="o">.</span><span class="na">getAttribute</span><span class="o">(</span><span class="n">nameAttribute</span><span class="o">).</span><span class="na">getValue</span><span class="o">());</span>
+            <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">();</span>
+        <span class="o">}</span>
+        <span class="cm">/***** OUTPUT *****</span>
+<span class="cm">         Request:1195</span>
+<span class="cm">         Urgent!  Filter by owner</span>
+
+<span class="cm">         Task:1244</span>
+<span class="cm">         Urgent: improve search performance ...</span>
+<span class="cm">         ******************/</span>
+
+        <span class="k">return</span> <span class="n">result</span><span class="o">.</span><span class="na">getAssets</span><span class="o">();</span>
+    <span class="o">}</span>
+</pre></div>
+
+<h3>
+<a name="how-to-sort-a-query" class="anchor" href="#how-to-sort-a-query"><span class="octicon octicon-link"></span></a>How to sort a query</h3>
+
+<p>Use the OrderBy property of the Query object to sort the results. This query will retrieve Story assets sorted by increasing Estimate:</p>
+
+<div class="highlight"><pre><span class="kd">public</span> <span class="n">Asset</span><span class="o">[]</span> <span class="nf">SortListOfAssets</span><span class="o">()</span> <span class="kd">throws</span> <span class="n">Exception</span> <span class="o">{</span>
+        <span class="n">IAssetType</span> <span class="n">storyType</span> <span class="o">=</span> <span class="n">_metaModel</span><span class="o">.</span><span class="na">getAssetType</span><span class="o">(</span><span class="s">"Story"</span><span class="o">);</span>
+        <span class="n">Query</span> <span class="n">query</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Query</span><span class="o">(</span><span class="n">storyType</span><span class="o">);</span>
+        <span class="n">IAttributeDefinition</span> <span class="n">nameAttribute</span> <span class="o">=</span> <span class="n">storyType</span><span class="o">.</span><span class="na">getAttributeDefinition</span><span class="o">(</span><span class="s">"Name"</span><span class="o">);</span>
+        <span class="n">IAttributeDefinition</span> <span class="n">estimateAttribute</span> <span class="o">=</span> <span class="n">storyType</span><span class="o">.</span><span class="na">getAttributeDefinition</span><span class="o">(</span><span class="s">"Estimate"</span><span class="o">);</span>
+        <span class="n">query</span><span class="o">.</span><span class="na">getSelection</span><span class="o">().</span><span class="na">add</span><span class="o">(</span><span class="n">nameAttribute</span><span class="o">);</span>
+        <span class="n">query</span><span class="o">.</span><span class="na">getSelection</span><span class="o">().</span><span class="na">add</span><span class="o">(</span><span class="n">estimateAttribute</span><span class="o">);</span>
+        <span class="n">query</span><span class="o">.</span><span class="na">getOrderBy</span><span class="o">().</span><span class="na">minorSort</span><span class="o">(</span><span class="n">estimateAttribute</span><span class="o">,</span> <span class="n">OrderBy</span><span class="o">.</span><span class="na">Order</span><span class="o">.</span><span class="na">Ascending</span><span class="o">);</span>
+        <span class="n">QueryResult</span> <span class="n">result</span> <span class="o">=</span> <span class="n">_services</span><span class="o">.</span><span class="na">retrieve</span><span class="o">(</span><span class="n">query</span><span class="o">);</span>
+
+        <span class="k">for</span> <span class="o">(</span><span class="n">Asset</span> <span class="n">story</span> <span class="o">:</span> <span class="n">result</span><span class="o">.</span><span class="na">getAssets</span><span class="o">())</span> <span class="o">{</span>
+            <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">story</span><span class="o">.</span><span class="na">getOid</span><span class="o">().</span><span class="na">getToken</span><span class="o">());</span>
+            <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">story</span><span class="o">.</span><span class="na">getAttribute</span><span class="o">(</span><span class="n">nameAttribute</span><span class="o">).</span><span class="na">getValue</span><span class="o">());</span>
+            <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">story</span><span class="o">.</span><span class="na">getAttribute</span><span class="o">(</span><span class="n">estimateAttribute</span><span class="o">).</span><span class="na">getValue</span><span class="o">());</span>
+            <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">();</span>
+        <span class="o">}</span>
+        <span class="cm">/***** OUTPUT *****</span>
+<span class="cm">         Story:1073</span>
+<span class="cm">         Add Order Line</span>
+<span class="cm">         1</span>
+
+<span class="cm">         Story:1068</span>
+<span class="cm">         Update Member</span>
+<span class="cm">         2 ...</span>
+<span class="cm">         ******************/</span>
+
+        <span class="k">return</span> <span class="n">result</span><span class="o">.</span><span class="na">getAssets</span><span class="o">();</span>
+    <span class="o">}</span>
+</pre></div>
+
+<p>There are two methods you can call on the OrderBy class to sort your results: MinorSort and MajorSort. If you are sorting by only one field, it does not matter which one you use. If you want to sort by multiple fields, you need to call either MinorSort or MajorSort multiple times. The difference is: Each time you call MinorSort, the parameter will be added to the end of the OrderBy statement. Each time you call MajorSort, the parameter will be inserted at the beginning of the OrderBy statement.</p>
+
+<h3>
+<a name="how-to-select-a-portion-of-query-results" class="anchor" href="#how-to-select-a-portion-of-query-results"><span class="octicon octicon-link"></span></a>How to select a portion of query results</h3>
+
+<p>Retrieve a "page" of query results by using the Paging propery of the Query object. This query will retrieve the first 3 Story assets:</p>
+
+<div class="highlight"><pre><span class="kd">public</span> <span class="n">Asset</span><span class="o">[]</span> <span class="nf">PageListOfAssets</span><span class="o">()</span> <span class="kd">throws</span> <span class="n">Exception</span> <span class="o">{</span>
+        <span class="n">IAssetType</span> <span class="n">storyType</span> <span class="o">=</span> <span class="n">_metaModel</span><span class="o">.</span><span class="na">getAssetType</span><span class="o">(</span><span class="s">"Story"</span><span class="o">);</span>
+        <span class="n">Query</span> <span class="n">query</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Query</span><span class="o">(</span><span class="n">storyType</span><span class="o">);</span>
+        <span class="n">IAttributeDefinition</span> <span class="n">nameAttribute</span> <span class="o">=</span> <span class="n">storyType</span><span class="o">.</span><span class="na">getAttributeDefinition</span><span class="o">(</span><span class="s">"Name"</span><span class="o">);</span>
+        <span class="n">IAttributeDefinition</span> <span class="n">estimateAttribute</span> <span class="o">=</span> <span class="n">storyType</span><span class="o">.</span><span class="na">getAttributeDefinition</span><span class="o">(</span><span class="s">"Estimate"</span><span class="o">);</span>
+        <span class="n">query</span><span class="o">.</span><span class="na">getSelection</span><span class="o">().</span><span class="na">add</span><span class="o">(</span><span class="n">nameAttribute</span><span class="o">);</span>
+        <span class="n">query</span><span class="o">.</span><span class="na">getSelection</span><span class="o">().</span><span class="na">add</span><span class="o">(</span><span class="n">estimateAttribute</span><span class="o">);</span>
+        <span class="n">query</span><span class="o">.</span><span class="na">getPaging</span><span class="o">().</span><span class="na">setPageSize</span><span class="o">(</span><span class="mi">3</span><span class="o">);</span>
+        <span class="n">query</span><span class="o">.</span><span class="na">getPaging</span><span class="o">().</span><span class="na">setStart</span><span class="o">(</span><span class="mi">0</span><span class="o">);</span>
+        <span class="n">QueryResult</span> <span class="n">result</span> <span class="o">=</span> <span class="n">_services</span><span class="o">.</span><span class="na">retrieve</span><span class="o">(</span><span class="n">query</span><span class="o">);</span>
+
+        <span class="k">for</span> <span class="o">(</span><span class="n">Asset</span> <span class="n">story</span> <span class="o">:</span> <span class="n">result</span><span class="o">.</span><span class="na">getAssets</span><span class="o">())</span> <span class="o">{</span>
+            <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">story</span><span class="o">.</span><span class="na">getOid</span><span class="o">().</span><span class="na">getToken</span><span class="o">());</span>
+            <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">story</span><span class="o">.</span><span class="na">getAttribute</span><span class="o">(</span><span class="n">nameAttribute</span><span class="o">).</span><span class="na">getValue</span><span class="o">());</span>
+            <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">story</span><span class="o">.</span><span class="na">getAttribute</span><span class="o">(</span><span class="n">estimateAttribute</span><span class="o">).</span><span class="na">getValue</span><span class="o">());</span>
+            <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">();</span>
+        <span class="o">}</span>
+        <span class="cm">/***** OUTPUT *****</span>
+<span class="cm">         Story:1063</span>
+<span class="cm">         Logon</span>
+<span class="cm">         2</span>
+
+<span class="cm">         Story:1064</span>
+<span class="cm">         Add Customer Details</span>
+<span class="cm">         2</span>
+
+<span class="cm">         Story:1065</span>
+<span class="cm">         Add Customer Header</span>
+<span class="cm">         3</span>
+<span class="cm">         ******************/</span>
+
+        <span class="k">return</span> <span class="n">result</span><span class="o">.</span><span class="na">getAssets</span><span class="o">();</span>
+    <span class="o">}</span>
+</pre></div>
+
+<p>The PageSize property shown asks for 3 items, and the Start property indicates to start at 0. The next 3 items can be retrieve with PageSize=3, Start=3.</p>
+
+<h3>
+<a name="how-to-query-the-history-of-a-single-asset" class="anchor" href="#how-to-query-the-history-of-a-single-asset"><span class="octicon octicon-link"></span></a>How to query the history of a single asset</h3>
+
+<p>This query will retrieve the history of the Member asset with ID 1000.</p>
+
+<div class="highlight"><pre><span class="kd">public</span> <span class="n">Asset</span><span class="o">[]</span> <span class="nf">HistorySingleAsset</span><span class="o">()</span> <span class="kd">throws</span> <span class="n">Exception</span> <span class="o">{</span>
+        <span class="n">IAssetType</span> <span class="n">memberType</span> <span class="o">=</span> <span class="n">_metaModel</span><span class="o">.</span><span class="na">getAssetType</span><span class="o">(</span><span class="s">"Member"</span><span class="o">);</span>
+        <span class="n">Query</span> <span class="n">query</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Query</span><span class="o">(</span><span class="n">memberType</span><span class="o">,</span> <span class="kc">true</span><span class="o">);</span>
+        <span class="n">IAttributeDefinition</span> <span class="n">idAttribute</span> <span class="o">=</span> <span class="n">memberType</span><span class="o">.</span><span class="na">getAttributeDefinition</span><span class="o">(</span><span class="s">"ID"</span><span class="o">);</span>
+        <span class="n">IAttributeDefinition</span> <span class="n">changeDateAttribute</span> <span class="o">=</span> <span class="n">memberType</span><span class="o">.</span><span class="na">getAttributeDefinition</span><span class="o">(</span><span class="s">"ChangeDate"</span><span class="o">);</span>
+        <span class="n">IAttributeDefinition</span> <span class="n">emailAttribute</span> <span class="o">=</span> <span class="n">memberType</span><span class="o">.</span><span class="na">getAttributeDefinition</span><span class="o">(</span><span class="s">"Email"</span><span class="o">);</span>
+        <span class="n">query</span><span class="o">.</span><span class="na">getSelection</span><span class="o">().</span><span class="na">add</span><span class="o">(</span><span class="n">changeDateAttribute</span><span class="o">);</span>
+        <span class="n">query</span><span class="o">.</span><span class="na">getSelection</span><span class="o">().</span><span class="na">add</span><span class="o">(</span><span class="n">emailAttribute</span><span class="o">);</span>
+        <span class="n">FilterTerm</span> <span class="n">idTerm</span> <span class="o">=</span> <span class="k">new</span> <span class="n">FilterTerm</span><span class="o">(</span><span class="n">idAttribute</span><span class="o">);</span>
+        <span class="n">idTerm</span><span class="o">.</span><span class="na">equal</span><span class="o">(</span><span class="s">"Member:20"</span><span class="o">);</span>
+        <span class="n">query</span><span class="o">.</span><span class="na">setFilter</span><span class="o">(</span><span class="n">idTerm</span><span class="o">);</span>
+        <span class="n">QueryResult</span> <span class="n">result</span> <span class="o">=</span> <span class="n">_services</span><span class="o">.</span><span class="na">retrieve</span><span class="o">(</span><span class="n">query</span><span class="o">);</span>
+        <span class="n">Asset</span><span class="o">[]</span> <span class="n">memberHistory</span> <span class="o">=</span> <span class="n">result</span><span class="o">.</span><span class="na">getAssets</span><span class="o">();</span>
+
+        <span class="k">for</span> <span class="o">(</span><span class="n">Asset</span> <span class="n">member</span> <span class="o">:</span> <span class="n">memberHistory</span><span class="o">)</span> <span class="o">{</span>
+            <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">member</span><span class="o">.</span><span class="na">getOid</span><span class="o">().</span><span class="na">getToken</span><span class="o">());</span>
+            <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">member</span><span class="o">.</span><span class="na">getAttribute</span><span class="o">(</span><span class="n">changeDateAttribute</span><span class="o">).</span><span class="na">getValue</span><span class="o">());</span>
+            <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">member</span><span class="o">.</span><span class="na">getAttribute</span><span class="o">(</span><span class="n">emailAttribute</span><span class="o">).</span><span class="na">getValue</span><span class="o">());</span>
+            <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">();</span>
+        <span class="o">}</span>
+        <span class="cm">/***** OUTPUT *****</span>
+<span class="cm">         Member:1000:105</span>
+<span class="cm">         4/2/2007 1:22:03 PM</span>
+<span class="cm">         andre.agile@company.com</span>
+
+<span class="cm">         Member:1000:101</span>
+<span class="cm">         3/29/2007 4:10:29 PM</span>
+<span class="cm">         andre@company.net</span>
+<span class="cm">         ******************/</span>
+
+        <span class="k">return</span> <span class="n">memberHistory</span><span class="o">;</span>
+    <span class="o">}</span>
+</pre></div>
+
+<p>To create a history query, provide a boolean "true" second argument to the Query constructor.</p>
+
+<h3>
+<a name="how-to-query-the-history-of-many-assets" class="anchor" href="#how-to-query-the-history-of-many-assets"><span class="octicon octicon-link"></span></a>How to query the history of many assets</h3>
+
+<p>This query will retrieve history for all Member assets:</p>
+
+<div class="highlight"><pre> <span class="kd">public</span> <span class="n">Asset</span><span class="o">[]</span> <span class="nf">HistoryListOfAssets</span><span class="o">()</span> <span class="kd">throws</span> <span class="n">Exception</span> <span class="o">{</span>
+        <span class="n">IAssetType</span> <span class="n">memberType</span> <span class="o">=</span> <span class="n">_metaModel</span><span class="o">.</span><span class="na">getAssetType</span><span class="o">(</span><span class="s">"Member"</span><span class="o">);</span>
+        <span class="n">Query</span> <span class="n">query</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Query</span><span class="o">(</span><span class="n">memberType</span><span class="o">,</span> <span class="kc">true</span><span class="o">);</span>
+        <span class="n">IAttributeDefinition</span> <span class="n">changeDateAttribute</span> <span class="o">=</span> <span class="n">memberType</span><span class="o">.</span><span class="na">getAttributeDefinition</span><span class="o">(</span><span class="s">"ChangeDate"</span><span class="o">);</span>
+        <span class="n">IAttributeDefinition</span> <span class="n">emailAttribute</span> <span class="o">=</span> <span class="n">memberType</span><span class="o">.</span><span class="na">getAttributeDefinition</span><span class="o">(</span><span class="s">"Email"</span><span class="o">);</span>
+        <span class="n">query</span><span class="o">.</span><span class="na">getSelection</span><span class="o">().</span><span class="na">add</span><span class="o">(</span><span class="n">changeDateAttribute</span><span class="o">);</span>
+        <span class="n">query</span><span class="o">.</span><span class="na">getSelection</span><span class="o">().</span><span class="na">add</span><span class="o">(</span><span class="n">emailAttribute</span><span class="o">);</span>
+        <span class="n">QueryResult</span> <span class="n">result</span> <span class="o">=</span> <span class="n">_services</span><span class="o">.</span><span class="na">retrieve</span><span class="o">(</span><span class="n">query</span><span class="o">);</span>
+        <span class="n">Asset</span><span class="o">[]</span> <span class="n">memberHistory</span> <span class="o">=</span> <span class="n">result</span><span class="o">.</span><span class="na">getAssets</span><span class="o">();</span>
+
+        <span class="k">for</span> <span class="o">(</span><span class="n">Asset</span> <span class="n">member</span> <span class="o">:</span> <span class="n">memberHistory</span><span class="o">)</span> <span class="o">{</span>
+            <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">member</span><span class="o">.</span><span class="na">getOid</span><span class="o">().</span><span class="na">getToken</span><span class="o">());</span>
+            <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">member</span><span class="o">.</span><span class="na">getAttribute</span><span class="o">(</span><span class="n">changeDateAttribute</span><span class="o">).</span><span class="na">getValue</span><span class="o">());</span>
+            <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">member</span><span class="o">.</span><span class="na">getAttribute</span><span class="o">(</span><span class="n">emailAttribute</span><span class="o">).</span><span class="na">getValue</span><span class="o">());</span>
+            <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">();</span>
+        <span class="o">}</span>
+        <span class="cm">/***** OUTPUT *****</span>
+<span class="cm">         Member:20:0</span>
+<span class="cm">         Thu Nov 30 19:00:00 EST 1899</span>
+<span class="cm">         null</span>
+
+<span class="cm">         Member:20:17183</span>
+<span class="cm">         Fri Nov 09 09:46:25 EST 2012</span>
+<span class="cm">         versionone@mailinator.com</span>
+
+<span class="cm">         Member:20:17190</span>
+<span class="cm">         Sun Nov 11 22:59:23 EST 2012</span>
+<span class="cm">         versionone@mailinator.com</span>
+
+<span class="cm">         Member:20:17191</span>
+<span class="cm">         Sun Nov 11 22:59:47 EST 2012</span>
+<span class="cm">         versionone@mailinator.com</span>
+<span class="cm">         ******************/</span>
+
+        <span class="k">return</span> <span class="n">memberHistory</span><span class="o">;</span>
+    <span class="o">}</span>
+</pre></div>
+
+<p>Again, the response is a list of historical assets. There will be multiple Asset objects returned for an asset that has changed previously.</p>
+
+<p>All of the previously demonstrated query properties can be used with historical queries also.</p>
+
+<h3>
+<a name="how-to-query-an-asset-as-of-a-specific-time" class="anchor" href="#how-to-query-an-asset-as-of-a-specific-time"><span class="octicon octicon-link"></span></a>How to query an asset "as of" a specific time</h3>
+
+<p>Use the AsOf property of the Query object to retrieve data as it existed at some point in time. This query finds the version of each Story asset as it existed seven days ago:</p>
+
+<div class="highlight"><pre> <span class="kd">public</span> <span class="n">Asset</span><span class="o">[]</span> <span class="nf">HistoryAsOfTime</span><span class="o">()</span> <span class="kd">throws</span> <span class="n">Exception</span> <span class="o">{</span>
+        <span class="n">IAssetType</span> <span class="n">storyType</span> <span class="o">=</span> <span class="n">_metaModel</span><span class="o">.</span><span class="na">getAssetType</span><span class="o">(</span><span class="s">"Story"</span><span class="o">);</span>
+        <span class="n">Query</span> <span class="n">query</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Query</span><span class="o">(</span><span class="n">storyType</span><span class="o">,</span> <span class="kc">true</span><span class="o">);</span>
+        <span class="n">IAttributeDefinition</span> <span class="n">nameAttribute</span> <span class="o">=</span> <span class="n">storyType</span><span class="o">.</span><span class="na">getAttributeDefinition</span><span class="o">(</span><span class="s">"Name"</span><span class="o">);</span>
+        <span class="n">IAttributeDefinition</span> <span class="n">estimateAttribute</span> <span class="o">=</span> <span class="n">storyType</span><span class="o">.</span><span class="na">getAttributeDefinition</span><span class="o">(</span><span class="s">"Estimate"</span><span class="o">);</span>
+        <span class="n">query</span><span class="o">.</span><span class="na">getSelection</span><span class="o">().</span><span class="na">add</span><span class="o">(</span><span class="n">nameAttribute</span><span class="o">);</span>
+        <span class="n">query</span><span class="o">.</span><span class="na">getSelection</span><span class="o">().</span><span class="na">add</span><span class="o">(</span><span class="n">estimateAttribute</span><span class="o">);</span>
+        <span class="n">Calendar</span> <span class="n">c</span> <span class="o">=</span> <span class="n">Calendar</span><span class="o">.</span><span class="na">getInstance</span><span class="o">();</span>
+        <span class="n">c</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="n">Calendar</span><span class="o">.</span><span class="na">DAY_OF_MONTH</span><span class="o">,</span> <span class="o">-</span><span class="mi">7</span><span class="o">);</span>
+        <span class="n">query</span><span class="o">.</span><span class="na">setAsOf</span><span class="o">(</span><span class="n">c</span><span class="o">.</span><span class="na">getTime</span><span class="o">());</span> <span class="c1">// query.AsOf = DateTime.Now.AddDays(-7); //7 days ago</span>
+        <span class="n">QueryResult</span> <span class="n">result</span> <span class="o">=</span> <span class="n">_services</span><span class="o">.</span><span class="na">retrieve</span><span class="o">(</span><span class="n">query</span><span class="o">);</span>
+
+        <span class="k">for</span> <span class="o">(</span><span class="n">Asset</span> <span class="n">story</span> <span class="o">:</span> <span class="n">result</span><span class="o">.</span><span class="na">getAssets</span><span class="o">())</span> <span class="o">{</span>
+            <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">story</span><span class="o">.</span><span class="na">getOid</span><span class="o">().</span><span class="na">getToken</span><span class="o">());</span>
+            <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">story</span><span class="o">.</span><span class="na">getAttribute</span><span class="o">(</span><span class="n">nameAttribute</span><span class="o">).</span><span class="na">getValue</span><span class="o">());</span>
+            <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">story</span><span class="o">.</span><span class="na">getAttribute</span><span class="o">(</span><span class="n">estimateAttribute</span><span class="o">).</span><span class="na">getValue</span><span class="o">());</span>
+            <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">();</span>
+        <span class="o">}</span>
+        <span class="cm">/***** OUTPUT *****</span>
+<span class="cm">         Story:1063</span>
+<span class="cm">         Logon</span>
+<span class="cm">         3</span>
+
+<span class="cm">         Story:1064</span>
+<span class="cm">         Add Customer Details</span>
+<span class="cm">         1</span>
+
+<span class="cm">         Story:1065</span>
+<span class="cm">         Add Customer Header</span>
+<span class="cm">         3</span>
+<span class="cm">         ******************/</span>
+
+        <span class="k">return</span> <span class="n">result</span><span class="o">.</span><span class="na">getAssets</span><span class="o">();</span>
+    <span class="o">}</span>
+
+</pre></div>
+
+<h2>
+<a name="learn-by-example-updates" class="anchor" href="#learn-by-example-updates"><span class="octicon octicon-link"></span></a>Learn By Example: Updates</h2>
+
+<p>Updating assets through the APIClient involves calling the Save method on the IServices object.</p>
+
+<h3>
+<a name="how-to-update-a-scalar-attribute-on-an-asset" class="anchor" href="#how-to-update-a-scalar-attribute-on-an-asset"><span class="octicon octicon-link"></span></a>How to update a scalar attribute on an asset</h3>
+
+<p>Updating a scalar attribute on an asset is accomplished by calling the SetAttribute method on an asset, specifying the IAttributeDefinition of the attribute you wish to change and the new scalar value. This code will update the Name attribute on the Story with ID 1094:</p>
+
+<div class="highlight"><pre><span class="kd">public</span> <span class="n">Asset</span> <span class="nf">UpdateScalarAttribute</span><span class="o">()</span> <span class="kd">throws</span> <span class="n">Exception</span> <span class="o">{</span>
+        <span class="n">Oid</span> <span class="n">storyId</span> <span class="o">=</span> <span class="n">Oid</span><span class="o">.</span><span class="na">fromToken</span><span class="o">(</span><span class="s">"Story:1094"</span><span class="o">,</span> <span class="n">_metaModel</span><span class="o">);</span>
+        <span class="n">Query</span> <span class="n">query</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Query</span><span class="o">(</span><span class="n">storyId</span><span class="o">);</span>
+        <span class="n">IAssetType</span> <span class="n">storyType</span> <span class="o">=</span> <span class="n">_metaModel</span><span class="o">.</span><span class="na">getAssetType</span><span class="o">(</span><span class="s">"Story"</span><span class="o">);</span>
+        <span class="n">IAttributeDefinition</span> <span class="n">nameAttribute</span> <span class="o">=</span> <span class="n">storyType</span><span class="o">.</span><span class="na">getAttributeDefinition</span><span class="o">(</span><span class="s">"Name"</span><span class="o">);</span>
+        <span class="n">query</span><span class="o">.</span><span class="na">getSelection</span><span class="o">().</span><span class="na">add</span><span class="o">(</span><span class="n">nameAttribute</span><span class="o">);</span>
+        <span class="n">QueryResult</span> <span class="n">result</span> <span class="o">=</span> <span class="n">_services</span><span class="o">.</span><span class="na">retrieve</span><span class="o">(</span><span class="n">query</span><span class="o">);</span>
+        <span class="n">Asset</span> <span class="n">story</span> <span class="o">=</span> <span class="n">result</span><span class="o">.</span><span class="na">getAssets</span><span class="o">()[</span><span class="mi">0</span><span class="o">];</span>
+        <span class="n">String</span> <span class="n">oldName</span> <span class="o">=</span> <span class="n">story</span><span class="o">.</span><span class="na">getAttribute</span><span class="o">(</span><span class="n">nameAttribute</span><span class="o">).</span><span class="na">getValue</span><span class="o">().</span><span class="na">toString</span><span class="o">();</span>
+        <span class="n">story</span><span class="o">.</span><span class="na">setAttributeValue</span><span class="o">(</span><span class="n">nameAttribute</span><span class="o">,</span> <span class="n">GetNewName</span><span class="o">());</span>
+        <span class="n">_services</span><span class="o">.</span><span class="na">save</span><span class="o">(</span><span class="n">story</span><span class="o">);</span>
+
+        <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">story</span><span class="o">.</span><span class="na">getOid</span><span class="o">().</span><span class="na">getToken</span><span class="o">());</span>
+        <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">oldName</span><span class="o">);</span>
+        <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">story</span><span class="o">.</span><span class="na">getAttribute</span><span class="o">(</span><span class="n">nameAttribute</span><span class="o">).</span><span class="na">getValue</span><span class="o">());</span>
+        <span class="cm">/***** OUTPUT *****</span>
+<span class="cm">         Story:1094:1446</span>
+<span class="cm">         Logon</span>
+<span class="cm">         New Name</span>
+<span class="cm">         ******************/</span>
+
+        <span class="k">return</span> <span class="n">story</span><span class="o">;</span>
+    <span class="o">}</span>
+</pre></div>
+
+<h3>
+<a name="how-to-update-a-single-value-relation-on-an-asset" class="anchor" href="#how-to-update-a-single-value-relation-on-an-asset"><span class="octicon octicon-link"></span></a>How to update a single-value relation on an asset</h3>
+
+<p>Updating a single-value relation is accomplished by calling the SetAttribute method on an asset, specifying the IAttributeDefinition of the attribute you wish to change and the ID for the new relation. This code will change the source of the Story with ID 1094:</p>
+
+<div class="highlight"><pre><span class="kd">public</span> <span class="n">Asset</span> <span class="nf">UpdateSingleValueRelation</span><span class="o">()</span> <span class="kd">throws</span> <span class="n">Exception</span> <span class="o">{</span>
+        <span class="n">Oid</span> <span class="n">storyId</span> <span class="o">=</span> <span class="n">Oid</span><span class="o">.</span><span class="na">fromToken</span><span class="o">(</span><span class="s">"Story:1094"</span><span class="o">,</span> <span class="n">_metaModel</span><span class="o">);</span>
+        <span class="n">Query</span> <span class="n">query</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Query</span><span class="o">(</span><span class="n">storyId</span><span class="o">);</span>
+        <span class="n">IAssetType</span> <span class="n">storyType</span> <span class="o">=</span> <span class="n">_metaModel</span><span class="o">.</span><span class="na">getAssetType</span><span class="o">(</span><span class="s">"Story"</span><span class="o">);</span>
+        <span class="n">IAttributeDefinition</span> <span class="n">sourceAttribute</span> <span class="o">=</span> <span class="n">storyType</span><span class="o">.</span><span class="na">getAttributeDefinition</span><span class="o">(</span><span class="s">"Source"</span><span class="o">);</span>
+        <span class="n">query</span><span class="o">.</span><span class="na">getSelection</span><span class="o">().</span><span class="na">add</span><span class="o">(</span><span class="n">sourceAttribute</span><span class="o">);</span>
+        <span class="n">QueryResult</span> <span class="n">result</span> <span class="o">=</span> <span class="n">_services</span><span class="o">.</span><span class="na">retrieve</span><span class="o">(</span><span class="n">query</span><span class="o">);</span>
+        <span class="n">Asset</span> <span class="n">story</span> <span class="o">=</span> <span class="n">result</span><span class="o">.</span><span class="na">getAssets</span><span class="o">()[</span><span class="mi">0</span><span class="o">];</span>
+        <span class="n">String</span> <span class="n">oldSource</span> <span class="o">=</span> <span class="n">story</span><span class="o">.</span><span class="na">getAttribute</span><span class="o">(</span><span class="n">sourceAttribute</span><span class="o">).</span><span class="na">getValue</span><span class="o">().</span><span class="na">toString</span><span class="o">();</span>
+        <span class="n">story</span><span class="o">.</span><span class="na">setAttributeValue</span><span class="o">(</span><span class="n">sourceAttribute</span><span class="o">,</span> <span class="n">GetNextSourceID</span><span class="o">(</span><span class="n">oldSource</span><span class="o">));</span>
+        <span class="n">_services</span><span class="o">.</span><span class="na">save</span><span class="o">(</span><span class="n">story</span><span class="o">);</span>
+
+        <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">story</span><span class="o">.</span><span class="na">getOid</span><span class="o">().</span><span class="na">getToken</span><span class="o">());</span>
+        <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">oldSource</span><span class="o">);</span>
+        <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">story</span><span class="o">.</span><span class="na">getAttribute</span><span class="o">(</span><span class="n">sourceAttribute</span><span class="o">).</span><span class="na">getValue</span><span class="o">());</span>
+        <span class="cm">/***** OUTPUT *****</span>
+<span class="cm">         Story:1094:1446</span>
+<span class="cm">         StorySource:148</span>
+<span class="cm">         StorySource:149</span>
+<span class="cm">         ******************/</span>
+
+        <span class="k">return</span> <span class="n">story</span><span class="o">;</span>
+    <span class="o">}</span>
+</pre></div>
+
+<h3>
+<a name="how-to-add-and-remove-values-from-a-multi-value-relation" class="anchor" href="#how-to-add-and-remove-values-from-a-multi-value-relation"><span class="octicon octicon-link"></span></a>How to add and remove values from a multi-value relation</h3>
+
+<p>Updating a multi-value relation is accomplished by calling either the RemoveAttributeValue or AddAttributeValue method on an asset, specifying the IAttributeDefinition of the attribute you wish to change and the ID of the relation you wish to add or remove. This code will add one Member and remove another Member from the Story with ID 1094:</p>
+
+<div class="highlight"><pre><span class="kd">public</span> <span class="n">Asset</span> <span class="nf">UpdateMultiValueRelation</span><span class="o">()</span> <span class="kd">throws</span> <span class="n">Exception</span> <span class="o">{</span>
+        <span class="n">Oid</span> <span class="n">storyId</span> <span class="o">=</span> <span class="n">Oid</span><span class="o">.</span><span class="na">fromToken</span><span class="o">(</span><span class="s">"Story:1124"</span><span class="o">,</span> <span class="n">_metaModel</span><span class="o">);</span>
+        <span class="n">Query</span> <span class="n">query</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Query</span><span class="o">(</span><span class="n">storyId</span><span class="o">);</span>
+        <span class="n">IAssetType</span> <span class="n">storyType</span> <span class="o">=</span> <span class="n">_metaModel</span><span class="o">.</span><span class="na">getAssetType</span><span class="o">(</span><span class="s">"Story"</span><span class="o">);</span>
+        <span class="n">IAttributeDefinition</span> <span class="n">ownersAttribute</span> <span class="o">=</span> <span class="n">storyType</span><span class="o">.</span><span class="na">getAttributeDefinition</span><span class="o">(</span><span class="s">"Owners"</span><span class="o">);</span>
+        <span class="n">query</span><span class="o">.</span><span class="na">getSelection</span><span class="o">().</span><span class="na">add</span><span class="o">(</span><span class="n">ownersAttribute</span><span class="o">);</span>
+        <span class="n">QueryResult</span> <span class="n">result</span> <span class="o">=</span> <span class="n">_services</span><span class="o">.</span><span class="na">retrieve</span><span class="o">(</span><span class="n">query</span><span class="o">);</span>
+        <span class="n">Asset</span> <span class="n">story</span> <span class="o">=</span> <span class="n">result</span><span class="o">.</span><span class="na">getAssets</span><span class="o">()[</span><span class="mi">0</span><span class="o">];</span>
+        <span class="n">List</span><span class="o">&lt;</span><span class="n">Object</span><span class="o">&gt;</span> <span class="n">oldOwners</span> <span class="o">=</span> <span class="k">new</span> <span class="n">ArrayList</span><span class="o">&lt;</span><span class="n">Object</span><span class="o">&gt;();</span>
+        <span class="n">oldOwners</span><span class="o">.</span><span class="na">addAll</span><span class="o">(</span><span class="n">Arrays</span><span class="o">.</span><span class="na">asList</span><span class="o">(</span><span class="n">story</span><span class="o">.</span><span class="na">getAttribute</span><span class="o">(</span><span class="n">ownersAttribute</span><span class="o">).</span><span class="na">getValues</span><span class="o">()));</span>
+        <span class="n">story</span><span class="o">.</span><span class="na">removeAttributeValue</span><span class="o">(</span><span class="n">ownersAttribute</span><span class="o">,</span> <span class="n">getOwnerToRemove</span><span class="o">(</span><span class="n">oldOwners</span><span class="o">));</span>
+        <span class="n">story</span><span class="o">.</span><span class="na">addAttributeValue</span><span class="o">(</span><span class="n">ownersAttribute</span><span class="o">,</span> <span class="n">getOwnerToAdd</span><span class="o">(</span><span class="n">oldOwners</span><span class="o">));</span>
+        <span class="n">_services</span><span class="o">.</span><span class="na">save</span><span class="o">(</span><span class="n">story</span><span class="o">);</span>
+
+        <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">story</span><span class="o">.</span><span class="na">getOid</span><span class="o">().</span><span class="na">getToken</span><span class="o">());</span>
+        <span class="n">Iterator</span><span class="o">&lt;</span><span class="n">Object</span><span class="o">&gt;</span> <span class="n">iter</span> <span class="o">=</span> <span class="n">oldOwners</span><span class="o">.</span><span class="na">iterator</span><span class="o">();</span>
+        <span class="k">while</span> <span class="o">(</span><span class="n">iter</span><span class="o">.</span><span class="na">hasNext</span><span class="o">())</span> <span class="o">{</span>
+            <span class="n">Oid</span> <span class="n">oid</span> <span class="o">=</span> <span class="o">(</span><span class="n">Oid</span><span class="o">)</span> <span class="n">iter</span><span class="o">.</span><span class="na">next</span><span class="o">();</span>
+            <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">oid</span><span class="o">.</span><span class="na">getToken</span><span class="o">());</span>
+        <span class="o">}</span>
+        <span class="k">for</span> <span class="o">(</span><span class="n">Object</span> <span class="n">o</span> <span class="o">:</span> <span class="n">story</span><span class="o">.</span><span class="na">getAttribute</span><span class="o">(</span><span class="n">ownersAttribute</span><span class="o">).</span><span class="na">getValues</span><span class="o">())</span> <span class="o">{</span>
+            <span class="n">Oid</span> <span class="n">oid</span> <span class="o">=</span> <span class="o">(</span><span class="n">Oid</span><span class="o">)</span> <span class="n">o</span><span class="o">;</span>
+            <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">oid</span><span class="o">.</span><span class="na">getToken</span><span class="o">());</span>
+        <span class="o">}</span>
+        <span class="cm">/***** OUTPUT *****</span>
+<span class="cm">         Story:1094:1446</span>
+<span class="cm">         Member:1003</span>
+<span class="cm">         Member:1000</span>
+<span class="cm">         ******************/</span>
+
+        <span class="k">return</span> <span class="n">story</span><span class="o">;</span>
+    <span class="o">}</span>
+
+</pre></div>
+
+<h2>
+<a name="learn-by-example-new-asset" class="anchor" href="#learn-by-example-new-asset"><span class="octicon octicon-link"></span></a>Learn By Example: New Asset</h2>
+
+<p>When you create a new asset in the APIClient you need to specify the "context" of another asset that will be the parent. For example, if you create a new Story asset you can specify which Scope it should be created in.</p>
+
+<p>How to get a new Story asset template in the context of a Scope asset
+This code will create a Story asset in the context of Scope with ID 1012:</p>
+
+<div class="highlight"><pre><span class="kd">public</span> <span class="n">Asset</span> <span class="nf">AddNewAsset</span><span class="o">()</span> <span class="kd">throws</span> <span class="n">Exception</span> <span class="o">{</span>
+        <span class="n">Oid</span> <span class="n">projectId</span> <span class="o">=</span> <span class="n">Oid</span><span class="o">.</span><span class="na">fromToken</span><span class="o">(</span><span class="s">"Scope:0"</span><span class="o">,</span> <span class="n">_metaModel</span><span class="o">);</span>
+        <span class="n">IAssetType</span> <span class="n">storyType</span> <span class="o">=</span> <span class="n">_metaModel</span><span class="o">.</span><span class="na">getAssetType</span><span class="o">(</span><span class="s">"Story"</span><span class="o">);</span>
+        <span class="n">Asset</span> <span class="n">newStory</span> <span class="o">=</span> <span class="n">_services</span><span class="o">.</span><span class="na">createNew</span><span class="o">(</span><span class="n">storyType</span><span class="o">,</span> <span class="n">projectId</span><span class="o">);</span>
+        <span class="n">IAttributeDefinition</span> <span class="n">nameAttribute</span> <span class="o">=</span> <span class="n">storyType</span><span class="o">.</span><span class="na">getAttributeDefinition</span><span class="o">(</span><span class="s">"Name"</span><span class="o">);</span>
+        <span class="n">newStory</span><span class="o">.</span><span class="na">setAttributeValue</span><span class="o">(</span><span class="n">nameAttribute</span><span class="o">,</span> <span class="s">"My New Story"</span><span class="o">);</span>
+        <span class="n">_services</span><span class="o">.</span><span class="na">save</span><span class="o">(</span><span class="n">newStory</span><span class="o">);</span>
+
+        <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">newStory</span><span class="o">.</span><span class="na">getOid</span><span class="o">().</span><span class="na">getToken</span><span class="o">());</span>
+        <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">newStory</span><span class="o">.</span><span class="na">getAttribute</span><span class="o">(</span><span class="n">storyType</span><span class="o">.</span><span class="na">getAttributeDefinition</span><span class="o">(</span><span class="s">"Scope"</span><span class="o">)).</span><span class="na">getValue</span><span class="o">());</span>
+        <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">newStory</span><span class="o">.</span><span class="na">getAttribute</span><span class="o">(</span><span class="n">nameAttribute</span><span class="o">).</span><span class="na">getValue</span><span class="o">());</span>
+        <span class="cm">/***** OUTPUT *****</span>
+<span class="cm">         Story:1094</span>
+<span class="cm">         Scope:1012</span>
+<span class="cm">         My New Story</span>
+<span class="cm">         ******************/</span>
+
+        <span class="k">return</span> <span class="n">newStory</span><span class="o">;</span>
+    <span class="o">}</span>
+</pre></div>
+
+<h2>
+<a name="learn-by-example-operations" class="anchor" href="#learn-by-example-operations"><span class="octicon octicon-link"></span></a>Learn By Example: Operations</h2>
+
+<p>An operation is an action that is executed against a single asset. For example, to delete an asset you must execute the Delete operation on the asset. To close or inactivate a Workitem, you must use the Inactivate Operation. Available operations for each asset are listed at the bottom of the the meta data description for that asset, for instance:</p>
+
+<pre lang="url"><code>https://www.myserver.com/VersionOne/meta.v1/Story?xsl=api.xsl
+</code></pre>
+
+<h3>
+<a name="how-to-delete-a-story-asset" class="anchor" href="#how-to-delete-a-story-asset"><span class="octicon octicon-link"></span></a>How to delete a Story asset</h3>
+
+<p>Get the Delete operation from the IMetaModel, and use IServices to execute it against a story Oid.</p>
+
+<div class="highlight"><pre><span class="kd">public</span> <span class="n">Oid</span> <span class="nf">DeleteAsset</span><span class="o">()</span> <span class="kd">throws</span> <span class="n">Exception</span> <span class="o">{</span>
+        <span class="n">Asset</span> <span class="n">story</span> <span class="o">=</span> <span class="n">AddNewAsset</span><span class="o">();</span>
+        <span class="n">IOperation</span> <span class="n">deleteOperation</span> <span class="o">=</span> <span class="n">_metaModel</span><span class="o">.</span><span class="na">getOperation</span><span class="o">(</span><span class="s">"Story.Delete"</span><span class="o">);</span>
+        <span class="n">Oid</span> <span class="n">deletedID</span> <span class="o">=</span> <span class="n">_services</span><span class="o">.</span><span class="na">executeOperation</span><span class="o">(</span><span class="n">deleteOperation</span><span class="o">,</span> <span class="n">story</span><span class="o">.</span><span class="na">getOid</span><span class="o">());</span>
+        <span class="n">Query</span> <span class="n">query</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Query</span><span class="o">(</span><span class="n">deletedID</span><span class="o">.</span><span class="na">getMomentless</span><span class="o">());</span>
+        <span class="k">try</span> <span class="o">{</span>
+            <span class="nd">@SuppressWarnings</span><span class="o">(</span><span class="s">"unused"</span><span class="o">)</span>
+            <span class="n">QueryResult</span> <span class="n">result</span> <span class="o">=</span> <span class="n">_services</span><span class="o">.</span><span class="na">retrieve</span><span class="o">(</span><span class="n">query</span><span class="o">);</span>
+        <span class="o">}</span> <span class="k">catch</span> <span class="o">(</span><span class="n">ConnectionException</span> <span class="n">e</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">if</span> <span class="o">(</span><span class="mi">404</span> <span class="o">==</span> <span class="n">e</span><span class="o">.</span><span class="na">getServerResponseCode</span><span class="o">())</span>
+                <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"Story has been deleted: "</span> <span class="o">+</span> <span class="n">story</span><span class="o">.</span><span class="na">getOid</span><span class="o">().</span><span class="na">getMomentless</span><span class="o">());</span>
+        <span class="o">}</span>
+
+        <span class="cm">/***** OUTPUT *****</span>
+<span class="cm">         Story has been deleted: Story:1049</span>
+<span class="cm">         ******************/</span>
+
+        <span class="k">return</span> <span class="n">deletedID</span><span class="o">;</span>
+    <span class="o">}</span>
+</pre></div>
+
+<p>The delete operation returns the Oid, with the new Moment, of the deleted asset. Future current info queries will automatically exclude deleted assets from results.</p>
+
+<p>Currently, there is no support for undeleting a deleted asset.</p>
+
+<h3>
+<a name="how-to-close-a-story-asset" class="anchor" href="#how-to-close-a-story-asset"><span class="octicon octicon-link"></span></a>How to close a Story asset</h3>
+
+<p>Get the Inactivate operation from the IMetaModel, and use IServices to execute it against a story Oid.</p>
+
+<div class="highlight"><pre><span class="kd">public</span> <span class="n">Asset</span> <span class="nf">CloseAsset</span><span class="o">()</span> <span class="kd">throws</span> <span class="n">Exception</span> <span class="o">{</span>
+        <span class="n">Asset</span> <span class="n">story</span> <span class="o">=</span> <span class="n">AddNewAsset</span><span class="o">();</span>
+        <span class="n">IOperation</span> <span class="n">closeOperation</span> <span class="o">=</span> <span class="n">_metaModel</span><span class="o">.</span><span class="na">getOperation</span><span class="o">(</span><span class="s">"Story.Inactivate"</span><span class="o">);</span>
+        <span class="n">Oid</span> <span class="n">closeID</span> <span class="o">=</span> <span class="n">_services</span><span class="o">.</span><span class="na">executeOperation</span><span class="o">(</span><span class="n">closeOperation</span><span class="o">,</span> <span class="n">story</span><span class="o">.</span><span class="na">getOid</span><span class="o">());</span>
+
+        <span class="n">Query</span> <span class="n">query</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Query</span><span class="o">(</span><span class="n">closeID</span><span class="o">.</span><span class="na">getMomentless</span><span class="o">());</span>
+        <span class="n">IAttributeDefinition</span> <span class="n">assetState</span> <span class="o">=</span> <span class="n">_metaModel</span><span class="o">.</span><span class="na">getAttributeDefinition</span><span class="o">(</span><span class="s">"Story.AssetState"</span><span class="o">);</span>
+        <span class="n">query</span><span class="o">.</span><span class="na">getSelection</span><span class="o">().</span><span class="na">add</span><span class="o">(</span><span class="n">assetState</span><span class="o">);</span>
+        <span class="n">QueryResult</span> <span class="n">result</span> <span class="o">=</span> <span class="n">_services</span><span class="o">.</span><span class="na">retrieve</span><span class="o">(</span><span class="n">query</span><span class="o">);</span>
+        <span class="n">Asset</span> <span class="n">closeStory</span> <span class="o">=</span> <span class="n">result</span><span class="o">.</span><span class="na">getAssets</span><span class="o">()[</span><span class="mi">0</span><span class="o">];</span>
+        <span class="n">AssetState</span> <span class="n">state</span> <span class="o">=</span> <span class="n">AssetState</span><span class="o">.</span><span class="na">valueOf</span><span class="o">(((</span><span class="n">Integer</span><span class="o">)</span> <span class="n">closeStory</span><span class="o">.</span><span class="na">getAttribute</span><span class="o">(</span><span class="n">assetState</span><span class="o">).</span><span class="na">getValue</span><span class="o">()).</span><span class="na">intValue</span><span class="o">());</span>
+
+        <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">closeStory</span><span class="o">.</span><span class="na">getOid</span><span class="o">());</span>
+        <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">state</span><span class="o">.</span><span class="na">toString</span><span class="o">());</span>
+        <span class="cm">/***** OUTPUT *****</span>
+<span class="cm">         Story:1050</span>
+<span class="cm">         Closed</span>
+<span class="cm">         ******************/</span>
+
+        <span class="k">return</span> <span class="n">closeStory</span><span class="o">;</span>
+    <span class="o">}</span>
+</pre></div>
+
+<p>The AssetState attribute is the internal state of an asset.</p>
+
+<h3>
+<a name="how-to-reopen-a-story-asset" class="anchor" href="#how-to-reopen-a-story-asset"><span class="octicon octicon-link"></span></a>How to reopen a Story asset</h3>
+
+<p>Get the Reactivate operation from the IMetaModel, and use IServices to execute it against a story Oid.</p>
+
+<div class="highlight"><pre>    <span class="kd">public</span> <span class="n">Asset</span> <span class="nf">ReOpenAsset</span><span class="o">()</span> <span class="kd">throws</span> <span class="n">Exception</span> <span class="o">{</span>
+        <span class="n">Asset</span> <span class="n">story</span> <span class="o">=</span> <span class="n">CloseAsset</span><span class="o">();</span>
+        <span class="n">IOperation</span> <span class="n">activateOperation</span> <span class="o">=</span> <span class="n">_metaModel</span><span class="o">.</span><span class="na">getOperation</span><span class="o">(</span><span class="s">"Story.Reactivate"</span><span class="o">);</span>
+        <span class="n">Oid</span> <span class="n">activeID</span> <span class="o">=</span> <span class="n">_services</span><span class="o">.</span><span class="na">executeOperation</span><span class="o">(</span><span class="n">activateOperation</span><span class="o">,</span> <span class="n">story</span><span class="o">.</span><span class="na">getOid</span><span class="o">());</span>
+
+        <span class="n">Query</span> <span class="n">query</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Query</span><span class="o">(</span><span class="n">activeID</span><span class="o">.</span><span class="na">getMomentless</span><span class="o">());</span>
+        <span class="n">IAttributeDefinition</span> <span class="n">assetState</span> <span class="o">=</span> <span class="n">_metaModel</span><span class="o">.</span><span class="na">getAttributeDefinition</span><span class="o">(</span><span class="s">"Story.AssetState"</span><span class="o">);</span>
+        <span class="n">query</span><span class="o">.</span><span class="na">getSelection</span><span class="o">().</span><span class="na">add</span><span class="o">(</span><span class="n">assetState</span><span class="o">);</span>
+        <span class="n">QueryResult</span> <span class="n">result</span> <span class="o">=</span> <span class="n">_services</span><span class="o">.</span><span class="na">retrieve</span><span class="o">(</span><span class="n">query</span><span class="o">);</span>
+        <span class="n">Asset</span> <span class="n">activeStory</span> <span class="o">=</span> <span class="n">result</span><span class="o">.</span><span class="na">getAssets</span><span class="o">()[</span><span class="mi">0</span><span class="o">];</span>
+        <span class="nd">@SuppressWarnings</span><span class="o">(</span><span class="s">"unused"</span><span class="o">)</span>
+        <span class="n">AssetState</span> <span class="n">state</span> <span class="o">=</span> <span class="n">AssetState</span><span class="o">.</span><span class="na">valueOf</span><span class="o">(((</span><span class="n">Integer</span><span class="o">)</span> <span class="n">activeStory</span><span class="o">.</span><span class="na">getAttribute</span><span class="o">(</span><span class="n">assetState</span><span class="o">).</span><span class="na">getValue</span><span class="o">()).</span><span class="na">intValue</span><span class="o">());</span>
+
+        <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">activeStory</span><span class="o">.</span><span class="na">getOid</span><span class="o">());</span>
+        <span class="cm">/***** OUTPUT *****</span>
+<span class="cm">         Story:1051</span>
+<span class="cm">         Active</span>
+<span class="cm">         ******************/</span>
+
+        <span class="k">return</span> <span class="n">activeStory</span><span class="o">;</span>
+    <span class="o">}</span>
+</pre></div>
+
+<h2>
+<a name="learn-by-example-system-settings" class="anchor" href="#learn-by-example-system-settings"><span class="octicon octicon-link"></span></a>Learn By Example: System Settings</h2>
+
+<p>Some system settings are exposed (read-only) to the APIClient, to allow client-side data validation. Specifically, the system settings for Effort Tracking, Story Tracking Level and Defect Tracking Level are now available to the APIClient, so that entry of Effort, Detail Estimate, and ToDo can be done consistently with the way VersionOne Enterprise is configured. In previous versions, there was no way for the APIClient to check these settings, and the developer would have to code with knowledge of the system's configured state.  Using the V1Configuration component, you can get the system's configured state, and apply these settings appropriately in code.</p>
+
+<h2>
+<a name="the-versionone-information-model" class="anchor" href="#the-versionone-information-model"><span class="octicon octicon-link"></span></a>The VersionOne Information Model</h2>
+
+<p>Practically all data in VersionOne is stored in the form of assets, which have attributes. Each asset is classified by an asset type, which describes a number of attribute definitions, operations, rules, and possibly an inheritance from another asset type. A list of all the types within VersionOne can be obtained by accessing the meta data url of your VersionOne instance. Additionally, VersionOne comes with an xsl stylesheet, which can be referenced as a parameter to the meta data url and makes it easier to read the response:</p>
+
+<pre lang="url"><code>https://www14.v1host.com/v1sdktesting/meta.v1/?xsl=api.xsl
+</code></pre>
+
+<p>Individual types can also be viewed through the meta url:</p>
+
+<pre lang="url"><code>https://www14.v1host.com/v1sdktesting/meta.v1/Story?xsl=api.xsl
+</code></pre>
+
+<p>You must use the system name for the type you would like to retrieve. This is true whether using the API directly or the APIClient. For instance, in the example above the system name is "Story", which certain methodology templates display as "Backlog Item" or "Requirement". Here is a list of some of the most important system names and their corresponding default display names in the available methodology templates:</p>
+
+<h3>
+<a name="system-names" class="anchor" href="#system-names"><span class="octicon octicon-link"></span></a>System Names</h3>
+
+<table summary="System Names" cellspacing="0" cellpadding="0" border="0">
+<tr>
+<th>System Name</th>
+        <th>XP Display Name</th>
+        <th>Scrum Display Name</th>
+        <th>AgileUP Display Name</th>
+        <th>DSDM Display Name</th>
+    </tr>
+<tr>
+<td>Scope</td>
+        <td>Project</td>
+        <td>Project</td>
+        <td>Project</td>
+        <td>Project</td>
+    </tr>
+<tr>
+<td>Timebox</td>
+        <td>Iteration</td>
+        <td>Sprint</td>
+        <td>Iteration</td>
+        <td>Iteration</td>
+    </tr>
+<tr>
+<td>Theme</td>
+        <td>Theme</td>
+        <td>Feature Group</td>
+        <td>Use Case</td>
+        <td>Feature Group</td>
+    </tr>
+<tr>
+<td>Story</td>
+        <td>Story</td>
+        <td>Backlog Item</td>
+        <td>Requirement</td>
+        <td>Requirement</td>
+    </tr>
+<tr>
+<td>Defect</td>
+        <td>Defect</td>
+        <td>Defect</td>
+        <td>Defect</td>
+        <td>Defect</td>
+    </tr>
+<tr>
+<td>Task</td>
+        <td>Task</td>
+        <td>Task</td>
+        <td>Task</td>
+        <td>Task</td>
+    </tr>
+<tr>
+<td>Test</td>
+        <td>Test</td>
+        <td>Test</td>
+        <td>Test</td>
+        <td>Test</td>
+    </tr>
+<tr>
+<td>RegressionTest</td>
+        <td>RegressionTest</td>
+        <td>RegressionTest</td>
+        <td>RegressionTest</td>
+        <td>RegressionTest</td>
+    </tr>
+<tr>
+<td>RegressionPlan</td>
+        <td>RegressionPlan</td>
+        <td>RegressionPlan</td>
+        <td>RegressionPlan</td>
+        <td>RegressionPlan</td>
+    </tr>
+<tr>
+<td>RegressionSuite</td>
+        <td>RegressionSuite</td>
+        <td>RegressionSuite</td>
+        <td>RegressionSuite</td>
+        <td>RegressionSuite</td>
+    </tr>
+<tr>
+<td>TestSet</td>
+        <td>TestSet</td>
+        <td>TestSet</td>
+        <td>TestSet</td>
+        <td>TestSet</td>
+    </tr>
+<tr>
+<td>Environment</td>
+        <td>Environment</td>
+        <td>Environment</td>
+        <td>Environment</td>
+        <td>Environment</td>
+    </tr>
+</table><h3>
+<a name="asset-type" class="anchor" href="#asset-type"><span class="octicon octicon-link"></span></a>Asset Type</h3>
+
+<p>Asset types describe the "classes" of business data available. Asset types form an inheritance hierarchy, such that each asset type inherits attribute definitions, operations, and rules from it's "parent" asset type. Those asset types at the leaves of this hierarchy are concrete, whereas asset types with "children" asset types are abstract. Assets are all instances of concrete asset types. Asset types are identified by unique names.</p>
+
+<p>By way of example, Story and Defect are concrete asset types. On the other hand, Workitem is an abstract asset type, from which Story and Defect ultimately derive.</p>
+
+<h3>
+<a name="attribute-definition" class="anchor" href="#attribute-definition"><span class="octicon octicon-link"></span></a>Attribute Definition</h3>
+
+<p>Attribute definitions describe the properties that "make up" each asset type. An attribute definition defines the type of its value, whether it is required and/or read-only, and many other qualities. Attribute definitions are identified by a name that is unique within its asset type.</p>
+
+<p>Attribute definitions are defined as either scalars or relations to other assets. Further, relation attribute definitions can be either single-value or multi-value. For example, the Estimate attribute definition on the Workitem asset type is a scalar (specifically, a floating-point number). On the other hand, the Workitem asset type's Scope attribute definition is a single-value relation (to a Scope asset). The reverse relation, Workitems on the Scope asset type, is a multi-value relation (to Workitem assets).</p>
+
+<h3>
+<a name="asset" class="anchor" href="#asset"><span class="octicon octicon-link"></span></a>Asset</h3>
+
+<p>Actual business objects in VersionOne are assets, which are instances of concrete asset types. Each asset is uniquely identified by it's asset type and ID (an integer). For example, Member:20 identifies the Member asset with ID of 20.</p>
+
+<h3>
+<a name="attribute" class="anchor" href="#attribute"><span class="octicon octicon-link"></span></a>Attribute</h3>
+
+<p>On every asset are a number of attributes, which attach specific values to the attribute definitions defined in the asset type. If the attribute's definition is a relation, then the value(s) of the attribute are references to an asset(s).</p>
+
+<h3>
+<a name="moment" class="anchor" href="#moment"><span class="octicon octicon-link"></span></a>Moment</h3>
+
+<p>As data changes in VersionOne, a history is maintained. Every change to every asset is journaled within the system, and assigned a chronologically-increasing integer called a moment. A past version of an asset is uniquely identified by it's asset type, ID, and Moment. A past version of a relation attribute will refer to the past version of it's target asset. For example, Member:20:563 identifies the Member asset with ID of 20, as it was at the time of moment 563.</p>
+
+<h2>
+<a name="other-resources" class="anchor" href="#other-resources"><span class="octicon octicon-link"></span></a>Other Resources</h2>
+
+<ul>
+<li>
+<a href="https://github.com/versionone/VersionOne.SDK.Java.APIClient/blob/master/CONTRIBUTING.md">CONTRIBUTING.md</a> - How to get involved with the VersionOne SDK.Java APIClient project</li>
+<li>
+<a href="https://github.com/versionone/VersionOne.SDK.Java.APIClient/blob/master/LICENSE.md">LICENSE.md</a> - Source code and user license</li>
+<li>
+<a href="https://github.com/versionone/VersionOne.SDK.Java.APIClient/blob/master/ACKNOWLEDGEMENTS.md">ACKNOWLEDGEMENTS.md</a> - Acknowledgments of included software and associated licenses</li>
+</ul><h3>
+<a name="getting-help" class="anchor" href="#getting-help"><span class="octicon octicon-link"></span></a>Getting Help</h3>
+
+<p>Need to bootstrap on VersionOne SDK.Java quickly? VersionOne services brings a wealth of development experience to training and mentoring on VersionOne SDK.Java:</p>
+
+<p><a href="http://www.versionone.com/training/product_training_services/">http://www.versionone.com/training/product_training_services/</a></p>
+
+<p>Have a question? Get help from the community of VersionOne developers:</p>
+
+<p><a href="http://groups.google.com/group/versionone-dev/">http://groups.google.com/group/versionone-dev/</a></p>
+        </section>
+
+        <footer>
+          Versionone.sdk.java.apiclient is maintained by <a href="https://github.com/versionone">versionone</a><br>
+          This page was generated by <a href="http://pages.github.com">GitHub Pages</a>. Tactile theme by <a href="https://twitter.com/jasonlong">Jason Long</a>.
+        </footer>
+
+        
+      </div>
+    </div>
+  </body>
+</html>
