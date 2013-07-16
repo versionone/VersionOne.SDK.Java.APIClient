@@ -10,7 +10,103 @@ http://localhost/VersionOne/meta.v1/Story?xsl=api.xsl
 ```
 You must use the system name for the type you would like to retrieve. This is true whether using the API directly or the APIClient. For instance, in the example above the system name is "Story", which certain methodology templates display as "Backlog Item" or "Requirement". Here is a list of some of the most important system names and their corresponding default display names in the available methodology templates:
 
-<p class="title"><b>Table 1. </b></p><div class="table-contents"><table cellspacing="0" cellpadding="0" border="0"><colgroup><col /><col /><col /><col /><col /></colgroup><thead><tr><th>System Name</th><th>XP Display Name</th><th>Scrum Display Name</th><th>AgileUP Display Name</th><th>DSDM Display Name</th></tr></thead><tbody><tr><td>Scope</td><td>Project</td><td>Project</td><td>Project</td><td>Project</td></tr><tr><td>Timebox</td><td>Iteration</td><td>Sprint</td><td>Iteration</td><td>Iteration</td></tr><tr><td>Theme</td><td>Theme</td><td>Feature Group</td><td>Use Case</td><td>Feature Group</td></tr><tr><td>Story</td><td>Story</td><td>Backlog Item</td><td>Requirement</td><td>Requirement</td></tr><tr><td>Defect</td><td>Defect</td><td>Defect</td><td>Defect</td><td>Defect</td></tr><tr><td>Task</td><td>Task</td><td>Task</td><td>Task</td><td>Task</td></tr><tr><td>Test</td><td>Test</td><td>Test</td><td>Test</td><td>Test</td></tr><tr><td>RegressionTest</td><td>RegressionTest</td><td>RegressionTest</td><td>RegressionTest</td><td>RegressionTest</td></tr><tr><td>RegressionPlan</td><td>RegressionPlan</td><td>RegressionPlan</td><td>RegressionPlan</td><td>RegressionPlan</td></tr><tr><td>RegressionSuite</td><td>RegressionSuite</td><td>RegressionSuite</td><td>RegressionSuite</td><td>RegressionSuite</td></tr><tr><td>TestSet</td><td>TestSet</td><td>TestSet</td><td>TestSet</td><td>TestSet</td></tr><tr><td>Environment</td><td>Environment</td><td>Environment</td><td>Environment</td><td>Environment</td></tr></tbody></table></div></div><br class="table-break" />
+    <table cellspacing="0" cellpadding="0" border="1" width="100%">
+        <thead>
+            <tr>
+                <th>System Name</th>
+                <th>XP Display Name</th>
+                <th>Scrum Display Name</th>
+                <th>AgileUP Display Name</th>
+                <th>DSDM Display Name</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>Scope</td>
+                <td>Project</td>
+                <td>Project</td>
+                <td>Project</td>
+                <td>Project</td>
+            </tr>
+            <tr>
+                <td>Timebox</td>
+                <td>Iteration</td>
+                <td>Sprint</td>
+                <td>Iteration</td>
+                <td>Iteration</td>
+            </tr>
+            <tr>
+                <td>Theme</td>
+                <td>Theme</td>
+                <td>Feature Group</td>
+                <td>Use Case</td>
+                <td>Feature Group</td>
+            </tr>
+            <tr>
+                <td>Story</td>
+                <td>Story</td>
+                <td>Backlog Item</td>
+                <td>Requirement</td>
+                <td>Requirement</td>
+            </tr>
+            <tr>
+                <td>Defect</td>
+                <td>Defect</td>
+                <td>Defect</td>
+                <td>Defect</td>
+                <td>Defect</td>
+            </tr>
+            <tr>
+                <td>Task</td>
+                <td>Task</td>
+                <td>Task</td>
+                <td>Task</td>
+                <td>Task</td>
+            </tr>
+            <tr>
+                <td>Test</td>
+                <td>Test</td>
+                <td>Test</td>
+                <td>Test</td>
+                <td>Test</td>
+            </tr>
+            <tr>
+                <td>RegressionTest</td>
+                <td>RegressionTest</td>
+                <td>RegressionTest</td>
+                <td>RegressionTest</td>
+                <td>RegressionTest</td>
+            </tr>
+            <tr>
+                <td>RegressionPlan</td>
+                <td>RegressionPlan</td>
+                <td>RegressionPlan</td>
+                <td>RegressionPlan</td>
+                <td>RegressionPlan</td>
+            </tr>
+            <tr>
+                <td>RegressionSuite</td>
+                <td>RegressionSuite</td>
+                <td>RegressionSuite</td>
+                <td>RegressionSuite</td>
+                <td>RegressionSuite</td>
+            </tr>
+            <tr>
+                <td>TestSet</td>
+                <td>TestSet</td>
+                <td>TestSet</td>
+                <td>TestSet</td>
+                <td>TestSet</td>
+            </tr>
+            <tr>
+                <td>Environment</td>
+                <td>Environment</td>
+                <td>Environment</td>
+                <td>Environment</td>
+                <td>Environment</td>
+            </tr>
+        </tbody>
+    </table>
 
 **Asset Type.**  Asset types describe the "classes" of business data available. Asset types form an inheritance hierarchy, such that each asset type inherits attribute definitions, operations, and rules from it's "parent" asset type. Those asset types at the leaves of this hierarchy are concrete, whereas asset types with "children" asset types are abstract. Assets are all instances of concrete asset types. Asset types are identified by unique names.
 
