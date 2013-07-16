@@ -5,6 +5,7 @@ When you create a new asset in the APIClient you need to specify the "context" o
 ### How to get a new Story asset template in the context of a Scope asset
 
 This code will create a Story asset in the context of Scope with ID 1012:
+
 ```
 public Asset AddNewAsset() throws Exception
 {

@@ -1,10 +1,11 @@
 ## Learn By Example: Queries
 
-This section is a series of examples, starting with simpler queries and moving to more advanced queries.	 You'll need to create an instance of both IMetaModel and IServices, as outlined above, to perform the queries.
+This section is a series of examples, starting with simpler queries and moving to more advanced queries. You'll need to create an instance of both IMetaModel and IServices, as outlined above, to perform the queries.
 
 ### How to query a single asset
 
 Retrieve the Member with ID 20:
+
 ```
 public Asset SingleAsset() throws Exception
 {
@@ -21,13 +22,13 @@ public Asset SingleAsset() throws Exception
     return member;
 }
 ```
-**Remarks**
 
 In this example, the asset will have its Oid populated, but will not have any other attributes populated. This is to minimize the size of the data sets returned. The next example shows how to ask for an asset with specific attributes populated.
 
 ### How to query for specific attributes
 
 Retrieve an asset with populated attributes by using the Selection property of the Query object.
+
 ```
 public Asset SingleAssetWithAttributes() throws Exception
 {
@@ -87,13 +88,13 @@ public Asset[] ListOfAssets()  throws Exception
     return result.getAssets();
 }
 ```
-**Remarks**
 
 Depending on your security role, you may not be able to see all the Story assets in the entire system.
 
 ### How to filter a query
 
 Use the Filter property of the Query object to filter the results that are returned. This query will retrieve only Story assets with a To Do of zero:
+
 ```
 public Asset[] FilterListOfAssets()  throws Exception
 {
@@ -133,7 +134,9 @@ public Asset[] FilterListOfAssets()  throws Exception
 ### How to sort a query
 
 Use the OrderBy property of the Query object to sort the results. This query will retrieve Story assets sorted by increasing Estimate:
-```public Asset[] SortListOfAssets()  throws Exception
+
+```
+public Asset[] SortListOfAssets()  throws Exception
 {
     IAssetType storyType = metaModel.getAssetType("Story");
     Query query = new Query(storyType);
@@ -164,13 +167,13 @@ Use the OrderBy property of the Query object to sort the results. This query wil
     return result.getAssets();
 }
 ```
-**Remarks**
 
 There are two methods you can call on the OrderBy class to sort your results: MinorSort and MajorSort. If you are sorting by only one field, it does not matter which one you use. If you want to sort by multiple fields, you need to call either MinorSort or MajorSort multiple times. The difference is: Each time you call MinorSort, the parameter will be added to the end of the OrderBy statement. Each time you call MajorSort, the parameter will be inserted at the beginning of the OrderBy statement.
 
 ### How to select a portion of query results
 
 Retrieve a "page" of query results by using the Paging propery of the Query object. This query will retrieve the first 3 Story assets:
+
 ```
 public Asset[] PageListOfAssets() throws Exception
 {
@@ -208,13 +211,13 @@ public Asset[] PageListOfAssets() throws Exception
     return result.getAssets();
 }
 ```
-**Remarks**
 
 The PageSize property shown asks for 3 items, and the Start property indicates to start at 0. The next 3 items can be retrieve with PageSize=3, Start=3.
 
 ### How to query the history of a single asset
 
 This query will retrieve the history of the Member asset with ID 1000.
+
 ```
 public Asset[] HistorySingleAsset() throws Exception
 {
@@ -251,13 +254,13 @@ public Asset[] HistorySingleAsset() throws Exception
     return memberHistory;
 }
 ```
-**Remarks**
 
 To create a history query, provide a boolean "true" second argument to the Query constructor.
 
 ### How to query the history of many assets
 
 This query will retrieve history for all Member assets:
+
 ```
 public Asset[] HistoryListOfAssets() throws Exception
 {
@@ -294,7 +297,6 @@ public Asset[] HistoryListOfAssets() throws Exception
     return memberHistory;
 }
 ```
-**Remarks**
 
 Again, the response is a list of historical assets. There will be multiple Asset objects returned for an asset that has changed previously.
 
@@ -303,6 +305,7 @@ All of the previously demonstrated query properties can be used with historical 
 ### How to query an asset "as of" a specific time
 
 Use the AsOf property of the Query object to retrieve data as it existed at some point in time. This query finds the version of each Story asset as it existed seven days ago:
+
 ```
 public Asset[] HistoryAsOfTime() throws Exception
 {

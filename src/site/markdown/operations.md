@@ -1,13 +1,15 @@
 ## Learn By Example: Operations
 
 An operation is an action that is executed against a single asset. For example, to delete an asset you must execute the Delete operation on the asset. To close or inactivate a Workitem, you must use the Inactivate Operation. Available operations for each asset are listed at the bottom of the the meta data description for that asset, for instance:
+
 ```
-http://localhost/VersionOne/meta.v1/Story?xsl=api.xsl
+&lt;Server Base URI&gt;/meta.v1/Story?xsl=api.xsl
 ```
 
 ### How to delete a Story asset
 
 Get the Delete operation from the IMetaModel, and use IServices to execute it against a story Oid.
+
 ```
 public Oid DeleteAsset() throws Exception
 {
@@ -31,6 +33,7 @@ public Oid DeleteAsset() throws Exception
 
 }
 ```
+
 The delete operation returns the Oid, with the new Moment, of the deleted asset. Future current info queries will automatically exclude deleted assets from results.
 
 Currently, there is no support for undeleting a deleted asset.
@@ -38,6 +41,7 @@ Currently, there is no support for undeleting a deleted asset.
 ### How to close a Story asset
 
 Get the Inactivate operation from the IMetaModel, and use IServices to execute it against a story Oid.
+
 ```
 public Asset CloseAsset() throws Exception
 { 
@@ -62,11 +66,13 @@ public Asset CloseAsset() throws Exception
     return closeStory;
 }
 ```
+
 The AssetState attribute is the internal state of an asset.
 
 ### How to reopen a Story asset
 
 Get the Reactivate operation from the IMetaModel, and use IServices to execute it against a story Oid.
+
 ```
 public Asset ReOpenAsset() throws Exception
 {
