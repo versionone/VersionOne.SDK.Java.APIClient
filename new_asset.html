@@ -3,7 +3,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-    <title>About</title>
+    <title></title>
     <style type="text/css" media="all">
       @import url("./css/maven-base.css");
       @import url("./css/maven-theme.css");
@@ -59,58 +59,17 @@
                           <a href="updates.html" title="Updates">Updates</a>
             </li>
                   <li class="none">
-                          <a href="new_asset.html" title="New Asset">New Asset</a>
-            </li>
+            <strong>New Asset</strong>
+          </li>
                   <li class="none">
                           <a href="operations.html" title="Operations">Operations</a>
             </li>
           </ul>
                        <h5>Project Documentation</h5>
                   <ul>
-                                                                                                                                                                                                                                                                                                      <li class="expanded">
+                                                                                                                                                                                                                                                                                            <li class="collapsed">
                           <a href="project-info.html" title="Project Information">Project Information</a>
-                    <ul>
-                      <li class="none">
-            <strong>About</strong>
-          </li>
-                      <li class="none">
-                          <a href="plugin-management.html" title="Plugin Management">Plugin Management</a>
-            </li>
-                      <li class="none">
-                          <a href="distribution-management.html" title="Distribution Management">Distribution Management</a>
-            </li>
-                      <li class="none">
-                          <a href="dependency-info.html" title="Dependency Information">Dependency Information</a>
-            </li>
-                      <li class="none">
-                          <a href="source-repository.html" title="Source Repository">Source Repository</a>
-            </li>
-                      <li class="none">
-                          <a href="mail-lists.html" title="Mailing Lists">Mailing Lists</a>
-            </li>
-                      <li class="none">
-                          <a href="issue-tracking.html" title="Issue Tracking">Issue Tracking</a>
-            </li>
-                      <li class="none">
-                          <a href="integration.html" title="Continuous Integration">Continuous Integration</a>
-            </li>
-                      <li class="none">
-                          <a href="plugins.html" title="Project Plugins">Project Plugins</a>
-            </li>
-                      <li class="none">
-                          <a href="license.html" title="Project License">Project License</a>
-            </li>
-                      <li class="none">
-                          <a href="team-list.html" title="Project Team">Project Team</a>
-            </li>
-                      <li class="none">
-                          <a href="project-summary.html" title="Project Summary">Project Summary</a>
-            </li>
-                      <li class="none">
-                          <a href="dependencies.html" title="Dependencies">Dependencies</a>
-            </li>
-              </ul>
-        </li>
+                  </li>
                                                                                                         <li class="collapsed">
                           <a href="project-reports.html" title="Project Reports">Project Reports</a>
                   </li>
@@ -124,7 +83,18 @@
     </div>
     <div id="bodyColumn">
       <div id="contentBox">
-        <div class="section"><h2>About VersionOne.SDK.Java.APIClient<a name="About_VersionOne.SDK.Java.APIClient"></a></h2><a name="About_VersionOne.SDK.Java.APIClient"></a><p>a library for custom Java development against the VersionOne Platform's REST-based API</p></div>
+        <div class="section"><h2>Learn By Example: New Asset<a name="Learn_By_Example:_New_Asset"></a></h2><p>When you create a new asset in the APIClient you need to specify the context of another asset that will be the parent. For example, if you create a new Story asset you can specify which Scope it should be created in.</p><div class="section"><h3>How to get a new Story asset template in the context of a Scope asset<a name="How_to_get_a_new_Story_asset_template_in_the_context_of_a_Scope_asset"></a></h3><p>This code will create a Story asset in the context of Scope with ID 1012: ``` public Asset AddNewAsset() throws Exception {  Oid projectId = Oid.fromToken(Scope:1012, metaModel);  IAssetType storyType = metaModel.getAssetType(Story);  Asset newStory = services.createNew(storyType, projectId);  IAttributeDefinition nameAttribute = storyType.getAttributeDefinition(Name);  newStory.setAttributeValue(nameAttribute, My New Story);  services.save(newStory);</p>
+<div class="source"><pre>System.out.println(newStory.getOid().getToken());
+System.out.println(newStory.getAttribute(storyType.getAttributeDefinition(&quot;Scope&quot;)).getValue());
+System.out.println(newStory.getAttribute(nameAttribute).getValue());
+/***** OUTPUT *****
+ Story:1094
+ Scope:1012
+ My New Story
+******************/
+
+return newStory;
+</pre></div><p>} ```</p></div></div>
       </div>
     </div>
     <div class="clear">
