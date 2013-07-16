@@ -83,26 +83,46 @@
     </div>
     <div id="bodyColumn">
       <div id="contentBox">
-        <div class="section"><h2>Learn By Example: Queries<a name="Learn_By_Example:_Queries"></a></h2><p>This section is a series of examples, starting with simpler queries and moving to more advanced queries. Youll need to create an instance of both IMetaModel and IServices, as outlined above, to perform the queries.</p><div class="section"><h3>How to query a single asset<a name="How_to_query_a_single_asset"></a></h3><p>Retrieve the Member with ID 20: ``` public Asset SingleAsset() throws Exception {  Oid memberId = Oid.fromToken(Member:20, metaModel);  Query query = new Query(memberId);  QueryResult result = services.retrieve(query);  Asset member = result.getAssets()[0];</p>
-<div class="source"><pre>System.out.println(member.getOid().getToken()); 
-/***** OUTPUT *****
- Member:20
-******************/
+        <div class="section"><h2>Learn By Example: Queries<a name="Learn_By_Example:_Queries"></a></h2><p>This section is a series of examples, starting with simpler queries and moving to more advanced queries. Youll need to create an instance of both IMetaModel and IServices, as outlined above, to perform the queries.</p><div class="section"><h3>How to query a single asset<a name="How_to_query_a_single_asset"></a></h3><p>Retrieve the Member with ID 20:</p>
+<div class="source"><pre>public Asset SingleAsset() throws Exception
+{
+    Oid memberId = Oid.fromToken(&quot;Member:20&quot;, metaModel);
+    Query query = new Query(memberId);
+    QueryResult result = services.retrieve(query);
+    Asset member = result.getAssets()[0];
 
-return member;
-</pre></div><p>} ``` <b>Remarks</b></p><p>In this example, the asset will have its Oid populated, but will not have any other attributes populated. This is to minimize the size of the data sets returned. The next example shows how to ask for an asset with specific attributes populated.</p></div><div class="section"><h3>How to query for specific attributes<a name="How_to_query_for_specific_attributes"></a></h3><p>Retrieve an asset with populated attributes by using the Selection property of the Query object. ``` public Asset SingleAssetWithAttributes() throws Exception {  Oid memberId = Oid.fromToken(Member:20, metaModel);  Query query = new Query(memberId);  IAttributeDefinition nameAttribute = metaModel.getAttributeDefinition(Member.Name);  IAttributeDefinition emailAttribute = metaModel.getAttributeDefinition(Member.Email);  query.getSelection().add(nameAttribute);  query.getSelection().add(emailAttribute);  QueryResult result = services.retrieve(query);  Asset member = result.getAssets()[0];</p>
-<div class="source"><pre>System.out.println(member.getOid().getToken());
-System.out.println(member.getAttribute(nameAttribute).getValue());
-System.out.println(member.getAttribute(emailAttribute).getValue());
+    System.out.println(member.getOid().getToken()); 
+    /***** OUTPUT *****
+     Member:20
+    ******************/
 
-/***** OUTPUT *****
- Member:20
- Administrator
- admin@company.com
-******************/
+    return member;
+}
+</pre></div><p>In this example, the asset will have its Oid populated, but will not have any other attributes populated. This is to minimize the size of the data sets returned. The next example shows how to ask for an asset with specific attributes populated.</p></div><div class="section"><h3>How to query for specific attributes<a name="How_to_query_for_specific_attributes"></a></h3><p>Retrieve an asset with populated attributes by using the Selection property of the Query object.</p>
+<div class="source"><pre>public Asset SingleAssetWithAttributes() throws Exception
+{
+    Oid memberId = Oid.fromToken(&quot;Member:20&quot;, metaModel);
+    Query query = new Query(memberId);
+    IAttributeDefinition nameAttribute = metaModel.getAttributeDefinition(&quot;Member.Name&quot;);
+    IAttributeDefinition emailAttribute = metaModel.getAttributeDefinition(&quot;Member.Email&quot;);
+    query.getSelection().add(nameAttribute);
+    query.getSelection().add(emailAttribute);
+    QueryResult result = services.retrieve(query);
+    Asset member = result.getAssets()[0];
 
-return member;
-</pre></div><p>} ```</p></div><div class="section"><h3>How to get a list of all Story assets<a name="How_to_get_a_list_of_all_Story_assets"></a></h3>
+    System.out.println(member.getOid().getToken());
+    System.out.println(member.getAttribute(nameAttribute).getValue());
+    System.out.println(member.getAttribute(emailAttribute).getValue());
+
+    /***** OUTPUT *****
+     Member:20
+     Administrator
+     admin@company.com
+    ******************/
+
+    return member;
+}
+</pre></div></div><div class="section"><h3>How to get a list of all Story assets<a name="How_to_get_a_list_of_all_Story_assets"></a></h3>
 <div class="source"><pre>public Asset[] ListOfAssets()  throws Exception
 {
     IAssetType storyType = metaModel.getAssetType(&quot;Story&quot;);
@@ -132,138 +152,215 @@ return member;
 
     return result.getAssets();
 }
-</pre></div><p><b>Remarks</b></p><p>Depending on your security role, you may not be able to see all the Story assets in the entire system.</p></div><div class="section"><h3>How to filter a query<a name="How_to_filter_a_query"></a></h3><p>Use the Filter property of the Query object to filter the results that are returned. This query will retrieve only Story assets with a To Do of zero: ``` public Asset[] FilterListOfAssets() throws Exception {  IAssetType taskType = metaModel.getAssetType(Task);  Query query = new Query(taskType);  IAttributeDefinition nameAttribute = taskType.getAttributeDefinition(Name);  IAttributeDefinition todoAttribute = taskType.getAttributeDefinition(ToDo);  query.getSelection().add(nameAttribute);  query.getSelection().add(todoAttribute);</p>
-<div class="source"><pre>FilterTerm toDoTerm = Query.term(todoAttribute);
-toDoTerm.Equal(0);
-query.setFilter(toDoTerm);
-QueryResult result = services.retrieve(query);
-
-for(Asset task : result.getAssets())
+</pre></div><p>Depending on your security role, you may not be able to see all the Story assets in the entire system.</p></div><div class="section"><h3>How to filter a query<a name="How_to_filter_a_query"></a></h3><p>Use the Filter property of the Query object to filter the results that are returned. This query will retrieve only Story assets with a To Do of zero:</p>
+<div class="source"><pre>public Asset[] FilterListOfAssets()  throws Exception
 {
-    System.out.println(task.getOid().getToken());
-    System.out.println(task.getAttribute(nameAttribute).getValue());
-    System.out.println(task.getAttribute(todoAttribute).getValue());
-    System.out.println();
+    IAssetType taskType = metaModel.getAssetType(&quot;Task&quot;);
+    Query query = new Query(taskType);
+    IAttributeDefinition nameAttribute = taskType.getAttributeDefinition(&quot;Name&quot;);
+    IAttributeDefinition todoAttribute = taskType.getAttributeDefinition(&quot;ToDo&quot;);
+    query.getSelection().add(nameAttribute);
+    query.getSelection().add(todoAttribute);
+    
+    FilterTerm toDoTerm = Query.term(todoAttribute);
+    toDoTerm.Equal(0);
+    query.setFilter(toDoTerm);
+    QueryResult result = services.retrieve(query);
+
+    for(Asset task : result.getAssets())
+    {
+        System.out.println(task.getOid().getToken());
+        System.out.println(task.getAttribute(nameAttribute).getValue());
+        System.out.println(task.getAttribute(todoAttribute).getValue());
+        System.out.println();
+    }
+    /***** OUTPUT *****
+     Task:1153
+     Code Review
+     0
+
+     Task:1154
+     Design Component
+     0 ...
+    ******************/
+
+    return result.getAssets();
 }
-/***** OUTPUT *****
- Task:1153
- Code Review
- 0
-
- Task:1154
- Design Component
- 0 ...
-******************/
-
-return result.getAssets();
-</pre></div><p>} ```</p></div><div class="section"><h3>How to sort a query<a name="How_to_sort_a_query"></a></h3><p>Use the OrderBy property of the Query object to sort the results. This query will retrieve Story assets sorted by increasing Estimate: ```public Asset[] SortListOfAssets() throws Exception {  IAssetType storyType = metaModel.getAssetType(Story);  Query query = new Query(storyType);  IAttributeDefinition nameAttribute = storyType.getAttributeDefinition(Name);  IAttributeDefinition estimateAttribute = storyType.getAttributeDefinition(Estimate);  query.getSelection().add(nameAttribute);  query.getSelection().add(estimateAttribute);  query.getOrderBy().minorSort(estimateAttribute, OrderBy.Order.Ascending);  QueryResult result = services.retrieve(query);</p>
-<div class="source"><pre>for(Asset story : result.getAssets())
+</pre></div></div><div class="section"><h3>How to sort a query<a name="How_to_sort_a_query"></a></h3><p>Use the OrderBy property of the Query object to sort the results. This query will retrieve Story assets sorted by increasing Estimate:</p>
+<div class="source"><pre>public Asset[] SortListOfAssets()  throws Exception
 {
-    System.out.println(story.getOid().getToken());
-    System.out.println(story.getAttribute(nameAttribute).getValue());
-    System.out.println(story.getAttribute(estimateAttribute).getValue());
-    System.out.println();
+    IAssetType storyType = metaModel.getAssetType(&quot;Story&quot;);
+    Query query = new Query(storyType);
+    IAttributeDefinition nameAttribute = storyType.getAttributeDefinition(&quot;Name&quot;);
+    IAttributeDefinition estimateAttribute = storyType.getAttributeDefinition(&quot;Estimate&quot;);
+    query.getSelection().add(nameAttribute);
+    query.getSelection().add(estimateAttribute);
+    query.getOrderBy().minorSort(estimateAttribute, OrderBy.Order.Ascending);
+    QueryResult result = services.retrieve(query);
+
+    for(Asset story : result.getAssets())
+    {
+        System.out.println(story.getOid().getToken());
+        System.out.println(story.getAttribute(nameAttribute).getValue());
+        System.out.println(story.getAttribute(estimateAttribute).getValue());
+        System.out.println();
+    }
+    /***** OUTPUT *****
+     Story:1073
+     Add Order Line
+     1
+
+     Story:1068
+     Update Member
+     2 ...
+    ******************/
+
+    return result.getAssets();
 }
-/***** OUTPUT *****
- Story:1073
- Add Order Line
- 1
-
- Story:1068
- Update Member
- 2 ...
-******************/
-
-return result.getAssets();
-</pre></div><p>} ``` <b>Remarks</b></p><p>There are two methods you can call on the OrderBy class to sort your results: MinorSort and MajorSort. If you are sorting by only one field, it does not matter which one you use. If you want to sort by multiple fields, you need to call either MinorSort or MajorSort multiple times. The difference is: Each time you call MinorSort, the parameter will be added to the end of the OrderBy statement. Each time you call MajorSort, the parameter will be inserted at the beginning of the OrderBy statement.</p></div><div class="section"><h3>How to select a portion of query results<a name="How_to_select_a_portion_of_query_results"></a></h3><p>Retrieve a page of query results by using the Paging propery of the Query object. This query will retrieve the first 3 Story assets: ``` public Asset[] PageListOfAssets() throws Exception {  IAssetType storyType = metaModel.getAssetType(Story);  Query query = new Query(storyType);  IAttributeDefinition nameAttribute = storyType.getAttributeDefinition(Name);  IAttributeDefinition estimateAttribute = storyType.getAttributeDefinition(Estimate);  query.getSelection().add(nameAttribute);  query.getSelection().add(estimateAttribute);  query.getPaging().setPageSize(3);  query.getPaging().setStart(0);  QueryResult result = services.retrieve(query);</p>
-<div class="source"><pre>for(Asset story : result.getAssets())
+</pre></div><p>There are two methods you can call on the OrderBy class to sort your results: MinorSort and MajorSort. If you are sorting by only one field, it does not matter which one you use. If you want to sort by multiple fields, you need to call either MinorSort or MajorSort multiple times. The difference is: Each time you call MinorSort, the parameter will be added to the end of the OrderBy statement. Each time you call MajorSort, the parameter will be inserted at the beginning of the OrderBy statement.</p></div><div class="section"><h3>How to select a portion of query results<a name="How_to_select_a_portion_of_query_results"></a></h3><p>Retrieve a page of query results by using the Paging propery of the Query object. This query will retrieve the first 3 Story assets:</p>
+<div class="source"><pre>public Asset[] PageListOfAssets() throws Exception
 {
-    System.out.println(story.getOid().getToken());
-    System.out.println(story.getAttribute(nameAttribute).getValue());
-    System.out.println(story.getAttribute(estimateAttribute).getValue());
-    System.out.println();
+    IAssetType storyType = metaModel.getAssetType(&quot;Story&quot;);
+    Query query = new Query(storyType);
+    IAttributeDefinition nameAttribute = storyType.getAttributeDefinition(&quot;Name&quot;);
+    IAttributeDefinition estimateAttribute = storyType.getAttributeDefinition(&quot;Estimate&quot;);
+    query.getSelection().add(nameAttribute);
+    query.getSelection().add(estimateAttribute);
+    query.getPaging().setPageSize(3);
+    query.getPaging().setStart(0);
+    QueryResult result = services.retrieve(query);
+
+    for(Asset story : result.getAssets())
+    {
+        System.out.println(story.getOid().getToken());
+        System.out.println(story.getAttribute(nameAttribute).getValue());
+        System.out.println(story.getAttribute(estimateAttribute).getValue());
+        System.out.println();
+    }
+    /***** OUTPUT *****
+     Story:1063
+     Logon
+     2
+
+     Story:1064
+     Add Customer Details
+     2
+
+     Story:1065
+     Add Customer Header
+     3
+    ******************/
+
+    return result.getAssets();
 }
-/***** OUTPUT *****
- Story:1063
- Logon
- 2
-
- Story:1064
- Add Customer Details
- 2
-
- Story:1065
- Add Customer Header
- 3
-******************/
-
-return result.getAssets();
-</pre></div><p>} ``` <b>Remarks</b></p><p>The PageSize property shown asks for 3 items, and the Start property indicates to start at 0. The next 3 items can be retrieve with PageSize=3, Start=3.</p></div><div class="section"><h3>How to query the history of a single asset<a name="How_to_query_the_history_of_a_single_asset"></a></h3><p>This query will retrieve the history of the Member asset with ID 1000. ``` public Asset[] HistorySingleAsset() throws Exception {  IAssetType memberType = metaModel.getAssetType(Member);  Query query = new Query(memberType, true);  IAttributeDefinition idAttribute = memberType.getAttributeDefinition(ID);  IAttributeDefinition changeDateAttribute = memberType.getAttributeDefinition(ChangeDate);  IAttributeDefinition emailAttribute = memberType.getAttributeDefinition(Email);  query.getSelection().add(changeDateAttribute);  query.getSelection().add(emailAttribute);  FilterTerm idTerm = Query.term(idAttribute);  idTerm.Equal(Member:1000);  query.setFilter(idTerm);  QueryResult result = services.retrieve(query);  Asset[] memberHistory = result.getAssets();</p>
-<div class="source"><pre>for(Asset member : memberHistory)
+</pre></div><p>The PageSize property shown asks for 3 items, and the Start property indicates to start at 0. The next 3 items can be retrieve with PageSize=3, Start=3.</p></div><div class="section"><h3>How to query the history of a single asset<a name="How_to_query_the_history_of_a_single_asset"></a></h3><p>This query will retrieve the history of the Member asset with ID 1000.</p>
+<div class="source"><pre>public Asset[] HistorySingleAsset() throws Exception
 {
-    System.out.println(member.getOid().getToken());
-    System.out.println(member.getAttribute(changeDateAttribute).getValue());
-    System.out.println(member.getAttribute(emailAttribute).getValue());
-    System.out.println();
+    IAssetType memberType = metaModel.getAssetType(&quot;Member&quot;);
+    Query query = new Query(memberType, true);
+    IAttributeDefinition idAttribute = memberType.getAttributeDefinition(&quot;ID&quot;);
+    IAttributeDefinition changeDateAttribute = memberType.getAttributeDefinition(&quot;ChangeDate&quot;);
+    IAttributeDefinition emailAttribute = memberType.getAttributeDefinition(&quot;Email&quot;);
+    query.getSelection().add(changeDateAttribute);
+    query.getSelection().add(emailAttribute);
+    FilterTerm idTerm = Query.term(idAttribute);
+    idTerm.Equal(&quot;Member:1000&quot;);
+    query.setFilter(idTerm);
+    QueryResult result = services.retrieve(query);
+    Asset[] memberHistory = result.getAssets();
+
+    for(Asset member : memberHistory)
+    {
+        System.out.println(member.getOid().getToken());
+        System.out.println(member.getAttribute(changeDateAttribute).getValue());
+        System.out.println(member.getAttribute(emailAttribute).getValue());
+        System.out.println();
+    }
+    /***** OUTPUT *****
+     Member:1000:105
+     4/2/2007 1:22:03 PM
+     andre.agile@company.com
+     
+     Member:1000:101
+     3/29/2007 4:10:29 PM
+     andre@company.net
+    ******************/
+
+    return memberHistory;
 }
-/***** OUTPUT *****
- Member:1000:105
- 4/2/2007 1:22:03 PM
- andre.agile@company.com
-
- Member:1000:101
- 3/29/2007 4:10:29 PM
- andre@company.net
-******************/
-
-return memberHistory;
-</pre></div><p>} ``` <b>Remarks</b></p><p>To create a history query, provide a boolean true second argument to the Query constructor.</p></div><div class="section"><h3>How to query the history of many assets<a name="How_to_query_the_history_of_many_assets"></a></h3><p>This query will retrieve history for all Member assets: ``` public Asset[] HistoryListOfAssets() throws Exception {  IAssetType memberType = metaModel.getAssetType(Member);  Query query = new Query(memberType, true);  IAttributeDefinition changeDateAttribute = memberType.getAttributeDefinition(ChangeDate);  IAttributeDefinition emailAttribute = memberType.getAttributeDefinition(Email);  query.getSelection().add(changeDateAttribute);  query.getSelection().add(emailAttribute);  QueryResult result = services.retrieve(query);  Asset[] memberHistory = result.getAssets();</p>
-<div class="source"><pre>for(Asset member : memberHistory)
+</pre></div><p>To create a history query, provide a boolean true second argument to the Query constructor.</p></div><div class="section"><h3>How to query the history of many assets<a name="How_to_query_the_history_of_many_assets"></a></h3><p>This query will retrieve history for all Member assets:</p>
+<div class="source"><pre>public Asset[] HistoryListOfAssets() throws Exception
 {
-    System.out.println(member.getOid().getToken());
-    System.out.println(member.getAttribute(changeDateAttribute).getValue());
-    System.out.println(member.getAttribute(emailAttribute).getValue());
-    System.out.println();
+    IAssetType memberType = metaModel.getAssetType(&quot;Member&quot;);
+    Query query = new Query(memberType, true);
+    IAttributeDefinition changeDateAttribute = memberType.getAttributeDefinition(&quot;ChangeDate&quot;);
+    IAttributeDefinition emailAttribute = memberType.getAttributeDefinition(&quot;Email&quot;);
+    query.getSelection().add(changeDateAttribute);
+    query.getSelection().add(emailAttribute);
+    QueryResult result = services.retrieve(query);
+    Asset[] memberHistory = result.getAssets();
+
+    for(Asset member : memberHistory)
+    {
+        System.out.println(member.getOid().getToken());
+        System.out.println(member.getAttribute(changeDateAttribute).getValue());
+        System.out.println(member.getAttribute(emailAttribute).getValue());
+        System.out.println();
+    }
+    /***** OUTPUT *****             
+     Member:1010:106
+     4/2/2007 3:27:23 PM
+     tammy.coder@company.com
+      
+     Member:1000:105
+     4/2/2007 1:22:03 PM
+     andre.agile@company.com
+     
+     Member:1000:101
+     3/29/2007 4:10:29 PM
+     andre@company.net
+    ******************/
+
+    return memberHistory;
 }
-/***** OUTPUT *****             
- Member:1010:106
- 4/2/2007 3:27:23 PM
- tammy.coder@company.com
-
- Member:1000:105
- 4/2/2007 1:22:03 PM
- andre.agile@company.com
-
- Member:1000:101
- 3/29/2007 4:10:29 PM
- andre@company.net
-******************/
-
-return memberHistory;
-</pre></div><p>} ``` <b>Remarks</b></p><p>Again, the response is a list of historical assets. There will be multiple Asset objects returned for an asset that has changed previously.</p><p>All of the previously demonstrated query properties can be used with historical queries also.</p></div><div class="section"><h3>How to query an asset as of a specific time<a name="How_to_query_an_asset_nullas_ofnull_a_specific_time"></a></h3><p>Use the AsOf property of the Query object to retrieve data as it existed at some point in time. This query finds the version of each Story asset as it existed seven days ago: ``` public Asset[] HistoryAsOfTime() throws Exception {  IAssetType storyType = metaModel.getAssetType(Story);  Query query = new Query(storyType, true);  IAttributeDefinition nameAttribute = storyType.getAttributeDefinition(Name);  IAttributeDefinition estimateAttribute = storyType.getAttributeDefinition(Estimate);  query.getSelection().add(nameAttribute);  query.getSelection().add(estimateAttribute);  Calendar c = Calendar.getInstance();  c.add(Calendar.DAY_OF_MONTH, -7);  query.setAsOf(c.getTime()); // query.AsOf = DateTime.Now.AddDays(-7); //7 days ago  QueryResult result = services.retrieve(query);</p>
-<div class="source"><pre>for(Asset story : result.getAssets())
+</pre></div><p>Again, the response is a list of historical assets. There will be multiple Asset objects returned for an asset that has changed previously.</p><p>All of the previously demonstrated query properties can be used with historical queries also.</p></div><div class="section"><h3>How to query an asset as of a specific time<a name="How_to_query_an_asset_nullas_ofnull_a_specific_time"></a></h3><p>Use the AsOf property of the Query object to retrieve data as it existed at some point in time. This query finds the version of each Story asset as it existed seven days ago:</p>
+<div class="source"><pre>public Asset[] HistoryAsOfTime() throws Exception
 {
-    System.out.println(story.getOid().getToken());
-    System.out.println(story.getAttribute(nameAttribute).getValue());
-    System.out.println(story.getAttribute(estimateAttribute).getValue());
-    System.out.println();
+    IAssetType storyType = metaModel.getAssetType(&quot;Story&quot;);
+    Query query = new Query(storyType, true);
+    IAttributeDefinition nameAttribute = storyType.getAttributeDefinition(&quot;Name&quot;);
+    IAttributeDefinition estimateAttribute = storyType.getAttributeDefinition(&quot;Estimate&quot;);
+    query.getSelection().add(nameAttribute);
+    query.getSelection().add(estimateAttribute);
+    Calendar c = Calendar.getInstance();
+    c.add(Calendar.DAY_OF_MONTH, -7);
+    query.setAsOf(c.getTime()); // query.AsOf = DateTime.Now.AddDays(-7); //7 days ago
+    QueryResult result = services.retrieve(query);
+
+    for(Asset story : result.getAssets())
+    {
+        System.out.println(story.getOid().getToken());
+        System.out.println(story.getAttribute(nameAttribute).getValue());
+        System.out.println(story.getAttribute(estimateAttribute).getValue());
+        System.out.println();
+    }
+    /***** OUTPUT *****
+     Story:1063
+     Logon
+     3
+
+     Story:1064
+     Add Customer Details
+     1
+
+     Story:1065
+     Add Customer Header
+     3
+    ******************/
+
+    return result.getAssets();
 }
-/***** OUTPUT *****
- Story:1063
- Logon
- 3
-
- Story:1064
- Add Customer Details
- 1
-
- Story:1065
- Add Customer Header
- 3
-******************/
-
-return result.getAssets();
-</pre></div><p>} ```</p></div></div>
+</pre></div></div></div>
       </div>
     </div>
     <div class="clear">

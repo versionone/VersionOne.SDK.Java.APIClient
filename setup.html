@@ -83,17 +83,17 @@
     </div>
     <div id="bodyColumn">
       <div id="contentBox">
-        <div class="section"><h2>Learn By Example: APIClient Setup<a name="Learn_By_Example:_APIClient_Setup"></a></h2><p>Using the APIClient is as simple as making a reference to the APIClient.dll in your .Net project, then providing connection information to the main service objects within the APIClient. There are three possible ways to connect to your VersionOne instance using the APIClient. Before you attempt to connect, find out whether your VersionOne instance uses VersionOne authentication or Windows Integrated Authentication. You need to create an instance of IMetaModel and and instance of IServices and provide them with connection information via instances of the V1APIConnector. The first example uses VersionOne authentication: <tt>
-V1APIConnector dataConnector = new V1APIConnector(&quot;http://server/v1instance/rest-1.v1/&quot;, &quot;username&quot;, &quot;password&quot;);
+        <div class="section"><h2>Learn By Example: APIClient Setup<a name="Learn_By_Example:_APIClient_Setup"></a></h2><p>Using the APIClient is as simple as making a reference to the APIClient.dll in your .Net project, then providing connection information to the main service objects within the APIClient. There are three possible ways to connect to your VersionOne instance using the APIClient. Before you attempt to connect, find out whether your VersionOne instance uses VersionOne authentication or Windows Integrated Authentication. You need to create an instance of IMetaModel and and instance of IServices and provide them with connection information via instances of the V1APIConnector. The first example uses VersionOne authentication:</p>
+<div class="source"><pre>V1APIConnector dataConnector = new V1APIConnector(&quot;http://server/v1instance/rest-1.v1/&quot;, &quot;username&quot;, &quot;password&quot;);
 V1APIConnector metaConnector = new V1APIConnector(&quot;http://server/v1instance/meta.v1/&quot;);
 metaModel = new MetaModel(metaConnector);
 services = new Services(metaModel, dataConnector);
-</tt> If your VersionOne instance uses Windows Integrated Authentication, and you wish to connect to the API using the credentials of the user running your program, you can omit the username and password arguments to the V1APIConnector: <tt>
-V1APIConnector dataConnector = new V1APIConnector(&quot;http://server/v1instance/rest-1.v1/&quot;);
+</pre></div><p>If your VersionOne instance uses Windows Integrated Authentication, and you wish to connect to the API using the credentials of the user running your program, you can omit the username and password arguments to the V1APIConnector:</p>
+<div class="source"><pre>V1APIConnector dataConnector = new V1APIConnector(&quot;http://server/v1instance/rest-1.v1/&quot;);
 V1APIConnector metaConnector = new V1APIConnector(&quot;http://server/v1instance/meta.v1/&quot;);
 IMetaModel metaModel = new MetaModel(metaConnector);
 IServices services = new Services(metaModel, dataConnector);
-</tt></p></div>
+</pre></div></div>
       </div>
     </div>
     <div class="clear">

@@ -83,109 +83,108 @@
     </div>
     <div id="bodyColumn">
       <div id="contentBox">
-        <div class="section"><h2>The VersionOne Information Model<a name="The_VersionOne_Information_Model"></a></h2><p>Practically all data in VersionOne is stored in the form of assets, which have attributes. Each asset is classified by an asset type, which describes a number of attribute definitions, operations, rules, and possibly an inheritance from another asset type. A list of all the types within VersionOne can be obtained by accessing the meta data url of your VersionOne instance. Additionally, VersionOne comes with an xsl stylesheet, which can be referenced as a parameter to the meta data url and makes it easier to read the response: <tt>
-http://localhost/VersionOne/meta.v1/?xsl=api.xsl
-</tt> Individual types can also be viewed through the meta url: <tt>
-http://localhost/VersionOne/meta.v1/Story?xsl=api.xsl
-</tt> You must use the system name for the type you would like to retrieve. This is true whether using the API directly or the APIClient. For instance, in the example above the system name is Story, which certain methodology templates display as Backlog Item or Requirement. Here is a list of some of the most important system names and their corresponding default display names in the available methodology templates:</p>
-<div class="source"><pre>&lt;table cellspacing=&quot;0&quot; cellpadding=&quot;0&quot; border=&quot;1&quot; width=&quot;100%&quot;&gt;
-    &lt;thead&gt;
-        &lt;tr&gt;
-            &lt;th&gt;System Name&lt;/th&gt;
-            &lt;th&gt;XP Display Name&lt;/th&gt;
-            &lt;th&gt;Scrum Display Name&lt;/th&gt;
-            &lt;th&gt;AgileUP Display Name&lt;/th&gt;
-            &lt;th&gt;DSDM Display Name&lt;/th&gt;
-        &lt;/tr&gt;
-    &lt;/thead&gt;
-    &lt;tbody&gt;
-        &lt;tr&gt;
-            &lt;td&gt;Scope&lt;/td&gt;
-            &lt;td&gt;Project&lt;/td&gt;
-            &lt;td&gt;Project&lt;/td&gt;
-            &lt;td&gt;Project&lt;/td&gt;
-            &lt;td&gt;Project&lt;/td&gt;
-        &lt;/tr&gt;
-        &lt;tr&gt;
-            &lt;td&gt;Timebox&lt;/td&gt;
-            &lt;td&gt;Iteration&lt;/td&gt;
-            &lt;td&gt;Sprint&lt;/td&gt;
-            &lt;td&gt;Iteration&lt;/td&gt;
-            &lt;td&gt;Iteration&lt;/td&gt;
-        &lt;/tr&gt;
-        &lt;tr&gt;
-            &lt;td&gt;Theme&lt;/td&gt;
-            &lt;td&gt;Theme&lt;/td&gt;
-            &lt;td&gt;Feature Group&lt;/td&gt;
-            &lt;td&gt;Use Case&lt;/td&gt;
-            &lt;td&gt;Feature Group&lt;/td&gt;
-        &lt;/tr&gt;
-        &lt;tr&gt;
-            &lt;td&gt;Story&lt;/td&gt;
-            &lt;td&gt;Story&lt;/td&gt;
-            &lt;td&gt;Backlog Item&lt;/td&gt;
-            &lt;td&gt;Requirement&lt;/td&gt;
-            &lt;td&gt;Requirement&lt;/td&gt;
-        &lt;/tr&gt;
-        &lt;tr&gt;
-            &lt;td&gt;Defect&lt;/td&gt;
-            &lt;td&gt;Defect&lt;/td&gt;
-            &lt;td&gt;Defect&lt;/td&gt;
-            &lt;td&gt;Defect&lt;/td&gt;
-            &lt;td&gt;Defect&lt;/td&gt;
-        &lt;/tr&gt;
-        &lt;tr&gt;
-            &lt;td&gt;Task&lt;/td&gt;
-            &lt;td&gt;Task&lt;/td&gt;
-            &lt;td&gt;Task&lt;/td&gt;
-            &lt;td&gt;Task&lt;/td&gt;
-            &lt;td&gt;Task&lt;/td&gt;
-        &lt;/tr&gt;
-        &lt;tr&gt;
-            &lt;td&gt;Test&lt;/td&gt;
-            &lt;td&gt;Test&lt;/td&gt;
-            &lt;td&gt;Test&lt;/td&gt;
-            &lt;td&gt;Test&lt;/td&gt;
-            &lt;td&gt;Test&lt;/td&gt;
-        &lt;/tr&gt;
-        &lt;tr&gt;
-            &lt;td&gt;RegressionTest&lt;/td&gt;
-            &lt;td&gt;RegressionTest&lt;/td&gt;
-            &lt;td&gt;RegressionTest&lt;/td&gt;
-            &lt;td&gt;RegressionTest&lt;/td&gt;
-            &lt;td&gt;RegressionTest&lt;/td&gt;
-        &lt;/tr&gt;
-        &lt;tr&gt;
-            &lt;td&gt;RegressionPlan&lt;/td&gt;
-            &lt;td&gt;RegressionPlan&lt;/td&gt;
-            &lt;td&gt;RegressionPlan&lt;/td&gt;
-            &lt;td&gt;RegressionPlan&lt;/td&gt;
-            &lt;td&gt;RegressionPlan&lt;/td&gt;
-        &lt;/tr&gt;
-        &lt;tr&gt;
-            &lt;td&gt;RegressionSuite&lt;/td&gt;
-            &lt;td&gt;RegressionSuite&lt;/td&gt;
-            &lt;td&gt;RegressionSuite&lt;/td&gt;
-            &lt;td&gt;RegressionSuite&lt;/td&gt;
-            &lt;td&gt;RegressionSuite&lt;/td&gt;
-        &lt;/tr&gt;
-        &lt;tr&gt;
-            &lt;td&gt;TestSet&lt;/td&gt;
-            &lt;td&gt;TestSet&lt;/td&gt;
-            &lt;td&gt;TestSet&lt;/td&gt;
-            &lt;td&gt;TestSet&lt;/td&gt;
-            &lt;td&gt;TestSet&lt;/td&gt;
-        &lt;/tr&gt;
-        &lt;tr&gt;
-            &lt;td&gt;Environment&lt;/td&gt;
-            &lt;td&gt;Environment&lt;/td&gt;
-            &lt;td&gt;Environment&lt;/td&gt;
-            &lt;td&gt;Environment&lt;/td&gt;
-            &lt;td&gt;Environment&lt;/td&gt;
-        &lt;/tr&gt;
-    &lt;/tbody&gt;
-&lt;/table&gt;
-</pre></div><p><b>Asset Type.</b> Asset types describe the classes of business data available. Asset types form an inheritance hierarchy, such that each asset type inherits attribute definitions, operations, and rules from its parent asset type. Those asset types at the leaves of this hierarchy are concrete, whereas asset types with children asset types are abstract. Assets are all instances of concrete asset types. Asset types are identified by unique names.</p><p>By way of example, Story and Defect are concrete asset types. On the other hand, Workitem is an abstract asset type, from which Story and Defect ultimately derive.</p><p><b>Attribute Definition.</b> Attribute definitions describe the properties that make up each asset type. An attribute definition defines the type of its value, whether it is required and/or read-only, and many other qualities. Attribute definitions are identified by a name that is unique within its asset type.</p><p>Attribute definitions are defined as either scalars or relations to other assets. Further, relation attribute definitions can be either single-value or multi-value. For example, the Estimate attribute definition on the Workitem asset type is a scalar (specifically, a floating-point number). On the other hand, the Workitem asset types Scope attribute definition is a single-value relation (to a Scope asset). The reverse relation, Workitems on the Scope asset type, is a multi-value relation (to Workitem assets).</p><p><b>Asset.</b> Actual business objects in VersionOne are assets, which are instances of concrete asset types. Each asset is uniquely identified by its asset type and ID (an integer). For example, Member:20 identifies the Member asset with ID of 20.</p><p><b>Attribute.</b> On every asset are a number of attributes, which attach specific values to the attribute definitions defined in the asset type. If the attributes definition is a relation, then the value(s) of the attribute are references to an asset(s).</p><p><b>Moment.</b> As data changes in VersionOne, a history is maintained. Every change to every asset is journaled within the system, and assigned a chronologically-increasing integer called a moment. A past version of an asset is uniquely identified by its asset type, ID, and Moment. A past version of a relation attribute will refer to the past version of its target asset. For example, Member:20:563 identifies the Member asset with ID of 20, as it was at the time of moment 563.</p></div>
+        <div class="section"><h2>The VersionOne Information Model<a name="The_VersionOne_Information_Model"></a></h2><p>Practically all data in VersionOne is stored in the form of assets, which have attributes. Each asset is classified by an asset type, which describes a number of attribute definitions, operations, rules, and possibly an inheritance from another asset type. A list of all the types within VersionOne can be obtained by accessing the meta data url of your VersionOne instance. Additionally, VersionOne comes with an xsl stylesheet, which can be referenced as a parameter to the meta data url and makes it easier to read the response:</p>
+<div class="source"><pre>&amp;lt;Server Base URI&amp;gt;/meta.v1/?xsl=api.xsl
+</pre></div><p>Individual types can also be viewed through the meta url:</p>
+<div class="source"><pre>&amp;lt;Server Base URI&amp;gt;/meta.v1/Story?xsl=api.xsl
+</pre></div><p>You must use the system name for the type you would like to retrieve. This is true whether using the API directly or the APIClient. For instance, in the example above the system name is Story, which certain methodology templates display as Backlog Item or Requirement. Here is a list of some of the most important system names and their corresponding default display names in the available methodology templates:</p>
+<table class="bodyTable" cellspacing="0" cellpadding="0" border="1" width="100%">
+    <thead>
+        <tr class="a">
+            <th>System Name</th>
+            <th>XP Display Name</th>
+            <th>Scrum Display Name</th>
+            <th>AgileUP Display Name</th>
+            <th>DSDM Display Name</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr class="b">
+            <td>Scope</td>
+            <td>Project</td>
+            <td>Project</td>
+            <td>Project</td>
+            <td>Project</td>
+        </tr>
+        <tr class="a">
+            <td>Timebox</td>
+            <td>Iteration</td>
+            <td>Sprint</td>
+            <td>Iteration</td>
+            <td>Iteration</td>
+        </tr>
+        <tr class="b">
+            <td>Theme</td>
+            <td>Theme</td>
+            <td>Feature Group</td>
+            <td>Use Case</td>
+            <td>Feature Group</td>
+        </tr>
+        <tr class="a">
+            <td>Story</td>
+            <td>Story</td>
+            <td>Backlog Item</td>
+            <td>Requirement</td>
+            <td>Requirement</td>
+        </tr>
+        <tr class="b">
+            <td>Defect</td>
+            <td>Defect</td>
+            <td>Defect</td>
+            <td>Defect</td>
+            <td>Defect</td>
+        </tr>
+        <tr class="a">
+            <td>Task</td>
+            <td>Task</td>
+            <td>Task</td>
+            <td>Task</td>
+            <td>Task</td>
+        </tr>
+        <tr class="b">
+            <td>Test</td>
+            <td>Test</td>
+            <td>Test</td>
+            <td>Test</td>
+            <td>Test</td>
+        </tr>
+        <tr class="a">
+            <td>RegressionTest</td>
+            <td>RegressionTest</td>
+            <td>RegressionTest</td>
+            <td>RegressionTest</td>
+            <td>RegressionTest</td>
+        </tr>
+        <tr class="b">
+            <td>RegressionPlan</td>
+            <td>RegressionPlan</td>
+            <td>RegressionPlan</td>
+            <td>RegressionPlan</td>
+            <td>RegressionPlan</td>
+        </tr>
+        <tr class="a">
+            <td>RegressionSuite</td>
+            <td>RegressionSuite</td>
+            <td>RegressionSuite</td>
+            <td>RegressionSuite</td>
+            <td>RegressionSuite</td>
+        </tr>
+        <tr class="b">
+            <td>TestSet</td>
+            <td>TestSet</td>
+            <td>TestSet</td>
+            <td>TestSet</td>
+            <td>TestSet</td>
+        </tr>
+        <tr class="a">
+            <td>Environment</td>
+            <td>Environment</td>
+            <td>Environment</td>
+            <td>Environment</td>
+            <td>Environment</td>
+        </tr>
+    </tbody>
+</table><p><b>Asset Type.</b> Asset types describe the classes of business data available. Asset types form an inheritance hierarchy, such that each asset type inherits attribute definitions, operations, and rules from its parent asset type. Those asset types at the leaves of this hierarchy are concrete, whereas asset types with children asset types are abstract. Assets are all instances of concrete asset types. Asset types are identified by unique names.</p><p>By way of example, Story and Defect are concrete asset types. On the other hand, Workitem is an abstract asset type, from which Story and Defect ultimately derive.</p><p><b>Attribute Definition.</b> Attribute definitions describe the properties that make up each asset type. An attribute definition defines the type of its value, whether it is required and/or read-only, and many other qualities. Attribute definitions are identified by a name that is unique within its asset type.</p><p>Attribute definitions are defined as either scalars or relations to other assets. Further, relation attribute definitions can be either single-value or multi-value. For example, the Estimate attribute definition on the Workitem asset type is a scalar (specifically, a floating-point number). On the other hand, the Workitem asset types Scope attribute definition is a single-value relation (to a Scope asset). The reverse relation, Workitems on the Scope asset type, is a multi-value relation (to Workitem assets).</p><p><b>Asset.</b> Actual business objects in VersionOne are assets, which are instances of concrete asset types. Each asset is uniquely identified by its asset type and ID (an integer). For example, Member:20 identifies the Member asset with ID of 20.</p><p><b>Attribute.</b> On every asset are a number of attributes, which attach specific values to the attribute definitions defined in the asset type. If the attributes definition is a relation, then the value(s) of the attribute are references to an asset(s).</p><p><b>Moment.</b> As data changes in VersionOne, a history is maintained. Every change to every asset is journaled within the system, and assigned a chronologically-increasing integer called a moment. A past version of an asset is uniquely identified by its asset type, ID, and Moment. A past version of a relation attribute will refer to the past version of its target asset. For example, Member:20:563 identifies the Member asset with ID of 20, as it was at the time of moment 563.</p></div>
       </div>
     </div>
     <div class="clear">
