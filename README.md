@@ -1,5 +1,5 @@
-# VersionOne SDK.Java #
-Copyright (c) 2008-2012 VersionOne, Inc.
+# VersionOne SDK.Java
+Copyright (c) 2008-2013 VersionOne, Inc.
 All rights reserved.
 
 For developers who have an itch that VersionOne doesn't scratch, the 
@@ -18,55 +18,53 @@ under a modified BSD license, which reflects our intent that software
 built with a dependency on the  VersionOne SDK.Java can be commercial or 
 open source, as the authors see fit.
 
-## System Requirements ##
+## System Requirements
+
 * Java Development Kit 1.7
 
-## Supported IDEs ##
-Eclipse or IntelliJ IDEA
+## Supported IDEs for Development
+
+* Eclipse or IntelliJ IDEA
 
 ## How to get the library as a precompiled package
 
 _Do this if you only want to use the functionality, but are not interested in compiling from source or in contributing code to the project._
 
-You can use maven to import the Java API Client and it's dependancies in your project by making use of Maven Central (http://search.maven.org).  You can edit the pom.xml file for your project in order to import the current version of the Java APIClient into your project.  More information on using Maven can be found here:  http://maven.apache.org/guides/introduction/introduction-to-the-pom.html.  If you wish, instead, to pull the source code down and integrate it with your project by cloning the git repository here:  https://github.com/versionone/VersionOne.SDK.Java.APIClient.
+You can use [Maven](http://maven.apache.org/guides/introduction/introduction-to-the-pom.html) to import the SDK.Java API Client and it's dependencies in your project by making use of [Maven Central](http://search.maven.org). You can edit the pom.xml file for your project in order to import the current version of the SDK.Java API Client into your project. If you wish, instead, to pull the source code down and integrate it with your project by cloning the [git repository](https://github.com/versionone/VersionOne.SDK.Java.APIClient).
 
 ## Learn By Example: APIClient Setup
 
 Using the Java APIClient is as simple as making a reference to the VersionOne.SDK.Java.APIClient-XXX.jar in your Java project, then providing connection information to the main service objects within the APIClient. There are three possible ways to connect to your VersionOne instance using the APIClient. Before you attempt to connect, find out whether your VersionOne instance uses VersionOne authentication or Windows Integrated Authentication. You need to create an instance of IMetaModel and and instance of IServices and provide them with connection information via instances of the V1APIConnector.
 
-### Configuration:  open the APIConfiguration.properties file in your .jar file.
+### Configuration: open the APIConfiguration.properties file in your .jar file.
 
 Open (not extract) the .jar file using an archiving tool such as 7zip or peaZip.  Navigate to "\com\versionone\apiclient\", and edit the APIConfiguration.properties file to reflect properly your environment.  By default, the samples will run against a temporary remote instance of VersionOne.
 
 Configuration Definitions:
 
-V1Url:  The URL of your instance of the VersionOne software.  It's the URL you use to login.
+V1Url: The URL of your instance of the VersionOne software. It's the URL you use to login.
 
-V1UserName:  The VersionOne user name that the API will impersonate as it executes.  Must be an existing user in the system.
+V1UserName: The VersionOne user name that the API will impersonate as it executes.  Must be an existing user in the system.
 
-***Important Note:  if you would like to use Windows authentication so that the API logs into VersionOne using the currently logged on user, please leave the V1UserName property blank.
+***Important Note: if you would like to use Windows authentication so that the API logs into VersionOne using the currently logged on user, please leave the V1UserName property blank.
 
-V1Password:  The VersionOne user password that the API will need to login to the instance.  Leave this blank if you are using Windows authentication.
+V1Password: The VersionOne user password that the API will need to login to the instance.  Leave this blank if you are using Windows authentication.
 
-MetaUrl:  The URI path to meta.  You should not need to change this setting under normal circumstances.
+MetaUrl: The URI path to meta. You should not need to change this setting under normal circumstances.
 
-DataUrl:  The URI path to retrieve data.  You should not need to change this setting under normal circumstances.
+DataUrl: The URI path to retrieve data. You should not need to change this setting under normal circumstances.
 
-ConfigUrl:  The URI path to retrieve VersionOne configuration info through the API.  You should not need to change this setting under normal circumstances.
+ConfigUrl: The URI path to retrieve VersionOne configuration info through the API. You should not need to change this setting under normal circumstances.
 
-ProxyUrl:  If you use a proxy server to logon to your VersionOne instance then provide the address here.
+ProxyUrl: If you use a proxy server to logon to your VersionOne instance then provide the address here.
 
-ProxyUserName:  The user that should authenticate to the proxy server.
+ProxyUserName: The user that should authenticate to the proxy server.
 
-ProxyPassword:  The password for the proxy user above.
+ProxyPassword: The password for the proxy user above.
 
-###Example Code Locations
+### Example Code Locations
 
-You can find fully compilable, functioning example code along with the associated unit tests in our public github repository here:  
-
-https://github.com/versionone/VersionOne.SDK.Java.APIClient/blob/master/src/main/java/com/versionone/apiclient/example/DataExamplesTester.java
-
-https://github.com/versionone/VersionOne.SDK.Java.APIClient/blob/master/src/main/java/com/versionone/apiclient/example/DataExamples.java
+Along with all the unit tests, you can find fully compilable, functioning [example code](https://github.com/versionone/VersionOne.SDK.Java.APIClient/blob/master/src/test/java/com/versionone/apiclient/example/GettingStarted.java) along with the [associated unit tests](https://github.com/versionone/VersionOne.SDK.Java.APIClient/blob/master/src/test/java/com/versionone/apiclient/example/GettingStartedTester.java).
 
 ### Retrieving your MetaModel and Services based on the config information you entered above.
 
