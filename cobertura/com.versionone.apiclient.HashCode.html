@@ -61,17 +61,17 @@
   <td class="src"><pre class="src">&nbsp;</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;25</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;        <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">int</span> Hash(<span class="keyword">int</span> data1, <span class="keyword">int</span> data2) {</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;26</td>  <td class="nbHitsCovered">&nbsp;159366</td>  <td class="src"><pre class="src">&nbsp;                <span class="keyword">int</span> hash = magic;</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;27</td>  <td class="nbHitsCovered">&nbsp;159366</td>  <td class="src"><pre class="src">&nbsp;                hash = MixHash(hash, data1);</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;28</td>  <td class="nbHitsCovered">&nbsp;159366</td>  <td class="src"><pre class="src">&nbsp;                hash = MixHash(hash, data2);</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;29</td>  <td class="nbHitsCovered">&nbsp;159366</td>  <td class="src"><pre class="src">&nbsp;                <span class="keyword">return</span> (<span class="keyword">int</span>) PostHash(hash);</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;26</td>  <td class="nbHitsCovered">&nbsp;159525</td>  <td class="src"><pre class="src">&nbsp;                <span class="keyword">int</span> hash = magic;</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;27</td>  <td class="nbHitsCovered">&nbsp;159525</td>  <td class="src"><pre class="src">&nbsp;                hash = MixHash(hash, data1);</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;28</td>  <td class="nbHitsCovered">&nbsp;159525</td>  <td class="src"><pre class="src">&nbsp;                hash = MixHash(hash, data2);</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;29</td>  <td class="nbHitsCovered">&nbsp;159525</td>  <td class="src"><pre class="src">&nbsp;                <span class="keyword">return</span> (<span class="keyword">int</span>) PostHash(hash);</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;30</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;        }</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;31</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;32</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;        <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">int</span> Hash(Object data1, Object data2) {</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;33</td>  <td class="nbHitsCovered">&nbsp;159362</td>  <td class="src"><pre class="src">&nbsp;                <span class="keyword">return</span> Hash(data1.hashCode(), data2.hashCode());</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;33</td>  <td class="nbHitsCovered">&nbsp;159521</td>  <td class="src"><pre class="src">&nbsp;                <span class="keyword">return</span> Hash(data1.hashCode(), data2.hashCode());</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;34</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;        }</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;35</td>  <td class="nbHits">&nbsp;</td>
@@ -136,25 +136,25 @@
   <td class="src"><pre class="src">&nbsp;</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;76</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;        <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">int</span> MixHash(<span class="keyword">int</span> hash, <span class="keyword">int</span> data) {</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;77</td>  <td class="nbHitsCovered">&nbsp;318744</td>  <td class="src"><pre class="src">&nbsp;                <span class="keyword">int</span> lo16 = data &amp; 0xFFFF;</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;78</td>  <td class="nbHitsCovered">&nbsp;318744</td>  <td class="src"><pre class="src">&nbsp;                <span class="keyword">int</span> hi16 = data &gt;&gt; 16;</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;79</td>  <td class="nbHitsCovered">&nbsp;318744</td>  <td class="src"><pre class="src">&nbsp;                hash += lo16;</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;80</td>  <td class="nbHitsCovered">&nbsp;318744</td>  <td class="src"><pre class="src">&nbsp;                hash ^= hash &lt;&lt; 16;</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;81</td>  <td class="nbHitsCovered">&nbsp;318744</td>  <td class="src"><pre class="src">&nbsp;                hash ^= hi16 &lt;&lt; 11;</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;82</td>  <td class="nbHitsCovered">&nbsp;318744</td>  <td class="src"><pre class="src">&nbsp;                hash += hash &gt;&gt; 11;</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;83</td>  <td class="nbHitsCovered">&nbsp;318744</td>  <td class="src"><pre class="src">&nbsp;                <span class="keyword">return</span> hash;</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;77</td>  <td class="nbHitsCovered">&nbsp;319062</td>  <td class="src"><pre class="src">&nbsp;                <span class="keyword">int</span> lo16 = data &amp; 0xFFFF;</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;78</td>  <td class="nbHitsCovered">&nbsp;319062</td>  <td class="src"><pre class="src">&nbsp;                <span class="keyword">int</span> hi16 = data &gt;&gt; 16;</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;79</td>  <td class="nbHitsCovered">&nbsp;319062</td>  <td class="src"><pre class="src">&nbsp;                hash += lo16;</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;80</td>  <td class="nbHitsCovered">&nbsp;319062</td>  <td class="src"><pre class="src">&nbsp;                hash ^= hash &lt;&lt; 16;</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;81</td>  <td class="nbHitsCovered">&nbsp;319062</td>  <td class="src"><pre class="src">&nbsp;                hash ^= hi16 &lt;&lt; 11;</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;82</td>  <td class="nbHitsCovered">&nbsp;319062</td>  <td class="src"><pre class="src">&nbsp;                hash += hash &gt;&gt; 11;</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;83</td>  <td class="nbHitsCovered">&nbsp;319062</td>  <td class="src"><pre class="src">&nbsp;                <span class="keyword">return</span> hash;</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;84</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;        }</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;85</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;86</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;        <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">int</span> PostHash(<span class="keyword">int</span> hash) {</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;87</td>  <td class="nbHitsCovered">&nbsp;159370</td>  <td class="src"><pre class="src">&nbsp;                hash ^= hash &lt;&lt; 3;</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;88</td>  <td class="nbHitsCovered">&nbsp;159370</td>  <td class="src"><pre class="src">&nbsp;                hash += hash &gt;&gt; 5;</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;89</td>  <td class="nbHitsCovered">&nbsp;159370</td>  <td class="src"><pre class="src">&nbsp;                hash ^= hash &lt;&lt; 2;</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;90</td>  <td class="nbHitsCovered">&nbsp;159370</td>  <td class="src"><pre class="src">&nbsp;                hash += hash &gt;&gt; 15;</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;91</td>  <td class="nbHitsCovered">&nbsp;159370</td>  <td class="src"><pre class="src">&nbsp;                hash ^= hash &lt;&lt; 10;</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;92</td>  <td class="nbHitsCovered">&nbsp;159370</td>  <td class="src"><pre class="src">&nbsp;                <span class="keyword">return</span> hash;</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;87</td>  <td class="nbHitsCovered">&nbsp;159529</td>  <td class="src"><pre class="src">&nbsp;                hash ^= hash &lt;&lt; 3;</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;88</td>  <td class="nbHitsCovered">&nbsp;159529</td>  <td class="src"><pre class="src">&nbsp;                hash += hash &gt;&gt; 5;</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;89</td>  <td class="nbHitsCovered">&nbsp;159529</td>  <td class="src"><pre class="src">&nbsp;                hash ^= hash &lt;&lt; 2;</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;90</td>  <td class="nbHitsCovered">&nbsp;159529</td>  <td class="src"><pre class="src">&nbsp;                hash += hash &gt;&gt; 15;</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;91</td>  <td class="nbHitsCovered">&nbsp;159529</td>  <td class="src"><pre class="src">&nbsp;                hash ^= hash &lt;&lt; 10;</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;92</td>  <td class="nbHitsCovered">&nbsp;159529</td>  <td class="src"><pre class="src">&nbsp;                <span class="keyword">return</span> hash;</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;93</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;        }</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;94</td>  <td class="nbHits">&nbsp;</td>
@@ -180,6 +180,6 @@
   <td class="src"><pre class="src">&nbsp;}</pre></td></tr>
 </table>
 
-<div class="footer">Report generated by <a href="http://cobertura.sourceforge.net/" target="_top">Cobertura</a> 1.9.4.1 on 7/29/13 3:16 PM.</div>
+<div class="footer">Report generated by <a href="http://cobertura.sourceforge.net/" target="_top">Cobertura</a> 1.9.4.1 on 7/29/13 3:40 PM.</div>
 </body>
 </html>
