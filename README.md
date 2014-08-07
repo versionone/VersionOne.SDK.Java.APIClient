@@ -210,7 +210,7 @@ Depending on your security role, you may not be able to see all the Story assets
 
 ### How to filter a query
 
-Use the setFilter property of the Query object to filter the results that are returned. This query will retrieve only Story assets with a To Do of zero:
+Use the setFilter property of the Query object to filter the results that are returned. This query will retrieve only Task assets with a To Do of zero:
 
 ```java
 public Asset[] FilterListOfAssets() throws Exception {
