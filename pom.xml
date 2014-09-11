@@ -122,7 +122,7 @@
 				<artifactId>site-maven-plugin</artifactId>
 				<configuration>
 					<message>Creating site for ${project.artifactId} ${project.version}</message>
-					<!-- <dryRun>true</dryRun> -->
+					<dryRun>true</dryRun>
 				</configuration>
 				<executions>
 					<execution>
