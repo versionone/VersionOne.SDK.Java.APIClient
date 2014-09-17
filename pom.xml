@@ -8,7 +8,7 @@
     <packaging>jar</packaging>
 
     <name>VersionOne.SDK.Java.APIClient</name>
-    <description>a library for custom Java development against the VersionOne Platform's REST-based API</description>
+    <description>A library for custom Java development against the VersionOne Development Platform's REST-based API.</description>
     <url>https://github.com/versionone/VersionOne.SDK.Java.APIClient</url>
     <organization>
         <name>Version One, Inc.</name>
