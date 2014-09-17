@@ -25,7 +25,7 @@ public class XmlApiWriterTester {
 		asset.setAttributeValue(nameDefinition, "Test Asset");
 		asset.setAttributeValue(scopeDefinition, new Oid(assetType));
 		
-		String expected = "<Asset><Attribute act=\"set\" name=\"Name\">Test Asset</Attribute><Relation act=\"set\" name=\"Scope\"><Asset idref=\"Scope:0\"/></Relation></Asset>";
+		String expected = "<Asset><Relation act=\"set\" name=\"Scope\"><Asset idref=\"Scope:0\"/></Relation><Attribute act=\"set\" name=\"Name\">Test Asset</Attribute></Asset>";
 
 		StringWriter assetData = new StringWriter();
 		XmlApiWriter testMe = new XmlApiWriter(true);
@@ -34,6 +34,7 @@ public class XmlApiWriterTester {
 		if(data.startsWith("<?xml")) {
 			data = data.substring(data.indexOf("?>")+2);
 		}
+		
 		Assert.assertEquals(expected, data);		
 	}
 	
