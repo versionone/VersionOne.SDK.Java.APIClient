@@ -40,6 +40,14 @@
             <name>Greg Johnson</name>
             <email>greg.johnson@versionone.com</email>
         </developer>
+        <developer>
+            <name>Valentin Plechuc</name>
+            <email>vplechuc@velocitypartners.net</email>
+        </developer>
+        <developer>
+            <name>Acey Bunch</name>
+            <email>acey.bunch@versionone.com</email>
+        </developer>
     </developers>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -121,9 +129,10 @@
 			<plugin>
 				<groupId>com.github.github</groupId>
 				<artifactId>site-maven-plugin</artifactId>
+				<version>0.9</version>
 				<configuration>
 					<message>Creating site for ${project.artifactId} ${project.version}</message>
-					<dryRun>true</dryRun>
+					<dryRun>false</dryRun>
 				</configuration>
 				<executions>
 					<execution>

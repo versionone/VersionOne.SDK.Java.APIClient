@@ -25,7 +25,7 @@ public class XmlApiWriterTester {
 		asset.setAttributeValue(nameDefinition, "Test Asset");
 		asset.setAttributeValue(scopeDefinition, new Oid(assetType));
 		
-		String expected = "<Asset><Relation act=\"set\" name=\"Scope\"><Asset idref=\"Scope:0\"/></Relation><Attribute act=\"set\" name=\"Name\">Test Asset</Attribute></Asset>";
+		String expected = "<Asset><Attribute act=\"set\" name=\"Name\">Test Asset</Attribute><Relation act=\"set\" name=\"Scope\"><Asset idref=\"Scope:0\"/></Relation></Asset>";
 
 		StringWriter assetData = new StringWriter();
 		XmlApiWriter testMe = new XmlApiWriter(true);
