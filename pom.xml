@@ -11,7 +11,7 @@
     <description>A library for custom Java development against the VersionOne Development Platform's REST-based API.</description>
     <url>https://github.com/versionone/VersionOne.SDK.Java.APIClient</url>
     <organization>
-        <name>Version One, Inc.</name>
+        <name>VersionOne, Inc.</name>
         <url>http://www.versionone.com/</url>
     </organization>
     <licenses>
