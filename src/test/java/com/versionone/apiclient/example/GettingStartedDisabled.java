@@ -7,7 +7,7 @@ import org.junit.*;
 
 import com.versionone.Oid;
 
-public class GettingStartedTester {
+public class GettingStartedDisabled {
 
     private GettingStarted _docExamples;
 
