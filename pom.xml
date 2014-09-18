@@ -107,7 +107,7 @@
 					<execution>
 						<id>attach-javadocs</id>
 						<goals>
-							<goal>deploy</goal>
+							<goal>javadoc</goal>
 						</goals>
 					</execution>
 				</executions>
