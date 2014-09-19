@@ -17,6 +17,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
+import com.versionone.apiclient.ClientConfiguration;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Ignore;
@@ -48,7 +49,8 @@ public class V1APIConnectorTest {
 
 	@Test(expected = ConnectionException.class)
 	public void testInvalidUser() throws ConnectionException {
-		V1APIConnector testMe = new V1APIConnector(V1_PATH, "foo", "bar");
+        ClientConfiguration config = new ClientConfiguration(V1_PATH, "foo", "bar");
+        V1APIConnector testMe = new V1APIConnector(V1_PATH, config);
 		testMe.getData("rest-1.v1/Data/Scope/0");
 	}
 
@@ -57,26 +59,30 @@ public class V1APIConnectorTest {
 	public void testProxy() throws ConnectionException, URISyntaxException {
 		URI uri = new URI("http://integvm01.internal.corp:3128");
 		ProxyProvider proxy = new ProxyProvider(uri, "user1", "user1");
-		V1APIConnector testMe = new V1APIConnector(V1_PATH, "admin", "admin", proxy);
+        ClientConfiguration config = new ClientConfiguration(V1_PATH, "admin", "admin");
+		V1APIConnector testMe = new V1APIConnector(V1_PATH, config, proxy);
 		testMe.getData("rest-1.v1/Data/Scope/0");
 	}
 
 	@Test
 	@Ignore("Requires VersionOne instance on localhost.")
 	public void testValidUser() throws ConnectionException {
-		V1APIConnector testMe = new V1APIConnector(V1_PATH, "admin", "admin");
+        ClientConfiguration config = new ClientConfiguration(V1_PATH, "admin", "admin");
+		V1APIConnector testMe = new V1APIConnector(V1_PATH, config);
 		Reader results = testMe.getData("rest-1.v1/Data/Scope/0");
 		Assert.assertTrue(results != null);
 	}
 
 	@Test(expected = ConnectionException.class)
 	public void testURLInvalidUserAfterValid() throws ConnectionException {
-		V1APIConnector testMe = new V1APIConnector(V1_PATH, "admin", "admin");
+        ClientConfiguration config = new ClientConfiguration(V1_PATH, "admin", "admin");
+		V1APIConnector testMe = new V1APIConnector(V1_PATH, config);
 		Reader results = testMe.getData("rest-1.v1/Data/Scope/0");
         testMe = new V1APIConnector(V1_PATH);
         results = testMe.getData("meta.v1/Scope");
 		Assert.assertTrue(results != null);
-		testMe = new V1APIConnector(V1_PATH, "foo12", "bar");
+        ClientConfiguration config2 = new ClientConfiguration(V1_PATH, "foo12", "bar");
+		testMe = new V1APIConnector(V1_PATH, config2);
 		testMe.getData("rest-1.v1/Data/Scope/0");
 	}
 
@@ -90,8 +96,8 @@ public class V1APIConnectorTest {
 		final TestServer testServer = new TestServer(port, null, 1);
 		startServer(testServer);
 
-		V1APIConnector testMe = new V1APIConnector("http://localhost:" + port,
-				"foo", "bar");
+        ClientConfiguration config = new ClientConfiguration(V1_PATH, "foo", "bar");
+		V1APIConnector testMe = new V1APIConnector("http://localhost:" + port, config);
 		testMe.customHttpHeaders.put(paramName, paramValue);
 		testMe.getData();
 
@@ -129,15 +135,14 @@ public class V1APIConnectorTest {
 		TestServer testServer = new TestServer(port, Arrays.asList(cookies), 5);
 		startServer(testServer);
 
-		V1APIConnector testMe = new V1APIConnector("http://localhost:" + port,
-				"foo", "bar");
+        ClientConfiguration config = new ClientConfiguration(null, "foo", "bar");
+		V1APIConnector testMe = new V1APIConnector("http://localhost:" + port, config);
 		// first request (no cookies)
 		testMe.getData();
 		// second request (only cookie from server)
 		testMe.getData();
 
-		V1APIConnector testMe2 = new V1APIConnector("http://localhost:" + port,
-				"foo", "bar");
+		V1APIConnector testMe2 = new V1APIConnector("http://localhost:" + port, config);
 		String paramName2 = "new_test_name";
 		String paramValue2 = "new_test_value";
 		Date expireDate = new Date();
@@ -148,8 +153,7 @@ public class V1APIConnectorTest {
 		testMe2.getData();
 
 		// no cookies
-		V1APIConnector testMe3 = new V1APIConnector("http://localhost:" + port,
-				"foo1", "bar");
+		V1APIConnector testMe3 = new V1APIConnector("http://localhost:" + port, config);
 		// fourth request. we use another user name (no cookies from the server)
 		testMe3.getData();
 
@@ -186,8 +190,7 @@ public class V1APIConnectorTest {
 		startServer(testServer);
 
 		// no cookies
-		V1APIConnector testMe4 = new V1APIConnector("http://127.0.0.1:" + port,
-				"foo1", "bar");
+		V1APIConnector testMe4 = new V1APIConnector("http://127.0.0.1:" + port, config);
 		// first request. we use another domen (no cookies from the server)
 		testMe4.getData();
 		testMe4.getCookiesJar().addCookie(paramName2, paramValue2, expireDate);
@@ -195,8 +198,7 @@ public class V1APIConnectorTest {
 		testMe4.getData();
 
 		// create connection with already requested domen
-		V1APIConnector testMe5 = new V1APIConnector("http://localhost:" + port,
-				"foo", "bar");
+		V1APIConnector testMe5 = new V1APIConnector("http://localhost:" + port, config);
 		// third request. we have to have 2 cookies
 		testMe5.getData();
 
@@ -239,8 +241,8 @@ public class V1APIConnectorTest {
 		String value1 = "value1";
 		String name2 = "name2";
 		String value2 = "value2";
-		V1APIConnector testMe = new V1APIConnector("http://localhost/test",
-				"foo", "bar");
+        ClientConfiguration config = new ClientConfiguration(V1_PATH, "foo", "bar");
+		V1APIConnector testMe = new V1APIConnector("http://localhost/test", config);
 		ICookiesManager cookiesManager = testMe.getCookiesJar();
 		cookiesManager.addCookie(name1, value1, expireDate);
 		cookiesManager.addCookie(name2, value2, expireDate);
@@ -262,8 +264,8 @@ public class V1APIConnectorTest {
 		TestServer testServer = new TestServer(port, Arrays.asList(nameCookie + "=" + cookie), 5);
 		startServer(testServer);
 
-		V1APIConnector testMe = new V1APIConnector("http://localhost:" + port,
-				"foo", "bar");
+        ClientConfiguration config = new ClientConfiguration(V1_PATH, "foo", "bar");
+		V1APIConnector testMe = new V1APIConnector("http://localhost:" + port, config);
 		testMe.getCookiesJar().deleteAllCookies();
 		// first request (no cookies)
 		testMe.getData();
@@ -290,9 +292,10 @@ public class V1APIConnectorTest {
 
 	@Test(expected = ConnectionException.class)
 	public void testEmptyUserAfterValid() throws ConnectionException {
-		V1APIConnector testMe = new V1APIConnector(V1_PATH, "admin", "admin");
+        ClientConfiguration config = new ClientConfiguration(V1_PATH, "admin", "admin");
+		V1APIConnector testMe = new V1APIConnector(V1_PATH, config);
 		testMe.getData("rest-1.v1/Data/Scope/0");
-		testMe = new V1APIConnector(V1_PATH, "", "");
+        testMe = new V1APIConnector(V1_PATH, new ClientConfiguration(V1_PATH, "", ""));
 		testMe.getData("rest-1.v1/Data/Scope/0");// throws ConnectionException
 	}
 

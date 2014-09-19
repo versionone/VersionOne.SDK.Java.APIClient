@@ -3,23 +3,10 @@ package com.versionone.apiclient.tests;
 import java.net.URI;
 import java.net.URISyntaxException;
 
+import com.versionone.apiclient.*;
 import org.junit.Assert;
 import org.junit.Ignore;
 import org.junit.Test;
-
-import com.versionone.apiclient.APIException;
-import com.versionone.apiclient.ConnectionException;
-import com.versionone.apiclient.IAPIConnector;
-import com.versionone.apiclient.IAssetType;
-import com.versionone.apiclient.IMetaModel;
-import com.versionone.apiclient.IServices;
-import com.versionone.apiclient.MetaModel;
-import com.versionone.apiclient.OidException;
-import com.versionone.apiclient.ProxyProvider;
-import com.versionone.apiclient.Query;
-import com.versionone.apiclient.QueryResult;
-import com.versionone.apiclient.Services;
-import com.versionone.apiclient.V1APIConnector;
 
 @Ignore("This test required proxy server.")
 public class ProxyTester {
@@ -41,13 +28,15 @@ public class ProxyTester {
 		//Connection with proxy
 		IAPIConnector metaConnectorWithProxy = new V1APIConnector(v1Path + "meta.v1/", proxyProvider);
         IMetaModel metaModelWithProxy = new MetaModel(metaConnectorWithProxy);
-        IAPIConnector dataConnectorWithProxy = new V1APIConnector(v1Path + "rest-1.v1/", v1UserName, v1Password, proxyProvider);
+
+        ClientConfiguration config = new ClientConfiguration(v1Path, v1UserName, v1Password);
+        IAPIConnector dataConnectorWithProxy = new V1APIConnector(v1Path + "rest-1.v1/", config, proxyProvider);
         IServices servicesWithProxy = new Services(metaModelWithProxy, dataConnectorWithProxy);
 
         //Connection without proxy
 		IAPIConnector metaConnector = new V1APIConnector(v1Path + "meta.v1/");
         IMetaModel metaModel = new MetaModel(metaConnector);
-        IAPIConnector dataConnector = new V1APIConnector(v1Path + "rest-1.v1/", v1UserName, v1Password);
+        IAPIConnector dataConnector = new V1APIConnector(v1Path + "rest-1.v1/", config);
         IServices services = new Services(metaModel, dataConnector);
 
         IAssetType projectTypeWithProxy = metaModelWithProxy.getAssetType("Scope");

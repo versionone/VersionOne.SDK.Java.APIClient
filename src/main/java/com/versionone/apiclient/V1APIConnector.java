@@ -1,17 +1,36 @@
 package com.versionone.apiclient;
 
+import com.versionone.util.V1Util;
+import org.apache.http.Header;
+import org.apache.http.HttpEntity;
+import org.apache.http.HttpHost;
+import org.apache.http.auth.AuthScope;
+import org.apache.http.auth.NTCredentials;
+import org.apache.http.client.ClientProtocolException;
+import org.apache.http.client.CredentialsProvider;
+import org.apache.http.client.methods.CloseableHttpResponse;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.protocol.HttpClientContext;
+import org.apache.http.impl.client.BasicCredentialsProvider;
+import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.impl.client.HttpClients;
+import org.apache.http.util.EntityUtils;
 import sun.net.www.protocol.http.AuthCacheImpl;
 import sun.net.www.protocol.http.AuthCacheValue;
 
 import java.io.*;
 import java.net.Authenticator;
 import java.net.HttpURLConnection;
+import java.net.InetAddress;
 import java.net.MalformedURLException;
 import java.net.PasswordAuthentication;
 import java.net.URL;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
-import java.util.Locale;
+
+import static com.versionone.util.V1Util.isNullOrEmpty;
 
 /**
  * This class represents a connection to the VersionOne server.
@@ -20,10 +39,9 @@ import java.util.Locale;
  */
 public class V1APIConnector implements IAPIConnector {
 
-	private static final String UTF8 = "UTF-8";
-
 	private final CookiesManager cookiesManager;
-	private String _url = null;
+    private final ICredentials credentials;
+    private String _url = null;
 	private ProxyProvider proxy = null;
 	private final Map<String, HttpURLConnection> _requests = new HashMap<String, HttpURLConnection>();
 	/**
@@ -34,30 +52,33 @@ public class V1APIConnector implements IAPIConnector {
 	/**
 	 * Create Connection.
 	 * @param url - URL to VersionOne system.
-	 * @param userName - Name of the user wishing to connect.
-	 * @param password - password of the user wishing to connect.
+	 * @param credentials - Authentication credentials
 	 */
-	public V1APIConnector(String url, String userName, String password) {
-		this(url, userName, password, null);
+	public V1APIConnector(String url, ICredentials credentials) {
+		this(url, credentials, null);
 	}
 
 	/**
 	 * Create Connection.
 	 * @param url - URL to VersionOne system.
-	 * @param userName - Name of the user wishing to connect.
-	 * @param password - password of the user wishing to connect.
+     * @param credentials - Authentication credentials
 	 * @param proxy	- proxy for connection.
 	 */
-	public V1APIConnector(String url, String userName, String password, ProxyProvider proxy) {
+	public V1APIConnector(String url, ICredentials credentials, ProxyProvider proxy) {
+        this.credentials = credentials;
 		this.proxy = proxy;
 		_url = url;
-		cookiesManager = CookiesManager.getCookiesManager(url, userName, password);
 
-		// WORKAROUND: http://bugs.sun.com/bugdatabase/view_bug.do?bug_id=6626700
-		if (userName != null) {
-			AuthCacheValue.setAuthCache(new AuthCacheImpl());
-			Authenticator.setDefault(new Credentials(userName, password));
-		}
+        String username = credentials == null ? null : credentials.getV1UserName();
+        String password = credentials == null ? null : credentials.getV1Password();
+
+        cookiesManager = CookiesManager.getCookiesManager(url, username, password);
+
+        // WORKAROUND: http://bugs.sun.com/bugdatabase/view_bug.do?bug_id=6626700
+        if (credentials != null && credentials.getV1UserName() != null) {
+            AuthCacheValue.setAuthCache(new AuthCacheImpl());
+            Authenticator.setDefault(new Credentials(credentials.getV1UserName(), credentials.getV1Password()));
+        }
 	}
 
 	/**
@@ -90,7 +111,7 @@ public class V1APIConnector implements IAPIConnector {
 	 * @param proxy - Proxy for connection.
 	 */
 	public V1APIConnector(String url, ProxyProvider proxy) {
-		this(url, null, null, proxy);
+		this(url, null, proxy);
 	}
 
 	/**
@@ -115,29 +136,23 @@ public class V1APIConnector implements IAPIConnector {
 	 * @throws IOException
 	 */
 	public Reader getData(String path) throws ConnectionException {
-		HttpURLConnection connection = createConnection(_url + path);
-		try {
-			switch (connection.getResponseCode()) {
-			case 200:
-				cookiesManager.addCookie(connection.getHeaderFields());
-				return new InputStreamReader(connection.getInputStream(), UTF8);
+		Response connection = createConnection(_url + path);
+        switch (connection.getResponseCode()) {
+            case 200:
+                cookiesManager.addCookie(connection.getHeaderFields());
+                return new StringReader(connection.getBody());
 
-			case 401:
-				throw new SecurityException();
+            case 401:
+                throw new SecurityException();
 
-			default: {
-				StringBuffer message = new StringBuffer("Received Error ");
-				message.append(connection.getResponseCode());
-				message.append(" from URL ");
-				message.append(connection.getURL().toString());
-				throw new ConnectionException(message.toString(), connection
-						.getResponseCode());
-			}
-			}
-		} catch (IOException e) {
-			throw new ConnectionException("Error processing result from URL "
-					+ path, e);
-		}
+            default: {
+                StringBuffer message = new StringBuffer("Received Error ");
+                message.append(connection.getResponseCode());
+                message.append(" from URL ");
+                message.append(connection.getUrl());
+                throw new ConnectionException(message.toString(), connection.getResponseCode());
+            }
+        }
 	}
 
 	/**
@@ -151,6 +166,7 @@ public class V1APIConnector implements IAPIConnector {
 	 * @throws IOException
 	 */
 	public Reader sendData(String path, String data) throws ConnectionException {
+        /*
 		HttpURLConnection connection = createConnection(_url + path);
 		connection.setDoOutput(true);
 		connection.setRequestProperty("Content-Type", "text/xml");
@@ -182,6 +198,9 @@ public class V1APIConnector implements IAPIConnector {
 			}
 		}
 		return new InputStreamReader(resultStream);
+		*/
+
+        throw new ConnectionException("POST not implemented");
 	}
 
 	/**
@@ -200,6 +219,7 @@ public class V1APIConnector implements IAPIConnector {
 	 */
 	public OutputStream beginRequest(String path, String contentType)
 			throws ConnectionException {
+        /*
 		OutputStream outputStream = null;
 		HttpURLConnection req = createConnection(_url + path);
 		if (contentType != null)
@@ -218,6 +238,9 @@ public class V1APIConnector implements IAPIConnector {
 		_requests.put(path, req);
 
 		return outputStream;
+		*/
+
+        throw new ConnectionException("POST not implemented");
 	}
 
 	/**
@@ -251,6 +274,7 @@ public class V1APIConnector implements IAPIConnector {
 		return resultStream;
 	}
 
+    /*
 	private HttpURLConnection createConnection(String path)
 			throws ConnectionException {
 		HttpURLConnection request;
@@ -274,6 +298,83 @@ public class V1APIConnector implements IAPIConnector {
 		}
 		return request;
 	}
+	*/
+
+    private Response createConnection(String path) throws ConnectionException {
+        try {
+            URL url = new URL(path);
+            HttpHost target = new HttpHost(url.getHost(), url.getPort(), url.getProtocol());
+
+            HttpClientContext context = HttpClientContext.create();
+
+            if (credentials != null && !isNullOrEmpty(credentials.getDomain())) {
+                CredentialsProvider credsProvider = new BasicCredentialsProvider();
+                credsProvider.setCredentials(AuthScope.ANY, new NTCredentials(credentials.getV1UserName(),
+                        credentials.getV1Password(), null, credentials.getDomain()));
+                context.setCredentialsProvider(credsProvider);
+            }
+
+            HttpGet get = new HttpGet(url.getPath());
+
+            CloseableHttpClient httpClient = HttpClients.createDefault();
+            CloseableHttpResponse response = httpClient.execute(target, get, context);
+
+            try {
+                int statusCode = response.getStatusLine().getStatusCode();
+                HttpEntity entity = response.getEntity();
+                String body = EntityUtils.toString(entity);
+                return new Response(body, statusCode, url, response.getAllHeaders());
+            }
+            finally {
+                response.close();
+            }
+        }
+        catch (MalformedURLException e) {
+            throw new ConnectionException("Invalid URL", e);
+        } catch (ClientProtocolException e) {
+            throw new ConnectionException("Request could not be performed", e);
+        } catch (IOException e) {
+            throw new ConnectionException("Request could not be performed", e);
+        }
+    }
+
+    class Response {
+        private final int responseCode;
+        private final String body;
+        private final URL url;
+        private final Header[] headers;
+
+        public Response(String body, int responseCode, URL url, Header[] headers) {
+            this.body = body;
+            this.responseCode = responseCode;
+            this.url = url;
+            this.headers = headers;
+        }
+
+        public int getResponseCode() {
+            return responseCode;
+        }
+
+        public String getBody() {
+            return body;
+        }
+
+        public URL getUrl() {
+            return url;
+        }
+
+        public Header[] getHeaders() {
+            return headers;
+        }
+
+        public Map<String, List<String>> getHeaderFields() {
+            Map m = new HashMap();
+            for (Header header : headers) {
+                m.put(header.getName(), Collections.singletonList(header.getValue()));
+            }
+            return m;
+        }
+    }
 
 	private void addHeaders(HttpURLConnection request) {
 		for (String key : customHttpHeaders.keySet()) {

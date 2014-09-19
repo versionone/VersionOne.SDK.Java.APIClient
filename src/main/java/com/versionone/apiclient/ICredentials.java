@@ -5,4 +5,5 @@ public interface ICredentials {
     String getV1Password();
     String getProxyUserName();
     String getProxyPassword();
+    String getDomain();
 }

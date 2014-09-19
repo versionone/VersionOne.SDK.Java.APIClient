@@ -18,6 +18,7 @@ public class APIConfiguration implements IAPIConfiguration {
         static String ProxyUrl(){return "ProxyUrl";}
         static String ProxyUserName() {return "ProxyUserName";}
         static String ProxyPassword() {return "ProxyPassword";}
+        public static String Domain() {return "Domains";}
     }
 
     public APIConfiguration() throws IOException {
@@ -59,6 +60,11 @@ public class APIConfiguration implements IAPIConfiguration {
 
     public String getProxyPassword() {
         return _properties.getProperty(ConfigurationProperties.ProxyPassword());
+    }
+
+    @Override
+    public String getDomain() {
+        return _properties.getProperty(ConfigurationProperties.Domain());
     }
 
 }
