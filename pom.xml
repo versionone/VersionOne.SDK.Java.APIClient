@@ -102,7 +102,7 @@
 				<executions>
 					<execution>
 						<goals>
-							<goal>cobertura:report</goal>
+							<goal>cobertura</goal>
 						</goals>
 						<phase>test</phase>
 					</execution>
