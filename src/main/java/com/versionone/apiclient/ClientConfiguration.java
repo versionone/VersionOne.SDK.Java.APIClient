@@ -1,9 +1,5 @@
 package com.versionone.apiclient;
 
-import com.versionone.apiclient.IAPIConfiguration;
-import com.versionone.apiclient.ICredentials;
-import com.versionone.apiclient.IUrls;
-
 public class ClientConfiguration implements IAPIConfiguration, IUrls, ICredentials {
 
     private String url;

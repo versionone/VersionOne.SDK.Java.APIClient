@@ -314,7 +314,7 @@ public class V1APIConnector implements IAPIConnector {
                 context.setCredentialsProvider(credsProvider);
             }
 
-            HttpGet get = new HttpGet(url.getPath());
+            HttpGet get = new HttpGet(url.getPath() +"?"+ url.getQuery());
 
             CloseableHttpClient httpClient = HttpClients.createDefault();
             CloseableHttpResponse response = httpClient.execute(target, get, context);
