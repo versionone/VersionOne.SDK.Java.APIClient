@@ -10,4 +10,5 @@ public interface IAPIConfiguration {
     String getProxyUrl();
     String getProxyUserName();
     String getProxyPassword();
+    String getDomain();
 }

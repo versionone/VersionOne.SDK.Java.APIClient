@@ -13,7 +13,6 @@ public final class Connectors implements IConnectors {
     private ICredentials _credentials;
 
     public Connectors() throws Exception {
-
         _urls = new Urls();
         _credentials = new Credentials();
 
@@ -21,26 +20,20 @@ public final class Connectors implements IConnectors {
     }
 
     public Connectors(IUrls urls, ICredentials credentials) throws Exception {
-
         if (null == urls || null == credentials)
             throw new IllegalArgumentException("Urls and credentials are required to be non-null.");
         _urls = urls;
         _credentials = credentials;
 
         createConnectors();
-
     }
 
     private void createConnectors() {
-
         _dataConnector = new V1APIConnector(
                 _urls.getDataUrl(),
-                _credentials.getV1UserName(),
-                _credentials.getV1Password()
+                _credentials
         );
-
         _metaConnector = new V1APIConnector(_urls.getMetaUrl());
-
     }
 
     public V1APIConnector getDataConnector(){
@@ -53,10 +46,10 @@ public final class Connectors implements IConnectors {
     public V1APIConnector getMetaConnectorWithProxy() throws URISyntaxException {
         if (_metaConnectorWithProxy != null) return _metaConnectorWithProxy;
         _metaConnectorWithProxy = new V1APIConnector(
-                _urls.getV1Url(),
-                _credentials.getV1UserName(),
-                _credentials.getV1Password(),
-                getProxyProvider());
+                _urls.getMetaUrl(),
+                _credentials,
+                getProxyProvider()
+        );
         return _metaConnectorWithProxy;
     }
 
@@ -64,31 +57,28 @@ public final class Connectors implements IConnectors {
         if (_dataConnectorWithProxy != null) return _dataConnectorWithProxy;
         _dataConnectorWithProxy = new V1APIConnector(
                 _urls.getDataUrl(),
-                _credentials.getV1UserName(),
-                _credentials.getV1Password(),
+                _credentials,
                 getProxyProvider()
-            );
+        );
         return _dataConnectorWithProxy;
     }
 
     public V1APIConnector getConfigConnector() {
         return new V1APIConnector(
                 _urls.getConfigUrl(),
-                _credentials.getV1UserName(),
-                _credentials.getV1Password());
+                _credentials
+        );
     }
 
     public V1APIConnector getConfigConnectorWithProxy() throws URISyntaxException {
         return new V1APIConnector(
                 _urls.getConfigUrl(),
-                _credentials.getV1UserName(),
-                _credentials.getV1Password(),
-                getProxyProvider());
+                _credentials
+        );
     }
 
     private ProxyProvider getProxyProvider() throws URISyntaxException {
         URI proxyUri = new URI(_urls.getProxyUrl());
         return new ProxyProvider(proxyUri, _credentials.getProxyUserName(), _credentials.getProxyPassword());
     }
-
 }

@@ -228,7 +228,8 @@ public class QueryURLBuilderTester {
     @Test
     @Ignore("Integration test, requires V1 Server")
     public void QueryTrackedEpicsByProject() throws APIException {
-        IAPIConnector metaConnector = new V1APIConnector(versionOneUrl + "meta.v1/", "admin", "admin");
+        ClientConfiguration config = new ClientConfiguration(versionOneUrl, "admin", "admin");
+        IAPIConnector metaConnector = new V1APIConnector(versionOneUrl + "meta.v1/", config);
         IMetaModel metaModel = new MetaModel(metaConnector);
 
         IAssetType epicType = metaModel.getAssetType("Epic");
@@ -267,7 +268,8 @@ public class QueryURLBuilderTester {
     @Test
     @Ignore("Integration test, requires V1 Server")
     public void QueryTrackedEpicsForMultipleProjectsUsingVariables() throws APIException {
-        IAPIConnector metaConnector = new V1APIConnector(versionOneUrl + "meta.v1/", "admin", "admin");
+        ClientConfiguration config = new ClientConfiguration(versionOneUrl, "admin", "admin");
+        IAPIConnector metaConnector = new V1APIConnector(versionOneUrl + "meta.v1/", config);
         IMetaModel metaModel = new MetaModel(metaConnector);
 
         QueryVariable scopeVariable = new QueryVariable("Scope", "Scope:2176");

@@ -56,6 +56,11 @@ public class ConnectorsTester {
             public String getProxyPassword() {
                 return "123456";
             }
+
+            @Override
+            public String getDomain() {
+                return null;
+            }
         };
 
         _nonDefaultTarget = new Connectors(urls, credentials);

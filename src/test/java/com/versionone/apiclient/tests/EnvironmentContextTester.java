@@ -55,6 +55,10 @@ public class EnvironmentContextTester {
             public String getProxyPassword() {
                 return "Wx7123456Wx7";
             }
+
+            public String getDomain() {
+                return null;
+            }
         };
 
         //can implement your own IConnector if needed.

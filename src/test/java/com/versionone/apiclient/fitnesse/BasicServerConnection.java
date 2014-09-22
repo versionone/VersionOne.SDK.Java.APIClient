@@ -2,6 +2,7 @@ package com.versionone.apiclient.fitnesse;
 
 import java.io.Reader;
 
+import com.versionone.apiclient.ClientConfiguration;
 import com.versionone.apiclient.V1APIConnector;
 
 /**
@@ -22,7 +23,8 @@ public class BasicServerConnection extends fit.ColumnFixture {
 			testMe = new V1APIConnector(url);
 		}
 		else {
-			testMe = new V1APIConnector(url, user, password);
+            ClientConfiguration config = new ClientConfiguration(url, user, password);
+            testMe = new V1APIConnector(url, config);
 		}
 		Reader temp = null;
 		try {

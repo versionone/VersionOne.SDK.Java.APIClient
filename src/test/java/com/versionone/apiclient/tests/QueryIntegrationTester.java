@@ -32,7 +32,8 @@ public class QueryIntegrationTester {
     @BeforeClass
     public static void beforeClass() {
         V1APIConnector metaConnector = new V1APIConnector(V1Url + "/meta.v1/");
-        V1APIConnector dataConnector = new V1APIConnector(V1Url + "/rest-1.v1/", Username, Password);
+        ClientConfiguration config = new ClientConfiguration(V1Url, Username, Password);
+        V1APIConnector dataConnector = new V1APIConnector(V1Url + "/rest-1.v1/", config);
         metaModel = new MetaModel(metaConnector);
         services = new Services(metaModel, dataConnector);
 

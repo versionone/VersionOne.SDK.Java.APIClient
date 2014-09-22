@@ -5,6 +5,7 @@ import java.util.Map;
 
 import com.versionone.apiclient.Asset;
 import com.versionone.apiclient.Attribute;
+import com.versionone.apiclient.ClientConfiguration;
 import com.versionone.apiclient.MetaModel;
 import com.versionone.apiclient.Query;
 import com.versionone.apiclient.QueryResult;
@@ -32,8 +33,9 @@ public class QueryFixture extends RowFixture {
 		String basicUrl = args[0];
 		
 		MetaModel metaModel = new MetaModel(new V1APIConnector(basicUrl + "/meta.v1/"));
-		
-		Services service = new Services(metaModel, new V1APIConnector(basicUrl + "/rest-1.v1/", args[1], args[2]));
+
+        ClientConfiguration config = new ClientConfiguration(basicUrl, args[1], args[2]);
+        Services service = new Services(metaModel, new V1APIConnector(basicUrl + "/rest-1.v1/", config));
 		
 		Query query = new Query(metaModel.getAssetType(args[3]));
 		

@@ -26,5 +26,10 @@ public final class Credentials implements ICredentials {
         return _config.getV1Password();
     }
 
+    @Override
+    public String getDomain() {
+        return _config.getDomain();
+    }
+
 }
 
