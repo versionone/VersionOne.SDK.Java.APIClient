@@ -53,7 +53,7 @@ public final class Connectors implements IConnectors {
     public V1APIConnector getMetaConnectorWithProxy() throws URISyntaxException {
         if (_metaConnectorWithProxy != null) return _metaConnectorWithProxy;
         _metaConnectorWithProxy = new V1APIConnector(
-                _urls.getV1Url(),
+        		_urls.getMetaUrl(),
                 _credentials.getV1UserName(),
                 _credentials.getV1Password(),
                 getProxyProvider());
