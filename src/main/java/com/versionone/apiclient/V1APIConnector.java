@@ -15,9 +15,8 @@ import java.util.Locale;
 
 /**
  * This class represents a connection to the VersionOne server.
- *
- * @author Jerry D. Odenwelder Jr.
  */
+@SuppressWarnings("restriction")
 public class V1APIConnector implements IAPIConnector {
 
 	private static final String UTF8 = "UTF-8";
@@ -26,13 +25,15 @@ public class V1APIConnector implements IAPIConnector {
 	private String _url = null;
 	private ProxyProvider proxy = null;
 	private final Map<String, HttpURLConnection> _requests = new HashMap<String, HttpURLConnection>();
+	
 	/**
-	 * Additional headers for request to the VersionOne server
+	 * Additional headers for request to the VersionOne server.
 	 */
 	public final Map<String, String> customHttpHeaders = new HashMap<String, String>();
 
 	/**
 	 * Create Connection.
+	 * 
 	 * @param url - URL to VersionOne system.
 	 * @param userName - Name of the user wishing to connect.
 	 * @param password - password of the user wishing to connect.
@@ -43,12 +44,14 @@ public class V1APIConnector implements IAPIConnector {
 
 	/**
 	 * Create Connection.
+	 * 
 	 * @param url - URL to VersionOne system.
 	 * @param userName - Name of the user wishing to connect.
 	 * @param password - password of the user wishing to connect.
 	 * @param proxy	- proxy for connection.
 	 */
 	public V1APIConnector(String url, String userName, String password, ProxyProvider proxy) {
+		
 		this.proxy = proxy;
 		_url = url;
 		cookiesManager = CookiesManager.getCookiesManager(url, userName, password);
@@ -61,7 +64,7 @@ public class V1APIConnector implements IAPIConnector {
 	}
 
 	/**
-	 * Returns cookies jar
+	 * Returns a cookies jar.
 	 */
 	public ICookiesManager getCookiesJar() {
 		return cookiesManager;
@@ -69,6 +72,7 @@ public class V1APIConnector implements IAPIConnector {
 
 	/**
 	 * Create a connection with only the URL.
+	 * 
 	 * Use this constructor to access MetaData, which does not require or if you want to use
 	 * have Windows Integrated Authentication or
 	 * MetaData does not require the use of credentials
@@ -94,7 +98,7 @@ public class V1APIConnector implements IAPIConnector {
 	}
 
 	/**
-	 * Read data from the root of the connection
+	 * Read data from the root of the connection.
 	 *
 	 * Note: Caller is responsible for closing the returned stream
 	 *
@@ -106,7 +110,7 @@ public class V1APIConnector implements IAPIConnector {
 	}
 
 	/**
-	 * Read data from the path provided
+	 * Read data from the path provided.
 	 *
 	 * Note: Caller is responsible for closing the returned stream
 	 *
@@ -115,9 +119,11 @@ public class V1APIConnector implements IAPIConnector {
 	 * @throws IOException
 	 */
 	public Reader getData(String path) throws ConnectionException {
+		
 		HttpURLConnection connection = createConnection(_url + path);
 		try {
 			switch (connection.getResponseCode()) {
+			
 			case 200:
 				cookiesManager.addCookie(connection.getHeaderFields());
 				return new InputStreamReader(connection.getInputStream(), UTF8);
@@ -130,18 +136,16 @@ public class V1APIConnector implements IAPIConnector {
 				message.append(connection.getResponseCode());
 				message.append(" from URL ");
 				message.append(connection.getURL().toString());
-				throw new ConnectionException(message.toString(), connection
-						.getResponseCode());
-			}
+				throw new ConnectionException(message.toString(), connection.getResponseCode());
+				}
 			}
 		} catch (IOException e) {
-			throw new ConnectionException("Error processing result from URL "
-					+ path, e);
+			throw new ConnectionException("Error processing result from URL " + path, e);
 		}
 	}
 
 	/**
-	 * Send data to the path
+	 * Send data to the path.
 	 *
 	 * Note: Caller is responsible for closing the returned stream
 	 *
@@ -151,11 +155,13 @@ public class V1APIConnector implements IAPIConnector {
 	 * @throws IOException
 	 */
 	public Reader sendData(String path, String data) throws ConnectionException {
+		
 		HttpURLConnection connection = createConnection(_url + path);
 		connection.setDoOutput(true);
 		connection.setRequestProperty("Content-Type", "text/xml");
 		OutputStreamWriter stream = null;
 		InputStream resultStream = null;
+		
 		try {
 			connection.setRequestMethod("POST");
 			stream = new OutputStreamWriter(connection.getOutputStream(), UTF8);
@@ -170,8 +176,7 @@ public class V1APIConnector implements IAPIConnector {
 			} catch (Exception e1) {
 				code = -1;
 			}
-			throw new ConnectionException("Error writing to output stream",
-					code, e);
+			throw new ConnectionException("Error writing to output stream", code, e);
 		} finally {
 			if (stream != null) {
 				try {
@@ -185,21 +190,20 @@ public class V1APIConnector implements IAPIConnector {
 	}
 
 	/**
-	 * Beginning HTTP request to server.
-	 * <p/>
+	 * Beginning HTTP POST request to the server.
+	 * 
 	 * To begin POST request contentType parameter must be defined. If
 	 * contentType parameter is null, GET request used. It's obligatory to
 	 * complete request and get response by {@link #endRequest(String)} method
 	 * with the same path parameter.
 	 *
 	 * @param path        path to the data on server.
-	 * @param contentType Content-type of output content. If null - GET request
-	 *                    used.
+	 * @param contentType Content-type of output content. If null - GET request used.
 	 * @return the stream for writing POST data.
 	 * @see #endRequest(String)
 	 */
-	public OutputStream beginRequest(String path, String contentType)
-			throws ConnectionException {
+	public OutputStream beginRequest(String path, String contentType) throws ConnectionException {
+		
 		OutputStream outputStream = null;
 		HttpURLConnection req = createConnection(_url + path);
 		if (contentType != null)
@@ -212,8 +216,7 @@ public class V1APIConnector implements IAPIConnector {
 				outputStream = req.getOutputStream();
 			} catch (IOException e) {
 				req.disconnect();
-				throw new ConnectionException("Error writing to output stream",
-						e);
+				throw new ConnectionException("Error writing to output stream", e);
 			}
 		_requests.put(path, req);
 
@@ -228,6 +231,7 @@ public class V1APIConnector implements IAPIConnector {
 	 * @see #beginRequest(String, String)
 	 */
 	public InputStream endRequest(String path) throws ConnectionException {
+		
 		InputStream resultStream = null;
 		HttpURLConnection req = _requests.remove(path);
 
@@ -240,19 +244,17 @@ public class V1APIConnector implements IAPIConnector {
 			cookiesManager.addCookie(req.getHeaderFields());
 		} catch (IOException e) {
 			try {
-				throw new ConnectionException("Error writing to output stream",
-						req.getResponseCode(), e);
+				throw new ConnectionException("Error writing to output stream", req.getResponseCode(), e);
 			} catch (IOException e1) {
-				throw new ConnectionException("Error writing to output stream",
-						e);
+				throw new ConnectionException("Error writing to output stream", e);
 			}
 		}
 
 		return resultStream;
 	}
 
-	private HttpURLConnection createConnection(String path)
-			throws ConnectionException {
+	private HttpURLConnection createConnection(String path) throws ConnectionException {
+		
 		HttpURLConnection request;
 		try {
 			URL url = new URL(path);
@@ -281,11 +283,6 @@ public class V1APIConnector implements IAPIConnector {
 		}
 	}
 
-	/**
-	 * Authenticator
-	 * @author Jerry D. Odenwelder Jr.
-	 *
-	 */
 	private class Credentials extends Authenticator {
 
 		PasswordAuthentication _value;
@@ -299,15 +296,13 @@ public class V1APIConnector implements IAPIConnector {
 			if (null == password) {
 				_value = new PasswordAuthentication(userName, "".toCharArray());
 			} else {
-				_value = new PasswordAuthentication(userName, password
-						.toCharArray());
+				_value = new PasswordAuthentication(userName, password.toCharArray());
 			}
 		}
 
 		@Override
 		public String toString() {
-			return _value.getUserName() + ":"
-					+ String.valueOf(_value.getPassword());
+			return _value.getUserName() + ":" + String.valueOf(_value.getPassword());
 		}
 	}
 }

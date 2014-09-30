@@ -6,7 +6,6 @@ import java.io.OutputStream;
 
 /**
  * Interface that Connector classes must implement
- * @author jerry
  */
 public interface IAPIConnector {
 
@@ -16,7 +15,7 @@ public interface IAPIConnector {
 	 * Note: Caller is responsible for closing the returned stream
 	 *
 	 * @return the stream for reading data
-         * @throws ConnectionException if any connection problems occur
+     * @throws ConnectionException if any connection problems occur
 	 */
 	Reader getData() throws ConnectionException;
 
@@ -27,7 +26,7 @@ public interface IAPIConnector {
 	 *
 	 * @param path
 	 * @return the stream for reading data
-         * @throws ConnectionException if any connection problems occur
+     * @throws ConnectionException if any connection problems occur
 	 */
 	Reader getData(String path) throws ConnectionException;
 
@@ -49,7 +48,7 @@ public interface IAPIConnector {
 	 * @param path path to the data on server
 	 * @param contentType Content-type of HTTP header
 	 * @return the stream for writing data
-         * @throws ConnectionException if any connection problems occur
+     * @throws ConnectionException if any connection problems occur
 	 */
 	OutputStream beginRequest(String path, String contentType) throws ConnectionException;
 
@@ -58,7 +57,7 @@ public interface IAPIConnector {
 	 *
 	 * @param path path to the data on server
 	 * @return the stream for reading data
-         * @throws ConnectionException if any connection problems occur
+     * @throws ConnectionException if any connection problems occur
 	 */
 	InputStream endRequest(String path) throws ConnectionException;
 }
