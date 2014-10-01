@@ -41,12 +41,12 @@
 			<email>greg.johnson@versionone.com</email>
 		</developer>
 		<developer>
-			<name>Valentin Plechuc</name>
-			<email>vplechuc@velocitypartners.net</email>
-		</developer>
-		<developer>
 			<name>Acey Bunch</name>
 			<email>acey.bunch@versionone.com</email>
+		</developer>
+		<developer>
+			<name>Valentin Plechuc</name>
+			<email>vplechuc@velocitypartners.net</email>
 		</developer>
 	</developers>
 	<properties>
@@ -54,18 +54,19 @@
 		<github.global.server>github</github.global.server>
 		<VERSION_NUMBER>${project.version}</VERSION_NUMBER>
 	</properties>
+	<!-- <distributionManagement> <snapshotRepository> <id>BUILDSERVER1</id> 
+		<name>BUILDSERVER1-snapshots</name> <url>http://buildserver1.corp.versionone.net:8081/artifactory/libs-snapshot-local</url> 
+		</snapshotRepository> <repository> <id>BUILDSERVER1</id> <name>BUILDSERVER1-releases</name> 
+		<url>http://buildserver1.corp.versionone.net:8081/artifactory/libs-release-local</url> 
+		</repository> </distributionManagement> -->
 	<distributionManagement>
 		<snapshotRepository>
-			<id>BUILDSERVER1</id>
-			<name>BUILDSERVER1-snapshots</name>
-			<url>http://buildserver1.corp.versionone.net:8081/artifactory/libs-snapshot-local</url>
+			<id>versionone</id>
+			<name>libs-snapshots-local</name>
+			<url>http://versionone.artifactoryonline.com/versionone/libs-snapshots-local</url>
 		</snapshotRepository>
-		<repository>
-			<id>BUILDSERVER1</id>
-			<name>BUILDSERVER1-releases</name>
-			<url>http://buildserver1.corp.versionone.net:8081/artifactory/libs-release-local</url>
-		</repository>
 	</distributionManagement>
+
 	<build>
 		<plugins>
 			<plugin>
@@ -75,6 +76,11 @@
 					<source>1.7</source>
 					<target>1.7</target>
 				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-deploy-plugin</artifactId>
+				<version>2.7</version>
 			</plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
@@ -248,16 +254,26 @@
 		</plugins>
 	</reporting>
 	<repositories>
+
 		<repository>
 			<id>java.net-Public</id>
 			<name>Maven Java Net Snapshots and Releases</name>
 			<url>https://maven.java.net/content/groups/public/</url>
 		</repository>
+
 		<repository>
 			<id>repository.jboss.org-public</id>
 			<name>JBoss.org Maven repository</name>
 			<url>https://repository.jboss.org/nexus/content/groups/public</url>
 		</repository>
+
+		<repository>
+			<snapshots />
+			<id>versionone</id>
+			<name>clarity-libs-private</name>
+			<url>http://versionone.artifactoryonline.com/versionone/simple/clarity-libs-private</url>
+		</repository>
+
 	</repositories>
 	<dependencies>
 		<dependency>
