@@ -4,7 +4,7 @@
 
 	<groupId>com.versionone</groupId>
 	<artifactId>VersionOne.SDK.Java.APIClient</artifactId>
-	<version>13.0.3</version>
+	<version>13.0.3-SNAPSHOT</version>
 	<packaging>jar</packaging>
 
 	<name>VersionOne.SDK.Java.APIClient</name>
@@ -61,6 +61,11 @@
 			<name>versionone-releases</name>
 			<url>http://versionone.artifactoryonline.com/versionone/libs-releases-local</url>
 		</repository>
+		<snapshotRepository>
+			<id>versionone</id>
+			<name>libs-snapshots-local</name>
+			<url>http://versionone.artifactoryonline.com/versionone/libs-snapshots-local</url>
+		</snapshotRepository>
 	</distributionManagement>
 
 	<build>
