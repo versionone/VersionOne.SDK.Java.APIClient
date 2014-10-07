@@ -269,6 +269,7 @@ public class V1APIConnector implements IAPIConnector {
 			request.setRequestProperty("Accept-Language", localeName);
 			cookiesManager.addCookiesToRequest(request);
 			addHeaders(request);
+			addUserAgent(request);
 		} catch (MalformedURLException e) {
 			throw new ConnectionException("Invalid URL", e);
 		} catch (IOException e) {
@@ -281,6 +282,15 @@ public class V1APIConnector implements IAPIConnector {
 		for (String key : customHttpHeaders.keySet()) {
 			request.setRequestProperty(key, customHttpHeaders.get(key));
 		}
+	}
+	
+	private void addUserAgent(HttpURLConnection request) {
+		//set user agent info
+		final String VERSIONONESDKJAVAAPICLIENT ="VersionOne.SDK.Java.APIClient";
+		final String API_VERSION ="13.0.1";
+		
+//		String currentUserAgent = request.getRequestProperty("User-Agent");
+//		request.setRequestProperty("User-Agent", VERSIONONESDKJAVAAPICLIENT + "/" + API_VERSION);
 	}
 
 	private class Credentials extends Authenticator {
