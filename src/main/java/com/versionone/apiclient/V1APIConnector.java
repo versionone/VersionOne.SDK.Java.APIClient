@@ -289,8 +289,8 @@ public class V1APIConnector implements IAPIConnector {
 		final String VERSIONONESDKJAVAAPICLIENT ="VersionOne.SDK.Java.APIClient";
 		final String API_VERSION ="13.0.1";
 		
-//		String currentUserAgent = request.getRequestProperty("User-Agent");
-		request.addRequestProperty("User-Agent", VERSIONONESDKJAVAAPICLIENT + "/" + API_VERSION);
+		String userAgentString = "Java/" + System.getProperty("java.version") + ";" + VERSIONONESDKJAVAAPICLIENT + "/" + API_VERSION;
+		request.setRequestProperty("User-Agent", userAgentString);
 	}
 
 	private class Credentials extends Authenticator {
