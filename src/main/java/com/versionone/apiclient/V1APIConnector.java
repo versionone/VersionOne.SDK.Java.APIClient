@@ -1,17 +1,24 @@
 package com.versionone.apiclient;
 
-import sun.net.www.protocol.http.AuthCacheImpl;
-import sun.net.www.protocol.http.AuthCacheValue;
-
-import java.io.*;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
+import java.io.Reader;
 import java.net.Authenticator;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.PasswordAuthentication;
 import java.net.URL;
 import java.util.HashMap;
-import java.util.Map;
 import java.util.Locale;
+import java.util.Map;
+
+import sun.net.www.protocol.http.AuthCacheImpl;
+import sun.net.www.protocol.http.AuthCacheValue;
+
+import com.jcabi.manifests.Manifests;
 
 /**
  * This class represents a connection to the VersionOne server.
@@ -286,10 +293,10 @@ public class V1APIConnector implements IAPIConnector {
 	
 	private void addUserAgent(HttpURLConnection request) {
 		//set user agent info
-		final String VERSIONONESDKJAVAAPICLIENT ="VersionOne.SDK.Java.APIClient";
-		final String API_VERSION ="13.0.1";
+		final String VERSIONONESDKJAVAAPICLIENT = Manifests.read("Implementation-Title") + "/" +Manifests.read("Implementation-Version");
+//		final String API_VERSION ="13.0.1";
 		
-		String userAgentString = "Java/" + System.getProperty("java.version") + ";" + VERSIONONESDKJAVAAPICLIENT + "/" + API_VERSION;
+		String userAgentString = "Java/" + System.getProperty("java.version") + ";" + VERSIONONESDKJAVAAPICLIENT ;
 		request.setRequestProperty("User-Agent", userAgentString);
 	}
 
