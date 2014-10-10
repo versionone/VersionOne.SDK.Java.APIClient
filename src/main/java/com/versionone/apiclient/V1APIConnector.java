@@ -81,14 +81,8 @@ public class V1APIConnector implements IAPIConnector {
 	 * @return String
 	 */
 	private String getUserAgentHeader() {
-		
-		//final String JAVA_SDK_HEADER = "VersionOne.SDK.Java.APIClient/13.0.1";
-		//final String JAVA_SDK_HEADER = Manifests.read("Implementation-Title") + "/" + Manifests.read("Implementation-Version");
-		
 		Package p = this.getClass().getPackage();
-		final String JAVA_SDK_HEADER = p.getImplementationTitle() + "/" + p.getImplementationVersion(); 
-		
-		return "Java/" + System.getProperty("java.version") + " " + JAVA_SDK_HEADER ;
+		return "Java/" + System.getProperty("java.version") + " " + p.getImplementationTitle() + "/" + p.getImplementationVersion();
 	}
 
 	/**
