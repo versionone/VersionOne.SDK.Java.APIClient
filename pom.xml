@@ -272,7 +272,7 @@
 	</reporting>
 
 	<dependencies>
-	<!-- Allows to read Manifest Information -->
+	    <!-- Allows to read Manifest Information -->
 		<dependency>
 			<groupId>com.jcabi</groupId>
 			<artifactId>jcabi-manifests</artifactId>

@@ -18,8 +18,6 @@ import java.util.Map;
 import sun.net.www.protocol.http.AuthCacheImpl;
 import sun.net.www.protocol.http.AuthCacheValue;
 
-import com.jcabi.manifests.Manifests;
-
 /**
  * This class represents a connection to the VersionOne server.
  */
@@ -38,6 +36,11 @@ public class V1APIConnector implements IAPIConnector {
 	 */
 	public final Map<String, String> customHttpHeaders = new HashMap<String, String>();
 
+	/**
+	 * Additional User-Agent header for request to the VersionOne server.
+	 */
+	private String _user_agent_header = "";
+	
 	/**
 	 * Create Connection.
 	 * 
@@ -68,6 +71,24 @@ public class V1APIConnector implements IAPIConnector {
 			AuthCacheValue.setAuthCache(new AuthCacheImpl());
 			Authenticator.setDefault(new Credentials(userName, password));
 		}
+		
+		_user_agent_header = getUserAgentHeader();
+	}
+
+	/**
+	 * Get the value to use for the custom user-agent header.
+	 * 
+	 * @return String
+	 */
+	private String getUserAgentHeader() {
+		
+		//final String JAVA_SDK_HEADER = "VersionOne.SDK.Java.APIClient/13.0.1";
+		//final String JAVA_SDK_HEADER = Manifests.read("Implementation-Title") + "/" + Manifests.read("Implementation-Version");
+		
+		Package p = this.getClass().getPackage();
+		final String JAVA_SDK_HEADER = p.getImplementationTitle() + "/" + p.getImplementationVersion(); 
+		
+		return "Java/" + System.getProperty("java.version") + " " + JAVA_SDK_HEADER ;
 	}
 
 	/**
@@ -147,7 +168,7 @@ public class V1APIConnector implements IAPIConnector {
 				}
 			}
 		} catch (IOException e) {
-			throw new ConnectionException("Error processing result from URL " + path, e);
+			throw new ConnectionException("Error processing result from URL " + _url + path, e);
 		}
 	}
 
@@ -274,9 +295,9 @@ public class V1APIConnector implements IAPIConnector {
             String localeName = Locale.getDefault().toString();
             localeName = localeName.replace("_", "-");
 			request.setRequestProperty("Accept-Language", localeName);
+			request.setRequestProperty("User-Agent", _user_agent_header);
 			cookiesManager.addCookiesToRequest(request);
 			addHeaders(request);
-			addUserAgent(request);
 		} catch (MalformedURLException e) {
 			throw new ConnectionException("Invalid URL", e);
 		} catch (IOException e) {
@@ -291,15 +312,6 @@ public class V1APIConnector implements IAPIConnector {
 		}
 	}
 	
-	private void addUserAgent(HttpURLConnection request) {
-		//set user agent info
-		final String VERSIONONESDKJAVAAPICLIENT = Manifests.read("Implementation-Title") + "/" +Manifests.read("Implementation-Version");
-//		final String API_VERSION ="13.0.1";
-		
-		String userAgentString = "Java/" + System.getProperty("java.version") + ";" + VERSIONONESDKJAVAAPICLIENT ;
-		request.setRequestProperty("User-Agent", userAgentString);
-	}
-
 	private class Credentials extends Authenticator {
 
 		PasswordAuthentication _value;
