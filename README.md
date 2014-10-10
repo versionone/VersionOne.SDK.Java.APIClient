@@ -1,5 +1,5 @@
 # VersionOne SDK.Java
-Copyright (c) 2008-2013 VersionOne, Inc.
+Copyright (c) 2008-2014 VersionOne, Inc.
 All rights reserved.
 
 For developers who have an itch that VersionOne doesn't scratch, the 
