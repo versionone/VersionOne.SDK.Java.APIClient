@@ -12,7 +12,8 @@ import java.util.List;
  *
  */
 public class TextBuilder {
-	@SuppressWarnings("unchecked")
+	
+	@SuppressWarnings("rawtypes")
 	private static final Class[] PARAMETERS = new Class[]{Object.class};
 
 	public static final Delegator STRINGIZER_DELEGATE = new Delegator(PARAMETERS,String.class);
