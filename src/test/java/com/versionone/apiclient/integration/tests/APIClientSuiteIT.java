@@ -13,7 +13,7 @@ import org.junit.runners.Suite;
 
 //NOTE: Add classes here to include in integration test run using Maven "verify" goal.
 @Suite.SuiteClasses({
-	APIClient_Connection.class 
+//	APIClient_Connection.class, 
 //	APIClient_CRUDTest.class, 
 //	APIClient_ErrorHandlingTest.class
 //	APIClient_QueryTest.class

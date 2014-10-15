@@ -15,9 +15,6 @@ import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 
-
-
-
 import org.apache.commons.lang3.StringUtils;
 
 import sun.net.www.protocol.http.AuthCacheImpl;
@@ -89,7 +86,7 @@ public class V1APIConnector implements IAPIConnector {
 			Authenticator.setDefault(new Credentials(userName, password));
 		}
 
-		_user_agent_header = setUserAgent();
+		_user_agent_header = setUserAgentHeader();
 	}
 
 
@@ -98,7 +95,7 @@ public class V1APIConnector implements IAPIConnector {
 	 * 
 	 * @return String
 	 */
-	private String setUserAgent() {
+	private String setUserAgentHeader() {
 		String header = "";
 		Package p = this.getClass().getPackage();
 	
@@ -107,17 +104,21 @@ public class V1APIConnector implements IAPIConnector {
 		if (StringUtils.isNotBlank(_app_name) && StringUtils.isNotBlank(_app_version)){
 			header = header + " " + _app_name+ "/" + _app_version;
 		}
+		
+//		if ((null != _app_name) && (null != _app_version)){
+//			header = header + " " + _app_name+ "/" + _app_version;
+//		}
 
 		return header;
 	}
 	
 	/**
-	 * Allows you to define the name and version of your App to be added to 
-	 * the headers
+	 * Allows you to define the name and version of your application to be added to the user-agent header.
+	 * 
 	 * @param name
 	 * @param version
 	 */
-	public static void setNameAnVersion(String name, String version) {
+	public static void setUserAgent(String name, String version) {
 		_app_name = name;
 		_app_version =  version;
 	}
