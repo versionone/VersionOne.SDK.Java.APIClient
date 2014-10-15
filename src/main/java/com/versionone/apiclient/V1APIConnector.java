@@ -15,6 +15,11 @@ import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 
+
+
+
+import org.apache.commons.lang3.StringUtils;
+
 import sun.net.www.protocol.http.AuthCacheImpl;
 import sun.net.www.protocol.http.AuthCacheValue;
 
@@ -30,7 +35,7 @@ public class V1APIConnector implements IAPIConnector {
 	private String _url = null;
 	private ProxyProvider proxy = null;
 	private final Map<String, HttpURLConnection> _requests = new HashMap<String, HttpURLConnection>();
-	
+
 	/**
 	 * Additional headers for request to the VersionOne server.
 	 */
@@ -40,13 +45,20 @@ public class V1APIConnector implements IAPIConnector {
 	 * Additional User-Agent header for request to the VersionOne server.
 	 */
 	private String _user_agent_header = "";
-	
+
+	private static String _app_name;
+
+	private static String _app_version;
+
 	/**
 	 * Create Connection.
 	 * 
-	 * @param url - URL to VersionOne system.
-	 * @param userName - Name of the user wishing to connect.
-	 * @param password - password of the user wishing to connect.
+	 * @param url
+	 *            - URL to VersionOne system.
+	 * @param userName
+	 *            - Name of the user wishing to connect.
+	 * @param password
+	 *            - password of the user wishing to connect.
 	 */
 	public V1APIConnector(String url, String userName, String password) {
 		this(url, userName, password, null);
@@ -55,13 +67,18 @@ public class V1APIConnector implements IAPIConnector {
 	/**
 	 * Create Connection.
 	 * 
-	 * @param url - URL to VersionOne system.
-	 * @param userName - Name of the user wishing to connect.
-	 * @param password - password of the user wishing to connect.
-	 * @param proxy	- proxy for connection.
+	 * @param url
+	 *            - URL to VersionOne system.
+	 * @param userName
+	 *            - Name of the user wishing to connect.
+	 * @param password
+	 *            - password of the user wishing to connect.
+	 * @param proxy
+	 *            - proxy for connection. it is not used ??
+	 *            
 	 */
 	public V1APIConnector(String url, String userName, String password, ProxyProvider proxy) {
-		
+
 		this.proxy = proxy;
 		_url = url;
 		cookiesManager = CookiesManager.getCookiesManager(url, userName, password);
@@ -71,18 +88,38 @@ public class V1APIConnector implements IAPIConnector {
 			AuthCacheValue.setAuthCache(new AuthCacheImpl());
 			Authenticator.setDefault(new Credentials(userName, password));
 		}
-		
-		_user_agent_header = getUserAgentHeader();
+
+		_user_agent_header = setUserAgent();
 	}
 
+
 	/**
-	 * Get the value to use for the custom user-agent header.
+	 * Set the value to use for the custom user-agent header.
 	 * 
 	 * @return String
 	 */
-	private String getUserAgentHeader() {
+	private String setUserAgent() {
+		String header = "";
 		Package p = this.getClass().getPackage();
-		return "Java/" + System.getProperty("java.version") + " " + p.getImplementationTitle() + "/" + p.getImplementationVersion();
+	
+		header = "Java/" + System.getProperty("java.version") + " " + p.getImplementationTitle() + "/" + p.getImplementationVersion();
+		
+		if (StringUtils.isNotBlank(_app_name) && StringUtils.isNotBlank(_app_version)){
+			header = header + " " + _app_name+ "/" + _app_version;
+		}
+
+		return header;
+	}
+	
+	/**
+	 * Allows you to define the name and version of your App to be added to 
+	 * the headers
+	 * @param name
+	 * @param version
+	 */
+	public static void setNameAnVersion(String name, String version) {
+		_app_name = name;
+		_app_version =  version;
 	}
 
 	/**
@@ -95,25 +132,24 @@ public class V1APIConnector implements IAPIConnector {
 	/**
 	 * Create a connection with only the URL.
 	 * 
-	 * Use this constructor to access MetaData, which does not require or if you want to use
-	 * have Windows Integrated Authentication or
-	 * MetaData does not require the use of credentials
+	 * Use this constructor to access MetaData, which does not require or if you want to use have Windows Integrated
+	 * Authentication or MetaData does not require the use of credentials
 	 *
-	 * @param url - Complete URL to VersionOne system
+	 * @param url
+	 *            - Complete URL to VersionOne system
 	 */
 	public V1APIConnector(String url) {
 		this(url, null, null);
 	}
 
-
 	/**
-	 * Create a connection with only the URL and proxy.
-	 * Use this constructor to access MetaData, which does not require or if you want to use
-	 * have Windows Integrated Authentication or
-	 * MetaData does not require the use of credentials
+	 * Create a connection with only the URL and proxy. Use this constructor to access MetaData, which does not require
+	 * or if you want to use have Windows Integrated Authentication or MetaData does not require the use of credentials
 	 *
-	 * @param url - Complete URL to VersionOne system
-	 * @param proxy - Proxy for connection.
+	 * @param url
+	 *            - Complete URL to VersionOne system
+	 * @param proxy
+	 *            - Proxy for connection.
 	 */
 	public V1APIConnector(String url, ProxyProvider proxy) {
 		this(url, null, null, proxy);
@@ -141,11 +177,11 @@ public class V1APIConnector implements IAPIConnector {
 	 * @throws IOException
 	 */
 	public Reader getData(String path) throws ConnectionException {
-		
+
 		HttpURLConnection connection = createConnection(_url + path);
 		try {
 			switch (connection.getResponseCode()) {
-			
+
 			case 200:
 				cookiesManager.addCookie(connection.getHeaderFields());
 				return new InputStreamReader(connection.getInputStream(), UTF8);
@@ -159,7 +195,7 @@ public class V1APIConnector implements IAPIConnector {
 				message.append(" from URL ");
 				message.append(connection.getURL().toString());
 				throw new ConnectionException(message.toString(), connection.getResponseCode());
-				}
+			}
 			}
 		} catch (IOException e) {
 			throw new ConnectionException("Error processing result from URL " + _url + path, e);
@@ -177,13 +213,13 @@ public class V1APIConnector implements IAPIConnector {
 	 * @throws IOException
 	 */
 	public Reader sendData(String path, String data) throws ConnectionException {
-		
+
 		HttpURLConnection connection = createConnection(_url + path);
 		connection.setDoOutput(true);
 		connection.setRequestProperty("Content-Type", "text/xml");
 		OutputStreamWriter stream = null;
 		InputStream resultStream = null;
-		
+
 		try {
 			connection.setRequestMethod("POST");
 			stream = new OutputStreamWriter(connection.getOutputStream(), UTF8);
@@ -204,7 +240,7 @@ public class V1APIConnector implements IAPIConnector {
 				try {
 					stream.close();
 				} catch (Exception e) {
-					//Do nothing
+					// Do nothing
 				}
 			}
 		}
@@ -214,18 +250,19 @@ public class V1APIConnector implements IAPIConnector {
 	/**
 	 * Beginning HTTP POST request to the server.
 	 * 
-	 * To begin POST request contentType parameter must be defined. If
-	 * contentType parameter is null, GET request used. It's obligatory to
-	 * complete request and get response by {@link #endRequest(String)} method
-	 * with the same path parameter.
+	 * To begin POST request contentType parameter must be defined. If contentType parameter is null, GET request used.
+	 * It's obligatory to complete request and get response by {@link #endRequest(String)} method with the same path
+	 * parameter.
 	 *
-	 * @param path        path to the data on server.
-	 * @param contentType Content-type of output content. If null - GET request used.
+	 * @param path
+	 *            path to the data on server.
+	 * @param contentType
+	 *            Content-type of output content. If null - GET request used.
 	 * @return the stream for writing POST data.
 	 * @see #endRequest(String)
 	 */
 	public OutputStream beginRequest(String path, String contentType) throws ConnectionException {
-		
+
 		OutputStream outputStream = null;
 		HttpURLConnection req = createConnection(_url + path);
 		if (contentType != null)
@@ -248,12 +285,13 @@ public class V1APIConnector implements IAPIConnector {
 	/**
 	 * Completing HTTP request and getting response.
 	 *
-	 * @param path path to the data on server.
+	 * @param path
+	 *            path to the data on server.
 	 * @return the response stream for reading data.
 	 * @see #beginRequest(String, String)
 	 */
 	public InputStream endRequest(String path) throws ConnectionException {
-		
+
 		InputStream resultStream = null;
 		HttpURLConnection req = _requests.remove(path);
 
@@ -276,7 +314,7 @@ public class V1APIConnector implements IAPIConnector {
 	}
 
 	private HttpURLConnection createConnection(String path) throws ConnectionException {
-		
+
 		HttpURLConnection request;
 		try {
 			URL url = new URL(path);
@@ -286,8 +324,8 @@ public class V1APIConnector implements IAPIConnector {
 				request = (HttpURLConnection) url.openConnection(proxy.getProxyObject());
 				proxy.addAuthorizationToHeader(request);
 			}
-            String localeName = Locale.getDefault().toString();
-            localeName = localeName.replace("_", "-");
+			String localeName = Locale.getDefault().toString();
+			localeName = localeName.replace("_", "-");
 			request.setRequestProperty("Accept-Language", localeName);
 			request.setRequestProperty("User-Agent", _user_agent_header);
 			cookiesManager.addCookiesToRequest(request);
@@ -305,7 +343,7 @@ public class V1APIConnector implements IAPIConnector {
 			request.setRequestProperty(key, customHttpHeaders.get(key));
 		}
 	}
-	
+
 	private class Credentials extends Authenticator {
 
 		PasswordAuthentication _value;
