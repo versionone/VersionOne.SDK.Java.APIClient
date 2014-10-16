@@ -83,6 +83,25 @@
 					</archive>
 				</configuration>
 			</plugin>
+
+			<!-- adds dependecies to the final jar -->
+			<plugin>
+				<artifactId>maven-assembly-plugin</artifactId>
+				<configuration>
+					<descriptorRefs>
+						<descriptorRef>jar-with-dependencies</descriptorRef>
+					</descriptorRefs>
+				</configuration>
+				<executions>
+					<execution>
+						<phase>package</phase>
+						<goals>
+							<goal>single</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+
 			<plugin>
 				<artifactId>maven-compiler-plugin</artifactId>
 				<version>3.1</version>
@@ -299,4 +318,5 @@
 			<version>3.0</version>
 		</dependency>
 	</dependencies>
+	
 </project>
