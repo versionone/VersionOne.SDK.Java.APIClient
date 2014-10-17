@@ -16,13 +16,13 @@ import org.junit.runners.Suite;
 //	APIClient_Connection.class, 
 //	APIClient_CRUDTest.class, 
 //	APIClient_ErrorHandlingTest.class
-//	APIClient_QueryTest.class
+	APIClient_Query.class
 //	APIClient_MiscTest.class	
 })
 
 public class APIClientSuiteIT {
 
-	static String instanceUrl;
+	private static String instanceUrl;
 	
 	@BeforeClass
 	public static void beforeRun() throws Exception  {
@@ -55,4 +55,16 @@ public class APIClientSuiteIT {
 		System.out.println("\n*** Ending Integration Test Run ***\n");
 	}
 	
+	/**
+	 * @return the instanceUrl
+	 */
+	public static String getInstanceUrl() {
+		return instanceUrl;
+	}
+
+
+
+
+
+
 }
