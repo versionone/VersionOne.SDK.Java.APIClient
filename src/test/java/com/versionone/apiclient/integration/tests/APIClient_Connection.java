@@ -8,8 +8,6 @@ import java.util.Properties;
 
 import org.junit.Test;
 
-import com.versionone.apiclient.IMetaModel;
-import com.versionone.apiclient.IServices;
 import com.versionone.apiclient.V1APIConnector;
 
 public class APIClient_Connection {
@@ -22,7 +20,7 @@ public class APIClient_Connection {
 	private static String V1_PASSWORD = "admin";
 
 	private static String DATA_URL ;
-	private static String META_URL ;
+
 
 	/**
 	 * Test basic connection to instance Connections (basic|windows|oauth): BASIC only for now
@@ -43,10 +41,8 @@ public class APIClient_Connection {
 			e.printStackTrace();
 		}
 		DATA_URL =  APIClientSuiteIT.instanceUrl + "/rest-1.v1/";
-		META_URL = APIClientSuiteIT.instanceUrl + "/meta.v1/";
 		try {
 			dataConnector = new V1APIConnector(DATA_URL, V1_USERNAME, V1_PASSWORD);
-			metaConnector = new V1APIConnector(META_URL);
 
 			assertNotNull(dataConnector);
 
