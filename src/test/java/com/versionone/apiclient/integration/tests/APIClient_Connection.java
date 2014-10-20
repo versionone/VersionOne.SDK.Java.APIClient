@@ -12,10 +12,10 @@ public class APIClient_Connection {
 	private static V1APIConnector dataConnector;
 
 
-	private static String V1_USERNAME = "admin";
-	private static String V1_PASSWORD = "admin";
+	private final static String V1_USERNAME = "admin";
+	private final static String V1_PASSWORD = "admin";
 
-	private static String DATA_URL; //=  APIClientSuiteIT.getInstanceUrl() + "/rest-1.v1/";
+	private String data_url; //=  APIClientSuiteIT.getInstanceUrl() + "/rest-1.v1/";
 
 
 	/**
@@ -26,11 +26,11 @@ public class APIClient_Connection {
 	
 
 	@Test
-	public void test_verifyConnectionInstance() throws Exception {
+	public void testVerifyConnectionInstance() throws Exception {
 
-		 DATA_URL =  APIClientSuiteIT.getInstanceUrl() + "/rest-1.v1/";
+		 data_url =  APIClientSuiteIT.getInstanceUrl() + "/rest-1.v1/";
 		try {
-			dataConnector = new V1APIConnector(DATA_URL, V1_USERNAME, V1_PASSWORD);
+			dataConnector = new V1APIConnector(data_url, V1_USERNAME, V1_PASSWORD);
 
 			assertNotNull(dataConnector);
 

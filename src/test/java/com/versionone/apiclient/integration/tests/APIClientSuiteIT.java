@@ -44,7 +44,7 @@ public class APIClientSuiteIT {
 		if (null == instanceUrl) {
 			String message = "No instance URL found. Ending integration test run.";
 			System.out.println(message);
-			throw new RuntimeException(message);
+			throw new Exception(message);
 		}
 		
 	}
