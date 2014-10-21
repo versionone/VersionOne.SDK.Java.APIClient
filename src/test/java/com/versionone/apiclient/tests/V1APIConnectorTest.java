@@ -416,4 +416,26 @@ public class V1APIConnectorTest {
 			return headers;
 		}
 	}
+	
+
+	@Test()
+	public void testUserAgentHeadersWithOutApp() {
+		V1APIConnector testMe = new V1APIConnector(V1_PATH, "admin", "admin");
+		Package p = this.getClass().getPackage();
+		String header = "Java/" + System.getProperty("java.version") + " " + p.getImplementationTitle() + "/" + p.getImplementationVersion();
+		Assert.assertEquals("", header, testMe.getUserAgentHeader());
+	}
+
+	@Test()
+	public void testUserAgentHeadersWithApp() {
+		V1APIConnector testMe = new V1APIConnector(V1_PATH, "admin", "admin");
+		String app_name = "myApp";
+		String app_version = "1.0.0";
+		testMe.setUserAgentHeader(app_name, app_version);
+		Package p = this.getClass().getPackage();
+		String header = "Java/" + System.getProperty("java.version") + " " + p.getImplementationTitle() + "/" + p.getImplementationVersion();
+		header = header + " " + app_name + "/" + app_version;
+		Assert.assertEquals("", header, testMe.getUserAgentHeader());
+	}
+
 }

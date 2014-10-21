@@ -15,7 +15,7 @@ public class APIClient_Connection {
 	private final static String V1_USERNAME = "admin";
 	private final static String V1_PASSWORD = "admin";
 
-	private String data_url; //=  APIClientSuiteIT.getInstanceUrl() + "/rest-1.v1/";
+	private String data_url; 
 
 
 	/**

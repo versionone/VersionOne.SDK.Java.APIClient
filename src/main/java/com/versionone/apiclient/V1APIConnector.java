@@ -72,7 +72,7 @@ public class V1APIConnector implements IAPIConnector {
 	 *            - password of the user wishing to connect.
 	 * @param proxy
 	 *            - proxy for connection. it is not used ??
-	 *            
+	 * 
 	 */
 	public V1APIConnector(String url, String userName, String password, ProxyProvider proxy) {
 
@@ -85,42 +85,36 @@ public class V1APIConnector implements IAPIConnector {
 			AuthCacheValue.setAuthCache(new AuthCacheImpl());
 			Authenticator.setDefault(new Credentials(userName, password));
 		}
-
-		_user_agent_header = setUserAgentHeader();
+		setUserAgentHeader(null, null);
 	}
-
 
 	/**
 	 * Set the value to use for the custom user-agent header.
 	 * 
 	 * @return String
 	 */
-	private String setUserAgentHeader() {
+	public void setUserAgentHeader(String name, String version) {
+		_app_name = name;
+		_app_version = version;
 		String header = "";
 		Package p = this.getClass().getPackage();
-	
-		header = "Java/" + System.getProperty("java.version") + " " + p.getImplementationTitle() + "/" + p.getImplementationVersion();
-		
-		if (StringUtils.isNotBlank(_app_name) && StringUtils.isNotBlank(_app_version)){
-			header = header + " " + _app_name+ "/" + _app_version;
-		}
-		
-//		if ((null != _app_name) && (null != _app_version)){
-//			header = header + " " + _app_name+ "/" + _app_version;
-//		}
 
-		return header;
+		header = "Java/" + System.getProperty("java.version") + " " + p.getImplementationTitle() + "/" + p.getImplementationVersion();
+
+		if (StringUtils.isNotBlank(_app_name) && StringUtils.isNotBlank(_app_version)) {
+			header = header + " " + _app_name + "/" + _app_version;
+		}
+		_user_agent_header = header;
 	}
-	
+
 	/**
-	 * Allows you to define the name and version of your application to be added to the user-agent header.
+	 * get the value to use for the custom user-agent header.
 	 * 
-	 * @param name
-	 * @param version
+	 * @return String
 	 */
-	public static void setUserAgent(String name, String version) {
-		_app_name = name;
-		_app_version =  version;
+	public String getUserAgentHeader() {
+
+		return _user_agent_header;
 	}
 
 	/**

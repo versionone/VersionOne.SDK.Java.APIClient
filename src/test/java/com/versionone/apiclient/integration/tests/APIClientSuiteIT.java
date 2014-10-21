@@ -15,9 +15,9 @@ import org.junit.runners.Suite;
 @Suite.SuiteClasses({
 //	APIClient_Connection.class, 
 //	APIClient_CRUDTest.class, 
-//	APIClient_ErrorHandlingTest.class
-	APIClient_Query.class
-//	APIClient_MiscTest.class	
+//	APIClient_ErrorHandling.class
+//	APIClient_Query.class
+	//APICLient_Misc.class	
 })
 
 public class APIClientSuiteIT {
