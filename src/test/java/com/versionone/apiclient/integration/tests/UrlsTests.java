@@ -11,6 +11,7 @@ import org.junit.Test;
 import com.versionone.apiclient.IUrls;
 import com.versionone.apiclient.Urls;
 
+@Ignore
 public class UrlsTests {
 
     private IUrls _defaultTarget;
