@@ -50,7 +50,6 @@ public class APIClientSuiteIT {
 			System.out.println(message);
 			throw new Exception(message);
 		}
-		
 	}
 	
 	@AfterClass
@@ -61,10 +60,5 @@ public class APIClientSuiteIT {
 	public static String getInstanceUrl() {
 		return instanceUrl;
 	}
-
-
-
-
-
 
 }
