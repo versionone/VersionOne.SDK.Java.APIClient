@@ -1,9 +1,9 @@
 package com.versionone.apiclient;
 
+import java.util.List;
+
 import com.versionone.util.Delegator;
 import com.versionone.util.IDelegate;
-
-import java.util.List;
 
 /**
  * Static methods for text manipulation.
@@ -112,7 +112,7 @@ public class TextBuilder {
 	 * @param seperator - character used to separate each object
 	 * @return String
 	 */
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings("rawtypes")
 	public static String join(List pathParts, String seperator) {
 		return join(pathParts.toArray(), seperator);
 	}
@@ -126,7 +126,7 @@ public class TextBuilder {
 	 * @param stringize - method on object.  All objects in list must declare this method as public.
 	 * @return
 	 */
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings("rawtypes")
 	public static String join(List pathParts, String seperator, IDelegate stringize) {
 		return join(pathParts.toArray(), seperator, stringize);
 	}
