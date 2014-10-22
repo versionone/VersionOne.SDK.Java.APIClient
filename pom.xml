@@ -160,6 +160,7 @@
 						<format>xml</format>
 					</formats>
 				</configuration>
+				<!--  
 				<executions>
 					<execution>
 						<goals>
@@ -168,6 +169,7 @@
 						<phase>test</phase>
 					</execution>
 				</executions>
+				-->
 			</plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
