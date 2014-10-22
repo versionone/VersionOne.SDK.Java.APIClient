@@ -126,7 +126,8 @@ public class EnvironmentContextTests {
         Assert.assertNotNull(config);
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @SuppressWarnings("unused")
+	@Test(expected = IllegalArgumentException.class)
     public void NullModelsAndServicesTest(){
         EnvironmentContext context = new EnvironmentContext(null);
     }
