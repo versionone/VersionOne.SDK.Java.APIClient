@@ -1,4 +1,4 @@
-package com.versionone.apiclient.example;
+package com.versionone.apiclient.documentation.test;
 
 import java.net.URISyntaxException;
 import java.util.ArrayList;
@@ -8,7 +8,24 @@ import java.util.Iterator;
 import java.util.List;
 
 import com.versionone.Oid;
-import com.versionone.apiclient.*;
+import com.versionone.apiclient.APIException;
+import com.versionone.apiclient.Asset;
+import com.versionone.apiclient.AssetState;
+import com.versionone.apiclient.AttributeSelection;
+import com.versionone.apiclient.ConnectionException;
+import com.versionone.apiclient.EnvironmentContext;
+import com.versionone.apiclient.FilterTerm;
+import com.versionone.apiclient.IAssetType;
+import com.versionone.apiclient.IAttributeDefinition;
+import com.versionone.apiclient.IMetaModel;
+import com.versionone.apiclient.IOperation;
+import com.versionone.apiclient.IServices;
+import com.versionone.apiclient.OidException;
+import com.versionone.apiclient.OrderBy;
+import com.versionone.apiclient.Query;
+import com.versionone.apiclient.QueryResult;
+import com.versionone.apiclient.V1APIConnector;
+import com.versionone.apiclient.V1Configuration;
 
 /**
  * This class contains the examples used : the API documentation
