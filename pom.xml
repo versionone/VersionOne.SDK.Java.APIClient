@@ -133,7 +133,7 @@
 				<configuration>
 					<skipTests>false</skipTests>
 					<includes>
-						<include>**/*Test*.java</include>
+						<include>**/*TestSuite.java</include>
 					</includes>
 				</configuration>
 			</plugin>

@@ -13,11 +13,8 @@ import org.junit.runners.Suite;
 
 //NOTE: Add classes here to include in integration test run using Maven "verify" goal.
 @Suite.SuiteClasses({
-//	APIClient_Connection.class, 
-//	APIClient_CRUDTest.class, 
-//	APIClient_ErrorHandling.class
-//	APIClient_Query.class
-	//APICLient_Misc.class	
+	ConnectorTests.class,
+	QueryTests.class
 })
 
 public class APIClientSuiteIT {
@@ -49,15 +46,11 @@ public class APIClientSuiteIT {
 		
 	}
 	
-	
 	@AfterClass
 	public static void afterRun() {
 		System.out.println("\n*** Ending Integration Test Run ***\n");
 	}
 	
-	/**
-	 * @return the instanceUrl
-	 */
 	public static String getInstanceUrl() {
 		return instanceUrl;
 	}

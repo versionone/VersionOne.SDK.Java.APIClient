@@ -2,8 +2,6 @@ package com.versionone.apiclient;
 
 /**
  * Represents the API Version
- * @author jerry
- *
  */
 public class Version implements Comparable<Version>{
 

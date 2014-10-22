@@ -7,14 +7,15 @@ import com.versionone.apiclient.MetaException;
 
 /**
  * AssetType used for testing
- * @author jerry
  */
 class MockAssetType implements IAssetType {
 
 	private String _name = "Mock";
 
 	public MockAssetType() {}
+	
 	public MockAssetType(String name) {_name = name;}
+	
 	public IAttributeDefinition getAttributeDefinition(String name)
 			throws MetaException {
 		// TODO Auto-generated method stub

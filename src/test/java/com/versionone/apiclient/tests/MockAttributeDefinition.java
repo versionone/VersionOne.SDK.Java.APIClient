@@ -7,7 +7,6 @@ import com.versionone.apiclient.MetaException;
 
 /**
  * AttributeType used for testing
- * @author jerry
  */
 class MockAttributeDefinition implements IAttributeDefinition {
 	String name;

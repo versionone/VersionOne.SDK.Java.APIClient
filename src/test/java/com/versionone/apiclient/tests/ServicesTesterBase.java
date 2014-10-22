@@ -14,14 +14,14 @@ public abstract class ServicesTesterBase {
 	
 	protected IMetaModel getMeta() {
 		if (_meta == null)
-			_meta = new MetaModel(new ResponseConnector.XMLResponseConnector(MetaTesterBase.TEST_DATA,"meta.v1/",getServicesTestKeys()), preload());
+			_meta = new MetaModel(new ResponseConnector.XMLResponseConnector(MetaTestBase.TEST_DATA,"meta.v1/",getServicesTestKeys()), preload());
 		return _meta;
 	}
 	
 	private ResponseConnector.XMLResponseConnector _dataConnector;
 	ResponseConnector getDataConnector() {
 			if(_dataConnector == null)
-				_dataConnector = new ResponseConnector.XMLResponseConnector(MetaTesterBase.TEST_DATA, "rest-1.v1/", getServicesTestKeys());
+				_dataConnector = new ResponseConnector.XMLResponseConnector(MetaTestBase.TEST_DATA, "rest-1.v1/", getServicesTestKeys());
 			return _dataConnector;
 	}
 

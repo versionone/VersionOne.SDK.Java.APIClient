@@ -4,7 +4,9 @@ package com.versionone.util;
  * some protected classes. 
  */
 
-import junit.framework.*;
+import junit.framework.Test;
+import junit.framework.TestCase;
+import junit.framework.TestSuite;
 
 /**
  * com.versionone.util.TestDelegate

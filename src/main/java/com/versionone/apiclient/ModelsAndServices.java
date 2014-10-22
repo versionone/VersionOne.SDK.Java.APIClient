@@ -1,8 +1,5 @@
 package com.versionone.apiclient;
 
-import com.versionone.DB;
-
-import java.io.IOException;
 import java.net.URISyntaxException;
 
 public final class ModelsAndServices implements IModelsAndServices  {
