@@ -13,12 +13,12 @@ public class ConfigurationTests {
     private IAPIConfiguration _target;
 
     @Before
-    public void SetUp() throws IOException {
+    public void setup() throws IOException {
         _target = new APIConfiguration();
     }
 
     @Test
-    public void GetV1UrlTest(){
+    public void testGetV1Url(){
         String v1Url = _target.getV1Url();
         Assert.assertTrue(v1Url.length() != 0);
         Assert.assertTrue(v1Url.startsWith("http"));
@@ -26,52 +26,52 @@ public class ConfigurationTests {
     }
 
     @Test
-    public void GetDataUrlTest(){
+    public void testGetDataUrl(){
         String dataUrl = _target.getDataUrl();
         Assert.assertTrue(dataUrl.length() != 0);
         Assert.assertTrue(dataUrl.endsWith("rest-1.v1/"));  //reasonable assumption...for now
     }
 
     @Test
-    public void GetMetaUrlTest(){
+    public void testGetMetaUrl(){
         String metaUrl = _target.getMetaUrl();
         Assert.assertTrue(metaUrl.length() != 0);
         Assert.assertTrue(metaUrl.endsWith("meta.v1/"));  //reasonable assumption...for now
     }
 
     @Test
-    public void GetUserNameTest(){
+    public void testGetUserName(){
         String userName = _target.getV1UserName();
         Assert.assertTrue(userName.length() != 0);
     }
 
     @Test
-    public void GetPasswordTest(){
+    public void testGetPassword(){
         String password = _target.getV1Password();
         Assert.assertTrue(password.length() != 0);
     }
 
     @Test
-    public void GetConfigUrlTest(){
+    public void testGetConfigUrl(){
         String configUrl = _target.getConfigUrl();
         Assert.assertTrue(configUrl.length() != 0);
     }
 
     @Test
-    public void GetProxyUrlTest(){
+    public void testGetProxyUrl(){
         String proxyUrl = _target.getProxyUrl();
         Assert.assertTrue(proxyUrl.length() != 0);
         Assert.assertTrue(proxyUrl.startsWith("http"));
     }
 
     @Test
-    public void GetProxyUserNameTest(){
+    public void testGetProxyUserName(){
         String userName = _target.getProxyUserName();
         Assert.assertTrue(userName.length() != 0);
     }
 
     @Test
-    public void GetProxyPasswordTest(){
+    public void testGetProxyPassword(){
         String password = _target.getProxyPassword();
         Assert.assertTrue(password.length() != 0);
     }

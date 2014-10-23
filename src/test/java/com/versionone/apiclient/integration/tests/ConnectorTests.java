@@ -15,6 +15,10 @@ import com.versionone.apiclient.ICookiesManager;
 import com.versionone.apiclient.ProxyProvider;
 import com.versionone.apiclient.V1APIConnector;
 
+//TODO:
+//		Error: Bad instance URL
+//		Error: Invalid credentials
+
 public class ConnectorTests {
 
 	private static final String V1_PATH = APIClientSuiteIT.getInstanceUrl();

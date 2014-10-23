@@ -22,6 +22,17 @@ import com.versionone.apiclient.Query;
 import com.versionone.apiclient.Services;
 import com.versionone.apiclient.V1APIConnector;
 
+//TODO:
+// Query for single assets
+// Query for multiple assets
+// Query for relations (select)
+// Filter query
+// Find query
+// Sort query
+// Paging query
+// Query history
+// Query "asof"
+
 public class QueryTests {
 	
     private static final String V1_PATH = APIClientSuiteIT.getInstanceUrl();
@@ -98,9 +109,6 @@ public class QueryTests {
 //		}
 //	}
 
-	// Query for multiple assets
-	//same as single assets
-
 	// Query for attributes (select)
 //	@Test
 //	@Ignore
@@ -121,17 +129,8 @@ public class QueryTests {
 //		}
 //	}
 	
-	// Query for relations (select)
-	// Filter query
-	// Find query
-	// Sort query
-	// Paging query
-	// Query history
-	// Query "asof"
-
-
     @Test
-    public void queryStoryByMoment() throws Exception {
+    public void testQueryStoryByMoment() throws Exception {
         Asset storyAsset = createDisposableStory();
         storyAsset.setAttributeValue(nameDef, InitialStoryName);
         storyAsset.setAttributeValue(scopeDef, Oid.fromToken("Scope:0", metaModel));
@@ -154,7 +153,7 @@ public class QueryTests {
     }
 
     @Test
-    public void queryStoryHistoryByMoment() throws Exception {
+    public void testQueryStoryHistoryByMoment() throws Exception {
         Asset storyAsset = createDisposableStory();
         storyAsset.setAttributeValue(nameDef, InitialStoryName);
         storyAsset.setAttributeValue(scopeDef, Oid.fromToken("Scope:0", metaModel));
@@ -177,7 +176,7 @@ public class QueryTests {
     }
 
     @Test
-    public void queryStoryChangesWithInequalityFilter() throws Exception {
+    public void testQueryStoryChangesWithInequalityFilter() throws Exception {
         Asset storyAsset = createDisposableStory();
         storyAsset.setAttributeValue(nameDef, InitialStoryName);
         storyAsset.setAttributeValue(scopeDef, Oid.fromToken("Scope:0", metaModel));

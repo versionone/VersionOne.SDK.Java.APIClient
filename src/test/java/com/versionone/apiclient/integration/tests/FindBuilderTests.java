@@ -12,19 +12,19 @@ public class FindBuilderTests {
     private EnvironmentContext _context;
 
     @Before
-    public void Setup() throws Exception {
+    public void setup() throws Exception {
         _target = new FindBuilder();
         _context = new EnvironmentContext();
     }
 
     @After
-    public void TearDown() {
+    public void tearDown() {
         _context = null;
         _target = null;
     }
 
     @Test
-    public void BuildWithInvalidParametersTest()
+    public void testBuildWithInvalidParameters()
     {
         IAssetType assetType = _context.getMetaModel().getAssetType("Member");
         _target.build(null, null);
@@ -35,7 +35,7 @@ public class FindBuilderTests {
     }
 
     @Test
-    public void BuildWithValidParametersTest()
+    public void testBuildWithValidParameters()
     {
         IAssetType assetType = _context.getMetaModel().getAssetType("Member");
         Query query = new Query(assetType);
@@ -51,7 +51,7 @@ public class FindBuilderTests {
     }
 
     @Test
-    public void QueryStringEscapeTest()
+    public void testQueryStringEscape()
     {
         IAssetType assetType = _context.getMetaModel().getAssetType("Member");
         Query query = new Query(assetType);

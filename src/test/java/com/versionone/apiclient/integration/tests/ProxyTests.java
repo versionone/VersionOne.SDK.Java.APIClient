@@ -21,7 +21,7 @@ import com.versionone.apiclient.QueryResult;
 import com.versionone.apiclient.Services;
 import com.versionone.apiclient.V1APIConnector;
 
-@Ignore("This test required proxy server.")
+@Ignore("This test requires a proxy server.")
 public class ProxyTests {
 
 	private final static String proxyAddress = "http://proxy:3128";
@@ -34,7 +34,7 @@ public class ProxyTests {
 
 
 	@Test
-	public void getProjectListTest() throws URISyntaxException, ConnectionException, APIException, OidException {
+	public void testGetProjectList() throws URISyntaxException, ConnectionException, APIException, OidException {
 		URI proxy = new URI(proxyAddress);
 		ProxyProvider proxyProvider = new ProxyProvider(proxy, proxyUserName, proxyPassword);
 

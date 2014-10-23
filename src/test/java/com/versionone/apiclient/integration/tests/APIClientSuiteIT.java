@@ -31,8 +31,6 @@ public class APIClientSuiteIT {
 	@BeforeClass
 	public static void beforeRun() throws Exception  {
 		
-		System.out.println("\n*** Beginning Integration Test Run ***\n");
-		
 		//Read the instance URL from the properties file in current directory.
 		Properties properties;
 		try (FileReader reader = new FileReader("EnvFile.properties")) {
@@ -50,11 +48,6 @@ public class APIClientSuiteIT {
 			System.out.println(message);
 			throw new Exception(message);
 		}
-	}
-	
-	@AfterClass
-	public static void afterRun() {
-		System.out.println("\n*** Ending Integration Test Run ***\n");
 	}
 	
 	public static String getInstanceUrl() {

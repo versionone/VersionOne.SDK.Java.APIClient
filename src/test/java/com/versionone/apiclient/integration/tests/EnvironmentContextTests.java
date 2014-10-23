@@ -24,7 +24,7 @@ public class EnvironmentContextTests {
     private EnvironmentContext _nonDefaultTarget;
 
     @Before
-    public void Setup() throws Exception {
+    public void setup() throws Exception {
 
         _defaultTarget = new EnvironmentContext();
 
@@ -78,7 +78,7 @@ public class EnvironmentContextTests {
 
     //retrieve meta model using environmentContext
     @Test
-    public void GetMetaModelTest(){
+    public void testGetMetaModel(){
         IMetaModel model = _defaultTarget.getMetaModel();
         Assert.assertNotNull(model);
         model = _nonDefaultTarget.getMetaModel();
@@ -87,7 +87,7 @@ public class EnvironmentContextTests {
 
     //retrieve services using environmentContext
     @Test
-    public void GetServicesTest(){
+    public void testGetServices(){
         IServices services = _defaultTarget.getServices();
         Assert.assertNotNull(services);
         services = _nonDefaultTarget.getServices();
@@ -95,7 +95,7 @@ public class EnvironmentContextTests {
     }
 
     @Test
-    public void GetMetaModelWithProxyTest() throws URISyntaxException {
+    public void testGetMetaModelWithProxy() throws URISyntaxException {
         IMetaModel model = _defaultTarget.getMetaModelWithProxy();
         Assert.assertNotNull(model);
         model = _nonDefaultTarget.getMetaModelWithProxy();
@@ -103,7 +103,7 @@ public class EnvironmentContextTests {
     }
 
     @Test
-    public void GetServicesWithProxyTest() throws URISyntaxException {
+    public void testGetServicesWithProxy() throws URISyntaxException {
         IServices services = _defaultTarget.getServicesWithProxy();
         Assert.assertNotNull(services);
         services = _nonDefaultTarget.getServicesWithProxy();
@@ -111,7 +111,7 @@ public class EnvironmentContextTests {
     }
 
     @Test
-    public void GetV1ConfigurationTest() {
+    public void testGetV1Configuration() {
         V1Configuration config = _defaultTarget.getV1Configuration();
         Assert.assertNotNull(config);
         config = _nonDefaultTarget.getV1Configuration();
@@ -119,7 +119,7 @@ public class EnvironmentContextTests {
     }
 
     @Test
-    public void GetV1ConfigurationWithProxyTest() throws URISyntaxException {
+    public void testGetV1ConfigurationWithProxy() throws URISyntaxException {
         V1Configuration config = _defaultTarget.getV1ConfigurationWithProxy();
         Assert.assertNotNull(config);
         config = _nonDefaultTarget.getV1ConfigurationWithProxy();
@@ -128,7 +128,7 @@ public class EnvironmentContextTests {
 
     @SuppressWarnings("unused")
 	@Test(expected = IllegalArgumentException.class)
-    public void NullModelsAndServicesTest(){
+    public void testNullModelsAndServices(){
         EnvironmentContext context = new EnvironmentContext(null);
     }
 
