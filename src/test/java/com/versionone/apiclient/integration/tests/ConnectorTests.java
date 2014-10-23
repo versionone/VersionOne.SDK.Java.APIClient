@@ -21,37 +21,37 @@ import com.versionone.apiclient.V1APIConnector;
 
 public class ConnectorTests {
 
-	private static final String V1_PATH = APIClientSuiteIT.getInstanceUrl();
+	private static final String V1_URL = APIClientSuiteIT.getInstanceUrl();
     private static final String V1_USERNAME = "admin";
     private static final String V1_PASSWORD = "admin";
 
 	@Before
 	public void clearCookes() {
-		V1APIConnector testMe = new V1APIConnector(V1_PATH);
+		V1APIConnector testMe = new V1APIConnector(V1_URL);
 		testMe.getCookiesJar().deleteAllCookies();
 	}
 
 	@Test(expected = ConnectionException.class)
 	public void testInvalidUser() throws ConnectionException {
-		V1APIConnector testMe = new V1APIConnector(V1_PATH, "foo", "bar");
+		V1APIConnector testMe = new V1APIConnector(V1_URL, "foo", "bar");
 		testMe.getData("rest-1.v1/Data/Scope/0");
 	}
 
 	@Test
 	public void testValidUser() throws ConnectionException {
-		V1APIConnector testMe = new V1APIConnector(V1_PATH, V1_USERNAME, V1_PASSWORD);
+		V1APIConnector testMe = new V1APIConnector(V1_URL, V1_USERNAME, V1_PASSWORD);
 		Reader results = testMe.getData("/rest-1.v1/Data/Scope/0");
 		Assert.assertTrue(results != null);
 	}
 
 	@Test(expected = ConnectionException.class)
 	public void testURLInvalidUserAfterValid() throws ConnectionException {
-		V1APIConnector testMe = new V1APIConnector(V1_PATH, V1_USERNAME, V1_PASSWORD);
+		V1APIConnector testMe = new V1APIConnector(V1_URL, V1_USERNAME, V1_PASSWORD);
 		Reader results = testMe.getData("/rest-1.v1/Data/Scope/0");
-        testMe = new V1APIConnector(V1_PATH);
+        testMe = new V1APIConnector(V1_URL);
         results = testMe.getData("/meta.v1/Scope");
 		Assert.assertTrue(results != null);
-		testMe = new V1APIConnector(V1_PATH, "foo", "bar");
+		testMe = new V1APIConnector(V1_URL, "foo", "bar");
 		testMe.getData("/rest-1.v1/Data/Scope/0");
 	}
 	
@@ -60,7 +60,7 @@ public class ConnectorTests {
 	public void testProxy() throws ConnectionException, URISyntaxException {
 		URI uri = new URI("http://integvm01.internal.corp:3128");
 		ProxyProvider proxy = new ProxyProvider(uri, "user1", "user1");
-		V1APIConnector testMe = new V1APIConnector(V1_PATH, V1_USERNAME, V1_PASSWORD, proxy);
+		V1APIConnector testMe = new V1APIConnector(V1_URL, V1_USERNAME, V1_PASSWORD, proxy);
 		testMe.getData("rest-1.v1/Data/Scope/0");
 	}	
 
@@ -72,7 +72,7 @@ public class ConnectorTests {
 		String value1 = "value1";
 		String name2 = "name2";
 		String value2 = "value2";
-		V1APIConnector testMe = new V1APIConnector(V1_PATH, "foo", "bar");
+		V1APIConnector testMe = new V1APIConnector(V1_URL, "foo", "bar");
 		ICookiesManager cookiesManager = testMe.getCookiesJar();
 		cookiesManager.addCookie(name1, value1, expireDate);
 		cookiesManager.addCookie(name2, value2, expireDate);
@@ -85,15 +85,15 @@ public class ConnectorTests {
 
 	@Test(expected = ConnectionException.class)
 	public void testEmptyUserAfterValid() throws ConnectionException {
-		V1APIConnector testMe = new V1APIConnector(V1_PATH, V1_USERNAME, V1_USERNAME);
+		V1APIConnector testMe = new V1APIConnector(V1_URL, V1_USERNAME, V1_USERNAME);
 		testMe.getData("/rest-1.v1/Data/Scope/0");
-		testMe = new V1APIConnector(V1_PATH, "", "");
+		testMe = new V1APIConnector(V1_URL, "", "");
 		testMe.getData("/rest-1.v1/Data/Scope/0");
 	}
 
 	@Test()
 	public void testUserAgentHeadersWithOutApp() {
-		V1APIConnector testMe = new V1APIConnector(V1_PATH, V1_USERNAME, V1_USERNAME);
+		V1APIConnector testMe = new V1APIConnector(V1_URL, V1_USERNAME, V1_USERNAME);
 		Package p = this.getClass().getPackage();
 		String header = "Java/" + System.getProperty("java.version") + " " + p.getImplementationTitle() + "/" + p.getImplementationVersion();
 		Assert.assertEquals("", header, testMe.getUserAgentHeader());
@@ -101,7 +101,7 @@ public class ConnectorTests {
 
 	@Test()
 	public void testUserAgentHeadersWithApp() {
-		V1APIConnector testMe = new V1APIConnector(V1_PATH, V1_USERNAME, V1_USERNAME);
+		V1APIConnector testMe = new V1APIConnector(V1_URL, V1_USERNAME, V1_USERNAME);
 		String app_name = "myApp";
 		String app_version = "1.0.0";
 		testMe.setUserAgentHeader(app_name, app_version);
