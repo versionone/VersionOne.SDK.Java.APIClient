@@ -21,9 +21,9 @@ import com.versionone.apiclient.V1APIConnector;
 
 public class ConnectorTests {
 
-	private static final String V1_URL = APIClientSuiteIT.getInstanceUrl();
-    private static final String V1_USERNAME = "admin";
-    private static final String V1_PASSWORD = "admin";
+	private static final String V1_URL = APIClientSuiteIT.getInstanceUrl().getV1Url();
+    private static final String V1_USERNAME = APIClientSuiteIT.getInstanceUrl().getV1UserName();
+    private static final String V1_PASSWORD =APIClientSuiteIT.getInstanceUrl().getV1Password();
 
 	@Before
 	public void clearCookes() {

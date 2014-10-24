@@ -19,6 +19,7 @@ import com.versionone.apiclient.IMetaModel;
 import com.versionone.apiclient.IServices;
 import com.versionone.apiclient.MetaModel;
 import com.versionone.apiclient.Query;
+import com.versionone.apiclient.QueryResult;
 import com.versionone.apiclient.Services;
 import com.versionone.apiclient.V1APIConnector;
 
@@ -35,9 +36,13 @@ import com.versionone.apiclient.V1APIConnector;
 
 public class QueryTests {
 	
-    private static final String V1_PATH = APIClientSuiteIT.getInstanceUrl();
-    private static final String V1_USERNAME = "admin";
-    private static final String V1_PASSWORD = "admin";
+    private static final String V1Url = APIClientSuiteIT.getInstanceUrl().getV1Url();
+    private static final String V1UserName = APIClientSuiteIT.getInstanceUrl().getV1UserName();
+    private static final String V1Password = APIClientSuiteIT.getInstanceUrl().getV1Password();
+    
+    private static final V1APIConnector  metaConnector = new V1APIConnector(V1Url + APIClientSuiteIT.getInstanceUrl().getMetaUrl());
+    private static final V1APIConnector dataConnector = new V1APIConnector(V1Url + APIClientSuiteIT.getInstanceUrl().getDataUrl(), V1UserName, V1Password);
+    
 
     private final String InitialStoryName = "Initial name";
     private final String ChangedStoryName = "Changed name";
@@ -45,6 +50,7 @@ public class QueryTests {
 
     private static IMetaModel metaModel;
     private static IServices services;
+    private static IServices dataService;
     private static IAssetType storyType;
 //    private static IOperation storyDeleteOperation;
 
@@ -57,11 +63,8 @@ public class QueryTests {
 
     @BeforeClass
     public static void beforeClass() {
-        V1APIConnector metaConnector = new V1APIConnector(V1_PATH + "/meta.v1/");
-        V1APIConnector dataConnector = new V1APIConnector(V1_PATH + "/rest-1.v1/", V1_USERNAME, V1_PASSWORD);
-        metaModel = new MetaModel(metaConnector);
-        services = new Services(metaModel, dataConnector);
 
+    	services = new Services(metaModel, dataConnector);
         storyType = metaModel.getAssetType("Story");
 //        storyDeleteOperation = storyType.getOperation("Delete");
 
@@ -74,40 +77,33 @@ public class QueryTests {
         attributesToQuery.add(momentDef);
     }
 
-//    @After
 //    public void after() throws Exception {
 //        for(Asset story: assetsToDispose) {
 //            services.executeOperation(storyDeleteOperation, story.getOid());
 //        }
 //    }
     
-//	@Test
-//	@Ignore
-//	public void testQuerySingleAsset() throws Exception {
-//		
-//		initialize();
-//
-//		try {
-//			dataConnector = new V1APIConnector(dataUrl, V1_USERNAME, V1_PASSWORD);
-//			metaConnector = new V1APIConnector(metaUrl);
-//
-//			metaModel = new MetaModel(metaConnector);
-//			dataService = new Services(metaModel, dataConnector);
-//
-//			Oid memberId = Oid.fromToken("Member:20", metaModel);
-//			Query query = new Query(memberId);
-//			IAttributeDefinition nameAttribute = metaModel.getAttributeDefinition("Member.Username");
-//			query.getSelection().add(nameAttribute);
-//			QueryResult result = dataService.retrieve(query);
-//
-//			assertNotNull(result.getAssets());
-//
-//			Assert.assertEquals("1 asset", 1, result.getAssets().length);
-//
-//		} catch (Exception ex) {
-//			throw ex;
-//		}
-//	}
+	@Test
+	public void testQuerySingleAsset() throws Exception {
+		
+		try {
+			metaModel = new MetaModel(metaConnector);
+			dataService = new Services(metaModel, dataConnector);
+
+			Oid memberId = Oid.fromToken("Member:20", metaModel);
+			Query query = new Query(memberId);
+			IAttributeDefinition nameAttribute = metaModel.getAttributeDefinition("Member.Username");
+			query.getSelection().add(nameAttribute);
+			QueryResult result = dataService.retrieve(query);
+
+			Assert.assertNotNull(result.getAssets());
+
+			Assert.assertEquals("1 asset", 1, result.getAssets().length);
+
+		} catch (Exception ex) {
+			throw ex;
+		}
+	}
 
 	// Query for attributes (select)
 //	@Test

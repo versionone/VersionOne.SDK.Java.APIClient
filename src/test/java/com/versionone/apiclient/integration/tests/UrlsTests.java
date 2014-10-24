@@ -15,7 +15,7 @@ import com.versionone.apiclient.Urls;
 public class UrlsTests {
 
     private IUrls _defaultTarget;
-    private static final String V1_PATH = APIClientSuiteIT.getInstanceUrl();
+    private static final String V1Url = APIClientSuiteIT.getInstanceUrl().getV1Url();
 
     @Before
     public void setup() throws IOException {
@@ -24,22 +24,22 @@ public class UrlsTests {
 
     @Test
     public void testGetV1Url(){
-        Assert.assertEquals(V1_PATH, _defaultTarget.getV1Url());
+        Assert.assertEquals(V1Url, _defaultTarget.getV1Url());
     }
 
     @Test
     public void testGetMetaUrl(){
-        Assert.assertEquals(V1_PATH + "/meta.v1/", _defaultTarget.getMetaUrl());
+        Assert.assertEquals(V1Url + "/meta.v1/", _defaultTarget.getMetaUrl());
     }
 
     @Test
     public void testGetDataUrl(){
-        Assert.assertEquals(V1_PATH + "/rest-1.v1/", _defaultTarget.getDataUrl());
+        Assert.assertEquals(V1Url + "/rest-1.v1/", _defaultTarget.getDataUrl());
     }
 
     @Test
     public void testGetConfigUrl(){
-        Assert.assertEquals(V1_PATH + "/config.v1/", _defaultTarget.getConfigUrl());
+        Assert.assertEquals(V1Url + "/config.v1/", _defaultTarget.getConfigUrl());
     }
 
     @Test

@@ -28,9 +28,11 @@ public class ProxyTests {
 	private final static String proxyUserName = "user";
 	private final static String proxyPassword = "password";
 
-	private final static String v1Path = "http://localhost/VersionOneTest/";
-	private final static String v1UserName = "admin";
-	private final static String v1Password = "admin";
+	private final static String V1Url = APIClientSuiteIT.getInstanceUrl().getV1Url();
+	private final static String V1UserName = APIClientSuiteIT.getInstanceUrl().getV1UserName();
+	private final static String V1Password = APIClientSuiteIT.getInstanceUrl().getV1Password();
+	private final static String METAV1 = APIClientSuiteIT.getInstanceUrl().getMetaUrl();
+	private final static String RESTV1 = APIClientSuiteIT.getInstanceUrl().getDataUrl();
 
 
 	@Test
@@ -39,15 +41,15 @@ public class ProxyTests {
 		ProxyProvider proxyProvider = new ProxyProvider(proxy, proxyUserName, proxyPassword);
 
 		//Connection with proxy
-		IAPIConnector metaConnectorWithProxy = new V1APIConnector(v1Path + "meta.v1/", proxyProvider);
+		IAPIConnector metaConnectorWithProxy = new V1APIConnector(V1Url + METAV1, proxyProvider);
         IMetaModel metaModelWithProxy = new MetaModel(metaConnectorWithProxy);
-        IAPIConnector dataConnectorWithProxy = new V1APIConnector(v1Path + "rest-1.v1/", v1UserName, v1Password, proxyProvider);
+        IAPIConnector dataConnectorWithProxy = new V1APIConnector(V1Url + RESTV1, V1UserName, V1Password, proxyProvider);
         IServices servicesWithProxy = new Services(metaModelWithProxy, dataConnectorWithProxy);
 
         //Connection without proxy
-		IAPIConnector metaConnector = new V1APIConnector(v1Path + "meta.v1/");
+		IAPIConnector metaConnector = new V1APIConnector(V1Url + METAV1);
         IMetaModel metaModel = new MetaModel(metaConnector);
-        IAPIConnector dataConnector = new V1APIConnector(v1Path + "rest-1.v1/", v1UserName, v1Password);
+        IAPIConnector dataConnector = new V1APIConnector(V1Url + RESTV1, V1UserName, V1Password);
         IServices services = new Services(metaModel, dataConnector);
 
         IAssetType projectTypeWithProxy = metaModelWithProxy.getAssetType("Scope");

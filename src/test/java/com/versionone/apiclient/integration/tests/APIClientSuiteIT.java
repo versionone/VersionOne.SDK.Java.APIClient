@@ -1,12 +1,10 @@
 package com.versionone.apiclient.integration.tests;
 
-import java.io.FileReader;
-import java.io.IOException;
-import java.util.Properties;
-
 import org.junit.BeforeClass;
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
+
+import com.versionone.apiclient.APIConfiguration;
 
 @RunWith(Suite.class)
 
@@ -26,31 +24,14 @@ import org.junit.runners.Suite;
 public class APIClientSuiteIT {
 
 	private static String instanceUrl;
+	private static APIConfiguration _config;
 	
 	@BeforeClass
 	public static void beforeRun() throws Exception  {
-		
-		//Read the instance URL from the properties file in current directory.
-		Properties properties;
-		try (FileReader reader = new FileReader("EnvFile.properties")) {
-			properties = new Properties();
-			properties.load(reader);
-			instanceUrl = properties.getProperty("V1_TEST_INSTANCE");
-			System.out.println("TARGET INSTANCE: " + instanceUrl);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		
-		//Check that we have an instance URL.
-		if (null == instanceUrl) {
-			String message = "No instance URL found. Ending integration test run.";
-			System.out.println(message);
-			throw new Exception(message);
-		}
+		 _config = new APIConfiguration();
 	}
 	
-	public static String getInstanceUrl() {
-		return instanceUrl;
+	public static APIConfiguration getInstanceUrl() {
+		return _config;
 	}
-
 }
