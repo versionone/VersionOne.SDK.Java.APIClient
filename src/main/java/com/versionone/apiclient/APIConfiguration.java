@@ -13,7 +13,7 @@ public class APIConfiguration implements IAPIConfiguration {
         static String DataUrl(){return "DataUrl";}
         static String MetaUrl() {return "MetaUrl";}
         static String ConfigUrl() {return "ConfigUrl";}
-        static String V1UserName(){return "V1UserName";}
+        static String V1UserName(){return "V1Username";}
         static String V1Password(){return "V1Password";}
         static String ProxyUrl(){return "ProxyUrl";}
         static String ProxyUserName() {return "ProxyUserName";}

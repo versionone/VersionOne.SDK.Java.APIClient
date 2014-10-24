@@ -23,7 +23,6 @@ import com.versionone.apiclient.APIConfiguration;
 
 public class APIClientSuiteIT {
 
-	private static String instanceUrl;
 	private static APIConfiguration _config;
 	
 	@BeforeClass
