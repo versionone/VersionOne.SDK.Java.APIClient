@@ -49,6 +49,7 @@ public class AssetTests {
         IAssetType assetType = _metaModel.getAssetType("Story");
         Asset newStory = _services.createNew(assetType, projectId);
         newStory.setOid(Oid.fromToken("", _metaModel));
+        Assert.assertNull(newStory.getOid());
     }
 
     @Test

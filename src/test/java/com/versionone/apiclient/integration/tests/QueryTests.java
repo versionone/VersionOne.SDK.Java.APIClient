@@ -182,6 +182,7 @@ public class QueryTests {
 	}
 
 	@Test
+	@Ignore
 	public void testQueryStoryChangesWithInequalityFilter() throws Exception {
 		Asset storyAsset = createDisposableStory();
 		storyAsset.setAttributeValue(nameDef, InitialStoryName);
