@@ -57,9 +57,9 @@ public final class ModelsAndServices implements IModelsAndServices  {
     }
 
     public V1Configuration getV1ConfigurationWithProxy() throws URISyntaxException {
-        if (_v1Config != null) return _v1Config;
-        _v1Config = new V1Configuration(_connectors.getConfigConnectorWithProxy());
-        return _v1Config;
+        if (_v1ConfigWithProxy != null) return _v1ConfigWithProxy;
+        _v1ConfigWithProxy = new V1Configuration(_connectors.getConfigConnectorWithProxy());
+        return _v1ConfigWithProxy;
     }
 
 }
