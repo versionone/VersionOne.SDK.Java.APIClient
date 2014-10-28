@@ -23,10 +23,12 @@ import com.versionone.apiclient.IServices;
 					ModelsAndServicesTests.class, 
 					ProxyTests.class, 
 					QueryTests.class, 
-					UrlsTests.class })
+					UrlsTests.class 
+	})
 public class APIClientSuiteIT {
 
 	private static APIConfiguration _config;
+	private static Oid _projectId; 
 	
 
 	@BeforeClass
@@ -48,9 +50,19 @@ public class APIClientSuiteIT {
 		IAttributeDefinition nameAttribute = assetType.getAttributeDefinition("Name");
 		newAsset.setAttributeValue(nameAttribute, "Java.SDK Integration Tests");
 		_services.save(newAsset);
+		
+		_projectId = newAsset.getOid().getMomentless();
+		
+		
 	}
 
 	public static APIConfiguration getInstanceUrl() {
 		return _config;
 	}
+
+	public static Oid get_projectId() {
+		return _projectId;
+	}
+	
+	
 }
