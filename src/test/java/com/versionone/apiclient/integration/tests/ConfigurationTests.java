@@ -6,13 +6,6 @@ import org.junit.Test;
 
 public class ConfigurationTests {
 
-	// private IAPIConfiguration _target;
-
-	// @Before
-	// public void setup() throws IOException {
-	// _target = new APIConfiguration();
-	// }
-
 	@Test
 	public void testGetV1Url() {
 		String v1Url = APIClientSuiteIT.getInstanceUrl().getV1Url();

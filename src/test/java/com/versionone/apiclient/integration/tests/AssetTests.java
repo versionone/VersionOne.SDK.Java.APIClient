@@ -1,18 +1,15 @@
 package com.versionone.apiclient.integration.tests;
 
-import java.sql.Date;
-
 import junit.framework.Assert;
 
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 
-import util.DateTimeUtil;
-
 import com.versionone.DB.DateTime;
 import com.versionone.Oid;
 import com.versionone.apiclient.Asset;
+import com.versionone.apiclient.AssetState;
 import com.versionone.apiclient.EnvironmentContext;
 import com.versionone.apiclient.IAssetType;
 import com.versionone.apiclient.IAttributeDefinition;
@@ -24,20 +21,6 @@ import com.versionone.apiclient.Query;
 import com.versionone.apiclient.QueryResult;
 import com.versionone.apiclient.V1Exception;
 
-//TODO:
-	//		Add scalar
-	//		Update scalar (attribute)
-	//		Remove scalar
-	//		Add single-relation
-	//		Update single-relation
-	//		Remove single-relations
-	//		Add multi-relation
-	//		Update multi-relation
-	//		Remove multi-relation
-	//		Close an asset
-	//		Reopen an asset
-	//		Error: Invalid asset
-	//		Error: Asset doesn't exists
 
 public class AssetTests {
 
@@ -53,6 +36,7 @@ public class AssetTests {
         _assetType = _metaModel.getAssetType("Story");
     }
 
+	//	Error: Invalid asset
     @Test(expected = OidException.class)
     @Ignore
     public void testSetInvalidOidOnAsset() throws V1Exception{
@@ -61,6 +45,7 @@ public class AssetTests {
         Assert.assertNull(newStory.getOid());
     }
     
+    //	Error: Asset doesn't exists
     @Test
     @Ignore
     public void testSetValidOidOnAsset() throws V1Exception {
@@ -68,7 +53,12 @@ public class AssetTests {
         newStory.setOid(Oid.fromToken("Story:999999", _metaModel));
         Assert.assertNotNull(newStory.getOid());
     }
- 
+    
+    /**
+     * common method for creation of an asset
+     * @return
+     * @throws V1Exception
+     */
     public Asset createsAnAsset() throws V1Exception {
 		//creates the asset
 		Asset newStory = _services.createNew(_assetType, APIClientSuiteIT.get_projectId());
@@ -79,7 +69,7 @@ public class AssetTests {
 		return newStory;
     }
     
-//	Create  asset
+    //	Create  asset
 	@Test
 	@Ignore
 	public void testAddAnAsset() throws V1Exception {
@@ -95,7 +85,7 @@ public class AssetTests {
 		Assert.assertEquals(newStory.getOid(), member.getOid());
 	}
     
-//	delete  asset    
+	//	delete  asset    
     @Test
     @Ignore
     public void testDeleteAnAsset() throws V1Exception {
@@ -113,8 +103,67 @@ public class AssetTests {
 		Assert.assertEquals(0,result.getTotalAvaliable());
     }
     
-//	Update an scalar    
+	//	Close an asset
     @Test
+    @Ignore
+	public void testCloseAnAsset() throws V1Exception {
+
+		QueryResult result = null;
+		// creates the asset
+		Asset newStory = createsAnAsset();
+		// change the value to close and Query 
+		IOperation closeOperation = _metaModel.getOperation("Story.Inactivate");
+		Oid closeID = _services.executeOperation(closeOperation, newStory.getOid());
+
+		Query query = new Query(closeID.getMomentless());
+		IAttributeDefinition assetState = _metaModel.getAttributeDefinition("Story.AssetState");
+		query.getSelection().add(assetState);
+		
+		result = _services.retrieve(query);
+		
+		Asset closeStory = result.getAssets()[0];
+
+		AssetState state = AssetState.valueOf(((Integer) closeStory.getAttribute(assetState).getValue()).intValue());
+		// assertion
+		Assert.assertEquals("Closed", state.toString());
+	}
+
+	//	Reopen an asset
+	@Test
+	@Ignore
+	public void testReopenAnAsset() throws V1Exception {
+
+		QueryResult result = null;
+		//creates an asset
+		Asset newStory = createsAnAsset();
+		// change the value to close and Query 
+		IOperation closeOperation = _metaModel.getOperation("Story.Inactivate");
+		Oid closeID = _services.executeOperation(closeOperation, newStory.getOid());
+		//return the closed story
+		Query query = new Query(closeID.getMomentless());
+		IAttributeDefinition assetState = _metaModel.getAttributeDefinition("Story.AssetState");
+		query.getSelection().add(assetState);
+		result = _services.retrieve(query);
+		Asset story = result.getAssets()[0];
+		
+		//reopen the closed story
+		IOperation activateOperation = _metaModel.getOperation("Story.Reactivate");
+		Oid activeID = _services.executeOperation(activateOperation, story.getOid());
+		query = new Query(activeID.getMomentless());
+		assetState = _metaModel.getAttributeDefinition("Story.AssetState");
+		query.getSelection().add(assetState);
+		result = _services.retrieve(query);
+		Asset activeStory = result.getAssets()[0];
+				
+		AssetState state = AssetState.valueOf(((Integer) activeStory.getAttribute(assetState).getValue()).intValue());
+
+		// assertion
+		Assert.assertEquals("Active", state.toString());
+	}
+    
+	//	Update an scalar    
+    @Test
+    @Ignore
     public void testUpdateScalarAttribute() throws Exception {
     	//add an asset
     	Asset newStory = createsAnAsset();
@@ -135,5 +184,44 @@ public class AssetTests {
 
         Assert.assertNotSame("Values:", oldName, story.getAttribute(nameAttribute).getValue().toString());
     }
- 
+    
+    
+//	Update single-relation
+//	Category : Relation to StoryCategory — reciprocal of Stories
+
+//	Add multi-relation
+//	Update multi-relation
+//	Remove multi-relation
+
+    @Test
+    public void testAddSingleRelation() throws Exception {
+    	//add an asset
+    	//Asset newStory = createsAnAsset();
+    }
+
+    
+//    public void testUpdateSingleValueRelation() throws Exception {
+//    
+//    	Oid storyId = createsAnAsset().getOid();
+//        
+//    	Query query = new Query(storyId);
+//      
+//    	IAssetType storyType = _metaModel.getAssetType("Story");
+//        
+//    	IAttributeDefinition sourceAttribute = storyType.getAttributeDefinition("Source");
+//        
+//    	query.getSelection().add(sourceAttribute);
+//        
+//        QueryResult result = _services.retrieve(query);
+//        
+//        Asset story = result.getAssets()[0];
+//        
+//        String oldSource = story.getAttribute(sourceAttribute).getValue().toString();
+//        
+//        story.setAttributeValue(sourceAttribute, storyId.getMomentless());
+//        
+//        _services.save(story);
+//
+//    }
+    
 }
