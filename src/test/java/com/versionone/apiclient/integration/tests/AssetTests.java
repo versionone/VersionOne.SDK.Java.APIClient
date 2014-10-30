@@ -171,7 +171,7 @@ public class AssetTests {
         QueryResult result = _services.retrieve(query);
         Asset story = result.getAssets()[0];
         String oldName = story.getAttribute(nameAttribute).getValue().toString();
-        story.setAttributeValue(nameAttribute, "IT New Name Defined");
+        story.setAttributeValue(nameAttribute, "AssetTests: Update an Scalar - Name updated");
         _services.save(story);
 
         Assert.assertNotSame("Values:", oldName, story.getAttribute(nameAttribute).getValue().toString());
