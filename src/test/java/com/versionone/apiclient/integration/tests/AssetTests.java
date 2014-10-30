@@ -3,10 +3,8 @@ package com.versionone.apiclient.integration.tests;
 import junit.framework.Assert;
 
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 
-import com.versionone.DB.DateTime;
 import com.versionone.Oid;
 import com.versionone.apiclient.Asset;
 import com.versionone.apiclient.AssetState;
@@ -41,11 +39,11 @@ public class AssetTests {
      * @return
      * @throws V1Exception
      */
-    public Asset createsAnAsset() throws V1Exception {
+    public Asset createsAnAsset(String assetName) throws V1Exception {
 		//creates the asset
 		Asset newStory = _services.createNew(_assetType, APIClientSuiteIT.get_projectId());
 		IAttributeDefinition nameAttribute = _assetType.getAttributeDefinition("Name");
-		newStory.setAttributeValue(nameAttribute, "IT JAVA SDK Add Story"+ DateTime.now().toString());
+		newStory.setAttributeValue(nameAttribute, assetName);
 		_services.save(newStory);
     	
 		return newStory;
@@ -93,7 +91,7 @@ public class AssetTests {
 	@Test
 	public void testAddAnAsset() throws V1Exception {
 		QueryResult result = null;
-		Asset newStory = createsAnAsset();
+		Asset newStory = createsAnAsset("AssetTests: Add a new asset");
 		Oid memberId = newStory.getOid();
 		Query query = new Query(memberId);
 		result = _services.retrieve(query);
@@ -107,7 +105,7 @@ public class AssetTests {
     public void testDeleteAnAsset() throws V1Exception {
     	
     	QueryResult result = null;
-		Asset newStory = createsAnAsset();
+		Asset newStory = createsAnAsset("AssetTests: Delete an asset");
         IOperation deleteOperation = _metaModel.getOperation("Story.Delete");
         Oid deletedID = _services.executeOperation(deleteOperation, newStory.getOid());
         Query query = new Query(deletedID);
@@ -121,7 +119,7 @@ public class AssetTests {
 	public void testCloseAnAsset() throws V1Exception {
 
 		QueryResult result = null;
-		Asset newStory = createsAnAsset();
+		Asset newStory = createsAnAsset("AssetTests: Close an asset");
 		IOperation closeOperation = _metaModel.getOperation("Story.Inactivate");
 		Oid closeID = _services.executeOperation(closeOperation, newStory.getOid());
 		Query query = new Query(closeID.getMomentless());
@@ -140,7 +138,7 @@ public class AssetTests {
 	public void testReopenAnAsset() throws V1Exception {
 
 		QueryResult result = null;
-		Asset newStory = createsAnAsset();
+		Asset newStory = createsAnAsset("AssetTests: Reopen an asset");
 		IOperation closeOperation = _metaModel.getOperation("Story.Inactivate");
 		Oid closeID = _services.executeOperation(closeOperation, newStory.getOid());
 		Query query = new Query(closeID.getMomentless());
@@ -165,7 +163,7 @@ public class AssetTests {
     @Test
     public void testUpdateScalarAttribute() throws Exception {
   
-    	Asset newStory = createsAnAsset();
+    	Asset newStory = createsAnAsset("AssetTests: Update an Scalar");
     	Query query = new Query(newStory.getOid());
         IAssetType storyType = _metaModel.getAssetType("Story");
         IAttributeDefinition nameAttribute = storyType.getAttributeDefinition("Name");
@@ -184,7 +182,7 @@ public class AssetTests {
 	@Test
 	public void testUpdateSingleValueRelation() throws Exception {
 
-		Asset newStory = createsAnAsset();
+		Asset newStory = createsAnAsset("AssetTests: Update Single Value Relation");
 		IAssetType storyType = _metaModel.getAssetType("Story");
 		IAttributeDefinition sourceAttribute = storyType.getAttributeDefinition("Source");
 		newStory.setAttributeValue(sourceAttribute, "StorySource:156");
@@ -201,9 +199,9 @@ public class AssetTests {
 	@Test
 	public void testAddMultipleValueRelation() throws Exception {
 
-		Asset parentStory = createsAnAsset();
-		Asset childStory1 = createsAnAsset();
-		Asset childStory2 = createsAnAsset();
+		Asset parentStory = createsAnAsset("AssetTests: Add Multiple Value Relation - Parent Story");
+		Asset childStory1 = createsAnAsset("AssetTests: Add Multiple Value Relation - Child1 Story");
+		Asset childStory2 = createsAnAsset("AssetTests: Add Multiple Value Relation - Child2 Story");
 		
 		IAssetType storyType = _metaModel.getAssetType("Story");
 		IAttributeDefinition dependantsAttribute = storyType.getAttributeDefinition("Dependants");
@@ -232,9 +230,9 @@ public class AssetTests {
 	@Test
 	public void testRemoveMultipleValueRelation() throws Exception {
 
-		Asset parentStory = createsAnAsset();
-		Asset childStory1 = createsAnAsset();
-		Asset childStory2 = createsAnAsset();
+		Asset parentStory = createsAnAsset("AssetTests: Remove Multiple Value Relation - Parent Story");
+		Asset childStory1 = createsAnAsset("AssetTests: Remove Multiple Value Relation - Child1 Story");
+		Asset childStory2 = createsAnAsset("AssetTests: Remove Multiple Value Relation - Child2 Story");
 		
 		IAssetType storyType = _metaModel.getAssetType("Story");
 		IAttributeDefinition dependantsAttribute = storyType.getAttributeDefinition("Dependants");
