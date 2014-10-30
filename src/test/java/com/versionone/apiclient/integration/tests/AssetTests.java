@@ -1,5 +1,9 @@
 package com.versionone.apiclient.integration.tests;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 import junit.framework.Assert;
 
 import org.junit.Before;
@@ -38,7 +42,7 @@ public class AssetTests {
 
 	//	Error: Invalid asset
     @Test(expected = OidException.class)
-    @Ignore
+    //@Ignore
     public void testSetInvalidOidOnAsset() throws V1Exception{
         Asset newStory = _services.createNew(_assetType, APIClientSuiteIT.get_projectId());
         newStory.setOid(Oid.fromToken("", _metaModel));
@@ -47,7 +51,7 @@ public class AssetTests {
     
     //	Error: Asset doesn't exists
     @Test
-    @Ignore
+    //@Ignore
     public void testSetValidOidOnAsset() throws V1Exception {
         Asset newStory = _services.createNew(_assetType, APIClientSuiteIT.get_projectId());
         newStory.setOid(Oid.fromToken("Story:999999", _metaModel));
@@ -71,7 +75,7 @@ public class AssetTests {
     
     //	Create  asset
 	@Test
-	@Ignore
+	//@Ignore
 	public void testAddAnAsset() throws V1Exception {
 		QueryResult result = null;
 		// add an asset
@@ -87,7 +91,7 @@ public class AssetTests {
     
 	//	delete  asset    
     @Test
-    @Ignore
+    //@Ignore
     public void testDeleteAnAsset() throws V1Exception {
     	
     	QueryResult result = null;
@@ -105,7 +109,7 @@ public class AssetTests {
     
 	//	Close an asset
     @Test
-    @Ignore
+    //@Ignore
 	public void testCloseAnAsset() throws V1Exception {
 
 		QueryResult result = null;
@@ -130,7 +134,7 @@ public class AssetTests {
 
 	//	Reopen an asset
 	@Test
-	@Ignore
+	//@Ignore
 	public void testReopenAnAsset() throws V1Exception {
 
 		QueryResult result = null;
@@ -163,7 +167,7 @@ public class AssetTests {
     
 	//	Update an scalar    
     @Test
-    @Ignore
+    //@Ignore
     public void testUpdateScalarAttribute() throws Exception {
     	//add an asset
     	Asset newStory = createsAnAsset();
@@ -186,42 +190,52 @@ public class AssetTests {
     }
     
     
-//	Update single-relation
-//	Category : Relation to StoryCategory — reciprocal of Stories
+    //	Update single-relation
+	@Test
+	//@Ignore
+	public void testUpdateSingleValueRelation() throws Exception {
 
-//	Add multi-relation
-//	Update multi-relation
-//	Remove multi-relation
+		// add an asset
+		Asset newStory = createsAnAsset();
+		//define the attribute 
+		IAssetType storyType = _metaModel.getAssetType("Story");
+		IAttributeDefinition sourceAttribute = storyType.getAttributeDefinition("Source");
+		newStory.setAttributeValue(sourceAttribute, "StorySource:156");
+		_services.save(newStory);
+		//query for the asset 
+		Query query = new Query(newStory.getOid());
+		query.getSelection().add(sourceAttribute);
+		QueryResult result = _services.retrieve(query);
+		Asset story = result.getAssets()[0];
 
-    @Test
-    public void testAddSingleRelation() throws Exception {
-    	//add an asset
-    	//Asset newStory = createsAnAsset();
-    }
+		//assertion
+        Assert.assertNotNull(story.getAttribute(sourceAttribute).getValue().toString());
+	}
+   
+	//	Add multi-relation
+	@Test
+	//@Ignore
+	public void testAddMultipleValueRelation() throws Exception {
 
-    
-//    public void testUpdateSingleValueRelation() throws Exception {
-//    
-//    	Oid storyId = createsAnAsset().getOid();
-//        
-//    	Query query = new Query(storyId);
-//      
-//    	IAssetType storyType = _metaModel.getAssetType("Story");
-//        
-//    	IAttributeDefinition sourceAttribute = storyType.getAttributeDefinition("Source");
-//        
-//    	query.getSelection().add(sourceAttribute);
-//        
-//        QueryResult result = _services.retrieve(query);
-//        
-//        Asset story = result.getAssets()[0];
-//        
-//        String oldSource = story.getAttribute(sourceAttribute).getValue().toString();
-//        
-//        story.setAttributeValue(sourceAttribute, storyId.getMomentless());
-//        
-//        _services.save(story);
-//
-//    }
-    
+		//Oid storyId = Oid.fromToken("Story:1124", _metaModel);
+		
+		Asset newStory = createsAnAsset();
+		
+		IAssetType storyType = _metaModel.getAssetType("Story");
+		IAttributeDefinition ownersAttribute = storyType.getAttributeDefinition("Owners");
+
+		//assertion no owner set
+        Assert.assertNull(newStory.getAttribute(ownersAttribute).getValue().toString());
+        //add the relation 
+        newStory.addAttributeValue(ownersAttribute,  "StorySource:156");
+		
+		_services.save(newStory);
+
+	}
+
+	 //	Remove multi-relation
+	
+    //	Update multi-relation
+  
+
 }
