@@ -22,7 +22,7 @@ import com.versionone.apiclient.IServices;
 					FindBuilderTests.class,
 					ModelsAndServicesTests.class, 
 					ProxyTests.class, 
-					QueryTests.class, 
+					FindAndQueryTests.class, 
 					UrlsTests.class 
 	})
 public class APIClientSuiteIT {

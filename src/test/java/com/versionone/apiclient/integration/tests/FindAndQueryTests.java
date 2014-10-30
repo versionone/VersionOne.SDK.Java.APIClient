@@ -35,7 +35,7 @@ import com.versionone.apiclient.V1APIConnector;
 // Query history
 // Query "asof"
 
-public class QueryTests {
+public class FindAndQueryTests {
 
 	
 	private final static String V1Url= APIClientSuiteIT.getInstanceUrl().getV1Url();

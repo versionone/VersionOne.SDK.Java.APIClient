@@ -15,10 +15,6 @@ import com.versionone.apiclient.ICookiesManager;
 import com.versionone.apiclient.ProxyProvider;
 import com.versionone.apiclient.V1APIConnector;
 
-//TODO:
-//		Error: Bad instance URL
-//		Error: Invalid credentials
-
 public class ConnectorTests {
 
 	private static final String V1_URL = APIClientSuiteIT.getInstanceUrl().getV1Url();
@@ -37,6 +33,13 @@ public class ConnectorTests {
 		testMe.getData("rest-1.v1/Data/Scope/0");
 	}
 
+	@Test(expected = ConnectionException.class)
+	public void testInvalidUrl() throws ConnectionException {
+		V1APIConnector testMe = new V1APIConnector(V1_URL,V1_USERNAME, V1_PASSWORD);
+		testMe.getData("rest-1.v1/bogus");
+	}
+
+	
 	@Test
 	public void testValidUser() throws ConnectionException {
 		V1APIConnector testMe = new V1APIConnector(V1_URL, V1_USERNAME, V1_PASSWORD);
