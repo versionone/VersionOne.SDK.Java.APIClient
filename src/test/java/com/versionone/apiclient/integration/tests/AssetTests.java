@@ -2,12 +2,16 @@ package com.versionone.apiclient.integration.tests;
 
 import junit.framework.Assert;
 
+import org.apache.oro.text.regex.Util;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import com.versionone.Oid;
+import com.versionone.apiclient.APIException;
 import com.versionone.apiclient.Asset;
 import com.versionone.apiclient.AssetState;
+import com.versionone.apiclient.ConnectionException;
 import com.versionone.apiclient.EnvironmentContext;
 import com.versionone.apiclient.IAssetType;
 import com.versionone.apiclient.IAttributeDefinition;
@@ -70,6 +74,21 @@ public class AssetTests {
 
 		return newMember;
 	}
+	
+	public QueryResult query(Oid memberId, IAttributeDefinition attribute) {
+		QueryResult result = null;
+		Query query = new Query(memberId);
+		if(attribute != null){
+			query.getSelection().add(attribute);
+		}
+		try {
+			result = _services.retrieve(query);
+		} catch (ConnectionException | APIException | OidException e) {
+			e.printStackTrace();
+		};
+	
+		return result;
+	}
 
 	//	Error: Invalid asset
     @Test(expected = OidException.class)
@@ -90,12 +109,10 @@ public class AssetTests {
     //	Create  asset
 	@Test
 	public void testAddAnAsset() throws V1Exception {
-		QueryResult result = null;
+	
 		Asset newStory = createsAnAsset("AssetTests: Add a new asset");
 		Oid memberId = newStory.getOid();
-		Query query = new Query(memberId);
-		result = _services.retrieve(query);
-		Asset member = result.getAssets()[0];
+		Asset member = query(memberId, null).getAssets()[0];
 
 		Assert.assertEquals(newStory.getOid(), member.getOid());
 	}
@@ -104,30 +121,23 @@ public class AssetTests {
     @Test
     public void testDeleteAnAsset() throws V1Exception {
     	
-    	QueryResult result = null;
 		Asset newStory = createsAnAsset("AssetTests: Delete an asset");
         IOperation deleteOperation = _metaModel.getOperation("Story.Delete");
         Oid deletedID = _services.executeOperation(deleteOperation, newStory.getOid());
-        Query query = new Query(deletedID);
-		result = _services.retrieve(query);
 
-		Assert.assertEquals(0,result.getTotalAvaliable());
+        Assert.assertEquals(0,query(deletedID, null).getTotalAvaliable());
     }
     
 	//	Close an asset
     @Test
 	public void testCloseAnAsset() throws V1Exception {
 
-		QueryResult result = null;
 		Asset newStory = createsAnAsset("AssetTests: Close an asset");
 		IOperation closeOperation = _metaModel.getOperation("Story.Inactivate");
 		Oid closeID = _services.executeOperation(closeOperation, newStory.getOid());
-		Query query = new Query(closeID.getMomentless());
 		IAttributeDefinition assetState = _metaModel.getAttributeDefinition("Story.AssetState");
-		query.getSelection().add(assetState);
 		
-		result = _services.retrieve(query);
-		Asset closeStory = result.getAssets()[0];
+		Asset closeStory = query(closeID.getMomentless(), assetState).getAssets()[0];
 		AssetState state = AssetState.valueOf(((Integer) closeStory.getAttribute(assetState).getValue()).intValue());
 	
 		Assert.assertEquals("Closed", state.toString());
@@ -137,23 +147,18 @@ public class AssetTests {
 	@Test
 	public void testReopenAnAsset() throws V1Exception {
 
-		QueryResult result = null;
 		Asset newStory = createsAnAsset("AssetTests: Reopen an asset");
 		IOperation closeOperation = _metaModel.getOperation("Story.Inactivate");
 		Oid closeID = _services.executeOperation(closeOperation, newStory.getOid());
-		Query query = new Query(closeID.getMomentless());
 		IAttributeDefinition assetState = _metaModel.getAttributeDefinition("Story.AssetState");
-		query.getSelection().add(assetState);
-		result = _services.retrieve(query);
-		Asset story = result.getAssets()[0];
+	
+		Asset story = query(closeID.getMomentless(), assetState).getAssets()[0];
 
 		IOperation activateOperation = _metaModel.getOperation("Story.Reactivate");
 		Oid activeID = _services.executeOperation(activateOperation, story.getOid());
-		query = new Query(activeID.getMomentless());
 		assetState = _metaModel.getAttributeDefinition("Story.AssetState");
-		query.getSelection().add(assetState);
-		result = _services.retrieve(query);
-		Asset activeStory = result.getAssets()[0];
+	
+		Asset activeStory =query(activeID.getMomentless(), assetState).getAssets()[0];
 		AssetState state = AssetState.valueOf(((Integer) activeStory.getAttribute(assetState).getValue()).intValue());
 
 		Assert.assertEquals("Active", state.toString());
@@ -164,12 +169,9 @@ public class AssetTests {
     public void testUpdateScalarAttribute() throws Exception {
   
     	Asset newStory = createsAnAsset("AssetTests: Update an Scalar");
-    	Query query = new Query(newStory.getOid());
         IAssetType storyType = _metaModel.getAssetType("Story");
         IAttributeDefinition nameAttribute = storyType.getAttributeDefinition("Name");
-        query.getSelection().add(nameAttribute);
-        QueryResult result = _services.retrieve(query);
-        Asset story = result.getAssets()[0];
+        Asset story =  query(newStory.getOid(), nameAttribute).getAssets()[0];
         String oldName = story.getAttribute(nameAttribute).getValue().toString();
         story.setAttributeValue(nameAttribute, "AssetTests: Update an Scalar - Name updated");
         _services.save(story);
@@ -187,10 +189,8 @@ public class AssetTests {
 		IAttributeDefinition sourceAttribute = storyType.getAttributeDefinition("Source");
 		newStory.setAttributeValue(sourceAttribute, "StorySource:156");
 		_services.save(newStory);
-		Query query = new Query(newStory.getOid());
-		query.getSelection().add(sourceAttribute);
-		QueryResult result = _services.retrieve(query);
-		Asset story = result.getAssets()[0];
+		
+		Asset story =  query(newStory.getOid(), sourceAttribute).getAssets()[0];
 
 		Assert.assertNotNull(story.getAttribute(sourceAttribute).getValue().toString());
 	}
@@ -208,20 +208,14 @@ public class AssetTests {
 		parentStory.addAttributeValue(dependantsAttribute,  childStory1.getOid());
         _services.save(parentStory);
 
-        Query query = new Query(parentStory.getOid());
-		query.getSelection().add(dependantsAttribute);
-		QueryResult result = _services.retrieve(query);
-		Asset story = result.getAssets()[0];
+		Asset story =  query(parentStory.getOid(), dependantsAttribute).getAssets()[0];
         
 		Assert.assertEquals(1, story.getAttribute(dependantsAttribute).getValues().length);
        
 		parentStory.addAttributeValue(dependantsAttribute,  childStory2.getOid());
         _services.save(parentStory);
 
-        query = new Query(parentStory.getOid());
-      	query.getSelection().add(dependantsAttribute);
-      	result = _services.retrieve(query);
-      	story = result.getAssets()[0];
+      	story =  query(parentStory.getOid(), dependantsAttribute).getAssets()[0];
               
       	Assert.assertEquals(2, story.getAttribute(dependantsAttribute).getValues().length); 
 	}
@@ -240,20 +234,14 @@ public class AssetTests {
 		parentStory.addAttributeValue(dependantsAttribute,  childStory2.getOid());
         _services.save(parentStory);
 
-        Query query = new Query(parentStory.getOid());
-		query.getSelection().add(dependantsAttribute);
-		QueryResult result = _services.retrieve(query);
-		Asset story = result.getAssets()[0];
+		Asset story =  query(parentStory.getOid(), dependantsAttribute).getAssets()[0];
 		
 		Assert.assertEquals(2, story.getAttribute(dependantsAttribute).getValues().length); 
 
 		parentStory.removeAttributeValue(dependantsAttribute,  childStory1.getOid());
         _services.save(parentStory);
         
-        query = new Query(parentStory.getOid());
-		query.getSelection().add(dependantsAttribute);
-		result = _services.retrieve(query);
-		story = result.getAssets()[0];
+		story =  query(parentStory.getOid(), dependantsAttribute).getAssets()[0];
 		
         Assert.assertEquals(1, story.getAttribute(dependantsAttribute).getValues().length);
 	}	
