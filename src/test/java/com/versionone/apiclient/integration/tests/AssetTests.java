@@ -2,9 +2,7 @@ package com.versionone.apiclient.integration.tests;
 
 import junit.framework.Assert;
 
-import org.apache.oro.text.regex.Util;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import com.versionone.Oid;

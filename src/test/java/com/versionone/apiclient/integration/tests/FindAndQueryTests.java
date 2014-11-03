@@ -11,6 +11,7 @@ import org.junit.Test;
 import com.versionone.Oid;
 import com.versionone.apiclient.AndFilterTerm;
 import com.versionone.apiclient.Asset;
+import com.versionone.apiclient.AttributeSelection;
 import com.versionone.apiclient.FilterTerm;
 import com.versionone.apiclient.GroupFilterTerm;
 import com.versionone.apiclient.IAssetType;
@@ -18,44 +19,21 @@ import com.versionone.apiclient.IAttributeDefinition;
 import com.versionone.apiclient.IFilterTerm;
 import com.versionone.apiclient.IMetaModel;
 import com.versionone.apiclient.IServices;
-import com.versionone.apiclient.MetaModel;
 import com.versionone.apiclient.Query;
+import com.versionone.apiclient.QueryFind;
 import com.versionone.apiclient.QueryResult;
-import com.versionone.apiclient.Services;
-import com.versionone.apiclient.V1APIConnector;
+import com.versionone.apiclient.V1Exception;
 
-//TODO:
-// Query for single assets
-// Query for multiple assets
-// Query for relations (select)
-// Filter query
-// Find query
-// Sort query
-// Paging query
-// Query history
-// Query "asof"
 
 public class FindAndQueryTests {
-
 	
-	private final static String V1Url= APIClientSuiteIT.getInstanceUrl().getV1Url();
-	private final static String V1UserName = APIClientSuiteIT.getInstanceUrl().getV1UserName();
-	private final static String V1Password = APIClientSuiteIT.getInstanceUrl().getV1Password();
-
-	
-	private static final V1APIConnector metaConnector = new V1APIConnector(V1Url + APIClientSuiteIT.getInstanceUrl().getMetaUrl());
-	private static final V1APIConnector dataConnector = new V1APIConnector(V1Url + APIClientSuiteIT.getInstanceUrl().getDataUrl(), V1UserName,
-			V1Password);
-
 	private final String InitialStoryName = "Initial name";
 	private final String ChangedStoryName = "Changed name";
 	private final String FinalStoryName = "Final name";
 
 	private static IMetaModel metaModel;
 	private static IServices services;
-	private static IServices dataService;
 	private static IAssetType storyType;
-	// private static IOperation storyDeleteOperation;
 
 	private static IAttributeDefinition nameDef;
 	private static IAttributeDefinition scopeDef;
@@ -67,12 +45,8 @@ public class FindAndQueryTests {
 	@BeforeClass
 	public static void beforeClass() {
 
-		
-//		V1APIConnector metaConnector = new V1APIConnector(V1Url + APIClientSuiteIT.getInstanceUrl().getMetaUrl());
-//		V1APIConnector dataConnector = new V1APIConnector(V1Url + APIClientSuiteIT.getInstanceUrl().getDataUrl(), V1UserName, V1Password);
-
-		metaModel = new MetaModel(metaConnector);
-		services = new Services(metaModel, dataConnector);
+		metaModel = APIClientSuiteIT.get_metaModel();
+		services = APIClientSuiteIT.get_services();
 		storyType = metaModel.getAssetType("Story");
 		// storyDeleteOperation = storyType.getOperation("Delete");
 
@@ -85,60 +59,74 @@ public class FindAndQueryTests {
 		attributesToQuery.add(momentDef);
 	}
 
-	// public void after() throws Exception {
-	// for(Asset story: assetsToDispose) {
-	// services.executeOperation(storyDeleteOperation, story.getOid());
-	// }
-	// }
-
+	// Query for single assets
 	@Test
 	public void testQuerySingleAsset() throws Exception {
-
-		try {
-			metaModel = new MetaModel(metaConnector);
-			dataService = new Services(metaModel, dataConnector);
 
 			Oid memberId = Oid.fromToken("Member:20", metaModel);
 			Query query = new Query(memberId);
 			IAttributeDefinition nameAttribute = metaModel.getAttributeDefinition("Member.Username");
 			query.getSelection().add(nameAttribute);
-			QueryResult result = dataService.retrieve(query);
+			QueryResult result = services.retrieve(query);
 
 			Assert.assertNotNull(result.getAssets());
 
 			Assert.assertEquals("1 asset", 1, result.getAssets().length);
-
-		} catch (Exception ex) {
-			throw ex;
-		}
 	}
 
-	// Query for attributes (select)
-	// @Test
-	// @Ignore
-	// public void testQueryForAtributtes() throws Exception {
-	//
-	// initialize();
-	//
-	// try {
-	// dataConnector = new V1APIConnector(dataUrl, V1_USERNAME, V1_PASSWORD);
-	// metaConnector = new V1APIConnector(metaUrl);
-	//
-	// metaModel = new MetaModel(metaConnector);
-	// dataService = new Services(metaModel, dataConnector);
-	// //not implemented
-	//
-	// } catch (Exception ex) {
-	// throw ex;
-	// }
-	// }
-
+	// Query for multiple assets
 	@Test
-	@Ignore
+	public void testQueryMultipleAsset() throws Exception {
+	      
+//			IAssetType storyType = metaModel.getAssetType("Story");
+	        Query query = new Query(storyType);
+	        IAttributeDefinition nameAttribute = storyType.getAttributeDefinition("Name");
+	        IAttributeDefinition estimateAttribute = storyType.getAttributeDefinition("Estimate");
+	        query.getSelection().add(nameAttribute);
+	        query.getSelection().add(estimateAttribute);
+	        QueryResult result = services.retrieve(query);
+
+	        Assert.assertNotNull(result.getAssets());
+
+	        Assert.assertTrue(result.getAssets().length > 1);
+	}
+	
+	// Filter query // Find query
+	@Test
+	public void testFindInAQuery() throws Exception {
+
+		Asset newStoryUrgent = services.createNew(storyType, APIClientSuiteIT.get_projectId());
+		IAttributeDefinition nameAttribute = storyType.getAttributeDefinition("Name");
+		newStoryUrgent.setAttributeValue(nameAttribute, "FindAndQueryTest: Find in a Query - Urgent story");
+		services.save(newStoryUrgent);
+
+		Asset newStory = services.createNew(storyType, APIClientSuiteIT.get_projectId());
+		nameAttribute = storyType.getAttributeDefinition("Name");
+		newStory.setAttributeValue(nameAttribute, "FindAndQueryTest: Find in a Query - Common story");
+		services.save(newStory);
+//		query
+		IAssetType requestType = metaModel.getAssetType("Story");
+		Query query = new Query(requestType);
+		query.getSelection().add(nameAttribute);
+		QueryResult result = services.retrieve(query);
+
+		Assert.assertTrue(result.getAssets().length>0);
+//		find
+		AttributeSelection selection = new AttributeSelection();
+		selection.add(nameAttribute);
+		query.setFind(new QueryFind("Urgent", selection)); 
+		result = services.retrieve(query);
+		Asset urgentStory = result.getAssets()[0];
+		
+		Assert.assertEquals("FindAndQueryTest: Find in a Query - Urgent story", urgentStory.getAttribute(nameAttribute).getValue().toString());
+	}
+
+	// Sort query
+	@Test
 	public void testQueryStoryByMoment() throws Exception {
 		Asset storyAsset = createDisposableStory();
 		storyAsset.setAttributeValue(nameDef, InitialStoryName);
-		storyAsset.setAttributeValue(scopeDef, Oid.fromToken("Scope:0", metaModel));
+		storyAsset.setAttributeValue(scopeDef, APIClientSuiteIT.get_projectId());
 		services.save(storyAsset);
 
 		storyAsset = getAssetsByOid(storyAsset.getOid().getMomentless(), attributesToQuery)[0];
@@ -158,11 +146,10 @@ public class FindAndQueryTests {
 	}
 
 	@Test
-	@Ignore
 	public void testQueryStoryHistoryByMoment() throws Exception {
 		Asset storyAsset = createDisposableStory();
 		storyAsset.setAttributeValue(nameDef, InitialStoryName);
-		storyAsset.setAttributeValue(scopeDef, Oid.fromToken("Scope:0", metaModel));
+		storyAsset.setAttributeValue(scopeDef,APIClientSuiteIT.get_projectId());
 		services.save(storyAsset);
 
 		storyAsset = getAssetsByOid(storyAsset.getOid().getMomentless(), attributesToQuery)[0];
@@ -182,11 +169,11 @@ public class FindAndQueryTests {
 	}
 
 	@Test
-	@Ignore
 	public void testQueryStoryChangesWithInequalityFilter() throws Exception {
+	
 		Asset storyAsset = createDisposableStory();
 		storyAsset.setAttributeValue(nameDef, InitialStoryName);
-		storyAsset.setAttributeValue(scopeDef, Oid.fromToken("Scope:0", metaModel));
+		storyAsset.setAttributeValue(scopeDef, APIClientSuiteIT.get_projectId());
 		services.save(storyAsset);
 
 		storyAsset = getAssetsByOid(storyAsset.getOid().getMomentless(), attributesToQuery)[0];
@@ -228,6 +215,27 @@ public class FindAndQueryTests {
 		Assert.assertFalse(nameMatch(FinalStoryName, assets));
 	}
 
+//	Paging
+	@Test
+	public void testPageListOfAssets() throws Exception {
+
+		Query query = new Query(storyType);
+        IAttributeDefinition nameAttribute = storyType.getAttributeDefinition("Name");
+        IAttributeDefinition estimateAttribute = storyType.getAttributeDefinition("Estimate");
+        query.getSelection().add(nameAttribute);
+        query.getSelection().add(estimateAttribute);
+        QueryResult result = services.retrieve(query);
+        
+        Assert.assertTrue(result.getAssets().length > 2 );
+       
+        query.getPaging().setPageSize(2);
+        query.getPaging().setStart(0);
+        result = services.retrieve(query);
+    
+        Assert.assertTrue(result.getAssets().length == 2 );
+	}
+	
+	
 	private boolean nameMatch(String name, Asset[] assets) throws Exception {
 		for (Asset asset : assets) {
 			String assetName = asset.getAttribute(nameDef).getValue().toString();
@@ -236,12 +244,11 @@ public class FindAndQueryTests {
 				return true;
 			}
 		}
-
 		return false;
 	}
 
-	private Asset createDisposableStory() {
-		Asset story = new Asset(storyType);
+	private Asset createDisposableStory() throws V1Exception {
+		Asset story = services.createNew(storyType, APIClientSuiteIT.get_projectId());
 		assetsToDispose.add(story);
 		return story;
 	}

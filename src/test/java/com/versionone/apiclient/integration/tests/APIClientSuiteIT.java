@@ -29,6 +29,8 @@ public class APIClientSuiteIT {
 
 	private static APIConfiguration _config;
 	private static Oid _projectId; 
+	private static IMetaModel _metaModel;
+	private static IServices _services;
 	
 
 	@BeforeClass
@@ -41,8 +43,8 @@ public class APIClientSuiteIT {
 
 		EnvironmentContext _context = new EnvironmentContext();
 
-		IMetaModel _metaModel = _context.getMetaModel();
-		IServices _services = _context.getServices();
+		_metaModel = _context.getMetaModel();
+		_services = _context.getServices();
 
 		Oid projectId = Oid.fromToken("Scope:0", _metaModel);
 		IAssetType assetType = _metaModel.getAssetType("Scope");
@@ -50,9 +52,7 @@ public class APIClientSuiteIT {
 		IAttributeDefinition nameAttribute = assetType.getAttributeDefinition("Name");
 		newAsset.setAttributeValue(nameAttribute, "Java.SDK Integration Tests");
 		_services.save(newAsset);
-		
 		_projectId = newAsset.getOid().getMomentless();
-		
 		
 	}
 
@@ -63,6 +63,17 @@ public class APIClientSuiteIT {
 	public static Oid get_projectId() {
 		return _projectId;
 	}
-	
+
+	public static APIConfiguration get_config() {
+		return _config;
+	}
+
+	public static IMetaModel get_metaModel() {
+		return _metaModel;
+	}
+
+	public static IServices get_services() {
+		return _services;
+	}
 	
 }
