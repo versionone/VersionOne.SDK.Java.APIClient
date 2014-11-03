@@ -5,7 +5,6 @@ import java.util.LinkedList;
 
 import org.junit.Assert;
 import org.junit.BeforeClass;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import com.versionone.Oid;
@@ -48,7 +47,6 @@ public class FindAndQueryTests {
 		metaModel = APIClientSuiteIT.get_metaModel();
 		services = APIClientSuiteIT.get_services();
 		storyType = metaModel.getAssetType("Story");
-		// storyDeleteOperation = storyType.getOperation("Delete");
 
 		nameDef = storyType.getAttributeDefinition("Name");
 		scopeDef = storyType.getAttributeDefinition("Scope");
@@ -78,7 +76,6 @@ public class FindAndQueryTests {
 	@Test
 	public void testQueryMultipleAsset() throws Exception {
 	      
-//			IAssetType storyType = metaModel.getAssetType("Story");
 	        Query query = new Query(storyType);
 	        IAttributeDefinition nameAttribute = storyType.getAttributeDefinition("Name");
 	        IAttributeDefinition estimateAttribute = storyType.getAttributeDefinition("Estimate");
