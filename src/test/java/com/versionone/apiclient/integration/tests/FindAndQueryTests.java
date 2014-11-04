@@ -1,10 +1,12 @@
 package com.versionone.apiclient.integration.tests;
 
+import java.util.Calendar;
 import java.util.Collection;
 import java.util.LinkedList;
 
 import org.junit.Assert;
 import org.junit.BeforeClass;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import com.versionone.Oid;
@@ -18,6 +20,7 @@ import com.versionone.apiclient.IAttributeDefinition;
 import com.versionone.apiclient.IFilterTerm;
 import com.versionone.apiclient.IMetaModel;
 import com.versionone.apiclient.IServices;
+import com.versionone.apiclient.OrderBy.Order;
 import com.versionone.apiclient.Query;
 import com.versionone.apiclient.QueryFind;
 import com.versionone.apiclient.QueryResult;
@@ -36,6 +39,7 @@ public class FindAndQueryTests {
 
 	private static IAttributeDefinition nameDef;
 	private static IAttributeDefinition scopeDef;
+	private static IAttributeDefinition createDate;
 	private static IAttributeDefinition momentDef;
 	private static Collection<IAttributeDefinition> attributesToQuery;
 
@@ -51,6 +55,7 @@ public class FindAndQueryTests {
 		nameDef = storyType.getAttributeDefinition("Name");
 		scopeDef = storyType.getAttributeDefinition("Scope");
 		momentDef = storyType.getAttributeDefinition("Moment");
+		createDate = storyType.getAttributeDefinition("CreateDate");
 		attributesToQuery = new LinkedList<IAttributeDefinition>();
 		attributesToQuery.add(nameDef);
 		attributesToQuery.add(scopeDef);
@@ -120,6 +125,68 @@ public class FindAndQueryTests {
 
 	// Sort query
 	@Test
+		public void testSortStories() throws Exception {
+
+		//add 3 stories
+		Asset storyAsset = createDisposableStory();
+		storyAsset.setAttributeValue(nameDef, "MM-Story");
+		storyAsset.setAttributeValue(scopeDef, APIClientSuiteIT.get_projectId());
+		services.save(storyAsset);
+		storyAsset = createDisposableStory();
+		storyAsset.setAttributeValue(nameDef, "AA-Story");
+		storyAsset.setAttributeValue(scopeDef, APIClientSuiteIT.get_projectId());
+		services.save(storyAsset);
+		storyAsset = createDisposableStory();
+		storyAsset.setAttributeValue(nameDef, "HH-Story");
+		storyAsset.setAttributeValue(scopeDef, APIClientSuiteIT.get_projectId());
+		services.save(storyAsset);
+		
+		IAssetType storyType = metaModel.getAssetType("Story");
+		Query query = new Query(storyType);
+		IAttributeDefinition nameAttribute = storyType.getAttributeDefinition("Name");
+		query.getSelection().add(nameAttribute);
+		query.getOrderBy().minorSort(nameAttribute, Order.Ascending);
+		
+		QueryResult result = services.retrieve(query);
+		
+		Asset first_story = result.getAssets()[0];
+		
+		Assert.assertEquals("AA-Story", first_story.getAttribute(nameAttribute).getValue().toString());
+		
+	}	
+
+	//asof
+	@Test
+	public void testAsof() throws Exception {
+//		Calendar c = Calendar.getInstance();
+//		c.add(Calendar.DAY_OF_MONTH, -7);
+		Asset storyAsset = createDisposableStory();
+		storyAsset.setAttributeValue(nameDef, "Test Asof");
+//		storyAsset.setAttributeValue(createDate, c.getTime());
+		storyAsset.setAttributeValue(scopeDef, APIClientSuiteIT.get_projectId());
+		services.save(storyAsset);
+
+		IAssetType storyType = metaModel.getAssetType("Story");
+		Query query = new Query(storyType, true);
+		IAttributeDefinition nameAttribute = storyType.getAttributeDefinition("Name");
+		IAttributeDefinition estimateAttribute = storyType.getAttributeDefinition("Estimate");
+//		IAttributeDefinition createDateAttribute = storyType.getAttributeDefinition("CreateDate");
+		query.getSelection().add(nameAttribute);
+		query.getSelection().add(estimateAttribute);
+//		query.getSelection().add(createDateAttribute);
+		
+		
+		Calendar date = Calendar.getInstance();
+		date.add(Calendar.DAY_OF_MONTH, -7);
+		query.setAsOf(date.getTime()); // query.AsOf = DateTime.Now.AddDays(-7); //7 days ago
+		
+		QueryResult result = services.retrieve(query);
+
+		result.getAssets();
+
+	}	
+	
+	@Test
 	public void testQueryStoryByMoment() throws Exception {
 		Asset storyAsset = createDisposableStory();
 		storyAsset.setAttributeValue(nameDef, InitialStoryName);
@@ -142,6 +209,7 @@ public class FindAndQueryTests {
 		Assert.assertEquals(storyAsset.getAttribute(nameDef).getValue(), ChangedStoryName);
 	}
 
+	//query History
 	@Test
 	public void testQueryStoryHistoryByMoment() throws Exception {
 		Asset storyAsset = createDisposableStory();
@@ -216,6 +284,20 @@ public class FindAndQueryTests {
 	@Test
 	public void testPageListOfAssets() throws Exception {
 
+		//add 3 stories
+		Asset storyAsset = createDisposableStory();
+		storyAsset.setAttributeValue(nameDef, "Paging Test - Story1");
+		storyAsset.setAttributeValue(scopeDef, APIClientSuiteIT.get_projectId());
+		services.save(storyAsset);
+		storyAsset = createDisposableStory();
+		storyAsset.setAttributeValue(nameDef, "Paging Test - Story2");
+		storyAsset.setAttributeValue(scopeDef, APIClientSuiteIT.get_projectId());
+		services.save(storyAsset);
+		storyAsset = createDisposableStory();
+		storyAsset.setAttributeValue(nameDef, "Paging Test - Story3");
+		storyAsset.setAttributeValue(scopeDef, APIClientSuiteIT.get_projectId());
+		services.save(storyAsset);
+		
 		Query query = new Query(storyType);
         IAttributeDefinition nameAttribute = storyType.getAttributeDefinition("Name");
         IAttributeDefinition estimateAttribute = storyType.getAttributeDefinition("Estimate");
@@ -246,7 +328,7 @@ public class FindAndQueryTests {
 
 	private Asset createDisposableStory() throws V1Exception {
 		Asset story = services.createNew(storyType, APIClientSuiteIT.get_projectId());
-		assetsToDispose.add(story);
+//		assetsToDispose.add(story);
 		return story;
 	}
 
