@@ -4,8 +4,21 @@ import junit.framework.Assert;
 
 import org.junit.Test;
 
+import com.versionone.apiclient.APIException;
+import com.versionone.apiclient.ConnectionException;
+import com.versionone.apiclient.IV1Configuration.TrackingLevel;
+import com.versionone.apiclient.V1Configuration;
+
 public class ConfigurationTests {
 
+	//add config test
+	@Test
+	public void testConfig() throws ConnectionException, APIException {
+		V1Configuration v1config = APIClientSuiteIT.get_context().getV1Configuration();
+		Assert.assertTrue(v1config.isEffortTracking());
+		Assert.assertTrue(TrackingLevel.On.equals( v1config.getDefectTrackingLevel()));
+	}
+	
 	@Test
 	public void testGetV1Url() {
 		String v1Url = APIClientSuiteIT.getInstanceUrl().getV1Url();
