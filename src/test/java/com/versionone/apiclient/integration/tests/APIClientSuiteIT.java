@@ -31,8 +31,9 @@ public class APIClientSuiteIT {
 	private static Oid _projectId; 
 	private static IMetaModel _metaModel;
 	private static IServices _services;
-	
+	private static EnvironmentContext _context;
 
+	
 	@BeforeClass
 	public static void beforeRun() throws Exception {
 		_config = new APIConfiguration();
@@ -41,7 +42,7 @@ public class APIClientSuiteIT {
 
 	public static void createTestSuite() throws Exception {
 
-		EnvironmentContext _context = new EnvironmentContext();
+		 _context = new EnvironmentContext();
 
 		_metaModel = _context.getMetaModel();
 		_services = _context.getServices();
@@ -74,6 +75,10 @@ public class APIClientSuiteIT {
 
 	public static IServices get_services() {
 		return _services;
+	}
+
+	public static EnvironmentContext get_context() {
+		return _context;
 	}
 	
 }

@@ -2,11 +2,11 @@ package com.versionone.apiclient.integration.tests;
 
 import java.util.Calendar;
 import java.util.Collection;
+import java.util.Date;
 import java.util.LinkedList;
 
 import org.junit.Assert;
 import org.junit.BeforeClass;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import com.versionone.Oid;
@@ -39,11 +39,9 @@ public class FindAndQueryTests {
 
 	private static IAttributeDefinition nameDef;
 	private static IAttributeDefinition scopeDef;
-	private static IAttributeDefinition createDate;
 	private static IAttributeDefinition momentDef;
 	private static Collection<IAttributeDefinition> attributesToQuery;
 
-	private final Collection<Asset> assetsToDispose = new LinkedList<Asset>();
 
 	@BeforeClass
 	public static void beforeClass() {
@@ -55,7 +53,6 @@ public class FindAndQueryTests {
 		nameDef = storyType.getAttributeDefinition("Name");
 		scopeDef = storyType.getAttributeDefinition("Scope");
 		momentDef = storyType.getAttributeDefinition("Moment");
-		createDate = storyType.getAttributeDefinition("CreateDate");
 		attributesToQuery = new LinkedList<IAttributeDefinition>();
 		attributesToQuery.add(nameDef);
 		attributesToQuery.add(scopeDef);
@@ -158,31 +155,28 @@ public class FindAndQueryTests {
 	//asof
 	@Test
 	public void testAsof() throws Exception {
-//		Calendar c = Calendar.getInstance();
-//		c.add(Calendar.DAY_OF_MONTH, -7);
 		Asset storyAsset = createDisposableStory();
 		storyAsset.setAttributeValue(nameDef, "Test Asof");
-//		storyAsset.setAttributeValue(createDate, c.getTime());
 		storyAsset.setAttributeValue(scopeDef, APIClientSuiteIT.get_projectId());
 		services.save(storyAsset);
 
 		IAssetType storyType = metaModel.getAssetType("Story");
 		Query query = new Query(storyType, true);
 		IAttributeDefinition nameAttribute = storyType.getAttributeDefinition("Name");
-		IAttributeDefinition estimateAttribute = storyType.getAttributeDefinition("Estimate");
-//		IAttributeDefinition createDateAttribute = storyType.getAttributeDefinition("CreateDate");
-		query.getSelection().add(nameAttribute);
-		query.getSelection().add(estimateAttribute);
-//		query.getSelection().add(createDateAttribute);
-		
-		
-		Calendar date = Calendar.getInstance();
-		date.add(Calendar.DAY_OF_MONTH, -7);
-		query.setAsOf(date.getTime()); // query.AsOf = DateTime.Now.AddDays(-7); //7 days ago
-		
-		QueryResult result = services.retrieve(query);
+		IAttributeDefinition createDateAttribute = storyType.getAttributeDefinition("CreateDate");
 
-		result.getAssets();
+		query.getSelection().add(nameAttribute);
+		query.getSelection().add(createDateAttribute);
+		AttributeSelection selection = new AttributeSelection();
+		selection.add(nameAttribute);
+		query.setFind(new QueryFind("Test Asof", selection)); 
+		Date date = (Date) Calendar.getInstance().getTime();
+		query.setAsOf(date); 
+		QueryResult result = services.retrieve(query);
+		
+		Assert.assertNotNull(result);
+		
+		Assert.assertEquals("Test Asof", result.getAssets()[0].getAttribute(nameAttribute).getValue().toString());
 
 	}	
 	
