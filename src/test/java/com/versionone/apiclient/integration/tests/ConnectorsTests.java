@@ -1,4 +1,4 @@
-package com.versionone.apiclient.unit.tests;
+package com.versionone.apiclient.integration.tests;
 
 import java.net.URISyntaxException;
 

@@ -13,18 +13,21 @@ import com.versionone.apiclient.IAttributeDefinition;
 import com.versionone.apiclient.IMetaModel;
 import com.versionone.apiclient.IServices;
 
+//NOTE: Add classes here to include in integration test run using Maven "verify" goal.
 @RunWith(Suite.class)
-// NOTE: Add classes here to include in integration test run using Maven "verify" goal.
-@Suite.SuiteClasses({ AssetTests.class, 
-					ConfigurationTests.class, 
-					ConnectorTests.class, 
-					EnvironmentContextTests.class, 
-					FindBuilderTests.class,
-					ModelsAndServicesTests.class, 
-					ProxyTests.class, 
-					FindAndQueryTests.class, 
-					UrlsTests.class 
-	})
+@Suite.SuiteClasses({ 
+	ConnectorsTests.class,
+	ConnectorTests.class, 
+	AssetTests.class, 
+	ConfigurationTests.class, 
+	EnvironmentContextTests.class, 
+	FindBuilderTests.class,
+	ModelsAndServicesTests.class, 
+	ProxyTests.class, 
+	FindAndQueryTests.class, 
+	UrlsTests.class 
+})
+
 public class APIClientIntegrationTestSuiteIT {
 
 	private static APIConfiguration _config;
