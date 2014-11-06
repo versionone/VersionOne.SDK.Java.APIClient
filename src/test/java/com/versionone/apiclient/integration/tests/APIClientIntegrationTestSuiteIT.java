@@ -50,6 +50,7 @@ public class APIClientIntegrationTestSuiteIT {
 		_metaModel = _context.getMetaModel();
 		_services = _context.getServices();
 
+		//Create a new project for integration test assets.
 		Oid projectId = Oid.fromToken("Scope:0", _metaModel);
 		IAssetType assetType = _metaModel.getAssetType("Scope");
 		Asset newAsset = _services.createNew(assetType, projectId);
