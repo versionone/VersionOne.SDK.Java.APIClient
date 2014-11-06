@@ -15,7 +15,7 @@ import com.versionone.apiclient.Urls;
 public class UrlsTests {
 
     private IUrls _defaultTarget;
-    private static final String V1Url = APIClientSuiteIT.getInstanceUrl().getV1Url();
+    private static final String V1Url = APIClientIntegrationTestSuiteIT.getInstanceUrl().getV1Url();
 
     @Before
     public void setup() throws IOException {

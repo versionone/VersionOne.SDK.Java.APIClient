@@ -28,4 +28,4 @@ import org.junit.runners.Suite.SuiteClasses;
         CredentialsTests.class,
         StringUtilityTests.class})
 
-public class APIClientTestSuite { }
+public class APIClientUnitTestSuite { }

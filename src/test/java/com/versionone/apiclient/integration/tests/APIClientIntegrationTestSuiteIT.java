@@ -25,7 +25,7 @@ import com.versionone.apiclient.IServices;
 					FindAndQueryTests.class, 
 					UrlsTests.class 
 	})
-public class APIClientSuiteIT {
+public class APIClientIntegrationTestSuiteIT {
 
 	private static APIConfiguration _config;
 	private static Oid _projectId; 

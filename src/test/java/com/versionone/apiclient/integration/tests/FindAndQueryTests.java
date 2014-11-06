@@ -46,8 +46,8 @@ public class FindAndQueryTests {
 	@BeforeClass
 	public static void beforeClass() {
 
-		metaModel = APIClientSuiteIT.get_metaModel();
-		services = APIClientSuiteIT.get_services();
+		metaModel = APIClientIntegrationTestSuiteIT.get_metaModel();
+		services = APIClientIntegrationTestSuiteIT.get_services();
 		storyType = metaModel.getAssetType("Story");
 
 		nameDef = storyType.getAttributeDefinition("Name");
@@ -94,12 +94,12 @@ public class FindAndQueryTests {
 	@Test
 	public void testFindInAQuery() throws Exception {
 
-		Asset newStoryUrgent = services.createNew(storyType, APIClientSuiteIT.get_projectId());
+		Asset newStoryUrgent = services.createNew(storyType, APIClientIntegrationTestSuiteIT.get_projectId());
 		IAttributeDefinition nameAttribute = storyType.getAttributeDefinition("Name");
 		newStoryUrgent.setAttributeValue(nameAttribute, "FindAndQueryTest: Find in a Query - Urgent story");
 		services.save(newStoryUrgent);
 
-		Asset newStory = services.createNew(storyType, APIClientSuiteIT.get_projectId());
+		Asset newStory = services.createNew(storyType, APIClientIntegrationTestSuiteIT.get_projectId());
 		nameAttribute = storyType.getAttributeDefinition("Name");
 		newStory.setAttributeValue(nameAttribute, "FindAndQueryTest: Find in a Query - Common story");
 		services.save(newStory);
@@ -127,15 +127,15 @@ public class FindAndQueryTests {
 		//add 3 stories
 		Asset storyAsset = createDisposableStory();
 		storyAsset.setAttributeValue(nameDef, "MM-Story");
-		storyAsset.setAttributeValue(scopeDef, APIClientSuiteIT.get_projectId());
+		storyAsset.setAttributeValue(scopeDef, APIClientIntegrationTestSuiteIT.get_projectId());
 		services.save(storyAsset);
 		storyAsset = createDisposableStory();
 		storyAsset.setAttributeValue(nameDef, "AA-Story");
-		storyAsset.setAttributeValue(scopeDef, APIClientSuiteIT.get_projectId());
+		storyAsset.setAttributeValue(scopeDef, APIClientIntegrationTestSuiteIT.get_projectId());
 		services.save(storyAsset);
 		storyAsset = createDisposableStory();
 		storyAsset.setAttributeValue(nameDef, "HH-Story");
-		storyAsset.setAttributeValue(scopeDef, APIClientSuiteIT.get_projectId());
+		storyAsset.setAttributeValue(scopeDef, APIClientIntegrationTestSuiteIT.get_projectId());
 		services.save(storyAsset);
 		
 		IAssetType storyType = metaModel.getAssetType("Story");
@@ -157,7 +157,7 @@ public class FindAndQueryTests {
 	public void testAsof() throws Exception {
 		Asset storyAsset = createDisposableStory();
 		storyAsset.setAttributeValue(nameDef, "Test Asof");
-		storyAsset.setAttributeValue(scopeDef, APIClientSuiteIT.get_projectId());
+		storyAsset.setAttributeValue(scopeDef, APIClientIntegrationTestSuiteIT.get_projectId());
 		services.save(storyAsset);
 
 		IAssetType storyType = metaModel.getAssetType("Story");
@@ -184,7 +184,7 @@ public class FindAndQueryTests {
 	public void testQueryStoryByMoment() throws Exception {
 		Asset storyAsset = createDisposableStory();
 		storyAsset.setAttributeValue(nameDef, InitialStoryName);
-		storyAsset.setAttributeValue(scopeDef, APIClientSuiteIT.get_projectId());
+		storyAsset.setAttributeValue(scopeDef, APIClientIntegrationTestSuiteIT.get_projectId());
 		services.save(storyAsset);
 
 		storyAsset = getAssetsByOid(storyAsset.getOid().getMomentless(), attributesToQuery)[0];
@@ -208,7 +208,7 @@ public class FindAndQueryTests {
 	public void testQueryStoryHistoryByMoment() throws Exception {
 		Asset storyAsset = createDisposableStory();
 		storyAsset.setAttributeValue(nameDef, InitialStoryName);
-		storyAsset.setAttributeValue(scopeDef,APIClientSuiteIT.get_projectId());
+		storyAsset.setAttributeValue(scopeDef,APIClientIntegrationTestSuiteIT.get_projectId());
 		services.save(storyAsset);
 
 		storyAsset = getAssetsByOid(storyAsset.getOid().getMomentless(), attributesToQuery)[0];
@@ -232,7 +232,7 @@ public class FindAndQueryTests {
 	
 		Asset storyAsset = createDisposableStory();
 		storyAsset.setAttributeValue(nameDef, InitialStoryName);
-		storyAsset.setAttributeValue(scopeDef, APIClientSuiteIT.get_projectId());
+		storyAsset.setAttributeValue(scopeDef, APIClientIntegrationTestSuiteIT.get_projectId());
 		services.save(storyAsset);
 
 		storyAsset = getAssetsByOid(storyAsset.getOid().getMomentless(), attributesToQuery)[0];
@@ -281,15 +281,15 @@ public class FindAndQueryTests {
 		//add 3 stories
 		Asset storyAsset = createDisposableStory();
 		storyAsset.setAttributeValue(nameDef, "Paging Test - Story1");
-		storyAsset.setAttributeValue(scopeDef, APIClientSuiteIT.get_projectId());
+		storyAsset.setAttributeValue(scopeDef, APIClientIntegrationTestSuiteIT.get_projectId());
 		services.save(storyAsset);
 		storyAsset = createDisposableStory();
 		storyAsset.setAttributeValue(nameDef, "Paging Test - Story2");
-		storyAsset.setAttributeValue(scopeDef, APIClientSuiteIT.get_projectId());
+		storyAsset.setAttributeValue(scopeDef, APIClientIntegrationTestSuiteIT.get_projectId());
 		services.save(storyAsset);
 		storyAsset = createDisposableStory();
 		storyAsset.setAttributeValue(nameDef, "Paging Test - Story3");
-		storyAsset.setAttributeValue(scopeDef, APIClientSuiteIT.get_projectId());
+		storyAsset.setAttributeValue(scopeDef, APIClientIntegrationTestSuiteIT.get_projectId());
 		services.save(storyAsset);
 		
 		Query query = new Query(storyType);
@@ -321,7 +321,7 @@ public class FindAndQueryTests {
 	}
 
 	private Asset createDisposableStory() throws V1Exception {
-		Asset story = services.createNew(storyType, APIClientSuiteIT.get_projectId());
+		Asset story = services.createNew(storyType, APIClientIntegrationTestSuiteIT.get_projectId());
 //		assetsToDispose.add(story);
 		return story;
 	}
