@@ -15,8 +15,6 @@ import org.w3c.dom.NodeList;
 
 /**
  * Concrete class for obtaining metadata from the VersionOne server
- * @author jerry
- *
  */
 public class MetaModel implements IMetaModel {
 	private Map<String, Object> _map = new HashMap<String, Object>();

@@ -20,9 +20,6 @@ import org.xml.sax.SAXException;
 
 /**
  * IAPIConnector that reads data from a file.
- *
- * @author Jerry D. Odenwelder.
- *
  */
 public class FileAPIConnector implements IAPIConnector {
 

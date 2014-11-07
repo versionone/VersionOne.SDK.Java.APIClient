@@ -8,8 +8,6 @@ import java.util.Map;
 
 /**
  * Represents the Localizer API on the VersionOne Server
- * @author jerry
- *
  */
 public class Localizer implements ILocalizer {
 
