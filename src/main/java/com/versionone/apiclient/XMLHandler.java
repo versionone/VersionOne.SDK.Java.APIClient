@@ -13,8 +13,6 @@ import org.xml.sax.SAXException;
 
 /**
  * This class centralizes the process of reading XML to create a DOM document
- * @author jerry
- *
  */
 class XMLHandler {
 

@@ -19,9 +19,7 @@ import java.util.*;
 /**
  * Class responsible creating XML from an Asset.  This
  * XML is used in the POST command when creating or
- * updating an Asset
- *
- * @author jerry
+ * updating an Asset.
  */
 public class XmlApiWriter {
 
@@ -188,6 +186,7 @@ public class XmlApiWriter {
      * @throws APIException when an unsupported type is passed
      */
     private String valueToXmlString(AttributeType type, Object value) throws APIException {
+    	
         if (value == null)
             return "";
 
@@ -236,7 +235,7 @@ public class XmlApiWriter {
 
     /**
      * @param date - date to calculate.
-     * @return number of seconds last from begining of specified day (in local time).
+     * @return number of seconds last from beginning of specified day (in local time).
      */
     private int getSecondOfDay(Date date) {
         final GregorianCalendar cal = new GregorianCalendar();
