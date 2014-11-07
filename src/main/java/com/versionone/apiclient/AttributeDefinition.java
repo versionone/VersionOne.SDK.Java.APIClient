@@ -12,8 +12,6 @@ import com.versionone.Oid;
 
 /**
  * Represents the definition of an Attribute
- * @author jerry
- *
  */
 class AttributeDefinition implements IAttributeDefinition {
 	private IMetaModel meta;

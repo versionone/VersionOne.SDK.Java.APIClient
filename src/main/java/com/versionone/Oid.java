@@ -7,8 +7,6 @@ import com.versionone.apiclient.OidException;
 
 /**
  * VersionOne object identifier
- * @author jerry
- *
  */
 public class Oid {
 	protected static final String NullOidToken = "NULL";
