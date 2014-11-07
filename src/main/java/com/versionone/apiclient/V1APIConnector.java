@@ -15,7 +15,7 @@ import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 
-import org.apache.commons.lang3.StringUtils;
+import com.versionone.util.V1Util;
 
 import sun.net.www.protocol.http.AuthCacheImpl;
 import sun.net.www.protocol.http.AuthCacheValue;
@@ -101,7 +101,7 @@ public class V1APIConnector implements IAPIConnector {
 
 		header = "Java/" + System.getProperty("java.version") + " " + p.getImplementationTitle() + "/" + p.getImplementationVersion();
 
-		if (StringUtils.isNotBlank(_app_name) && StringUtils.isNotBlank(_app_version)) {
+		if (!V1Util.isNullOrEmpty(_app_name) && !V1Util.isNullOrEmpty(_app_version)) {
 			header = header + " " + _app_name + "/" + _app_version;
 		}
 		_user_agent_header = header;
