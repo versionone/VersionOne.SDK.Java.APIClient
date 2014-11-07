@@ -1,12 +1,11 @@
-/*(c) Copyright 2008, VersionOne, Inc. All rights reserved. (c)*/
 package com.versionone.util;
 
-import com.versionone.DB.DateTime;
-
-import java.io.*;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.io.Reader;
+import java.io.Writer;
 import java.lang.reflect.Array;
-import java.util.Date;
-import java.util.GregorianCalendar;
 import java.util.List;
 
 /**
