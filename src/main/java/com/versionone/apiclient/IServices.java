@@ -3,7 +3,7 @@ package com.versionone.apiclient;
 import com.versionone.Oid;
 
 /**
- * Methods implemented by a class providing VersioOne services
+ * Methods implemented by a class providing VersionOne services.
  */
 public interface IServices {
 
@@ -49,8 +49,7 @@ public interface IServices {
      * @throws OidException - if there is problem related to Object Identifiers
      * @throws APIException if there is a problem executing the query
 	 */
-	QueryResult retrieve(Query query) throws ConnectionException, APIException,
-            OidException;
+	QueryResult retrieve(Query query) throws ConnectionException, APIException, OidException;
 
 	/**
 	 * Persist changes to an asset without comment
