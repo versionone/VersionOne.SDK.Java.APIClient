@@ -3,10 +3,7 @@ package com.versionone.apiclient;
 import com.versionone.Oid;
 
 /**
- * Methods implemented by a class profiding VersioOne services
- * 
- * @author jerry
- *
+ * Methods implemented by a class providing VersioOne services
  */
 public interface IServices {
 
