@@ -55,7 +55,7 @@ public class V1APIConnector implements IAPIConnector {
 	 * @param userName
 	 *            - Name of the user wishing to connect.
 	 * @param password
-	 *            - password of the user wishing to connect.
+	 *            - Password of the user wishing to connect.
 	 */
 	public V1APIConnector(String url, String userName, String password) {
 		this(url, userName, password, null);
@@ -69,9 +69,9 @@ public class V1APIConnector implements IAPIConnector {
 	 * @param userName
 	 *            - Name of the user wishing to connect.
 	 * @param password
-	 *            - password of the user wishing to connect.
+	 *            - Password of the user wishing to connect.
 	 * @param proxy
-	 *            - proxy for connection. it is not used ??
+	 *            - Proxy for connection. it is not used ??
 	 * 
 	 */
 	public V1APIConnector(String url, String userName, String password, ProxyProvider proxy) {
@@ -108,7 +108,7 @@ public class V1APIConnector implements IAPIConnector {
 	}
 
 	/**
-	 * get the value to use for the custom user-agent header.
+	 * Get the value to use for the custom user-agent header.
 	 * 
 	 * @return String
 	 */
