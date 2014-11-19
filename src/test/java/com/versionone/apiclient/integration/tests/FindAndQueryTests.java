@@ -94,27 +94,26 @@ public class FindAndQueryTests {
 	@Test
 	public void testFindInAQuery() throws Exception {
 
-		Asset newStoryUrgent = services.createNew(storyType, APIClientIntegrationTestSuiteIT.get_projectId());
+		Asset newStoryUrgent = createDisposableStory();// services.createNew(storyType, APIClientIntegrationTestSuiteIT.get_projectId());
 		IAttributeDefinition nameAttribute = storyType.getAttributeDefinition("Name");
 		newStoryUrgent.setAttributeValue(nameAttribute, "FindAndQueryTest: Find in a Query - Urgent story");
 		services.save(newStoryUrgent);
 
-		Asset newStory = services.createNew(storyType, APIClientIntegrationTestSuiteIT.get_projectId());
+		Asset newStory = createDisposableStory();//services.createNew(storyType, APIClientIntegrationTestSuiteIT.get_projectId());
 		nameAttribute = storyType.getAttributeDefinition("Name");
 		newStory.setAttributeValue(nameAttribute, "FindAndQueryTest: Find in a Query - Common story");
 		services.save(newStory);
 //		query
 		IAssetType requestType = metaModel.getAssetType("Story");
 		Query query = new Query(requestType);
-		query.getSelection().add(nameAttribute);
-		QueryResult result = services.retrieve(query);
-
-		Assert.assertTrue(result.getAssets().length>0);
+		IAttributeDefinition nameAttributeToQuery = requestType.getAttributeDefinition("Name");
+		query.getSelection().add(nameAttributeToQuery);
+		
 //		find
 		AttributeSelection selection = new AttributeSelection();
-		selection.add(nameAttribute);
+		selection.add(nameAttributeToQuery);
 		query.setFind(new QueryFind("Urgent", selection)); 
-		result = services.retrieve(query);
+		QueryResult result = services.retrieve(query);
 		Asset urgentStory = result.getAssets()[0];
 		
 		Assert.assertEquals("FindAndQueryTest: Find in a Query - Urgent story", urgentStory.getAttribute(nameAttribute).getValue().toString());
