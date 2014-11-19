@@ -18,8 +18,6 @@ import java.util.*;
 
 /**
  * Wraps the services available in the VersionOne API
- *
- * @author Jerry D. Odenwelder Jr.
  */
 public class Services implements IServices {
 
@@ -43,8 +41,7 @@ public class Services implements IServices {
      *
      * @see IServices#retrieve(Query)
      */
-    public QueryResult retrieve(Query query) throws ConnectionException,
-            APIException, OidException {
+    public QueryResult retrieve(Query query) throws ConnectionException, APIException, OidException {
         String queryUrl = new QueryURLBuilder(query).toString();
         Reader reader = null;
         try {

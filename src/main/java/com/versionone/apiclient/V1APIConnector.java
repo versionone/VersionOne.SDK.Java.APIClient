@@ -55,7 +55,7 @@ public class V1APIConnector implements IAPIConnector {
 	 * @param userName
 	 *            - Name of the user wishing to connect.
 	 * @param password
-	 *            - password of the user wishing to connect.
+	 *            - Password of the user wishing to connect.
 	 */
 	public V1APIConnector(String url, String userName, String password) {
 		this(url, userName, password, null);
@@ -69,9 +69,9 @@ public class V1APIConnector implements IAPIConnector {
 	 * @param userName
 	 *            - Name of the user wishing to connect.
 	 * @param password
-	 *            - password of the user wishing to connect.
+	 *            - Password of the user wishing to connect.
 	 * @param proxy
-	 *            - proxy for connection. it is not used ??
+	 *            - Proxy for connection. it is not used ??
 	 * 
 	 */
 	public V1APIConnector(String url, String userName, String password, ProxyProvider proxy) {
@@ -108,7 +108,7 @@ public class V1APIConnector implements IAPIConnector {
 	}
 
 	/**
-	 * get the value to use for the custom user-agent header.
+	 * Get the value to use for the custom user-agent header.
 	 * 
 	 * @return String
 	 */
@@ -139,7 +139,7 @@ public class V1APIConnector implements IAPIConnector {
 
 	/**
 	 * Create a connection with only the URL and proxy. Use this constructor to access MetaData, which does not require
-	 * or if you want to use have Windows Integrated Authentication or MetaData does not require the use of credentials
+	 * or if you want to use have Windows Integrated Authentication or MetaData does not require the use of credentials.
 	 *
 	 * @param url
 	 *            - Complete URL to VersionOne system
@@ -153,9 +153,9 @@ public class V1APIConnector implements IAPIConnector {
 	/**
 	 * Read data from the root of the connection.
 	 *
-	 * Note: Caller is responsible for closing the returned stream
+	 * Note: Caller is responsible for closing the returned stream.
 	 *
-	 * @return the stream for reading data
+	 * @return The stream for reading data.
 	 * @throws IOException
 	 */
 	public Reader getData() throws ConnectionException {
@@ -165,10 +165,10 @@ public class V1APIConnector implements IAPIConnector {
 	/**
 	 * Read data from the path provided.
 	 *
-	 * Note: Caller is responsible for closing the returned stream
+	 * Note: Caller is responsible for closing the returned stream.
 	 *
 	 * @param path
-	 * @return the stream for reading data
+	 * @return The stream for reading data.
 	 * @throws IOException
 	 */
 	public Reader getData(String path) throws ConnectionException {
@@ -200,7 +200,7 @@ public class V1APIConnector implements IAPIConnector {
 	/**
 	 * Send data to the path.
 	 *
-	 * Note: Caller is responsible for closing the returned stream
+	 * Note: Caller is responsible for closing the returned stream.
 	 *
 	 * @param path
 	 * @param data
@@ -280,9 +280,8 @@ public class V1APIConnector implements IAPIConnector {
 	/**
 	 * Completing HTTP request and getting response.
 	 *
-	 * @param path
-	 *            path to the data on server.
-	 * @return the response stream for reading data.
+	 * @param path Path to the data on server.
+	 * @return The response stream for reading data.
 	 * @see #beginRequest(String, String)
 	 */
 	public InputStream endRequest(String path) throws ConnectionException {
