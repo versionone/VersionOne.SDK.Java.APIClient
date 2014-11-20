@@ -15,7 +15,7 @@ public class QueryResult {
     /**
      * Get the Assets returned by the Query
      *
-     * @return
+     * @return array of Asset
      */
     public Asset[] getAssets() {
         return assets;
@@ -24,7 +24,7 @@ public class QueryResult {
     /**
      * Get the total number of Assets available
      *
-     * @return
+     * @return int
      */
     public int getTotalAvaliable() {
         return total;
@@ -33,7 +33,7 @@ public class QueryResult {
     /**
      * Get the query used to generate this
      *
-     * @return
+     * @return Query
      */
     public Query getQuery() {
         return query;

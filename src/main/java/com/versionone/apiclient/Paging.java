@@ -37,7 +37,7 @@ public class Paging
 	
 	/**
 	 * Get the paging token
-	 * @return
+	 * @return String
 	 */
 	public String getToken() { return String.format("%d,%d", getPageSize(), getStart()); }
 	

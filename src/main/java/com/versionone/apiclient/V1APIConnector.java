@@ -91,7 +91,6 @@ public class V1APIConnector implements IAPIConnector {
 	/**
 	 * Set the value to use for the custom user-agent header.
 	 * 
-	 * @return String
 	 */
 	public void setUserAgentHeader(String name, String version) {
 		_app_name = name;
@@ -119,6 +118,7 @@ public class V1APIConnector implements IAPIConnector {
 
 	/**
 	 * Returns a cookies jar.
+	 * @return ICookiesManager
 	 */
 	public ICookiesManager getCookiesJar() {
 		return cookiesManager;

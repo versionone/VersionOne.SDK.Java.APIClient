@@ -30,7 +30,7 @@ public abstract class DB {
 	/**
 	 * Get the value of the data.
 	 *
-	 * @return
+	 * @return Object
 	 */
 	public abstract Object getValue();
 
@@ -187,7 +187,7 @@ public abstract class DB {
 		 *
 		 * @param a - Int value
 		 * @param b - Int value
-		 * @return
+		 * @return boolean
 		 */
 		public static boolean compare(Int a, Int b) {
 			return a.isNull() ? b.isNull() : b.isNull() && a.value == b.value;
@@ -566,7 +566,7 @@ public abstract class DB {
 		/**
 		 * return the long value of this date
 		 *
-		 * @return
+		 * @return long
 		 * @see java.util.Date#getTime()
 		 */
 		public long toLong() {
@@ -781,7 +781,7 @@ public abstract class DB {
 		/**
 		 * Return the float as basic type
 		 *
-		 * @return
+		 * @return float
 		 */
 		public float getFloatValue() {
 			if (isNull())

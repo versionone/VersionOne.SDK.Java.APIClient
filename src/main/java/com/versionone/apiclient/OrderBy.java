@@ -55,13 +55,13 @@ public class OrderBy
 
 	/**
 	 * Return the number of terms
-	 * @return
+	 * @return int
 	 */
 	public int size() { return _terms.size(); }
 
 	/**
 	 * get the sort token
-	 * @return
+	 * @return String
 	 */
 	public String getToken() {
 		return TextBuilder.join(_terms,",");

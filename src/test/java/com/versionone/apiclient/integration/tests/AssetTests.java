@@ -38,7 +38,7 @@ public class AssetTests {
 
     /**
      * common method for creation of an asset
-     * @return
+     * @return Asset
      * @throws V1Exception
      */
     public Asset createsAnAsset(String assetName) throws V1Exception {

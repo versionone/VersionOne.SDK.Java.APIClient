@@ -20,7 +20,7 @@ class XMLHandler {
 	 * 
 	 * @param reader
 	 * @param url
-	 * @return
+	 * @return Document
 	 * @throws APIException
 	 * @throws ConnectionException if connection failed
 	 */
@@ -43,7 +43,7 @@ class XMLHandler {
 
 	/**
 	 * Create the Xerces Document Builder
-	 * @return
+	 * @return DocumentBuilder
 	 * @throws ParserConfigurationException
 	 */
 	public static DocumentBuilder createDocumentBuilder() throws ParserConfigurationException {

@@ -142,8 +142,7 @@ public class Delegator {
          * constructor supplying a Class passing in types not template
          *
          * @param target     possibly null target if null the method must be static
-         * @param target     non-null class implementing a suitable  method
-         * @param target     non-null object implementing a suitable static method
+         * @param targetClass     non-null class implementing a suitable  method
          * @param methodName nun-null name of a public static method in target
          * @param template   non-null template with the required arguemts and return
          */
@@ -156,7 +155,7 @@ public class Delegator {
         /**
          * convenience call to handle case of no arguments
          *
-         * @return whatever is returned
+         * @return Object
          */
         public Object invoke() throws IllegalArgumentException, DelegateInvokeException {
             return invoke(EMPTY_OBJECT_ARRAY);
@@ -166,7 +165,7 @@ public class Delegator {
          * convenience call to handle case of one argument
          *
          * @param arg some argument
-         * @return whatever is returned
+         * @return Object
          */
         public Object invoke(Object arg) throws IllegalArgumentException, DelegateInvokeException {
             Object[] args = {arg};
@@ -178,7 +177,7 @@ public class Delegator {
          *
          * @param arg1 some argument
          * @param arg2 some argument
-         * @return whatever is returned
+         * @return Object
          */
         public Object invoke(Object arg1, Object arg2) throws IllegalArgumentException, DelegateInvokeException {
             Object[] args = {arg1, arg2};
@@ -191,7 +190,7 @@ public class Delegator {
          * @param proxy  object for which we are a proxy   (ignored)
          * @param method method to call (ignored)
          * @param args   arguments to pass
-         * @return whatever is returned primitive types are wrapped
+         * @return Object - primitive types are wrapped
          */
         public Object invoke(Object proxy, Method method, Object[] args) {
             return invoke(args);
@@ -201,7 +200,7 @@ public class Delegator {
          * basic call to method
          *
          * @param args method arguments
-         * @return whatever is returned
+         * @return Object
          */
         public Object invoke(Object[] args) throws IllegalArgumentException, DelegateInvokeException {
             // validateArgs(args);

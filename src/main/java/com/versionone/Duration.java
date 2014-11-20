@@ -79,7 +79,7 @@ public class Duration {
 
 	/**
 	 * Get amount of this Duration in days 
-	 * @return
+	 * @return int
 	 */
 	public int getDays() {
 		switch (_units) {
