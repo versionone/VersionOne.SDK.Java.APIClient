@@ -124,7 +124,7 @@ public class TextBuilder {
 	 * @param pathParts - List of objects to join
 	 * @param seperator - character used to separate each object
 	 * @param stringize - method on object.  All objects in list must declare this method as public.
-	 * @return
+	 * @return String
 	 */
 	@SuppressWarnings("rawtypes")
 	public static String join(List pathParts, String seperator, IDelegate stringize) {

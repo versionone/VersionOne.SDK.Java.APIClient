@@ -26,7 +26,7 @@ public class AttributeSelection extends ArrayList<IAttributeDefinition> {
 
 	/**
 	 * Get a comma separated string of the names of all the attributes being selected
-	 * @return
+	 * @return String
 	 */
 	public String getNames() {
 		return TextBuilder.join(toArray(), ",", TextBuilder.STRINGIZER_DELEGATE.build(AttributeSelection.class, "NameOf"));
@@ -34,7 +34,7 @@ public class AttributeSelection extends ArrayList<IAttributeDefinition> {
 
 	/**
 	 * Get a comma separated string of the names of all the attributes being selected
-	 * @return
+	 * @return String
 	 */
 	public String getToken() {
 		return TextBuilder.join(toArray(), ",", TextBuilder.STRINGIZER_DELEGATE.build(AttributeSelection.class, "TokenOf"));
@@ -43,7 +43,7 @@ public class AttributeSelection extends ArrayList<IAttributeDefinition> {
 	/**
 	 * Implementation detail.  Returns the Token of the attribute definition
 	 * @param def
-	 * @return
+	 * @return String
 	 */
 	public static String TokenOf(Object def)
 	{
@@ -53,7 +53,7 @@ public class AttributeSelection extends ArrayList<IAttributeDefinition> {
 	/**
 	 * Implementation detail.  Returns the Name of the attribute definition
 	 * @param def
-	 * @return
+	 * @return String
 	 */
 	public static String NameOf(Object def)
 	{

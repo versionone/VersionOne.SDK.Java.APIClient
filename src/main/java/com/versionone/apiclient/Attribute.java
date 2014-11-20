@@ -22,7 +22,7 @@ public abstract class Attribute {
 
 	/**
 	 * Get the Asset that owns the attribute
-	 * @return
+	 * @return Asset
 	 */
 	public Asset getAsset() {
 		return _asset;
@@ -30,7 +30,7 @@ public abstract class Attribute {
 
 	/**
 	 * Get the definition of the attribiute
-	 * @return
+	 * @return IAttributeDefinition
 	 */
 	public IAttributeDefinition getDefinition() {
 		return _def;
@@ -38,21 +38,21 @@ public abstract class Attribute {
 
 	/**
 	 * Get the original value of the attribute
-	 * @return
+	 * @return Object
 	 * @throws APIException
 	 */
 	public abstract Object getOriginalValue() throws APIException;
 
 	/**
 	 * Get the new value of the attribute
-	 * @return
+	 * @return Object
 	 * @throws APIException
 	 */
 	public abstract Object getNewValue() throws APIException;
 
 	/**
 	 * Get the current value of the attrubute
-	 * @return
+	 * @return Object
 	 * @throws APIException
 	 */
 	public Object getValue() throws APIException {
@@ -63,31 +63,31 @@ public abstract class Attribute {
 
 	/**
 	 * Get the original values 
-	 * @return
+	 * @return array of Object
 	 */
 	public abstract Object[] getOriginalValues();
 
 	/**
 	 * Get the new Valued
-	 * @return
+	 * @return array of Object
 	 */
 	public abstract Object[] getNewValues();
 
 	/**
 	 * Get values that were added
-	 * @return
+	 * @return array of Object
 	 */
 	public abstract Object[] getAddedValues();
 
 	/**
 	 * Get the values that were removed
-	 * @return
+	 * @return array of Object
 	 */
 	public abstract Object[] getRemovedValues();
 
 	/**
 	 * Get the current values of the attriute
-	 * @return
+	 * @return array of Object
 	 */
 	public Object[] getValues() {
 		if (hasChanged())
@@ -98,7 +98,7 @@ public abstract class Attribute {
 
 	/**
 	 * Has this attribute changed
-	 * @return
+	 * @return boolean
 	 */
 	public abstract boolean hasChanged();
 

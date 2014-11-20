@@ -6,7 +6,6 @@ import java.util.List;
 /**
  * Base class for grouping filter terms (i.e and, or)
  *
- * @author jerry
  */
 public abstract class GroupFilterTerm implements IFilterTerm {
     List<IFilterTerm> terms = new ArrayList<IFilterTerm>();
@@ -62,7 +61,7 @@ public abstract class GroupFilterTerm implements IFilterTerm {
      * Create an AndFilterTerm from the array of terms
      *
      * @param terms
-     * @return
+     * @return GroupFilterTerm
      */
     public GroupFilterTerm and(IFilterTerm... terms) {
         AndFilterTerm term = new AndFilterTerm(terms);
@@ -74,7 +73,7 @@ public abstract class GroupFilterTerm implements IFilterTerm {
      * create an OrFilterTerm from the array of terms
      *
      * @param terms
-     * @return
+     * @return GroupFilterTerm
      */
     public GroupFilterTerm or(IFilterTerm... terms) {
         OrFilterTerm term = new OrFilterTerm(terms);
@@ -86,7 +85,7 @@ public abstract class GroupFilterTerm implements IFilterTerm {
      * Create a filter term from the attribute definition
      *
      * @param def
-     * @return
+     * @return FilterTerm
      */
     public FilterTerm Term(IAttributeDefinition def) {
         FilterTerm term = new FilterTerm(def);

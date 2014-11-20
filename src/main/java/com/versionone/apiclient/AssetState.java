@@ -33,14 +33,14 @@ public enum AssetState {
 	
 	/**
 	 * Get the integer value of this state
-	 * @return
+	 * @return int
 	 */
 	public int value() {return _value;}
 	
 	/**
 	 * Select AssetState based on an integer value
 	 * @param intValue
-	 * @return
+	 * @return AssetState
 	 */
 	public static AssetState valueOf(int intValue) {		
 		AssetState[] temp = AssetState.values();
@@ -54,7 +54,7 @@ public enum AssetState {
 	/**
 	 * is an int a valid AssetState
 	 * @param intValue
-	 * @return
+	 * @return boolean
 	 */
 	public static boolean isDefined(int intValue) {
 		AssetState[] temp = AssetState.values();

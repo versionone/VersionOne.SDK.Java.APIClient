@@ -66,7 +66,7 @@ public interface IAttributeDefinition {
 
 	/**
 	 * get attribute display name
-	 * @return
+	 * @return String
 	 */
 	String getDisplayName();
 
