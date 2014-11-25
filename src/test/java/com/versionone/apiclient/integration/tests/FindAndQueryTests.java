@@ -7,6 +7,7 @@ import java.util.LinkedList;
 
 import org.junit.Assert;
 import org.junit.BeforeClass;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import com.versionone.Oid;
@@ -92,6 +93,7 @@ public class FindAndQueryTests {
 	
 	// Filter query // Find query
 	@Test
+	@Ignore
 	public void testFindInAQuery() throws Exception {
 
 		Asset newStoryUrgent = createDisposableStory();// services.createNew(storyType, APIClientIntegrationTestSuiteIT.get_projectId());
@@ -154,6 +156,7 @@ public class FindAndQueryTests {
 
 	//asof
 	@Test
+	@Ignore
 	public void testAsof() throws Exception {
 		Asset storyAsset = createDisposableStory();
 		storyAsset.setAttributeValue(nameDef, "Test Asof");
