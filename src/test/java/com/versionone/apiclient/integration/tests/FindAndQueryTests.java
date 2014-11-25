@@ -110,8 +110,9 @@ public class FindAndQueryTests {
 		query.getSelection().add(nameAttributeToQuery);
 		
 //		find
+		IAttributeDefinition nameAttributeToFindQuery = requestType.getAttributeDefinition("Name");
 		AttributeSelection selection = new AttributeSelection();
-		selection.add(nameAttributeToQuery);
+		selection.add(nameAttributeToFindQuery);
 		query.setFind(new QueryFind("Urgent", selection)); 
 		QueryResult result = services.retrieve(query);
 		Asset urgentStory = result.getAssets()[0];
@@ -173,7 +174,7 @@ public class FindAndQueryTests {
 		query.setAsOf(date); 
 		QueryResult result = services.retrieve(query);
 		
-		Assert.assertNotNull(result);
+	//	Assert.assertNotNull(result);
 		
 		Assert.assertEquals("Test Asof", result.getAssets()[0].getAttribute(nameAttribute).getValue().toString());
 
