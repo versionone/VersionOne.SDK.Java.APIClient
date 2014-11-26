@@ -1,16 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <assembly>
-    <formats>
-        <format>zip</format>
-    </formats>
-
-    <fileSets>
-        <fileSet>
-            <directory>${project.build.directory}</directory>
-            <outputDirectory />
-            <includes>
-                <include>**/*.jar</include>
-            </includes>
-        </fileSet>
-    </fileSets>
+	<formats>
+		<format>zip</format>
+	</formats>
+	<fileSets>
+		<fileSet>
+			<directory>${project.build.directory}</directory>
+			<outputDirectory />
+			<includes>
+				<include>**/apidocs/</include>
+				<include>${project.artifactId}-${project.version}.jar</include>
+			</includes>
+		</fileSet>
+		<fileSet>
+			<directory>${project.basedir}</directory>
+			<outputDirectory></outputDirectory>
+			<includes>
+				<include>**/src/</include>
+			</includes>
+		</fileSet>
+	</fileSets>
 </assembly>
