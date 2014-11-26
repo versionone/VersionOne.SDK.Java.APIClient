@@ -17,6 +17,8 @@
 			<outputDirectory></outputDirectory>
 			<includes>
 				<include>**/src/</include>
+				<include>LICENSE*</include>
+				<include>README*</include>
 			</includes>
 		</fileSet>
 	</fileSets>
