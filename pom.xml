@@ -113,7 +113,7 @@
 				<executions>
 					<execution>
 						<id>make-assembly</id>
-						<phase>package</phase>
+						<phase>deploy</phase>
 						<goals>
 							<goal>single</goal>
 						</goals>
@@ -142,6 +142,7 @@
 				<executions>
 					<execution>
 						<id>attach-javadocs</id>
+						<phase>clean</phase>
 						<goals>
 							<goal>jar</goal>
 						</goals>
@@ -156,12 +157,15 @@
 				<executions>
 					<execution>
 						<id>attach-sources</id>
+						<phase>clean</phase>
 						<goals>
 							<goal>jar</goal>
 						</goals>
 					</execution>
 				</executions>
 			</plugin>
+		
+			<!-- Unit test suite -->
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-surefire-plugin</artifactId>
@@ -173,6 +177,7 @@
 					</includes>
 				</configuration>
 			</plugin>
+			<!-- integration test suite -->
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-failsafe-plugin</artifactId>
