@@ -23,9 +23,9 @@ public class APIException extends V1Exception {
 
 	/**
 	 * Create with meassage, token, and exception 
-	 * @param message
-	 * @param token
-	 * @param inner
+	 * @param message - String data
+	 * @param token - String data
+	 * @param inner - Exception
 	 */
 	public APIException(String message, String token, Exception inner) {
 		this(message + ": " + token, inner);
@@ -33,7 +33,7 @@ public class APIException extends V1Exception {
 
 	/**
 	 * Create with just a message
-	 * @param message
+	 * @param message - String data
 	 */
 	public APIException(String message) {
 		super(message, null);
@@ -41,8 +41,8 @@ public class APIException extends V1Exception {
 
 	/**
 	 * Create with message and exception
-	 * @param message
-	 * @param inner
+	 * @param message - String data
+	 * @param inner - Exception
 	 */
 	public APIException(String message, Exception inner) {
 		super(message, inner);

@@ -24,7 +24,7 @@ public interface IAPIConnector {
 	 *
 	 * Note: Caller is responsible for closing the returned stream
 	 *
-	 * @param path
+	 * @param path - String
 	 * @return the stream for reading data
      * @throws ConnectionException if any connection problems occur
 	 */
@@ -35,8 +35,8 @@ public interface IAPIConnector {
 	 *
 	 * Note: Caller is responsible for closing the returned stream
 	 *
-	 * @param path
-	 * @param data
+	 * @param path - String
+	 * @param data - String
 	 * @return the response in a stream
 	 * @throws ConnectionException if any connection problems occur
 	 */

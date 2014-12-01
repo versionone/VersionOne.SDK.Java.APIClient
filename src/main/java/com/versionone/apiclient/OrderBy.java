@@ -33,8 +33,8 @@ public class OrderBy
 
 	/**
 	 * Set the attribute and order for major sort of returned data
-	 * @param attribdef
-	 * @param order
+	 * @param attribdef - IAttributeDefinition
+	 * @param order - Order
 	 */
 	public void majorSort(IAttributeDefinition attribdef, Order order)
 	{
@@ -44,8 +44,8 @@ public class OrderBy
 
 	/**
 	 * Set the attribute and order for minor sort of returned data
-	 * @param attribdef
-	 * @param order
+	 * @param attribdef - IAttributeDefinition
+	 * @param order - Order
 	 */
 	public void minorSort(IAttributeDefinition attribdef, Order order)
 	{

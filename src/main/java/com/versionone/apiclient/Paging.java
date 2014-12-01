@@ -26,8 +26,8 @@ public class Paging
 	/**
 	 * Create with a specific start element and page size
 	 * 
-	 * @param start
-	 * @param pagesize
+	 * @param start - int
+	 * @param pagesize - int
 	 */
 	public Paging(int start, int pagesize)
 	{

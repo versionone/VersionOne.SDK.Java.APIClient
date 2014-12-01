@@ -29,7 +29,7 @@ public interface IOperation {
 	/**
 	 * Get the definition for the attribute used to validate this operation
 	 * @return IAttributeDefinition of attribute used to validate this operation
-	 * @throws V1Exception if there's a problem getting the information
+	 * @throws MetaException if there's a problem getting the information
 	 */
 	IAttributeDefinition getValidatorAttribute() throws MetaException;
 }

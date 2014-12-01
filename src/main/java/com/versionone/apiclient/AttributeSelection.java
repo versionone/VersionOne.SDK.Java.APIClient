@@ -42,7 +42,7 @@ public class AttributeSelection extends ArrayList<IAttributeDefinition> {
 
 	/**
 	 * Implementation detail.  Returns the Token of the attribute definition
-	 * @param def
+	 * @param def - Object
 	 * @return String
 	 */
 	public static String TokenOf(Object def)
@@ -52,7 +52,7 @@ public class AttributeSelection extends ArrayList<IAttributeDefinition> {
 
 	/**
 	 * Implementation detail.  Returns the Name of the attribute definition
-	 * @param def
+	 * @param def - Object
 	 * @return String
 	 */
 	public static String NameOf(Object def)

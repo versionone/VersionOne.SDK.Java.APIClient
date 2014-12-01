@@ -60,7 +60,7 @@ public abstract class GroupFilterTerm implements IFilterTerm {
     /**
      * Create an AndFilterTerm from the array of terms
      *
-     * @param terms
+     * @param terms - IFilterTerm data
      * @return GroupFilterTerm
      */
     public GroupFilterTerm and(IFilterTerm... terms) {
@@ -72,7 +72,7 @@ public abstract class GroupFilterTerm implements IFilterTerm {
     /**
      * create an OrFilterTerm from the array of terms
      *
-     * @param terms
+     * @param terms - IFilterTerm data
      * @return GroupFilterTerm
      */
     public GroupFilterTerm or(IFilterTerm... terms) {
@@ -84,7 +84,7 @@ public abstract class GroupFilterTerm implements IFilterTerm {
     /**
      * Create a filter term from the attribute definition
      *
-     * @param def
+     * @param def - IAttributeDefinition data
      * @return FilterTerm
      */
     public FilterTerm Term(IAttributeDefinition def) {

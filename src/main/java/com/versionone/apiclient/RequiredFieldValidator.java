@@ -27,9 +27,9 @@ public class RequiredFieldValidator {
      * @param asset 				- Asset to validate
      * @param attributeDefinition 	- Attribute definition of validated attribute
      * @return Validation result
-     * @throws APIException
-     * @throws OidException
-     * @throws ConnectionException
+     * @throws APIException - APIException
+     * @throws OidException - OidException
+     * @throws ConnectionException - ConnectionException
      */
     public boolean validate(Asset asset, IAttributeDefinition attributeDefinition) throws APIException, ConnectionException, OidException {
         getRequiredFields(asset.getAssetType());
@@ -51,9 +51,9 @@ public class RequiredFieldValidator {
      *
      *  @param asset	- Asset to validate
      *  @return Collection of attribute definitions for attributes which values do not pass validation
-     * @throws APIException
-     * @throws OidException
-     * @throws ConnectionException
+     * @throws APIException - APIException
+     * @throws OidException - OidException
+     * @throws ConnectionException - ConnectionException
      */
     public List<IAttributeDefinition> validate(Asset asset) throws APIException, ConnectionException, OidException {
         getRequiredFields(asset.getAssetType());
@@ -77,9 +77,9 @@ public class RequiredFieldValidator {
      *
      * @param assets - Assets collection to check.
      * @return Validation results dictionary, each entry value key is Asset, and value is output of @seeValidate(Asset)
-     * @throws APIException
-     * @throws OidException
-     * @throws ConnectionException
+     * @throws APIException - APIException
+     * @throws OidException - OidException
+     * @throws ConnectionException - ConnectionException
      */
     public Map<Asset, List<IAttributeDefinition>> validate(Asset[] assets) throws APIException, ConnectionException, OidException {
         Map<Asset, List<IAttributeDefinition>> results = new HashMap<Asset, List<IAttributeDefinition>>();
@@ -97,10 +97,10 @@ public class RequiredFieldValidator {
      * @param assetType		- Asset type.
      * @param attributeName - Attribute name.
      * @return is specified attribute required for specified asset.
-     * @throws MetaException
-     * @throws OidException
-     * @throws APIException
-     * @throws ConnectionException
+     * @throws MetaException - MetaException
+     * @throws OidException  - OidException
+     * @throws APIException - APIException
+     * @throws ConnectionException - ConnectionException
      */
     public boolean isRequired(IAssetType assetType, String attributeName) throws ConnectionException, APIException, OidException, MetaException {
         return isRequired(assetType.getAttributeDefinition(attributeName));
@@ -111,10 +111,10 @@ public class RequiredFieldValidator {
      *
      * @param definition - Attribute definition.
      * @return is specified attribute definition required.
-     * @throws MetaException
-     * @throws OidException
-     * @throws APIException
-     * @throws ConnectionException
+     * @throws MetaException - MetaException
+     * @throws OidException - OidException
+     * @throws APIException - APIException
+     * @throws ConnectionException - ConnectionException
      */
     public boolean isRequired(IAttributeDefinition definition) throws ConnectionException, APIException, OidException, MetaException {
         getRequiredFields(definition.getAssetType());

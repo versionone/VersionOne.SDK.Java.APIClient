@@ -25,9 +25,9 @@ public class Oid {
 
 	/**
 	 * Create fully qualified object identifier
-	 * @param assetType
-	 * @param id
-	 * @param moment
+	 * @param assetType - IAssetType
+	 * @param id - DB.Int
+	 * @param moment - DB.Int
      * @deprecated use {@link #Oid(com.versionone.apiclient.IAssetType, int, int)}
 	 */
 	public Oid(IAssetType assetType, DB.Int id, DB.Int moment) {
@@ -45,9 +45,9 @@ public class Oid {
 
 	/**
 	 * Create fully qualified object identifier
-	 * @param assetType
-	 * @param id
-	 * @param moment
+	 * @param assetType - IAssetType
+	 * @param id -  int
+	 * @param moment - DB.Int
      * @deprecated use {@link #Oid(com.versionone.apiclient.IAssetType, int)}
 	 */
 	public Oid(IAssetType assetType, int id, DB.Int moment) {
@@ -56,9 +56,9 @@ public class Oid {
 
 	/**
 	 * Create fully qualified object identifier
-	 * @param assetType
-	 * @param id
-	 * @param moment
+	 * @param assetType - IAssetType
+	 * @param id - int
+	 * @param moment - int
 	 */
 	public Oid(IAssetType assetType, int id, int moment) {
 		this(assetType, id);
@@ -67,8 +67,8 @@ public class Oid {
 	
 	/**
 	 * Create Object Identifier without moment
-	 * @param assetType
-	 * @param id
+	 * @param assetType - IAssetType
+	 * @param id - int
 	 */
 	public Oid(IAssetType assetType, int id) {
         if (assetType == null) {
@@ -80,7 +80,7 @@ public class Oid {
 
 	/**
 	 * Create Object Identifier with just an AssetType
-	 * @param assetType
+	 * @param assetType - IAssetType
 	 */
 	public Oid(IAssetType assetType) {
 		this(assetType, new DB.Int(0), new DB.Int(DB.Null));

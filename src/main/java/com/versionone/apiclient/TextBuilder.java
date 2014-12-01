@@ -61,12 +61,12 @@ public class TextBuilder {
 
 	/**
 	 * Join an array of objects using their "toString" method. Each object is separated by the separator character
-	 * <br/><br/>Example:<br/><br/>
+	 * Example:
 	 * <code>
 	 * String[] input = {"the", "join", "example"};
 	 * String result = TextBuilder.join(input, ":");
 	 * </code>
-	 * <br/><br/>
+	 *
 	 * Result is "the:join:example"
 	 * @param pathParts - objects to join
 	 * @param seperator - character used to separate objects

@@ -150,7 +150,7 @@ public class Query {
     /**
      * Set the attribute selection
      *
-     * @param value
+     * @param value - AttributeSelection
      */
     public void setSelection(AttributeSelection value) {
         if (null != value)
@@ -160,7 +160,7 @@ public class Query {
     /**
      * Set a filter
      *
-     * @param value
+     * @param value  - IFilterTerm
      */
     public void setFilter(IFilterTerm value) {
         if (null != value) {
@@ -180,7 +180,7 @@ public class Query {
     /**
      * Set OrderBy information
      *
-     * @param value
+     * @param value - OrderBy
      */
     public void setOrderBy(OrderBy value) {
         if (null != value)
@@ -199,7 +199,7 @@ public class Query {
     /**
      * Set paging details
      *
-     * @param value
+     * @param value - Paging
      */
     public void setPaging(Paging value) {
         if (null != value)
@@ -218,7 +218,7 @@ public class Query {
     /**
      * Set asOf Date
      *
-     * @param value
+     * @param value - Date
      */
     public void setAsOf(Date value) {
         asOf = value;

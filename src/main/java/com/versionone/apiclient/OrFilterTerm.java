@@ -10,7 +10,7 @@ public class OrFilterTerm extends GroupFilterTerm {
     /**
      * Create filter collection of terms
      *
-     * @param terms
+     * @param terms - IFilterTerm
      */
     public OrFilterTerm(IFilterTerm... terms) {
         super(terms);

@@ -90,6 +90,8 @@ public class V1APIConnector implements IAPIConnector {
 
 	/**
 	 * Set the value to use for the custom user-agent header.
+	 * @param name - String
+	 * @param version - String
 	 * 
 	 */
 	public void setUserAgentHeader(String name, String version) {
@@ -156,7 +158,7 @@ public class V1APIConnector implements IAPIConnector {
 	 * Note: Caller is responsible for closing the returned stream.
 	 *
 	 * @return The stream for reading data.
-	 * @throws IOException
+	 * @throws ConnectionException - ConnectionException
 	 */
 	public Reader getData() throws ConnectionException {
 		return getData("");
@@ -167,9 +169,10 @@ public class V1APIConnector implements IAPIConnector {
 	 *
 	 * Note: Caller is responsible for closing the returned stream.
 	 *
-	 * @param path
+	 * @param path - String
 	 * @return The stream for reading data.
-	 * @throws IOException
+	 * @throws ConnectionException - ConnectionException
+	 * @return Reader - Reader
 	 */
 	public Reader getData(String path) throws ConnectionException {
 
@@ -202,10 +205,10 @@ public class V1APIConnector implements IAPIConnector {
 	 *
 	 * Note: Caller is responsible for closing the returned stream.
 	 *
-	 * @param path
-	 * @param data
+	 * @param path - String
+	 * @param data - String
 	 * @return the response in a stream
-	 * @throws IOException
+	 * @throws ConnectionException - ConnectionException
 	 */
 	public Reader sendData(String path, String data) throws ConnectionException {
 

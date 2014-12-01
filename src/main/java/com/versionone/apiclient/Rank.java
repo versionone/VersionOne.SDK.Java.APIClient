@@ -145,7 +145,7 @@ public class Rank extends Number implements Comparable<Rank> {
      * <code>true</code> if and only if the argument is not
      * <code>null</code> and the <code>Rank</code> object that has
      * the same Rank number.
-     * <p/>
+     *
      * Note: Rank objects with offset which isn't 0 cannot be compared.
      *
      * (<code>{@link #isAfter()} == true</code> or
@@ -179,7 +179,7 @@ public class Rank extends Number implements Comparable<Rank> {
 
     /**
      * Compares this Rank with the specified Rank.
-     * <p/>
+     *
      * Note: Rank objects with not 0 offset cannot be compared.
      * (<code>{@link #isAfter()} == true</code> or
      * <code>{@link #isBefore()} == true)</code>

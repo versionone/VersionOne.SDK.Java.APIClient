@@ -24,7 +24,7 @@ public class MetaModel implements IMetaModel {
 
 	/**
 	 * Create from a connection and obtain meta-data as needed
-	 * @param connector
+	 * @param connector - IAPIConnector
 	 */
 	public MetaModel(IAPIConnector connector) {
 		this(connector, false);
@@ -32,8 +32,8 @@ public class MetaModel implements IMetaModel {
 
 	/**
 	 * Create from a connection and pre-load meta data
-	 * @param connector
-	 * @param hookup
+	 * @param connector - IAPIConnector
+	 * @param hookup - boolean
 	 */
 	public MetaModel(IAPIConnector connector, boolean hookup) {
 		_connector = connector;
@@ -57,7 +57,7 @@ public class MetaModel implements IMetaModel {
 	/**
 	 * Get MetaMode version
 	 * @return Version of MetaModel
-	 * @throws MetaException
+	 * @throws MetaException - MetaException
 	 */
 	public Version getVersion() throws MetaException {
 		if (_version == null) {

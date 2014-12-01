@@ -24,6 +24,7 @@ public class Asset {
 
 	/**
 	 * Get type information
+	 * @return IAssetType
 	 */
 	public IAssetType getAssetType(){
         return assetType;
@@ -31,6 +32,7 @@ public class Asset {
 
 	/**
 	 * Get Asset Object Identifier
+	 * @return  Oid
 	 */
 	public Oid getOid() {
         return oid;
@@ -40,7 +42,7 @@ public class Asset {
 	 * This method is used by Service after a new asset has been created.
 	 * the result of create returns the oid
 	 *
-	 * @param value
+	 * @param value - Oid
 	 * @throws OidException - when the new oid is a different type of asset
 	 */
 	public void setOid(Oid value) throws OidException {
@@ -52,6 +54,7 @@ public class Asset {
 
 	/**
 	 * Get asset attributes
+	 * @return  Map data
 	 */
 	public Map<String, Attribute> getAttributes(){
         return attributes;
@@ -60,6 +63,7 @@ public class Asset {
 	/**
 	 * Used to add new relationships
 	 * get new assets
+	 * @return  Map.
 	 */
 	public Map<String, Asset> getNewAssets() {
         return newAssets;
@@ -67,6 +71,7 @@ public class Asset {
 
 	/**
 	 * Get child assets
+	 * @return List
 	 */
 	public List<Asset> getChildren() {
         return children;
@@ -74,7 +79,7 @@ public class Asset {
 
 	/**
 	 * Create from Object Id
-	 * @param oid
+	 * @param oid - Oid data
 	 */
 	public Asset(Oid oid) {
 		if (oid.isNull()) {
@@ -87,7 +92,7 @@ public class Asset {
 	/**
 	 * Create based on type
 	 *
-	 * @param assetType
+	 * @param assetType - IAssetType
 	 */
 	public Asset(IAssetType assetType) {
 		this.assetType = assetType;
@@ -97,6 +102,7 @@ public class Asset {
 	 * set an attribute value
 	 * @param attributeDefinition attribute definition
 	 * @param value attribute value
+	 * @throws APIException - APIException throws
 	 */
 	public void setAttributeValue(IAttributeDefinition attributeDefinition, Object value) throws APIException {
 		ensureAttribute(attributeDefinition).setValue(value);
@@ -116,9 +122,9 @@ public class Asset {
 	/**
 	 * add an attribute value
 	 *
-	 * @param attributeDefinition
-	 * @param value
-	 * @throws Exception
+	 * @param attributeDefinition - IAttributeDefinition
+	 * @param value - Object
+	 * @throws APIException -  exception throws
 	 */
 	public void addAttributeValue(IAttributeDefinition attributeDefinition, Object value) throws APIException {
 		ensureAttribute(attributeDefinition).addValue(value);
@@ -126,9 +132,9 @@ public class Asset {
 
 	/**
 	 * remove an attribute value
-	 * @param attributeDefinition
-	 * @param value
-	 * @throws Exception
+	 * @param attributeDefinition - IAttributeDefinition
+	 * @param value - Object
+	 * @throws APIException - APIException throws
 	 */
 	public void removeAttributeValue(IAttributeDefinition attributeDefinition, Object value) throws APIException {
 		ensureAttribute(attributeDefinition).removeValue(value);
@@ -150,7 +156,9 @@ public class Asset {
 
 	/**
 	 * get an attribute based on definition
-	 * @param attributeDefinition
+	 * @param attributeDefinition - IAttributeDefinition
+	 * @throws MetaException - MetaException
+	 * @return Attribute - Attribute
 	 */
 	public Attribute getAttribute(IAttributeDefinition attributeDefinition) throws MetaException {
 		return attributes.get(resolveAttributeDefinition(attributeDefinition).getToken());
@@ -183,6 +191,7 @@ public class Asset {
 
 	/**
 	 * determine if something changed
+	 * @return boolean - return boolean value
 	 */
 	public boolean hasChanged() {
 		for(Attribute attribute : attributes.values()) {

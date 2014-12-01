@@ -38,22 +38,22 @@ public abstract class Attribute {
 
 	/**
 	 * Get the original value of the attribute
-	 * @return Object
-	 * @throws APIException
+	 * @return Object - Object
+	 * @throws APIException - APIException
 	 */
 	public abstract Object getOriginalValue() throws APIException;
 
 	/**
 	 * Get the new value of the attribute
 	 * @return Object
-	 * @throws APIException
+	 * @throws APIException - APIException
 	 */
 	public abstract Object getNewValue() throws APIException;
 
 	/**
 	 * Get the current value of the attrubute
 	 * @return Object
-	 * @throws APIException
+	 * @throws APIException - APIException
 	 */
 	public Object getValue() throws APIException {
 		if (hasChanged())

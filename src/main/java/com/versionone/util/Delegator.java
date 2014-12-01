@@ -7,7 +7,7 @@ import java.util.ArrayList;
 /**
  * Delegator class from the article
  * http://www.onjava.com/pub/a/onjava/2003/05/21/delegates.html?page=1
- * <p/>
+ *
  * Class representing a delegate template -
  * also a factory returning the real delegate object
  *
@@ -70,6 +70,7 @@ public class Delegator {
 
     /**
      * accessor for return class
+     * @return class - Class
      */
     public Class getReturn() {
         return m_Return;
@@ -78,6 +79,7 @@ public class Delegator {
 
     /**
      * accessor for argument classes
+     *  @return class - Class[]
      */
     public Class[] getArguments() {
         return m_Arguments;
@@ -218,6 +220,8 @@ public class Delegator {
         /**
          * if uncommented in invoke this code will throw an IllegalArgument call
          * if arguments are of the wrong type
+         * @param args - Object
+         * @throws IllegalArgumentException - IllegalArgumentException
          */
         protected void validateArgs(Object[] args) throws IllegalArgumentException {
             Class[] MyArgs = getArguments();
@@ -235,6 +239,7 @@ public class Delegator {
 
         /**
          * accessor for the method
+         * @return Method - Method
          */
         public Method getMethod() {
             return m_Method;
@@ -242,6 +247,7 @@ public class Delegator {
 
         /**
          * accessor for the target
+         * @return Object - Object
          */
         public Object getTarget() {
             return m_Target;
@@ -271,6 +277,10 @@ public class Delegator {
 
     /**
      * utility method to test suitability
+     * @param args - Class[]
+     * @param retClass - Class
+     * @param testMethod - Method
+     * @return boolean - boolean
      */
     protected static boolean isSuitableMethod(Method testMethod, Class[] args, Class retClass) {
         Class[] methodArgs = testMethod.getParameterTypes();
@@ -289,6 +299,10 @@ public class Delegator {
 
     /**
      * utility method to get candidate methods to search
+     * @param MethodName - String
+     * @param nargs - int
+     * @param targetClass - Class
+     * @return  Method - Method[]
      */
     protected static Method[] getCandidateMethods(Class targetClass, String MethodName, int nargs) {
         Method[] possibilities = targetClass.getMethods();
@@ -309,6 +323,9 @@ public class Delegator {
 
     /**
      * utility method to test return
+     * @param retClass - Class
+     * @param test - Method
+     * @return boolean - boolean
      */
     protected static boolean isValidReturn(Method test, Class retClass) {
         if (retClass == null) {
@@ -328,6 +345,10 @@ public class Delegator {
 
     /**
      * Utility method to locate a proper Method object
+     * @param targetClass - Class
+     * @param MethodName  - String
+     * @param templ - Delegator
+     *  @return Method - Method
      */
     protected static Method findSuitableMethod(Class targetClass, String MethodName, Delegator templ) {
         Class[] args = templ.getArguments();
@@ -363,6 +384,8 @@ public class Delegator {
 
     /**
      * utility code to find the one suitable method in the passed in interface.
+     * @param TheInterface - Class
+     *  @return Method - Method
      */
     protected static Method findMethod(Class TheInterface) {
         if (!TheInterface.isInterface()) {

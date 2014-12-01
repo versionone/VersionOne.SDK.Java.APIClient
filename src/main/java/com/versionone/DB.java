@@ -155,7 +155,7 @@ public abstract class DB {
 		 * Object is | value set by calling
 		 * String   |  Integer.valueOf(value)
 		 * Number   |  value.intValue()
-		 * <p/>
+		 *
 		 * Anything  else causes the value to be null
 		 *
 		 * @param value - Set value based on

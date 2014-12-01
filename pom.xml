@@ -200,6 +200,7 @@
 					<formats>
 						<format>xml</format>
 					</formats>
+					<check/>
 				</configuration>
 				<!-- <executions> <execution> <goals> <goal>cobertura</goal> </goals> 
 					<phase>test</phase> </execution> </executions> -->
@@ -285,7 +286,7 @@
 										</goals>
 									</pluginExecutionFilter>
 									<action>
-										<ignore></ignore>
+										<ignore/>
 									</action>
 								</pluginExecution>
 							</pluginExecutions>

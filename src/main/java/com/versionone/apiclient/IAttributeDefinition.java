@@ -54,7 +54,7 @@ public interface IAttributeDefinition {
 	/**
 	 * Get asset type information to this attribute
 	 * @return IAssetType for this attribute
-	 * @throws MetaException
+	 * @throws MetaException  - MetaException
 	 */
 	IAssetType getAssetType() throws MetaException;
 

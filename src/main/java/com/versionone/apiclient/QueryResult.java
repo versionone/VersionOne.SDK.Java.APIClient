@@ -53,7 +53,7 @@ public class QueryResult {
     /**
      * Use this constructor when you want to create a result with nothing
      *
-     * @param query
+     * @param query - Query
      */
     public QueryResult(Query query) {
         this(new Asset[0], 0, query);

@@ -9,7 +9,7 @@ public class AndFilterTerm extends GroupFilterTerm {
     /**
      * Create filter with a collection of terms
      *
-     * @param terms
+     * @param terms - IFilterTerm data
      */
     public AndFilterTerm(IFilterTerm... terms) {
         super(terms);

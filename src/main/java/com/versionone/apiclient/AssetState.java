@@ -39,7 +39,7 @@ public enum AssetState {
 	
 	/**
 	 * Select AssetState based on an integer value
-	 * @param intValue
+	 * @param intValue - int
 	 * @return AssetState
 	 */
 	public static AssetState valueOf(int intValue) {		
@@ -53,8 +53,8 @@ public enum AssetState {
 	
 	/**
 	 * is an int a valid AssetState
-	 * @param intValue
-	 * @return boolean
+	 * @param intValue - int
+	 * @return boolean - boolean
 	 */
 	public static boolean isDefined(int intValue) {
 		AssetState[] temp = AssetState.values();
