@@ -5,19 +5,17 @@ import java.util.Calendar;
 import java.util.Date;
 
 import org.junit.Assert;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import com.versionone.Oid;
 import com.versionone.apiclient.Asset;
-import com.versionone.apiclient.XmlApiWriter;
 import com.versionone.apiclient.IAttributeDefinition.AttributeType;
+import com.versionone.apiclient.XmlApiWriter;
 
 
 public class XmlApiWriterTests {
 
 	@Test
-	@Ignore
 	public void testWriteAssetCreate() throws Exception {
 		MockAssetType assetType = new MockAssetType("Scope"); 
 		MockAttributeDefinition nameDefinition = new MockAttributeDefinition("Name", AttributeType.Text);
@@ -27,9 +25,9 @@ public class XmlApiWriterTests {
 		asset.setAttributeValue(nameDefinition, "Test Asset");
 		asset.setAttributeValue(scopeDefinition, new Oid(assetType));
 		
-		String expected = "<Asset><Relation act=\"set\" name=\"Scope\"><Asset idref=\"Scope:0\"/></Relation><Attribute act=\"set\" name=\"Name\">Test Asset</Attribute></Asset>";
+//		String expected = "<Asset><Relation act=\"set\" name=\"Scope\"><Asset idref=\"Scope:0\"/></Relation><Attribute act=\"set\" name=\"Name\">Test Asset</Attribute></Asset>";
 
-//		String expected = "<Asset><Attribute act=\"set\" name=\"Name\">Test Asset</Attribute><Relation act=\"set\" name=\"Scope\"><Asset idref=\"Scope:0\"/></Relation></Asset>";
+		String expected = "<Asset><Attribute act=\"set\" name=\"Name\">Test Asset</Attribute><Relation act=\"set\" name=\"Scope\"><Asset idref=\"Scope:0\"/></Relation></Asset>";
 
 		StringWriter assetData = new StringWriter();
 		XmlApiWriter testMe = new XmlApiWriter(true);
