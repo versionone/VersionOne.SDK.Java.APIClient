@@ -1,22 +1,10 @@
-# VersionOne SDK.Java
-Copyright (c) 2008-2014 VersionOne, Inc.
+# VersionOne Java SDK
+Copyright (c) 2008-2014 [VersionOne](http://versionone.com/).
 All rights reserved.
 
-For developers who have an itch that VersionOne doesn't scratch, the 
-VersionOne SDK.Java is a free, community-driven, open-source toolkit 
-written in Java that accelerates software development of tools that 
-tailor VersionOne to better fit with new practices and other tools. 
-Unlike direct use of the REST API, the VersionOne SDK.Java provides a 
-framework for application development on the JVM stack and tools to 
-make development of those applications fast and easy. The framework 
-and tools are driven from experience developing code to solve real 
-problems.
+The VersionOne Java SDK is a free and open-source library that accelerates software development of applications that tailor VersionOne to better fit with new practices and other tools. Unlike direct use of the VersionOne REST API, the Java SDK provides a framework for application development on the JVM stack to make development of those applications faster and easier.
 
-This product includes software developed at VersionOne 
-(http://versionone.com/). This product is open source and is licensed 
-under a modified BSD license, which reflects our intent that software 
-built with a dependency on the  VersionOne SDK.Java can be commercial or 
-open source, as the authors see fit.
+This product includes software developed by VersionOne. This product is open source and is licensed under a modified BSD license, which reflects our intent that software built with a dependency on the Java SDK can be commercial or open source, as the authors see fit.
 
 ## System Requirements
 
@@ -30,11 +18,11 @@ open source, as the authors see fit.
 
 _Do this if you only want to use the functionality, but are not interested in compiling from source or in contributing code to the project._
 
-You can use [Maven](http://maven.apache.org/guides/introduction/introduction-to-the-pom.html) to import the SDK.Java API Client and it's dependencies in your project by making use of [Maven Central](http://search.maven.org). You can edit the pom.xml file for your project in order to import the current version of the SDK.Java API Client into your project. If you wish, instead, to pull the source code down and integrate it with your project by cloning the [git repository](https://github.com/versionone/VersionOne.SDK.Java.APIClient).
+You can use [Maven](http://maven.apache.org/guides/introduction/introduction-to-the-pom.html) to import the Java SDK and it's dependencies in your project by making use of [Maven Central](http://search.maven.org). You can edit the pom.xml file for your project in order to import the current version of the Java SDK into your project. If you wish, you can pull the source code down and integrate it with your project by cloning the [git repository](https://github.com/versionone/VersionOne.SDK.Java.APIClient).
 
 ## Learn By Example: APIClient Setup
 
-Using the Java APIClient is as simple as making a reference to the VersionOne.SDK.Java.APIClient-XXX.jar in your Java project, then providing connection information to the main service objects within the APIClient. There are three possible ways to connect to your VersionOne instance using the APIClient. Before you attempt to connect, find out whether your VersionOne instance uses VersionOne authentication or Windows Integrated Authentication. You need to create an instance of IMetaModel and and instance of IServices and provide them with connection information via instances of the V1APIConnector.
+Using the Java SDK is as simple as making a reference to the VersionOne.SDK.Java.APIClient-XXX.jar in your Java project, then providing connection information to the main service objects within the Java SDK. There are three possible ways to connect to your VersionOne instance using the SDK. Before you attempt to connect, find out whether your VersionOne instance uses VersionOne authentication or Windows Integrated Authentication. You need to create an instance of IMetaModel and and instance of IServices and provide them with connection information via instances of the V1APIConnector.
 
 ### Configuration: open the APIConfiguration.properties file in your .jar file.
 
