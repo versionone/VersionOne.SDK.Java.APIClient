@@ -142,7 +142,7 @@
 				<executions>
 					<execution>
 						<id>attach-javadocs</id>
-						<phase>clean</phase>
+						<phase>package</phase>
 						<goals>
 							<goal>jar</goal>
 						</goals>
