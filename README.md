@@ -2,9 +2,9 @@
 Copyright (c) 2008-2014 [VersionOne](http://versionone.com/).
 All rights reserved.
 
-The VersionOne Java SDK is a free and open-source library that accelerates software development of applications that tailor VersionOne to better fit with new practices and other tools. Unlike direct use of the VersionOne REST API, the Java SDK provides a framework for application development on the JVM stack to make development of those applications faster and easier.
+The VersionOne Java SDK is a free and open-source library that accelerates software development of applications that integrate with VersionOne. The SDK serves as a wrapper to the VersionOne REST API, eliminating the need to code the infrastructure necessary for direct handling of HTTP requests and responses.
 
-This product includes software developed by VersionOne. This product is open source and is licensed under a modified BSD license, which reflects our intent that software built with a dependency on the Java SDK can be commercial or open source, as the authors see fit.
+The Java SDK is open source and is licensed under a modified BSD license, which reflects our intent that software built with a dependency on the SDK can be for commercial and/or open source products.
 
 ## System Requirements
 
@@ -57,6 +57,41 @@ ProxyUrl: If you use a proxy server to logon to your VersionOne instance then pr
 ProxyUserName: The user that should authenticate to the proxy server.
 
 ProxyPassword: The password for the proxy user above.
+
+<table summary="System Names" cellspacing="0" cellpadding="0" border="0">
+<thead>
+    <tr>
+        <th>Property</th>
+        <th>Description</th>
+    </tr>
+</thead>
+<tbody>
+    <tr>
+        <td>V1Url</td>
+        <td>The URL of your instance of the VersionOne software. It's the URL you use to login.</td>
+    </tr>
+    <tr>
+        <td>V1UserName</td>
+        <td>The VersionOne user name that the API will impersonate as it executes.  Must be an existing user in the system. Leave this blank if you are using Windows authentication.</td>
+    </tr>
+    <tr>
+        <td>V1Password</td>
+        <td>The VersionOne user password that the API will need to login to the instance.  Leave this blank if you are using Windows authentication.</td>
+    </tr>
+    <tr>
+        <td>V1Url</td>
+        <td>The URL of your instance of the VersionOne software. It's the URL you use to login.</td>
+    </tr>
+    <tr>
+        <td>V1Url</td>
+        <td>The URL of your instance of the VersionOne software. It's the URL you use to login.</td>
+    </tr>
+    <tr>
+        <td>V1Url</td>
+        <td>The URL of your instance of the VersionOne software. It's the URL you use to login.</td>
+    </tr>
+</tbody>
+</table>
 
 ### Example Code Locations
 
