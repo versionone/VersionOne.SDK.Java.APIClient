@@ -16,9 +16,17 @@ This product includes software developed by VersionOne. This product is open sou
 
 ## How to get the library as a precompiled package
 
-_Do this if you only want to use the functionality, but are not interested in compiling from source or in contributing code to the project._
+The compiled version of the Java SDK is available as a downloadable ZIP file from the [VersionOne Application Catalog](http://v1appcatalog.azurewebsites.net/app/index.html#/Details/VersionOne.SDK.Java.APIClient). 
 
-You can use [Maven](http://maven.apache.org/guides/introduction/introduction-to-the-pom.html) to import the Java SDK and it's dependencies in your project by making use of [Maven Central](http://search.maven.org). You can edit the pom.xml file for your project in order to import the current version of the Java SDK into your project. If you wish, you can pull the source code down and integrate it with your project by cloning the [git repository](https://github.com/versionone/VersionOne.SDK.Java.APIClient).
+Alternatively, you can use [Maven](http://maven.apache.org/guides/introduction/introduction-to-the-pom.html) to import the Java SDK and it's dependencies from [Maven Central](http://search.maven.org) by adding the following dependency to your project's POM:
+
+```
+<dependency>
+    <groupId>com.versionone</groupId>
+    <artifactId>VersionOne.SDK.Java.APIClient</artifactId>
+    <version>13.0.1</version>
+</dependency>
+```
 
 ## Learn By Example: APIClient Setup
 
