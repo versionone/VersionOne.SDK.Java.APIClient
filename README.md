@@ -14,23 +14,23 @@ This product includes software developed by VersionOne. This product is open sou
 
 * Eclipse or IntelliJ IDEA
 
-## How to get the library as a precompiled package
+## Adding the Java SDK to your project
 
 The compiled version of the Java SDK is available as a downloadable ZIP file from the [VersionOne Application Catalog](http://v1appcatalog.azurewebsites.net/app/index.html#/Details/VersionOne.SDK.Java.APIClient). 
 
-Alternatively, you can use [Maven](http://maven.apache.org/guides/introduction/introduction-to-the-pom.html) to import the Java SDK and it's dependencies from [Maven Central](http://search.maven.org) by adding the following dependency to your project's POM:
+Alternatively, you can use [Maven](http://maven.apache.org/guides/introduction/introduction-to-the-pom.html) to import the Java SDK and it's dependencies from [Maven Central](http://search.maven.org) by adding the following dependency to your project's POM file:
 
-```
+```xml
 <dependency>
     <groupId>com.versionone</groupId>
     <artifactId>VersionOne.SDK.Java.APIClient</artifactId>
-    <version>13.0.1</version>
+    <version>13.0.2</version>
 </dependency>
 ```
 
-## Learn By Example: APIClient Setup
+## Using the Java SDK
 
-Using the Java SDK is as simple as making a reference to the VersionOne.SDK.Java.APIClient-XXX.jar in your Java project, then providing connection information to the main service objects within the Java SDK. There are three possible ways to connect to your VersionOne instance using the SDK. Before you attempt to connect, find out whether your VersionOne instance uses VersionOne authentication or Windows Integrated Authentication. You need to create an instance of IMetaModel and and instance of IServices and provide them with connection information via instances of the V1APIConnector.
+Using the Java SDK is as simple as making a reference to the VersionOne.SDK.Java.APIClient-XXX.jar in your Java project, then providing connection information to the main connector objects within the Java SDK. There are three possible ways to connect to your VersionOne instance using the SDK. Before you attempt to connect, find out whether your VersionOne instance uses VersionOne authentication or Windows Integrated Authentication. You need to create an instance of IMetaModel and and instance of IServices and provide them with connection information via instances of the V1APIConnector.
 
 ### Configuration: open the APIConfiguration.properties file in your .jar file.
 
