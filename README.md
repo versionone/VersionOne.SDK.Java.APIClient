@@ -28,35 +28,15 @@ Alternatively, you can use [Maven](http://maven.apache.org/guides/introduction/i
 </dependency>
 ```
 
-## Using the Java SDK
+## Connecting  to VersionOne
 
-Using the Java SDK is as simple as making a reference to the VersionOne.SDK.Java.APIClient-XXX.jar in your Java project, then providing connection information to the main connector objects within the Java SDK. There are three possible ways to connect to your VersionOne instance using the SDK. Before you attempt to connect, find out whether your VersionOne instance uses VersionOne authentication or Windows Integrated Authentication. You need to create an instance of IMetaModel and and instance of IServices and provide them with connection information via instances of the V1APIConnector.
+Using the Java SDK is as simple as making a reference to the VersionOne.SDK.Java.APIClient-XXX.jar in your Java project, then providing connection information to the main connector objects within the Java SDK.
 
-### Configuration: open the APIConfiguration.properties file in your .jar file.
+There are multiple ways to connect to your VersionOne instance using the SDK. Before you attempt to connect, find out whether your VersionOne instance uses VersionOne authentication or Windows Integrated Authentication. You need to create an instance of IMetaModel and and instance of IServices and provide them with connection information via instances of the V1APIConnector object.
+
+### Setting the APIConfiguration.properties file
 
 Open (not extract) the .jar file using an archiving tool such as 7zip or peaZip.  Navigate to "\com\versionone\apiclient\", and edit the APIConfiguration.properties file to reflect properly your environment.  By default, the samples will run against a temporary remote instance of VersionOne.
-
-Configuration Definitions:
-
-V1Url: The URL of your instance of the VersionOne software. It's the URL you use to login.
-
-V1UserName: The VersionOne user name that the API will impersonate as it executes.  Must be an existing user in the system.
-
-***Important Note: if you would like to use Windows authentication so that the API logs into VersionOne using the currently logged on user, please leave the V1UserName property blank.
-
-V1Password: The VersionOne user password that the API will need to login to the instance.  Leave this blank if you are using Windows authentication.
-
-MetaUrl: The URI path to meta. You should not need to change this setting under normal circumstances.
-
-DataUrl: The URI path to retrieve data. You should not need to change this setting under normal circumstances.
-
-ConfigUrl: The URI path to retrieve VersionOne configuration info through the API. You should not need to change this setting under normal circumstances.
-
-ProxyUrl: If you use a proxy server to logon to your VersionOne instance then provide the address here.
-
-ProxyUserName: The user that should authenticate to the proxy server.
-
-ProxyPassword: The password for the proxy user above.
 
 <table summary="System Names" cellspacing="0" cellpadding="0" border="0">
 <thead>
@@ -79,23 +59,31 @@ ProxyPassword: The password for the proxy user above.
         <td>The VersionOne user password that the API will need to login to the instance.  Leave this blank if you are using Windows authentication.</td>
     </tr>
     <tr>
-        <td>V1Url</td>
-        <td>The URL of your instance of the VersionOne software. It's the URL you use to login.</td>
+        <td>MetaUrl</td>
+        <td>The URI path to meta. You should not need to change this setting under normal circumstances.</td>
     </tr>
     <tr>
-        <td>V1Url</td>
-        <td>The URL of your instance of the VersionOne software. It's the URL you use to login.</td>
+        <td>DataUrl</td>
+        <td>The URI path to retrieve data. You should not need to change this setting under normal circumstances.</td>
     </tr>
     <tr>
-        <td>V1Url</td>
-        <td>The URL of your instance of the VersionOne software. It's the URL you use to login.</td>
+        <td>ConfigUrl</td>
+        <td>The URI path to retrieve VersionOne configuration info through the API. You should not need to change this setting under normal circumstances.</td>
+    </tr>
+    <tr>
+        <td>ProxyUrl</td>
+        <td>If you use a proxy server to logon to your VersionOne instance then provide the address here.</td>
+    </tr>
+    <tr>
+        <td>ProxyUserName</td>
+        <td>The user that should authenticate to the proxy server.</td>
+    </tr>
+    <tr>
+        <td>ProxyPassword</td>
+        <td>The password for the proxy user above.</td>
     </tr>
 </tbody>
 </table>
-
-### Example Code Locations
-
-Along with all the unit tests, you can find fully compilable, functioning [example code](https://github.com/versionone/VersionOne.SDK.Java.APIClient/blob/master/src/test/java/com/versionone/apiclient/example/GettingStarted.java) along with the [associated unit tests](https://github.com/versionone/VersionOne.SDK.Java.APIClient/blob/master/src/test/java/com/versionone/apiclient/example/GettingStartedTester.java).
 
 ### Retrieving your MetaModel and Services based on the config information you entered above.
 
@@ -121,19 +109,19 @@ public class DataExamples {
         _config = _context.getV1Configuration();
     }
 ```
-### Setup using Windows Integrated Authentication
+### Using Windows Integrated Authentication
 
 If your VersionOne instance uses Windows Integrated Authentication, and you wish to connect to the API using the credentials of the user running your program, you can omit the username and password arguments in the APIConfiguration.properties file as mentioned above.
 
-## Learn By Example: Queries
+## Querying Data
 
 This section is a series of examples, starting with simpler queries and moving to more advanced queries. You'll need to create an instance of both IMetaModel and IServices, as outlined above, to perform the queries.
 
-### Access configuration information
+### How to query configuration information
 
 ```java
-public boolean IsEffortTrackingEnabled() throws Exception
-    {
+public boolean IsEffortTrackingEnabled() throws Exception {
+
         return _config.isEffortTracking();
 
         /***** OUTPUT *****
@@ -141,8 +129,7 @@ public boolean IsEffortTrackingEnabled() throws Exception
          ******************/
     }
     
-public void StoryAndDefectTrackingLevel() throws Exception
-    {
+public void StoryAndDefectTrackingLevel() throws Exception {
 
         System.out.println(_config.getStoryTrackingLevel());
         System.out.println(_config.getDefectTrackingLevel());
@@ -154,23 +141,24 @@ public void StoryAndDefectTrackingLevel() throws Exception
     }
 ```
 
-### How to query a single asset
+### How to query for an asset
 
 Retrieve the Member with ID 20:
 
 ```java
 public Asset SingleAsset() throws Exception {
+
         Oid memberId = Oid.fromToken("Member:20", _metaModel);
         Query query = new Query(memberId);
         QueryResult result = _services.retrieve(query);
         Asset member = result.getAssets()[0];
 
         System.out.println(member.getOid().getToken());
+        return member;
+
         /***** OUTPUT *****
          Member:20
          ******************/
-
-        return member;
     }
 ```
 
@@ -182,6 +170,7 @@ Retrieve an asset with populated attributes by using the Selection property of t
 
 ```java
 public Asset SingleAssetWithAttributes() throws Exception {
+
         Oid memberId = Oid.fromToken("Member:20", _metaModel);
         Query query = new Query(memberId);
         IAttributeDefinition nameAttribute = _metaModel.getAttributeDefinition("Member.Name");
@@ -194,14 +183,13 @@ public Asset SingleAssetWithAttributes() throws Exception {
         System.out.println(member.getOid().getToken());
         System.out.println(member.getAttribute(nameAttribute).getValue());
         System.out.println(member.getAttribute(emailAttribute).getValue());
+        return member;
 
         /***** OUTPUT *****
          Member:20
          Administrator
          admin@company.com
          ******************/
-
-        return member;
     }
 ```
 
@@ -209,6 +197,7 @@ public Asset SingleAssetWithAttributes() throws Exception {
 
 ```java
 public Asset[] ListOfAssets() throws Exception {
+
         IAssetType storyType = _metaModel.getAssetType("Story");
         Query query = new Query(storyType);
         IAttributeDefinition nameAttribute = storyType.getAttributeDefinition("Name");
@@ -223,6 +212,9 @@ public Asset[] ListOfAssets() throws Exception {
             System.out.println(story.getAttribute(estimateAttribute).getValue());
             System.out.println();
         }
+
+        return result.getAssets();
+
         /***** OUTPUT *****
          Story:1083
          View Daily Call Count
@@ -232,8 +224,6 @@ public Asset[] ListOfAssets() throws Exception {
          Multi-View Customer Calendar
          1 ...
          ******************/
-
-        return result.getAssets();
     }
 ```
 
@@ -241,40 +231,92 @@ Depending on your security role, you may not be able to see all the Story assets
 
 ### How to filter a query
 
-Use the setFilter property of the Query object to filter the results that are returned. This query will retrieve only Task assets with a To Do of zero:
+Use the setFilter property of the Query object to filter the results that are returned. This query will retrieve only Task assets with a ToDo value of zero:
 
 ```java
 public Asset[] FilterListOfAssets() throws Exception {
-        IAssetType taskType = _metaModel.getAssetType("Task");
-        Query query = new Query(taskType);
-        IAttributeDefinition nameAttribute = taskType.getAttributeDefinition("Name");
-        IAttributeDefinition todoAttribute = taskType.getAttributeDefinition("ToDo");
-        query.getSelection().add(nameAttribute);
-        query.getSelection().add(todoAttribute);
 
-        FilterTerm toDoTerm = new FilterTerm(todoAttribute);
-        toDoTerm.equal(0);
-        query.setFilter(toDoTerm);
-        QueryResult result = _services.retrieve(query);
+	IAssetType taskType = _metaModel.getAssetType("Task");
+    Query query = new Query(taskType);
+    IAttributeDefinition nameAttribute = taskType.getAttributeDefinition("Name");
+    IAttributeDefinition todoAttribute = taskType.getAttributeDefinition("ToDo");
+    query.getSelection().add(nameAttribute);
+    query.getSelection().add(todoAttribute);
 
-        for (Asset task : result.getAssets()) {
-            System.out.println(task.getOid().getToken());
-            System.out.println(task.getAttribute(nameAttribute).getValue());
-            System.out.println(task.getAttribute(todoAttribute).getValue());
-            System.out.println();
-        }
-        /***** OUTPUT *****
-         Task:1153
-         Code Review
-         0
+    FilterTerm toDoTerm = new FilterTerm(todoAttribute);
+    toDoTerm.equal(0);
+    query.setFilter(toDoTerm);
+    QueryResult result = _services.retrieve(query);
 
-         Task:1154
-         Design Component
-         0 ...
-         ******************/
-
-        return result.getAssets();
+    for (Asset task : result.getAssets()) {
+        System.out.println(task.getOid().getToken());
+        System.out.println(task.getAttribute(nameAttribute).getValue());
+        System.out.println(task.getAttribute(todoAttribute).getValue());
+        System.out.println();
     }
+
+    return result.getAssets();
+
+    /***** OUTPUT *****
+     Task:1153
+     Code Review
+     0
+
+     Task:1154
+     Design Component
+     0 ...
+     ******************/
+}
+```
+
+### How to filter a query with multiple attributes
+
+To filter on multiple attributes, use the GroupFilterTerm to concatenate filters. This example shows how to retreive a set of Defects that are in a specific project and have a ToDo value of zero:
+
+```java
+public Asset[] FilterListOfAssetsWithMultipleAttributes(String projectOid) throws Exception {
+
+    IAssetType assetType = _metaModel.getAssetType("Defect");
+     
+    //Create the query and set the attributes to select.
+    Query query = new Query(assetType);
+    IAttributeDefinition projectAttribute = assetType.getAttributeDefinition("Scope");
+    IAttributeDefinition todoAttribute = assetType.getAttributeDefinition("ToDo");
+    query.getSelection().add(projectAttribute);
+    query.getSelection().add(todoAttribute);
+        
+    //Set the terms to filter with.
+    FilterTerm projectTerm = new FilterTerm(projectAttribute);
+    projectTerm.equal(projectOid);
+    FilterTerm todoTerm = new FilterTerm(todoAttribute);
+    todoTerm.equal(0);
+
+    //Create the group filter.
+    GroupFilterTerm groupFilter = new AndFilterTerm(projectTerm, todoTerm);
+    query.setFilter(groupFilter);
+        
+    //Execute the query and display the results.
+    QueryResult result = _services.retrieve(query);	
+
+    for (Asset task : result.getAssets()) {
+        System.out.println(task.getOid().getToken());
+        System.out.println(task.getAttribute(projectAttribute).getValue());
+        System.out.println(task.getAttribute(todoAttribute).getValue());
+        System.out.println();
+    }
+
+    return result.getAssets();
+
+    /***** OUTPUT *****
+	 Defect:37396
+	 Scope:37367
+	 0.0
+			
+	 Defect:39675
+	 Scope:37367
+	 0.0
+    ******************/
+}
 ```
 
 ### How to use find in a query
@@ -282,8 +324,8 @@ public Asset[] FilterListOfAssets() throws Exception {
 Use the Find property of the Query object to search for text. This query will retrieve only Request assets with the word "Urgent" in the name:
 
 ```java
-public Asset[] FindListOfAssets() throws Exception
-    {
+public Asset[] FindListOfAssets() throws Exception {
+
         IAssetType requestType = _metaModel.getAssetType("Story");
         Query query = new Query(requestType);
         IAttributeDefinition nameAttribute = requestType.getAttributeDefinition("Name");
@@ -302,6 +344,9 @@ public Asset[] FindListOfAssets() throws Exception
             System.out.println(request.getAttribute(nameAttribute).getValue());
             System.out.println();
         }
+
+        return result.getAssets();
+
         /***** OUTPUT *****
          Request:1195
          Urgent!  Filter by owner
@@ -309,8 +354,6 @@ public Asset[] FindListOfAssets() throws Exception
          Task:1244
          Urgent: improve search performance ...
          ******************/
-
-        return result.getAssets();
     }
 ```
 
@@ -320,6 +363,7 @@ Use the OrderBy property of the Query object to sort the results. This query wil
 
 ```java
 public Asset[] SortListOfAssets() throws Exception {
+
         IAssetType storyType = _metaModel.getAssetType("Story");
         Query query = new Query(storyType);
         IAttributeDefinition nameAttribute = storyType.getAttributeDefinition("Name");
@@ -335,6 +379,9 @@ public Asset[] SortListOfAssets() throws Exception {
             System.out.println(story.getAttribute(estimateAttribute).getValue());
             System.out.println();
         }
+
+        return result.getAssets();
+
         /***** OUTPUT *****
          Story:1073
          Add Order Line
@@ -344,8 +391,6 @@ public Asset[] SortListOfAssets() throws Exception {
          Update Member
          2 ...
          ******************/
-
-        return result.getAssets();
     }
 ```
 
@@ -357,6 +402,7 @@ Retrieve a "page" of query results by using the Paging propery of the Query obje
 
 ```java
 public Asset[] PageListOfAssets() throws Exception {
+
         IAssetType storyType = _metaModel.getAssetType("Story");
         Query query = new Query(storyType);
         IAttributeDefinition nameAttribute = storyType.getAttributeDefinition("Name");
@@ -373,6 +419,9 @@ public Asset[] PageListOfAssets() throws Exception {
             System.out.println(story.getAttribute(estimateAttribute).getValue());
             System.out.println();
         }
+
+        return result.getAssets();
+
         /***** OUTPUT *****
          Story:1063
          Logon
@@ -386,8 +435,6 @@ public Asset[] PageListOfAssets() throws Exception {
          Add Customer Header
          3
          ******************/
-
-        return result.getAssets();
     }
 ```
 
@@ -399,6 +446,7 @@ This query will retrieve the history of the Member asset with ID 1000.
 
 ```java
 public Asset[] HistorySingleAsset() throws Exception {
+
         IAssetType memberType = _metaModel.getAssetType("Member");
         Query query = new Query(memberType, true);
         IAttributeDefinition idAttribute = memberType.getAttributeDefinition("ID");
@@ -418,6 +466,9 @@ public Asset[] HistorySingleAsset() throws Exception {
             System.out.println(member.getAttribute(emailAttribute).getValue());
             System.out.println();
         }
+
+        return memberHistory;
+
         /***** OUTPUT *****
          Member:1000:105
          4/2/2007 1:22:03 PM
@@ -427,8 +478,6 @@ public Asset[] HistorySingleAsset() throws Exception {
          3/29/2007 4:10:29 PM
          andre@company.net
          ******************/
-
-        return memberHistory;
     }
 ```
 
@@ -440,6 +489,7 @@ This query will retrieve history for all Member assets:
 
 ```java
  public Asset[] HistoryListOfAssets() throws Exception {
+
         IAssetType memberType = _metaModel.getAssetType("Member");
         Query query = new Query(memberType, true);
         IAttributeDefinition changeDateAttribute = memberType.getAttributeDefinition("ChangeDate");
@@ -455,6 +505,9 @@ This query will retrieve history for all Member assets:
             System.out.println(member.getAttribute(emailAttribute).getValue());
             System.out.println();
         }
+
+        return memberHistory;
+
         /***** OUTPUT *****
          Member:20:0
          Thu Nov 30 19:00:00 EST 1899
@@ -472,8 +525,6 @@ This query will retrieve history for all Member assets:
          Sun Nov 11 22:59:47 EST 2012
          versionone@mailinator.com
          ******************/
-
-        return memberHistory;
     }
 ```
 
@@ -487,6 +538,7 @@ Use the AsOf property of the Query object to retrieve data as it existed at some
 
 ```java
  public Asset[] HistoryAsOfTime() throws Exception {
+
         IAssetType storyType = _metaModel.getAssetType("Story");
         Query query = new Query(storyType, true);
         IAttributeDefinition nameAttribute = storyType.getAttributeDefinition("Name");
@@ -504,6 +556,9 @@ Use the AsOf property of the Query object to retrieve data as it existed at some
             System.out.println(story.getAttribute(estimateAttribute).getValue());
             System.out.println();
         }
+
+        return result.getAssets();
+
         /***** OUTPUT *****
          Story:1063
          Logon
@@ -517,15 +572,13 @@ Use the AsOf property of the Query object to retrieve data as it existed at some
          Add Customer Header
          3
          ******************/
-
-        return result.getAssets();
     }
 
 ```
 
-## Learn By Example: Updates
+## Updating Data
 
-Updating assets through the APIClient involves calling the Save method on the IServices object.
+Updating assets with the Java SDK involves calling the Save method on the IServices object.
 
 ### How to update a scalar attribute on an asset
 
@@ -563,6 +616,7 @@ Updating a single-value relation is accomplished by calling the SetAttribute met
 
 ```java
 public Asset UpdateSingleValueRelation() throws Exception {
+
         Oid storyId = Oid.fromToken("Story:1094", _metaModel);
         Query query = new Query(storyId);
         IAssetType storyType = _metaModel.getAssetType("Story");
@@ -577,13 +631,13 @@ public Asset UpdateSingleValueRelation() throws Exception {
         System.out.println(story.getOid().getToken());
         System.out.println(oldSource);
         System.out.println(story.getAttribute(sourceAttribute).getValue());
+        return story;
+
         /***** OUTPUT *****
          Story:1094:1446
          StorySource:148
          StorySource:149
          ******************/
-
-        return story;
     }
 ```
 
@@ -593,6 +647,7 @@ Updating a multi-value relation is accomplished by calling either the RemoveAttr
 
 ```java
 public Asset UpdateMultiValueRelation() throws Exception {
+
         Oid storyId = Oid.fromToken("Story:1124", _metaModel);
         Query query = new Query(storyId);
         IAssetType storyType = _metaModel.getAssetType("Story");
@@ -616,26 +671,29 @@ public Asset UpdateMultiValueRelation() throws Exception {
             Oid oid = (Oid) o;
             System.out.println(oid.getToken());
         }
+
+        return story;
+
         /***** OUTPUT *****
          Story:1094:1446
          Member:1003
          Member:1000
          ******************/
-
-        return story;
     }
 
 ```
 
-## Learn By Example: New Asset
+## Creating New Assets
 
-When you create a new asset in the APIClient you need to specify the "context" of another asset that will be the parent. For example, if you create a new Story asset you can specify which Scope it should be created in.
+When you create a new asset using the Java SDK, you need to specify the "context" of another asset that will be the parent. For example, if you create a new Story asset you can specify which Scope it should be created in.
 
-How to get a new Story asset template in the context of a Scope asset
+### How to get a new Story asset template in the context of a Scope asset
+
 This code will create a Story asset in the context of Scope with ID 1012:
 
 ```java
 public Asset AddNewAsset() throws Exception {
+
         Oid projectId = Oid.fromToken("Scope:0", _metaModel);
         IAssetType storyType = _metaModel.getAssetType("Story");
         Asset newStory = _services.createNew(storyType, projectId);
@@ -646,17 +704,17 @@ public Asset AddNewAsset() throws Exception {
         System.out.println(newStory.getOid().getToken());
         System.out.println(newStory.getAttribute(storyType.getAttributeDefinition("Scope")).getValue());
         System.out.println(newStory.getAttribute(nameAttribute).getValue());
+        return newStory;
+
         /***** OUTPUT *****
          Story:1094
          Scope:1012
          My New Story
          ******************/
-
-        return newStory;
     }
 ```
 
-## Learn By Example: Operations
+## Executing Operations
 
 An operation is an action that is executed against a single asset. For example, to delete an asset you must execute the Delete operation on the asset. To close or inactivate a Workitem, you must use the Inactivate Operation. Available operations for each asset are listed at the bottom of the the meta data description for that asset, for instance:
 
@@ -670,10 +728,12 @@ Get the Delete operation from the IMetaModel, and use IServices to execute it ag
 
 ```java
 public Oid DeleteAsset() throws Exception {
+
         Asset story = AddNewAsset();
         IOperation deleteOperation = _metaModel.getOperation("Story.Delete");
         Oid deletedID = _services.executeOperation(deleteOperation, story.getOid());
         Query query = new Query(deletedID.getMomentless());
+
         try {
             @SuppressWarnings("unused")
             QueryResult result = _services.retrieve(query);
@@ -682,11 +742,11 @@ public Oid DeleteAsset() throws Exception {
                 System.out.println("Story has been deleted: " + story.getOid().getMomentless());
         }
 
+        return deletedID;
+
         /***** OUTPUT *****
          Story has been deleted: Story:1049
          ******************/
-
-        return deletedID;
     }
 ```
 
@@ -700,6 +760,7 @@ Get the Inactivate operation from the IMetaModel, and use IServices to execute i
 
 ```java
 public Asset CloseAsset() throws Exception {
+
         Asset story = AddNewAsset();
         IOperation closeOperation = _metaModel.getOperation("Story.Inactivate");
         Oid closeID = _services.executeOperation(closeOperation, story.getOid());
@@ -713,12 +774,12 @@ public Asset CloseAsset() throws Exception {
 
         System.out.println(closeStory.getOid());
         System.out.println(state.toString());
+        return closeStory;
+
         /***** OUTPUT *****
          Story:1050
          Closed
          ******************/
-
-        return closeStory;
     }
 ```
 
@@ -730,6 +791,7 @@ Get the Reactivate operation from the IMetaModel, and use IServices to execute i
 
 ```java
     public Asset ReOpenAsset() throws Exception {
+
         Asset story = CloseAsset();
         IOperation activateOperation = _metaModel.getOperation("Story.Reactivate");
         Oid activeID = _services.executeOperation(activateOperation, story.getOid());
@@ -743,18 +805,18 @@ Get the Reactivate operation from the IMetaModel, and use IServices to execute i
         AssetState state = AssetState.valueOf(((Integer) activeStory.getAttribute(assetState).getValue()).intValue());
 
         System.out.println(activeStory.getOid());
+        return activeStory;
+
         /***** OUTPUT *****
          Story:1051
          Active
          ******************/
-
-        return activeStory;
     }
 ```
 
-## Learn By Example: System Settings
+## Getting System Settings
 
-Some system settings are exposed (read-only) to the APIClient, to allow client-side data validation. Specifically, the system settings for Effort Tracking, Story Tracking Level and Defect Tracking Level are now available to the APIClient, so that entry of Effort, Detail Estimate, and ToDo can be done consistently with the way VersionOne Enterprise is configured. In previous versions, there was no way for the APIClient to check these settings, and the developer would have to code with knowledge of the system's configured state.  Using the V1Configuration component, you can get the system's configured state, and apply these settings appropriately in code.
+Some system settings are exposed (read-only) to the Java SDK to allow client-side data validation. Specifically, the system settings for Effort Tracking, Story Tracking Level and Defect Tracking Level are available to the Java SDK so that entry of Effort, Detail Estimate, and ToDo can be done consistently with the way VersionOne is configured. Using the V1Configuration class, you can get the system's configured state, and apply these settings appropriately in code.
 
 ## The VersionOne Information Model
 
@@ -770,7 +832,7 @@ Individual types can also be viewed through the meta url:
 https://www14.v1host.com/v1sdktesting/meta.v1/Story?xsl=api.xsl
 ```
 
-You must use the system name for the type you would like to retrieve. This is true whether using the API directly or the APIClient. For instance, in the example above the system name is "Story", which certain methodology templates display as "Backlog Item" or "Requirement". Here is a list of some of the most important system names and their corresponding default display names in the available methodology templates:
+You must use the system name for the type you would like to retrieve. This is true whether using the API directly or the Java SDK. For instance, in the example above the system name is "Story", which certain methodology templates display as "Backlog Item" or "Requirement". Here is a list of some of the most important system names and their corresponding default display names in the available methodology templates:
 
 ### System Names
 <table summary="System Names" cellspacing="0" cellpadding="0" border="0">
@@ -895,18 +957,9 @@ On every asset are a number of attributes, which attach specific values to the a
 
 As data changes in VersionOne, a history is maintained. Every change to every asset is journaled within the system, and assigned a chronologically-increasing integer called a moment. A past version of an asset is uniquely identified by it's asset type, ID, and Moment. A past version of a relation attribute will refer to the past version of it's target asset. For example, Member:20:563 identifies the Member asset with ID of 20, as it was at the time of moment 563.
 
-## Other Resources
+## Getting Help
+To learn more about the VersionOne API, please visit the [VersionOne Developer Site](https://community.versionone.com/Developers).
 
-* [CONTRIBUTING.md](https://github.com/versionone/VersionOne.SDK.Java.APIClient/blob/master/CONTRIBUTING.md) - How to get involved with the VersionOne SDK.Java APIClient project
-* [LICENSE.md](https://github.com/versionone/VersionOne.SDK.Java.APIClient/blob/master/LICENSE.md) - Source code and user license
-* [ACKNOWLEDGEMENTS.md](https://github.com/versionone/VersionOne.SDK.Java.APIClient/blob/master/ACKNOWLEDGEMENTS.md) - Acknowledgments of included software and associated licenses
+To ask questions of the VersionOne developer community, please visit [StackOverflow](http://stackoverflow.com/questions/tagged/versionone).
 
-### Getting Help
-Need to bootstrap on VersionOne SDK.Java quickly? VersionOne services brings a wealth of development experience to training and mentoring on VersionOne SDK.Java:
-
-http://www.versionone.com/training/product_training_services/
-
-Have a question? Get help from the community of VersionOne developers:
-
-http://groups.google.com/group/versionone-dev/
-
+For dedicated assistance, contact [VersionOne Technical Services](http://www.versionone.com/training/technical_services/).
