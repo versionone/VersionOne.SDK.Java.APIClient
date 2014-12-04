@@ -16,27 +16,40 @@ The Java SDK is open source and is licensed under a modified BSD license, which 
 
 ## Adding the Java SDK to your project
 
-The compiled version of the Java SDK is available as a downloadable ZIP file from the [VersionOne Application Catalog](http://v1appcatalog.azurewebsites.net/app/index.html#/Details/VersionOne.SDK.Java.APIClient). 
+The compiled version of the Java SDK is available as a downloadable ZIP file from the [VersionOne Application Catalog](http://v1appcatalog.azurewebsites.net/app/index.html#/Details/VersionOne.SDK.Java.APIClient). When you extarct the ZIP file, you will find a jar file named VersionOne.SDK.Java.APIClient-XXX.jar that you can then reference in your Java project.
 
-Alternatively, you can use [Maven](http://maven.apache.org/guides/introduction/introduction-to-the-pom.html) to import the Java SDK and it's dependencies from [Maven Central](http://search.maven.org) by adding the following dependency to your project's POM file:
+Alternatively, you can use [Maven](http://maven.apache.org/guides/introduction/introduction-to-the-pom.html) to import the Java SDK and it's dependencies from [Maven Central](http://search.maven.org/#search%7Cga%7C1%7Ca%3A%22VersionOne.SDK.Java.APIClient%22) by adding the following dependency to your project's POM file:
 
 ```xml
 <dependency>
     <groupId>com.versionone</groupId>
     <artifactId>VersionOne.SDK.Java.APIClient</artifactId>
-    <version>13.0.2</version>
+    <version>XX.X.X</version>
 </dependency>
 ```
 
 ## Connecting  to VersionOne
 
-Using the Java SDK is as simple as making a reference to the VersionOne.SDK.Java.APIClient-XXX.jar in your Java project, then providing connection information to the main connector objects within the Java SDK.
+Using the Java SDK is as simple as making a reference to the Java SDK jar file in your project, then providing the appropriate connection information to the V1APIConnector class.
 
-There are multiple ways to connect to your VersionOne instance using the SDK. Before you attempt to connect, find out whether your VersionOne instance uses VersionOne authentication or Windows Integrated Authentication. You need to create an instance of IMetaModel and and instance of IServices and provide them with connection information via instances of the V1APIConnector object.
+### Creating a connection using V1APIConnector
 
-### Setting the APIConfiguration.properties file
+Before attempting to connect, you should determine your VersionOne instance uses Basic (username and password) or Windows Integrated (NTLM) authentication. Once you have that information and the URL of your VersionOne instance, you need to create an instance of the IMetaModel and IServices classes, providing them with connection information via instances of the V1APIConnector object as in the following example:
 
-Open (not extract) the .jar file using an archiving tool such as 7zip or peaZip.  Navigate to "\com\versionone\apiclient\", and edit the APIConfiguration.properties file to reflect properly your environment.  By default, the samples will run against a temporary remote instance of VersionOne.
+```java
+V1APIConnector _dataConnector = new V1APIConnector("http://localhost/versionone/rest-1.v1/", "admin", "admin");
+V1APIConnector _metaConnector = new V1APIConnector("http://localhost/versionone/meta.v1/");
+	    
+IMetaModel _metaModel = new MetaModel(_metaConnector);
+IServices _services = new Services(_metaModel, _dataConnector);
+```
+> The example above is based on having VersionOne installed locally.
+
+### Creating a connection using EnvironmentContext
+
+As an alternative to using the V1APIConnector class, the Java SDK provides an EnvironmentContext class that reads information from a Java properties file.
+
+Open (not extract) the .jar file using an file archiving tool. Navigate to "\com\versionone\apiclient\", and edit the APIConfiguration.properties file to match your environment using these property definitions:
 
 <table summary="System Names" cellspacing="0" cellpadding="0" border="0">
 <thead>
@@ -85,7 +98,7 @@ Open (not extract) the .jar file using an archiving tool such as 7zip or peaZip.
 </tbody>
 </table>
 
-### Retrieving your MetaModel and Services based on the config information you entered above.
+This example shows how to connect using the EnvironmentContext class:
 
 ```java
 public class DataExamples {
@@ -112,6 +125,16 @@ public class DataExamples {
 ### Using Windows Integrated Authentication
 
 If your VersionOne instance uses Windows Integrated Authentication, and you wish to connect to the API using the credentials of the user running your program, you can omit the username and password arguments in the APIConfiguration.properties file as mentioned above.
+
+
+### Using a custom user-agent header
+When making using the Java SDK for VersionOne API calls, it is recommended that you create a custom user-agent header to pass along to the API. The V1APIConnector class in the Java SDK has a setUserAgentHeader method that can be used to pass a custom header to the VersionOne API like this:
+
+```java
+
+```
+
+> For more information about custom user-agent strings, see [HTTP User-Agent Header](https://community.versionone.com/Developers/Developer-Library/Concepts/HTTP_User-Agent_Header) in the VersionOne Developer Library.
 
 ## Querying Data
 
@@ -271,7 +294,7 @@ public Asset[] FilterListOfAssets() throws Exception {
 
 ### How to filter a query with multiple attributes
 
-To filter on multiple attributes, use the GroupFilterTerm to concatenate filters. This example shows how to retreive a set of Defects that are in a specific project and have a ToDo value of zero:
+To filter on multiple attributes, use the GroupFilterTerm to combine filter terms. This example shows how to retreive a set of Defects that are in a specific project and have a ToDo value of zero:
 
 ```java
 public Asset[] FilterListOfAssetsWithMultipleAttributes(String projectOid) throws Exception {
@@ -958,7 +981,7 @@ On every asset are a number of attributes, which attach specific values to the a
 As data changes in VersionOne, a history is maintained. Every change to every asset is journaled within the system, and assigned a chronologically-increasing integer called a moment. A past version of an asset is uniquely identified by it's asset type, ID, and Moment. A past version of a relation attribute will refer to the past version of it's target asset. For example, Member:20:563 identifies the Member asset with ID of 20, as it was at the time of moment 563.
 
 ## Getting Help
-To learn more about the VersionOne API, please visit the [VersionOne Developer Site](https://community.versionone.com/Developers).
+To learn more about the VersionOne API, please visit the [VersionOne Developer Community](https://community.versionone.com/Developers).
 
 To ask questions of the VersionOne developer community, please visit [StackOverflow](http://stackoverflow.com/questions/tagged/versionone).
 
