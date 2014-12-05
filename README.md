@@ -16,7 +16,7 @@ The Java SDK is open source and is licensed under a modified BSD license, which 
 
 ## Adding the Java SDK to your project
 
-The compiled version of the Java SDK is available as a downloadable ZIP file from the [VersionOne Application Catalog](http://v1appcatalog.azurewebsites.net/app/index.html#/Details/VersionOne.SDK.Java.APIClient). When you extarct the ZIP file, you will find a jar file named VersionOne.SDK.Java.APIClient-XXX.jar that you can then reference in your Java project.
+The compiled version of the Java SDK is available as a downloadable ZIP file from the [VersionOne Application Catalog](http://v1appcatalog.azurewebsites.net/app/index.html#/Details/VersionOne.SDK.Java.APIClient). When you extract the ZIP file, you will find a jar file named VersionOne.SDK.Java.APIClient-XXX.jar that you can reference in your Java project.
 
 Alternatively, you can use [Maven](http://maven.apache.org/guides/introduction/introduction-to-the-pom.html) to import the Java SDK and it's dependencies from [Maven Central](http://search.maven.org/#search%7Cga%7C1%7Ca%3A%22VersionOne.SDK.Java.APIClient%22) by adding the following dependency to your project's POM file:
 
@@ -34,7 +34,7 @@ Using the Java SDK is as simple as making a reference to the Java SDK jar file i
 
 ### Creating a connection using V1APIConnector
 
-Before attempting to connect, you should determine your VersionOne instance uses Basic (username and password) or Windows Integrated (NTLM) authentication. Once you have that information and the URL of your VersionOne instance, you need to create an instance of the IMetaModel and IServices classes, providing them with connection information via instances of the V1APIConnector object as in the following example:
+Before attempting to connect, you should determine if your VersionOne instance uses Basic (username and password) or Windows Integrated Authentication (NTLM). Once you have that information and the URL of your VersionOne instance, you'll need to create an instance of the **IMetaModel** and **IServices** classes, providing them with connection information via separate instances of the **V1APIConnector** class as in the following example:
 
 ```java
 V1APIConnector _dataConnector = new V1APIConnector("http://localhost/versionone/rest-1.v1/", "admin", "admin");
@@ -47,7 +47,7 @@ IServices _services = new Services(_metaModel, _dataConnector);
 
 ### Creating a connection using EnvironmentContext
 
-As an alternative to using the V1APIConnector class, the Java SDK provides an EnvironmentContext class that reads information from a Java properties file.
+As an alternative to using the **V1APIConnector** class, the Java SDK provides an **EnvironmentContext** class that reads information from a Java properties file.
 
 Open (not extract) the .jar file using an file archiving tool. Navigate to "\com\versionone\apiclient\", and edit the APIConfiguration.properties file to match your environment using these property definitions:
 
@@ -98,7 +98,7 @@ Open (not extract) the .jar file using an file archiving tool. Navigate to "\com
 </tbody>
 </table>
 
-This example shows how to connect using the EnvironmentContext class:
+This example shows how to connect using the **EnvironmentContext** class:
 
 ```java
 public class DataExamples {
@@ -124,21 +124,21 @@ public class DataExamples {
 ```
 ### Using Windows Integrated Authentication
 
-If your VersionOne instance uses Windows Integrated Authentication, and you wish to connect to the API using the credentials of the user running your program, you can omit the username and password arguments in the APIConfiguration.properties file as mentioned above.
+If your VersionOne instance uses Windows Integrated Authentication, and you wish to connect to the API using the credentials of the user running your program, you can omit the username and password arguments in the  **V1APIConnector** class or in APIConfiguration.properties file as described above.
 
 
 ### Using a custom user-agent header
 When making using the Java SDK for VersionOne API calls, it is recommended that you create a custom user-agent header to pass along to the API. The V1APIConnector class in the Java SDK has a setUserAgentHeader method that can be used to pass a custom header to the VersionOne API like this:
 
 ```java
-
+_dataConnector.setUserAgentHeader("YourAppName", "1.0.0");
 ```
 
 > For more information about custom user-agent strings, see [HTTP User-Agent Header](https://community.versionone.com/Developers/Developer-Library/Concepts/HTTP_User-Agent_Header) in the VersionOne Developer Library.
 
 ## Querying Data
 
-This section is a series of examples, starting with simpler queries and moving to more advanced queries. You'll need to create an instance of both IMetaModel and IServices, as outlined above, to perform the queries.
+This section is a series of examples, starting with simpler queries and moving to more advanced queries. You'll need to create an instance of both **IMetaModel** and **IServices**, as outlined above, to perform the queries.
 
 ### How to query configuration information
 
@@ -189,7 +189,7 @@ In this example, the asset will have its Oid populated, but will not have any ot
 
 ### How to query for specific attributes
 
-Retrieve an asset with populated attributes by using the Selection property of the Query object.
+Retrieve an asset with populated attributes by using the **Selection** property of the **Query** class.
 
 ```java
 public Asset SingleAssetWithAttributes() throws Exception {
@@ -254,7 +254,7 @@ Depending on your security role, you may not be able to see all the Story assets
 
 ### How to filter a query
 
-Use the setFilter property of the Query object to filter the results that are returned. This query will retrieve only Task assets with a ToDo value of zero:
+Use the **setFilter** property of the **Query** class to filter the results that are returned. This query will retrieve only Task assets with a ToDo value of zero:
 
 ```java
 public Asset[] FilterListOfAssets() throws Exception {
@@ -294,7 +294,7 @@ public Asset[] FilterListOfAssets() throws Exception {
 
 ### How to filter a query with multiple attributes
 
-To filter on multiple attributes, use the GroupFilterTerm to combine filter terms. This example shows how to retreive a set of Defects that are in a specific project and have a ToDo value of zero:
+To filter on multiple attributes, use the **GroupFilterTerm** class to combine filter terms. This example shows how to retreive a set of Defects that are in a specific project and have a ToDo value of zero:
 
 ```java
 public Asset[] FilterListOfAssetsWithMultipleAttributes(String projectOid) throws Exception {
@@ -344,7 +344,7 @@ public Asset[] FilterListOfAssetsWithMultipleAttributes(String projectOid) throw
 
 ### How to use find in a query
 
-Use the Find property of the Query object to search for text. This query will retrieve only Request assets with the word "Urgent" in the name:
+Use the **Find** property of the **Query** class to search for text. This query will retrieve only Request assets with the word "Urgent" in the name:
 
 ```java
 public Asset[] FindListOfAssets() throws Exception {
@@ -382,7 +382,7 @@ public Asset[] FindListOfAssets() throws Exception {
 
 ### How to sort a query
 
-Use the OrderBy property of the Query object to sort the results. This query will retrieve Story assets sorted by increasing Estimate:
+Use the **OrderBy** property of the **Query** class to sort the results. This query will retrieve Story assets sorted by increasing Estimate:
 
 ```java
 public Asset[] SortListOfAssets() throws Exception {
@@ -417,11 +417,11 @@ public Asset[] SortListOfAssets() throws Exception {
     }
 ```
 
-There are two methods you can call on the OrderBy class to sort your results: MinorSort and MajorSort. If you are sorting by only one field, it does not matter which one you use. If you want to sort by multiple fields, you need to call either MinorSort or MajorSort multiple times. The difference is: Each time you call MinorSort, the parameter will be added to the end of the OrderBy statement. Each time you call MajorSort, the parameter will be inserted at the beginning of the OrderBy statement.
+There are two methods you can call on the **OrderBy** class to sort your results: **MinorSort** and **MajorSort**. If you are sorting by only one field, it does not matter which one you use. If you want to sort by multiple fields, you need to call either **MinorSort** or **MajorSort** multiple times. The difference is: Each time you call **MinorSort**, the parameter will be added to the end of the OrderBy statement. Each time you call **MajorSort**, the parameter will be inserted at the beginning of the OrderBy statement.
 
 ### How to select a portion of query results
 
-Retrieve a "page" of query results by using the Paging propery of the Query object. This query will retrieve the first 3 Story assets:
+Retrieve a "page" of query results by using the **Paging** propery of the **Query** class. This query will retrieve the first 3 Story assets:
 
 ```java
 public Asset[] PageListOfAssets() throws Exception {
@@ -461,7 +461,7 @@ public Asset[] PageListOfAssets() throws Exception {
     }
 ```
 
-The PageSize property shown asks for 3 items, and the Start property indicates to start at 0. The next 3 items can be retrieve with PageSize=3, Start=3.
+The **PageSize** property shown asks for 3 items, and the **Start** property indicates to start at 0. The next 3 items can be retrieve with PageSize=3, Start=3.
 
 ###How to query the history of a single asset
 
@@ -504,7 +504,7 @@ public Asset[] HistorySingleAsset() throws Exception {
     }
 ```
 
-To create a history query, provide a boolean "true" second argument to the Query constructor.
+To create a history query, provide a boolean "true" second argument to the **Query** class constructor.
 
 ### How to query the history of many assets
 
@@ -557,7 +557,7 @@ All of the previously demonstrated query properties can be used with historical 
 
 ### How to query an asset "as of" a specific time
 
-Use the AsOf property of the Query object to retrieve data as it existed at some point in time. This query finds the version of each Story asset as it existed seven days ago:
+Use the **AsOf** property of the **Query** class to retrieve data as it existed at some point in time. This query finds the version of each Story asset as it existed seven days ago:
 
 ```java
  public Asset[] HistoryAsOfTime() throws Exception {
@@ -601,11 +601,11 @@ Use the AsOf property of the Query object to retrieve data as it existed at some
 
 ## Updating Data
 
-Updating assets with the Java SDK involves calling the Save method on the IServices object.
+Updating assets with the Java SDK involves calling the **Save** method on the **IServices** class.
 
 ### How to update a scalar attribute on an asset
 
-Updating a scalar attribute on an asset is accomplished by calling the SetAttribute method on an asset, specifying the IAttributeDefinition of the attribute you wish to change and the new scalar value. This code will update the Name attribute on the Story with ID 1094:
+Updating a scalar attribute on an asset is accomplished by calling the **SetAttribute** method on an asset, specifying the **IAttributeDefinition** of the attribute you wish to change and the new scalar value. This code will update the Name attribute on the Story with ID 1094:
 
 ```java
 public Asset UpdateScalarAttribute() throws Exception {
@@ -635,7 +635,7 @@ public Asset UpdateScalarAttribute() throws Exception {
 
 ### How to update a single-value relation on an asset
 
-Updating a single-value relation is accomplished by calling the SetAttribute method on an asset, specifying the IAttributeDefinition of the attribute you wish to change and the ID for the new relation. This code will change the source of the Story with ID 1094:
+Updating a single-value relation is accomplished by calling the **SetAttribute** method on an asset, specifying the **IAttributeDefinition** of the attribute you wish to change and the ID for the new relation. This code will change the source of the Story with ID 1094:
 
 ```java
 public Asset UpdateSingleValueRelation() throws Exception {
@@ -666,7 +666,7 @@ public Asset UpdateSingleValueRelation() throws Exception {
 
 ### How to add and remove values from a multi-value relation
 
-Updating a multi-value relation is accomplished by calling either the RemoveAttributeValue or AddAttributeValue method on an asset, specifying the IAttributeDefinition of the attribute you wish to change and the ID of the relation you wish to add or remove. This code will add one Member and remove another Member from the Story with ID 1094:
+Updating a multi-value relation is accomplished by calling either the **RemoveAttributeValue** or **AddAttributeValue** method on an asset, specifying the **IAttributeDefinition** of the attribute you wish to change and the ID of the relation you wish to add or remove. This code will add one Member and remove another Member from the Story with ID 1094:
 
 ```java
 public Asset UpdateMultiValueRelation() throws Exception {
@@ -747,7 +747,7 @@ https://www.myserver.com/VersionOne/meta.v1/Story?xsl=api.xsl
 
 ### How to delete a Story asset
 
-Get the Delete operation from the IMetaModel, and use IServices to execute it against a story Oid.
+Get the Delete operation from the **IMetaModel**, and use **IServices** to execute it against a story Oid.
 
 ```java
 public Oid DeleteAsset() throws Exception {
@@ -775,11 +775,11 @@ public Oid DeleteAsset() throws Exception {
 
 The delete operation returns the Oid, with the new Moment, of the deleted asset. Future current info queries will automatically exclude deleted assets from results.
 
-Currently, there is no support for undeleting a deleted asset.
+> Currently, there is no support for undeleting a deleted asset.
 
 ### How to close a Story asset
 
-Get the Inactivate operation from the IMetaModel, and use IServices to execute it against a story Oid.
+Get the Inactivate operation from the **IMetaModel**, and use **IServices** to execute it against a story Oid.
 
 ```java
 public Asset CloseAsset() throws Exception {
@@ -806,11 +806,11 @@ public Asset CloseAsset() throws Exception {
     }
 ```
 
-The AssetState attribute is the internal state of an asset.
+> The AssetState attribute is the internal state of an asset.
 
 ### How to reopen a Story asset
 
-Get the Reactivate operation from the IMetaModel, and use IServices to execute it against a story Oid.
+Get the Reactivate operation from the **IMetaModel**, and use **IServices** to execute it against a story Oid.
 
 ```java
     public Asset ReOpenAsset() throws Exception {
@@ -839,7 +839,7 @@ Get the Reactivate operation from the IMetaModel, and use IServices to execute i
 
 ## Getting System Settings
 
-Some system settings are exposed (read-only) to the Java SDK to allow client-side data validation. Specifically, the system settings for Effort Tracking, Story Tracking Level and Defect Tracking Level are available to the Java SDK so that entry of Effort, Detail Estimate, and ToDo can be done consistently with the way VersionOne is configured. Using the V1Configuration class, you can get the system's configured state, and apply these settings appropriately in code.
+Some system settings are exposed (read-only) to the Java SDK to allow client-side data validation. Specifically, the system settings for Effort Tracking, Story Tracking Level and Defect Tracking Level are available to the Java SDK so that entry of Effort, Detail Estimate, and ToDo can be done consistently with the way VersionOne is configured. Using the **V1Configuration** class, you can get the system's configured state, and apply these settings appropriately in code.
 
 ## The VersionOne Information Model
 
@@ -978,7 +978,7 @@ On every asset are a number of attributes, which attach specific values to the a
 
 ### Moment
 
-As data changes in VersionOne, a history is maintained. Every change to every asset is journaled within the system, and assigned a chronologically-increasing integer called a moment. A past version of an asset is uniquely identified by it's asset type, ID, and Moment. A past version of a relation attribute will refer to the past version of it's target asset. For example, Member:20:563 identifies the Member asset with ID of 20, as it was at the time of moment 563.
+As data changes in VersionOne, a history is maintained. Every change to every asset is tracked within the system, and assigned a chronologically-increasing integer called a moment. A past version of an asset is uniquely identified by it's asset type, ID, and Moment. A past version of a relation attribute will refer to the past version of it's target asset. For example, Member:20:563 identifies the Member asset with ID of 20, as it was at the time of moment 563.
 
 ## Getting Help
 To learn more about the VersionOne API, please visit the [VersionOne Developer Community](https://community.versionone.com/Developers).
