@@ -35,18 +35,38 @@
 		<developer>
 			<name>Ian Buchanan</name>
 			<email>ian.buchanan@versionone.com</email>
+			<organization>VersionOne</organization>
+			<organizationUrl>http://www.versionone.com/</organizationUrl>
+			<roles>
+				<role>developer</role>
+			</roles>
 		</developer>
 		<developer>
 			<name>Greg Johnson</name>
 			<email>greg.johnson@versionone.com</email>
+			<organization>VersionOne</organization>
+			<organizationUrl>http://www.versionone.com/</organizationUrl>
+			<roles>
+				<role>developer</role>
+			</roles>
 		</developer>
 		<developer>
 			<name>Acey Bunch</name>
 			<email>acey.bunch@versionone.com</email>
+			<organization>VersionOne</organization>
+			<organizationUrl>http://www.versionone.com/</organizationUrl>
+			<roles>
+				<role>developer</role>
+			</roles>
 		</developer>
 		<developer>
 			<name>Valentin Plechuc</name>
 			<email>vplechuc@velocitypartners.net</email>
+			<organization>Velocity Partners</organization>
+			<organizationUrl>http://www.velocitypartners.net/</organizationUrl>
+			<roles>
+				<role>developer</role>
+			</roles>
 		</developer>
 	</developers>
 	<properties>
