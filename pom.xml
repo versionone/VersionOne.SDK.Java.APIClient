@@ -4,7 +4,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.versionone</groupId>
 	<artifactId>VersionOne.SDK.Java.APIClient</artifactId>
-	<version>13.0.2</version>
+	<version>13.0.3</version>
 	<packaging>jar</packaging>
 
 	<name>VersionOne.SDK.Java.APIClient</name>
@@ -304,6 +304,19 @@
 					</execution>
 				</executions>
 			</plugin>
+
+			<plugin>
+				<groupId>org.sonatype.plugins</groupId>
+				<artifactId>nexus-staging-maven-plugin</artifactId>
+				<version>1.6.5</version>
+				<extensions>true</extensions>
+				<configuration>
+					<serverId>ossrh</serverId>
+					<nexusUrl>https://oss.sonatype.org/</nexusUrl>
+					<autoReleaseAfterClose>false</autoReleaseAfterClose>
+				</configuration>
+			</plugin>
+
 		</plugins>
 
 		<pluginManagement>
