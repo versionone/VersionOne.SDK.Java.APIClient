@@ -2,9 +2,6 @@ package com.versionone.apiclient;
 
 /**
  * Provides support for paging parameter in query.
- * 
- * @author jerry
- *
  */
 public class Paging
 {
@@ -37,6 +34,7 @@ public class Paging
 	
 	/**
 	 * Get the paging token
+	 * 
 	 * @return String
 	 */
 	public String getToken() { return String.format("%d,%d", getPageSize(), getStart()); }

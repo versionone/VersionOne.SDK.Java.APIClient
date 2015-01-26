@@ -12,6 +12,7 @@ public class ProxyProvider {
 
 	/**
 	 * Create proxy for connection.
+	 * 
 	 * @param address host and port for proxy server.
 	 * @param userName user name for proxy.
 	 * @param password password for proxy.
@@ -34,13 +35,12 @@ public class ProxyProvider {
 	}
 
 	/**
-	 *  * This code handles Base64 encoding for basic authentication
-	 * and the like
+	 * This code handles Base64 encoding for basic authentication and the like
 	 */
 	private static class Base64Encode {
 
 	    /**
-	     * the encode alphabet
+	     * The encode alphabet
 	     */
 		private final static char base64Array [] = {
 		      'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H',
@@ -59,8 +59,7 @@ public class ProxyProvider {
 	     * Encode a block of binary data as base64 as specified in RFC1521.
 	     *
 	     * @param data the binary data to encode.
-	     * @return An array of characters that represent the data encoded
-	     *      as Base64
+	     * @return An array of characters that represent the data encoded as Base64
 	     */
 		  private static String base64Encode(String string) {
 			String encodedString = "";

@@ -2,18 +2,14 @@ package com.versionone.apiclient;
 
 /**
  * Represents a generic API exception
- * @author jerry
- *
  */
 public class APIException extends V1Exception {
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 
 	/**
 	 * Create with message and token
+	 * 
 	 * @param message - error message
 	 * @param token - VersionOne object token 
 	 */
@@ -22,7 +18,8 @@ public class APIException extends V1Exception {
 	}
 
 	/**
-	 * Create with meassage, token, and exception 
+	 * Create with message, token, and exception 
+	 * 
 	 * @param message - String data
 	 * @param token - String data
 	 * @param inner - Exception
@@ -33,6 +30,7 @@ public class APIException extends V1Exception {
 
 	/**
 	 * Create with just a message
+	 * 
 	 * @param message - String data
 	 */
 	public APIException(String message) {
@@ -41,6 +39,7 @@ public class APIException extends V1Exception {
 
 	/**
 	 * Create with message and exception
+	 * 
 	 * @param message - String data
 	 * @param inner - Exception
 	 */

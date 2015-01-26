@@ -21,7 +21,7 @@ import sun.net.www.protocol.http.AuthCacheImpl;
 import sun.net.www.protocol.http.AuthCacheValue;
 
 /**
- * This class represents a connection to the VersionOne server.
+ * Used to establish a connection to the VersionOne server.
  */
 @SuppressWarnings("restriction")
 public class V1APIConnector implements IAPIConnector {
@@ -33,29 +33,18 @@ public class V1APIConnector implements IAPIConnector {
 	private ProxyProvider proxy = null;
 	private final Map<String, HttpURLConnection> _requests = new HashMap<String, HttpURLConnection>();
 
-	/**
-	 * Additional headers for request to the VersionOne server.
-	 */
+	//Header values for the HTTP request to the VersionOne server.
 	public final Map<String, String> customHttpHeaders = new HashMap<String, String>();
-
-	/**
-	 * Additional User-Agent header for request to the VersionOne server.
-	 */
 	private String _user_agent_header = "";
-
 	private static String _app_name;
-
 	private static String _app_version;
 
 	/**
 	 * Create Connection.
 	 * 
-	 * @param url
-	 *            - URL to VersionOne system.
-	 * @param userName
-	 *            - Name of the user wishing to connect.
-	 * @param password
-	 *            - Password of the user wishing to connect.
+	 * @param url URL to VersionOne system.
+	 * @param userName Name of the user wishing to connect.
+	 * @param password Password of the user wishing to connect.
 	 */
 	public V1APIConnector(String url, String userName, String password) {
 		this(url, userName, password, null);
@@ -64,15 +53,10 @@ public class V1APIConnector implements IAPIConnector {
 	/**
 	 * Create Connection.
 	 * 
-	 * @param url
-	 *            - URL to VersionOne system.
-	 * @param userName
-	 *            - Name of the user wishing to connect.
-	 * @param password
-	 *            - Password of the user wishing to connect.
-	 * @param proxy
-	 *            - Proxy for connection. it is not used ??
-	 * 
+	 * @param url URL to VersionOne system.
+	 * @param userName Name of the user wishing to connect.
+	 * @param password Password of the user wishing to connect.
+	 * @param proxy Proxy for connection. it is not used ??
 	 */
 	public V1APIConnector(String url, String userName, String password, ProxyProvider proxy) {
 
@@ -89,10 +73,10 @@ public class V1APIConnector implements IAPIConnector {
 	}
 
 	/**
-	 * Set the value to use for the custom user-agent header.
-	 * @param name - String
-	 * @param version - String
+	 * Set a value for the user-agent header.
 	 * 
+	 * @param name String
+	 * @param version String
 	 */
 	public void setUserAgentHeader(String name, String version) {
 		_app_name = name;
@@ -120,6 +104,7 @@ public class V1APIConnector implements IAPIConnector {
 
 	/**
 	 * Returns a cookies jar.
+	 * 
 	 * @return ICookiesManager
 	 */
 	public ICookiesManager getCookiesJar() {
@@ -129,11 +114,10 @@ public class V1APIConnector implements IAPIConnector {
 	/**
 	 * Create a connection with only the URL.
 	 * 
-	 * Use this constructor to access MetaData, which does not require or if you want to use have Windows Integrated
-	 * Authentication or MetaData does not require the use of credentials
+	 * Use this constructor to access MetaData, which does not require or if you want to use have Windows Integrated Authentication or 
+	 * MetaData does not require the use of credentials
 	 *
-	 * @param url
-	 *            - Complete URL to VersionOne system
+	 * @param url Complete URL to VersionOne system
 	 */
 	public V1APIConnector(String url) {
 		this(url, null, null);
@@ -143,10 +127,8 @@ public class V1APIConnector implements IAPIConnector {
 	 * Create a connection with only the URL and proxy. Use this constructor to access MetaData, which does not require
 	 * or if you want to use have Windows Integrated Authentication or MetaData does not require the use of credentials.
 	 *
-	 * @param url
-	 *            - Complete URL to VersionOne system
-	 * @param proxy
-	 *            - Proxy for connection.
+	 * @param url Complete URL to VersionOne system
+	 * @param proxy Proxy for connection.
 	 */
 	public V1APIConnector(String url, ProxyProvider proxy) {
 		this(url, null, null, proxy);
@@ -205,10 +187,10 @@ public class V1APIConnector implements IAPIConnector {
 	 *
 	 * Note: Caller is responsible for closing the returned stream.
 	 *
-	 * @param path - String
-	 * @param data - String
+	 * @param path String
+	 * @param data String
 	 * @return the response in a stream
-	 * @throws ConnectionException - ConnectionException
+	 * @throws ConnectionException
 	 */
 	public Reader sendData(String path, String data) throws ConnectionException {
 
@@ -252,10 +234,8 @@ public class V1APIConnector implements IAPIConnector {
 	 * It's obligatory to complete request and get response by {@link #endRequest(String)} method with the same path
 	 * parameter.
 	 *
-	 * @param path
-	 *            path to the data on server.
-	 * @param contentType
-	 *            Content-type of output content. If null - GET request used.
+	 * @param path Path to the data on server.
+	 * @param contentType Content-type of output content. If null - GET request used.
 	 * @return the stream for writing POST data.
 	 * @see #endRequest(String)
 	 */

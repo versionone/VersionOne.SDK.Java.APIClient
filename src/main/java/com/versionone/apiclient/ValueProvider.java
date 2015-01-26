@@ -5,6 +5,7 @@ import java.util.Arrays;
 import java.util.List;
 
 public class ValueProvider implements IValueProvider {
+	
     private final List<Object> values = new ArrayList<Object>();
 
     public ValueProvider(Object[] values) {

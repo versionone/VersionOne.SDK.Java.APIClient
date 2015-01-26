@@ -27,6 +27,7 @@ public interface IServices {
 
 	/**
 	 * Get type information for an operation specified in a token
+	 * 
 	 * @param token - token to process
 	 * @return IOperation based on token
 	 * @throws MetaException if the token is invalid
@@ -35,6 +36,7 @@ public interface IServices {
 
 	/**
 	 * Get a Object Identifier for the specified token
+	 * 
 	 * @param token - token to process
 	 * @return Object Identifier
 	 * @throws OidException if the token is invalid
@@ -43,6 +45,7 @@ public interface IServices {
 
 	/**
 	 * Execute a Query and return the results
+	 * 
 	 * @param query - Query to execute
 	 * @return QueryResult of the query
      * @throws ConnectionException - if connection to VersionOne down
@@ -62,6 +65,7 @@ public interface IServices {
 
 	/**
 	 * Persist changes to as asset with comment
+	 * 
 	 * @param asset - asset that changed
 	 * @param comment - comment
      * @throws ConnectionException - if connection to VersionOne down
@@ -71,6 +75,7 @@ public interface IServices {
 
 	/**
 	 * Save multiple assets without comment
+	 * 
 	 * @param assetList - array of assets to save
 	 * @throws V1Exception - if the save fails
 	 */
@@ -78,6 +83,7 @@ public interface IServices {
 
 	/**
 	 * Determine the OID of the currently logged in user
+	 * 
 	 * @return Object Identifier for current user
      * @throws ConnectionException - if connection to VersionOne down
      * @throws OidException - if there is problem related to Object Identifiers 
@@ -87,6 +93,7 @@ public interface IServices {
 
 	/**
 	 * Create a new Asset 
+	 * 
 	 * @param assetType - type of asset to create
 	 * @param context - context under which to create the asset
 	 * @return New Asset
@@ -96,6 +103,7 @@ public interface IServices {
 
 	/**
 	 * Execute an operation
+	 * 
 	 * @param op - Operation to execute
 	 * @param oid - OID of object on which method is executed
 	 * @return Oid result of operation

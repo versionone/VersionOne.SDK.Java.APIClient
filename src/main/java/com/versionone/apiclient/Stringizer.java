@@ -3,6 +3,7 @@ package com.versionone.apiclient;
 import java.lang.reflect.Method;
 
 class Stringizer {
+	
 	Object target;
 	String methodName;
 

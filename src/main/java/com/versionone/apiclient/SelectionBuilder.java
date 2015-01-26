@@ -1,6 +1,7 @@
 package com.versionone.apiclient;
 
 public class SelectionBuilder extends QueryBuilder {
+	
     @Override
     protected void doBuild(Query query, BuildResult result) {
         if (query.getParentRelation() != null) {

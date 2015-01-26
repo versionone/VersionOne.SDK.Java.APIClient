@@ -1,6 +1,7 @@
 package com.versionone.apiclient;
 
 public class HierarchicalPartBuilder extends QueryBuilder {
+	
     @Override
     protected void doBuild(Query query, BuildResult result) {
         result.pathParts.add(query.isHistorical() ? "Hist" : "Data");

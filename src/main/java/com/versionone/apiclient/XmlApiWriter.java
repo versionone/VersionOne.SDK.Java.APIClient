@@ -17,9 +17,7 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 
 /**
- * Class responsible creating XML from an Asset.  This
- * XML is used in the POST command when creating or
- * updating an Asset.
+ * Class responsible creating XML from an asset. The XML is used in the POST command when creating or updating an asset.
  */
 public class XmlApiWriter {
 
@@ -96,7 +94,7 @@ public class XmlApiWriter {
     }
 
     /**
-     * add the attribute information
+     * Add the attribute information
      *
      * @param attribute -
      * @param parent    -

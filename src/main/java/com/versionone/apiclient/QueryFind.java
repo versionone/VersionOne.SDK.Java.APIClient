@@ -1,6 +1,7 @@
 package com.versionone.apiclient;
 
 public class QueryFind {
+	
     public final String text;
     public final AttributeSelection attributes;
 

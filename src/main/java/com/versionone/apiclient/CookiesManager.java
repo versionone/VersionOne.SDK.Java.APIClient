@@ -10,16 +10,9 @@ import java.util.*;
 
 /**
  * Class for process and store cookies for requests to the VersionOne service
- *
- * @author VersionOne
- *
  */
-public class CookiesManager extends HashMap<String, CookieData> implements
-		ICookiesManager {
+public class CookiesManager extends HashMap<String, CookieData> implements ICookiesManager {
 
-	/**
-	 * serialVersionUID
-	 */
 	private static final long serialVersionUID = -5115415390702250886L;
 	private static final String SET_COOKIE_PARAM = "Set-Cookie";
 	private static final String COOKIE_PARAM = "Cookie";
@@ -149,8 +142,7 @@ public class CookiesManager extends HashMap<String, CookieData> implements
 	/**
 	 * Store cookie for using in next requests
 	 *
-	 * @param headerData
-	 *            Map of response header data
+	 * @param headerData Map of response header data
 	 */
 	public void addCookie(Map<String, List<String>> headerData) {
 		List<String> listCookies = headerData.get(SET_COOKIE_PARAM);
@@ -164,12 +156,9 @@ public class CookiesManager extends HashMap<String, CookieData> implements
 	/**
 	 * Add cookie to storage
 	 *
-	 * @param name -
-	 *            cookie name
-	 * @param value -
-	 *            cookie value
-	 * @param expires -
-	 *            date when cookie will expire
+	 * @param name The cookie name
+	 * @param value The cookie value
+	 * @param expires The date when the cookie will expire
 	 */
 	public void addCookie(String name, String value, Date expires) {
 		put(name, new CookieData(name, value, expires));
@@ -185,8 +174,7 @@ public class CookiesManager extends HashMap<String, CookieData> implements
 	/**
 	 * Add cookies to requests to the VersionOne service
 	 *
-	 * @param request
-	 *            HttpURLConnection to VersionOne server
+	 * @param request HttpURLConnection to VersionOne server
 	 */
 	protected void addCookiesToRequest(HttpURLConnection request) {
 		if (request == null) {

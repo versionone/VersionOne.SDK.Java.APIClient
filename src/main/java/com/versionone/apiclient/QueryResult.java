@@ -1,11 +1,7 @@
 package com.versionone.apiclient;
 
 /**
- * This class is used to wrap the results of a query and
- * to allow the caller to know how many total items are
- * available
- *
- * @author Jerry D. Odenwelder Jr.
+ * This class is used to wrap the results of a query and to allow the caller to know how many total items are available
  */
 public class QueryResult {
     private Asset[] assets;

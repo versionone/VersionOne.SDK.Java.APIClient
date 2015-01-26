@@ -70,7 +70,7 @@ public abstract class GroupFilterTerm implements IFilterTerm {
     }
 
     /**
-     * create an OrFilterTerm from the array of terms
+     * Create an OrFilterTerm from the array of terms
      *
      * @param terms - IFilterTerm data
      * @return GroupFilterTerm

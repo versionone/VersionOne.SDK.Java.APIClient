@@ -2,6 +2,10 @@ package com.versionone.apiclient;
 
 import java.net.URISyntaxException;
 
+/**
+ * Note: This class has been deprecated from the VersionOne Java SDK. Use the {@link com.versionone.apiclient.V1APIConnector} class to make a connection to VersionOne. 
+ */
+@Deprecated
 public final class EnvironmentContext {
 
     private IModelsAndServices _modelsAndServices;

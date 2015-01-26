@@ -1,10 +1,10 @@
-/*(c) Copyright 2008, VersionOne, Inc. All rights reserved. (c)*/
 package com.versionone.apiclient;
 
 import java.io.OutputStream;
 import java.io.InputStream;
 
 public interface IAttachments {
+	
     /**
      * Getting reader
      *

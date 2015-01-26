@@ -2,6 +2,7 @@ package com.versionone.apiclient;
 
 
 class Pair extends Tuple {
+	
 	private Object _first;
 	private Object _second;
 

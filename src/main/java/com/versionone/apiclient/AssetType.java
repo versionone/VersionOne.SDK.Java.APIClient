@@ -9,9 +9,7 @@ import javax.xml.xpath.XPathFactory;
 import org.w3c.dom.Element;
 
 /**
- * Represents information about an Assets type
- * @author jerry
- *
+ * Represents information about an asset type
  */
 @SuppressWarnings("unchecked")
 class AssetType implements IAssetType {
@@ -34,7 +32,8 @@ class AssetType implements IAssetType {
 	private String _descriptionToken = null;
 
 	/**
-	 * Create
+	 * Create an asset
+	 * 
 	 * @param meta
 	 * @param element
 	 * @param map
@@ -80,6 +79,7 @@ class AssetType implements IAssetType {
 
 	/**
 	 * Get the definition of an attribute on this type of Asset
+	 * 
 	 * @see IAssetType#getAttributeDefinition(String)
 	 */
 	public IAttributeDefinition getAttributeDefinition(String name) throws MetaException {

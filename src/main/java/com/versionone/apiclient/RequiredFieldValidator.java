@@ -138,6 +138,7 @@ public class RequiredFieldValidator {
 
     /**
      * Load required fields attribute definitions for provided Asset type.
+     * 
      * @param assetType - Asset type.
      * @return Collection of attribute definitions for required fields.
      * @throws OidException

@@ -1,14 +1,13 @@
-/*(c) Copyright 2008, VersionOne, Inc. All rights reserved. (c)*/
 package com.versionone.apiclient;
 
 import com.versionone.DB;
 
 /**
- * Rank class used to order Assets. Rank has a number and offset. In comparison
- * may act only Ranks with offset == 0. By methods {@link #before()},
+ * Rank class used to order assets. Rank has a number and offset. In comparison may act only Ranks with offset == 0. By methods {@link #before()},
  * {@link #after()} appropriate correlation Ranks can be created.
  */
 public class Rank extends Number implements Comparable<Rank> {
+	
     private final int _rankNumber;
     private final int _offset;
 
@@ -19,6 +18,7 @@ public class Rank extends Number implements Comparable<Rank> {
 
     /**
      * Creates the Rank equivalent to specified object.
+     * 
      * Object can be instance of:
      * <ul>
      * <li> {@link com.versionone.apiclient.Rank} - the same Rank
@@ -152,11 +152,9 @@ public class Rank extends Number implements Comparable<Rank> {
      * <code>{@link #isBefore()} == true)</code>
      *
      * @param obj object to compare with.
-     * @return <code>true</code> if objects equals, <code>false</code> -
-     *         otherwise.
+     * @return <code>true</code> if objects equals, <code>false</code> otherwise.
      *
-     * @throws IllegalArgumentException if <code>obj</code> or <code>this</code> has offset
-     *                                  not equal 0.
+     * @throws IllegalArgumentException if <code>obj</code> or <code>this</code> has offset not equal 0.
      */
     @Override
     public boolean equals(Object obj) throws IllegalArgumentException {
@@ -192,8 +190,7 @@ public class Rank extends Number implements Comparable<Rank> {
      *         greater than <code>0</code> if this <code>Rank</code> number is
      *         numerically greater than the argument <code>Rank</code> number
      *         (signed comparison).
-     * @throws IllegalArgumentException if <code>obj</code> or <code>this</code> has offset
-     *                                  not equal 0.
+     * @throws IllegalArgumentException if <code>obj</code> or <code>this</code> has offset not equal 0.
      */
     public int compareTo(Rank other) throws IllegalArgumentException {
         assert other != null;

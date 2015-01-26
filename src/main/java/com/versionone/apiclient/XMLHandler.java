@@ -17,7 +17,6 @@ import org.xml.sax.SAXException;
 class XMLHandler {
 
 	/**
-	 * 
 	 * @param reader
 	 * @param url
 	 * @return Document
@@ -43,6 +42,7 @@ class XMLHandler {
 
 	/**
 	 * Create the Xerces Document Builder
+	 * 
 	 * @return DocumentBuilder
 	 * @throws ParserConfigurationException
 	 */

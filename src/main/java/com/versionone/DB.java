@@ -9,10 +9,8 @@ import java.util.GregorianCalendar;
 import java.util.TimeZone;
 
 /**
- * Base class for data types used in APIClient.  Internal types are wrapped
+ * Base class for data types used in the Java SDK.  Internal types are wrapped
  * to allow for null values.
- *
- * @author jerry
  */
 public abstract class DB {
 
@@ -129,8 +127,6 @@ public abstract class DB {
 
 	/**
 	 * DB Class for Integers
-	 *
-	 * @author jerry
 	 */
 	public static class Int extends DB {
 
@@ -263,8 +259,6 @@ public abstract class DB {
 
 	/**
 	 * DB type for Boolean values
-	 *
-	 * @author jerry
 	 */
 	public static class Bit extends DB {
 		private Boolean value = null;
@@ -384,8 +378,6 @@ public abstract class DB {
 
 	/**
 	 * DB type for Strings
-	 *
-	 * @author jerry
 	 */
 	public static class Str extends DB {
 
@@ -458,8 +450,6 @@ public abstract class DB {
 
 	/**
 	 * DB Type for Dates
-	 *
-	 * @author jerry
 	 */
 	public static class DateTime extends DB implements Comparable<DateTime> {
 
@@ -725,8 +715,6 @@ public abstract class DB {
 
 	/**
 	 * DB type for Float
-	 *
-	 * @author jerry
 	 */
 	public static class Real extends DB {
 
@@ -760,8 +748,6 @@ public abstract class DB {
 				if (value instanceof String) {
 					String strValue = (String) value;
 					if (0 != strValue.length()) {
-//						setValue(0);
-//} else {
 						setValue(Float.parseFloat((String) value));
 					}
 				} else if (value instanceof Number) {
@@ -821,8 +807,6 @@ public abstract class DB {
 
 	/**
 	 * DB type for Long
-	 *
-	 * @author jerry
 	 */
 	public static class BigInt extends DB {
 

@@ -5,9 +5,7 @@ import java.util.ArrayList;
 import com.versionone.DB;
 
 /**
- * Represents an Attribute that can contain multiple value
- * @author jerry
- *
+ * Represents an attribute that can contain multiple values
  */
 @SuppressWarnings("unchecked")
 class MultiValueAttribute extends Attribute

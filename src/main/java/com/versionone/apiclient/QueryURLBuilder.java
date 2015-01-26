@@ -2,8 +2,6 @@ package com.versionone.apiclient;
 
 /**
  * Responsible for building the query
- *
- * @author jerry
  */
 public class QueryURLBuilder extends CompositeBuilder {
     private final Query query;

@@ -16,6 +16,7 @@ public class Localizer implements ILocalizer {
 
 	/**
 	 * Create with a connection
+	 * 
 	 * @param connector - IAPIConnector
 	 */
 	public Localizer(IAPIConnector connector)
@@ -25,6 +26,7 @@ public class Localizer implements ILocalizer {
 
 	/**
 	 * Resolve the key to it's localized value
+	 * 
 	 * @param key - String
 	 * @return Localized String value
 	 */

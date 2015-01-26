@@ -2,8 +2,6 @@ package com.versionone.apiclient;
 
 /**
  * Indicate an unrecoverable error with MetaData
- * @author jerry
- *
  */
 public class MetaException extends RuntimeException {
 	private static final long serialVersionUID = 1L;

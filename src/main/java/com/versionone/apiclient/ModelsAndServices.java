@@ -49,7 +49,6 @@ public final class ModelsAndServices implements IModelsAndServices  {
         return _servicesWithProxy;
     }
 
-
     public V1Configuration getV1Configuration(){
         if (_v1Config != null) return _v1Config;
         _v1Config = new V1Configuration(_connectors.getConfigConnector());

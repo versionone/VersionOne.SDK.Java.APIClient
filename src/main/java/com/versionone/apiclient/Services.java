@@ -26,8 +26,6 @@ public class Services implements IServices {
     private Oid _loggedin;
 
     /**
-     * Create
-     *
      * @param metaModel - VersionOne MetaModel
      * @param connector - Connection to the server
      */

@@ -3,6 +3,7 @@ package com.versionone.apiclient;
 import java.util.Date;
 
 public interface ICookiesManager {
+	
     /**
      * Adds cookie to storage.
      *

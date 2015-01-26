@@ -2,8 +2,6 @@ package com.versionone.apiclient;
 
 /**
  * Base class
- * @author jerry
- *
  */
 abstract class Tuple {
 	

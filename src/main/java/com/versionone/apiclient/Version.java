@@ -24,6 +24,7 @@ public class Version implements Comparable<Version>{
 	/**
 	 * Parse a string to create version
 	 * Expected format {major}.{minor}.{build}.{revision}
+	 * 
 	 * @param value - string to parse
 	 */
 	public Version(String value) {

@@ -7,9 +7,6 @@ import com.versionone.util.IDelegate;
 
 /**
  * Static methods for text manipulation.
- *
- * @author jerry
- *
  */
 public class TextBuilder {
 	
@@ -20,12 +17,12 @@ public class TextBuilder {
 
 	/**
 	 * Default Delegate used by TextBuilder.  Calls objects toString method
-	 * @author jerry
-	 *
 	 */
 	public static class DefaultStringize {
+		
 		/**
 		 * Convert object to string by calling toString
+		 * 
 		 * @param value - object to convert
 		 * @return result of calling value.toString()
 		 */
@@ -107,6 +104,7 @@ public class TextBuilder {
 
 	/**
 	 * Join with a list using "toString" method of each object in the list
+	 * 
 	 * @see #join(Object[], String)
 	 * @param pathParts - list of objects to join
 	 * @param seperator - character used to separate each object

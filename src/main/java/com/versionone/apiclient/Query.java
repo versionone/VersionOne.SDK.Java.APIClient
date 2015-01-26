@@ -9,8 +9,6 @@ import com.versionone.apiclient.IAttributeDefinition.AttributeType;
 
 /**
  * Represents a VersionOne API Query
- *
- * @author Jerry D. Odenwelder Jr.
  */
 public class Query {
     public static final Date MIN_DATE = new Date(0);
@@ -40,7 +38,7 @@ public class Query {
      * Create a query on attribute in an Asset
      *
      * @param assettype      - type of asset to query
-     * @param parentrelation - attribtue to query
+     * @param parentrelation - attribute to query
      */
     public Query(IAssetType assettype, IAttributeDefinition parentrelation) {
         this(assettype, false, parentrelation);
@@ -61,7 +59,7 @@ public class Query {
      *
      * @param assettype      - type of asset to query
      * @param historical     - indicate if you want a history query
-     * @param parentrelation - attribtue to query
+     * @param parentrelation - attribute to query
      */
     public Query(IAssetType assettype, boolean historical, IAttributeDefinition parentrelation) {
         assetType = assettype;

@@ -24,6 +24,7 @@ public class MetaModel implements IMetaModel {
 
 	/**
 	 * Create from a connection and obtain meta-data as needed
+	 * 
 	 * @param connector - IAPIConnector
 	 */
 	public MetaModel(IAPIConnector connector) {
@@ -32,6 +33,7 @@ public class MetaModel implements IMetaModel {
 
 	/**
 	 * Create from a connection and pre-load meta data
+	 * 
 	 * @param connector - IAPIConnector
 	 * @param hookup - boolean
 	 */
@@ -44,6 +46,7 @@ public class MetaModel implements IMetaModel {
 
 	/**
 	 * Get an asset type based on a token
+	 * 
 	 * @see IMetaModel#getAssetType(String)
 	 */
 	public IAssetType getAssetType(String token) throws MetaException {
@@ -56,6 +59,7 @@ public class MetaModel implements IMetaModel {
 
 	/**
 	 * Get MetaMode version
+	 * 
 	 * @return Version of MetaModel
 	 * @throws MetaException - MetaException
 	 */
@@ -72,6 +76,7 @@ public class MetaModel implements IMetaModel {
 
 	/**
 	 * Get an attribute definition from a token
+	 * 
 	 * @see IMetaModel#getAttributeDefinition(String)
 	 */
 	public IAttributeDefinition getAttributeDefinition(String token) throws MetaException {
@@ -84,6 +89,7 @@ public class MetaModel implements IMetaModel {
 
 	/**
 	 * Get an operation based on a token
+	 * 
 	 * @see IMetaModel#getOperation(String)
 	 */
 	public IOperation getOperation(String token) throws MetaException {

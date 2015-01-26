@@ -30,7 +30,8 @@ class AttributeDefinition implements IAttributeDefinition {
 	private String _displayname;
 
 	/**
-	 * Create
+	 * Create an attribute definition
+	 * 
 	 * @param meta
 	 * @param element
 	 * @throws Exception

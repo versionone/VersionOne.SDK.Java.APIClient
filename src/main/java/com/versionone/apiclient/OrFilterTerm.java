@@ -2,8 +2,6 @@ package com.versionone.apiclient;
 
 /**
  * Combine terms in a filter using 'or'
- *
- * @author jerry
  */
 public class OrFilterTerm extends GroupFilterTerm {
 

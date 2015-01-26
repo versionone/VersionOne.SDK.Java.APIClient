@@ -46,6 +46,7 @@ public class FileAPIConnector implements IAPIConnector {
 
 	/**
 	 * Create Connector
+	 * 
 	 * @param fileName - fully qualified filename
 	 * @param prefix - String
 	 */

@@ -4,16 +4,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Order a Query
- * @author jerry
- *
+ * Order a query
  */
 public class OrderBy
 {
 	/**
-	 * Supported sor orders
-	 * @author jerry
-	 *
+	 * Supported sort orders
 	 */
 	public enum Order
 	{
@@ -33,6 +29,7 @@ public class OrderBy
 
 	/**
 	 * Set the attribute and order for major sort of returned data
+	 * 
 	 * @param attribdef - IAttributeDefinition
 	 * @param order - Order
 	 */
@@ -44,6 +41,7 @@ public class OrderBy
 
 	/**
 	 * Set the attribute and order for minor sort of returned data
+	 * 
 	 * @param attribdef - IAttributeDefinition
 	 * @param order - Order
 	 */
@@ -55,12 +53,14 @@ public class OrderBy
 
 	/**
 	 * Return the number of terms
+	 * 
 	 * @return int
 	 */
 	public int size() { return _terms.size(); }
 
 	/**
-	 * get the sort token
+	 * Get the sort token
+	 * 
 	 * @return String
 	 */
 	public String getToken() {

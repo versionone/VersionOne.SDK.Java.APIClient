@@ -1,6 +1,7 @@
 package com.versionone.apiclient;
 
 public class WhereBuilder extends QueryBuilder {
+	
     @Override
     protected void doBuild(Query query, BuildResult result) {
         IFilterTerm filter2token = query.getFilter();

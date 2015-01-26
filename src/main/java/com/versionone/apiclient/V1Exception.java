@@ -1,10 +1,7 @@
 package com.versionone.apiclient;
 
 /**
- * Base class for all VersionOne APIClient exceptions
- *
- * @author jerry
- *
+ * Base class for all VersionOne Java SDK exceptions
  */
 public class V1Exception extends Exception {
 
@@ -15,6 +12,7 @@ public class V1Exception extends Exception {
 
 	/**
 	 * Create with just a message.  Used when the exception is internal.
+	 * 
 	 * @param message - String
 	 */
 	public V1Exception(String message) {
@@ -23,6 +21,7 @@ public class V1Exception extends Exception {
 
 	/**
 	 * Create with a message and nested exception.  Used when an exception is being re-thrown
+	 * 
 	 * @param message - String
 	 * @param innerException - Exception
 	 */
