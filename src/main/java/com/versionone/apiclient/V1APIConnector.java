@@ -21,9 +21,9 @@ import sun.net.www.protocol.http.AuthCacheImpl;
 import sun.net.www.protocol.http.AuthCacheValue;
 
 /**
- * Used to establish a connection to the VersionOne server. Supports connecting with basic (username/password), Windows Integrated Authentication (NTLM), and
- * VersionOne access tokens.
+ * Note: This class has been deprecated from the VersionOne Java SDK. Use the {@link com.versionone.apiclient.V1Connector} class to make a connection to VersionOne. 
  */
+@Deprecated
 @SuppressWarnings("restriction")
 public class V1APIConnector implements IAPIConnector {
 
