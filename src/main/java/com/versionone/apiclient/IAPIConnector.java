@@ -5,7 +5,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 
 /**
- * Interface that Connector classes must implement
+ * Interface that connector classes must implement
  */
 public interface IAPIConnector {
 
