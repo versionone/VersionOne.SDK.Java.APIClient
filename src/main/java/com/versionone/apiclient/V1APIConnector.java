@@ -106,7 +106,7 @@ public class V1APIConnector implements IAPIConnector {
 	 * 
 	 * @param url URL of the VersionOne server
 	 * @param accessToken VersionOne access token
-	 * @param proxy Proxy for the connection
+	 * 
 	 */
 	public V1APIConnector(String url, String accessToken) {
 		_url = url;
@@ -210,7 +210,7 @@ public class V1APIConnector implements IAPIConnector {
 	 * @param path String
 	 * @param data String
 	 * @return the response in a stream
-	 * @throws ConnectionException
+	 * @throws ConnectionException  - ConnectionException
 	 */
 	public Reader sendData(String path, String data) throws ConnectionException {
 
