@@ -106,7 +106,6 @@ public class V1APIConnector implements IAPIConnector {
 	 * 
 	 * @param url URL of the VersionOne server
 	 * @param accessToken VersionOne access token
-	 * 
 	 */
 	public V1APIConnector(String url, String accessToken) {
 		_url = url;

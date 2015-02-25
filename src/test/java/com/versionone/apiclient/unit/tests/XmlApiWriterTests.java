@@ -24,10 +24,14 @@ public class XmlApiWriterTests {
 		Asset asset = new Asset(assetType);
 		asset.setAttributeValue(nameDefinition, "Test Asset");
 		asset.setAttributeValue(scopeDefinition, new Oid(assetType));
-		
-		//NOTE: Old expected when running JVM 1.7?
+				
+		//NOTE: For some reason the Xml document using the 1.8 version is builded on a different way than the one using the 1.7 version
+		//So if this test fails check wich version ar you using and uncomment the correct one
+
+		//String used for JVM 1.7
 		//String expected = "<Asset><Attribute act=\"set\" name=\"Name\">Test Asset</Attribute><Relation act=\"set\" name=\"Scope\"><Asset idref=\"Scope:0\"/></Relation></Asset>";
 		
+		//String used for JVM 1.8
 		String expected = "<Asset><Relation act=\"set\" name=\"Scope\"><Asset idref=\"Scope:0\"/></Relation><Attribute act=\"set\" name=\"Name\">Test Asset</Attribute></Asset>";
 
 		StringWriter assetData = new StringWriter();
