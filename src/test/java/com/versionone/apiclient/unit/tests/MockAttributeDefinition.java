@@ -1,9 +1,9 @@
 package com.versionone.apiclient.unit.tests;
 
-import com.versionone.apiclient.IAssetType;
-import com.versionone.apiclient.IAttributeDefinition;
-import com.versionone.apiclient.IFilterTerm;
-import com.versionone.apiclient.MetaException;
+import com.versionone.apiclient.exceptions.MetaException;
+import com.versionone.apiclient.filters.IFilterTerm;
+import com.versionone.apiclient.interfaces.IAssetType;
+import com.versionone.apiclient.interfaces.IAttributeDefinition;
 
 /**
  * AttributeType used for testing
@@ -72,7 +72,7 @@ class MockAttributeDefinition implements IAttributeDefinition {
 	}
 
 	public IAttributeDefinition aggregate(
-			com.versionone.apiclient.IAttributeDefinition.Aggregate aggregate) {
+			com.versionone.apiclient.interfaces.IAttributeDefinition.Aggregate aggregate) {
 		// TODO Auto-generated method stub
 		return null;
 	}

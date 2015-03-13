@@ -7,15 +7,15 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.versionone.apiclient.APIException;
 import com.versionone.apiclient.Asset;
-import com.versionone.apiclient.ConnectionException;
-import com.versionone.apiclient.IAssetType;
-import com.versionone.apiclient.IAttributeDefinition;
-import com.versionone.apiclient.MetaException;
-import com.versionone.apiclient.OidException;
 import com.versionone.apiclient.RequiredFieldValidator;
-import com.versionone.apiclient.Services;
+import com.versionone.apiclient.exceptions.APIException;
+import com.versionone.apiclient.exceptions.ConnectionException;
+import com.versionone.apiclient.exceptions.MetaException;
+import com.versionone.apiclient.exceptions.OidException;
+import com.versionone.apiclient.interfaces.IAssetType;
+import com.versionone.apiclient.interfaces.IAttributeDefinition;
+import com.versionone.apiclient.services.Services;
 
 public class RequiredFieldValidatorTests extends ServicesTesterBase {
 

@@ -6,6 +6,19 @@ import java.util.List;
 import java.util.Map;
 
 import com.versionone.Oid;
+import com.versionone.apiclient.exceptions.APIException;
+import com.versionone.apiclient.exceptions.ConnectionException;
+import com.versionone.apiclient.exceptions.MetaException;
+import com.versionone.apiclient.exceptions.OidException;
+import com.versionone.apiclient.filters.AndFilterTerm;
+import com.versionone.apiclient.filters.FilterTerm;
+import com.versionone.apiclient.filters.IFilterTerm;
+import com.versionone.apiclient.interfaces.IAssetType;
+import com.versionone.apiclient.interfaces.IAttributeDefinition;
+import com.versionone.apiclient.interfaces.IMetaModel;
+import com.versionone.apiclient.interfaces.IServices;
+import com.versionone.apiclient.services.Query;
+import com.versionone.apiclient.services.QueryResult;
 
 // TODO create AssetValidationResult and AssetCollectionValidationResult so users could operate results with more convenience. At least calculated field IsValid is reasonable. These classes would inherit corresponding collections to contain less redundancy.
 public class RequiredFieldValidator {

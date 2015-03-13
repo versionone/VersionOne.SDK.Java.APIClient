@@ -8,6 +8,11 @@ import javax.xml.xpath.XPathFactory;
 
 import org.w3c.dom.Element;
 
+import com.versionone.apiclient.exceptions.MetaException;
+import com.versionone.apiclient.interfaces.IAssetType;
+import com.versionone.apiclient.interfaces.IAttributeDefinition;
+import com.versionone.apiclient.interfaces.IMetaModel;
+
 /**
  * Represents information about an asset type
  */

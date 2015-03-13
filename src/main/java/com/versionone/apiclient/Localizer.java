@@ -6,6 +6,11 @@ import java.io.Reader;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.versionone.apiclient.exceptions.ConnectionException;
+import com.versionone.apiclient.exceptions.V1Exception;
+import com.versionone.apiclient.interfaces.IAPIConnector;
+import com.versionone.apiclient.interfaces.ILocalizer;
+
 /**
  * Represents the Localizer API on the VersionOne Server
  */
@@ -29,8 +34,9 @@ public class Localizer implements ILocalizer {
 	 * 
 	 * @param key - String
 	 * @return Localized String value
+	 * @throws V1ConnectionException 
 	 */
-	public String resolve(String key)
+	public String resolve(String key) throws V1Exception
 	{
 		if(!_map.containsKey(key)) {
 			Reader reader = null;

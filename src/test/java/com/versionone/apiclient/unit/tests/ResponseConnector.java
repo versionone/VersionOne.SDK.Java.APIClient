@@ -26,8 +26,8 @@ import org.w3c.dom.NodeList;
 import org.w3c.dom.Text;
 import org.xml.sax.SAXException;
 
-import com.versionone.apiclient.ConnectionException;
-import com.versionone.apiclient.IAPIConnector;
+import com.versionone.apiclient.exceptions.ConnectionException;
+import com.versionone.apiclient.interfaces.IAPIConnector;
 
 public class ResponseConnector implements IAPIConnector {
 

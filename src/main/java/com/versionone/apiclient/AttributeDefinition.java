@@ -9,6 +9,15 @@ import org.w3c.dom.Element;
 import com.versionone.DB;
 import com.versionone.Duration;
 import com.versionone.Oid;
+import com.versionone.apiclient.exceptions.APIException;
+import com.versionone.apiclient.exceptions.MetaException;
+import com.versionone.apiclient.exceptions.OidException;
+import com.versionone.apiclient.exceptions.V1Exception;
+import com.versionone.apiclient.filters.IFilterTerm;
+import com.versionone.apiclient.interfaces.IAssetType;
+import com.versionone.apiclient.interfaces.IAttributeDefinition;
+import com.versionone.apiclient.interfaces.IMetaModel;
+import com.versionone.apiclient.services.TextBuilder;
 
 /**
  * Represents the definition of an Attribute

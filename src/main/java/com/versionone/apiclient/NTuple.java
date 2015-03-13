@@ -1,5 +1,7 @@
 package com.versionone.apiclient;
 
+import com.versionone.utils.HashCode;
+
 class NTuple extends Tuple {
 	private Object[] _elements;
 	

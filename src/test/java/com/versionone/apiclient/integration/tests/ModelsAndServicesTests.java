@@ -8,9 +8,9 @@ import org.junit.Before;
 import org.junit.Test;
 
 import com.versionone.apiclient.Connectors;
-import com.versionone.apiclient.IConnectors;
-import com.versionone.apiclient.IModelsAndServices;
 import com.versionone.apiclient.ModelsAndServices;
+import com.versionone.apiclient.interfaces.IConnectors;
+import com.versionone.apiclient.interfaces.IModelsAndServices;
 
 public class ModelsAndServicesTests {
 

@@ -9,14 +9,14 @@ import org.junit.Test;
 
 import com.versionone.apiclient.Connectors;
 import com.versionone.apiclient.EnvironmentContext;
-import com.versionone.apiclient.IConnectors;
-import com.versionone.apiclient.ICredentials;
-import com.versionone.apiclient.IMetaModel;
-import com.versionone.apiclient.IModelsAndServices;
-import com.versionone.apiclient.IServices;
-import com.versionone.apiclient.IUrls;
 import com.versionone.apiclient.ModelsAndServices;
 import com.versionone.apiclient.V1Configuration;
+import com.versionone.apiclient.interfaces.IConnectors;
+import com.versionone.apiclient.interfaces.ICredentials;
+import com.versionone.apiclient.interfaces.IMetaModel;
+import com.versionone.apiclient.interfaces.IModelsAndServices;
+import com.versionone.apiclient.interfaces.IServices;
+import com.versionone.apiclient.interfaces.IUrls;
 
 public class EnvironmentContextTests {
 

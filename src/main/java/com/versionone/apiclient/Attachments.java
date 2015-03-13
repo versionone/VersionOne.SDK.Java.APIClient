@@ -4,6 +4,11 @@ import java.io.OutputStream;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 
+import com.versionone.apiclient.exceptions.AttachmentLengthException;
+import com.versionone.apiclient.exceptions.ConnectionException;
+import com.versionone.apiclient.interfaces.IAPIConnector;
+import com.versionone.apiclient.interfaces.IAttachments;
+
 
 public class Attachments implements IAttachments {
     private final IAPIConnector _connector;

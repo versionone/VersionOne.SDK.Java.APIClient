@@ -4,7 +4,7 @@ import junit.framework.Assert;
 
 import org.junit.Test;
 
-import com.versionone.apiclient.Version;
+import com.versionone.utils.Version;
 
 
 public class VersionTests {

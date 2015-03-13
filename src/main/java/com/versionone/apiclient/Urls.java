@@ -2,6 +2,9 @@ package com.versionone.apiclient;
 
 import java.io.IOException;
 
+import com.versionone.apiclient.interfaces.IAPIConfiguration;
+import com.versionone.apiclient.interfaces.IUrls;
+
 public final class Urls implements IUrls {
 
     private IAPIConfiguration _config;

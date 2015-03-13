@@ -3,9 +3,9 @@ package com.versionone.apiclient.unit.tests;
 import org.junit.Assert;
 import org.junit.Test;
 
-import com.versionone.apiclient.IAssetType;
-import com.versionone.apiclient.MetaException;
-import com.versionone.apiclient.V1Exception;
+import com.versionone.apiclient.exceptions.MetaException;
+import com.versionone.apiclient.exceptions.V1Exception;
+import com.versionone.apiclient.interfaces.IAssetType;
 
 public class AssetTypeTests extends MetaTestBase {
 

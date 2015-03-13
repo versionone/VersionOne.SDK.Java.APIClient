@@ -7,19 +7,19 @@ import org.junit.Assert;
 import org.junit.Ignore;
 import org.junit.Test;
 
-import com.versionone.apiclient.APIException;
-import com.versionone.apiclient.ConnectionException;
-import com.versionone.apiclient.IAPIConnector;
-import com.versionone.apiclient.IAssetType;
-import com.versionone.apiclient.IMetaModel;
-import com.versionone.apiclient.IServices;
 import com.versionone.apiclient.MetaModel;
-import com.versionone.apiclient.OidException;
 import com.versionone.apiclient.ProxyProvider;
-import com.versionone.apiclient.Query;
-import com.versionone.apiclient.QueryResult;
-import com.versionone.apiclient.Services;
 import com.versionone.apiclient.V1APIConnector;
+import com.versionone.apiclient.exceptions.APIException;
+import com.versionone.apiclient.exceptions.ConnectionException;
+import com.versionone.apiclient.exceptions.OidException;
+import com.versionone.apiclient.interfaces.IAPIConnector;
+import com.versionone.apiclient.interfaces.IAssetType;
+import com.versionone.apiclient.interfaces.IMetaModel;
+import com.versionone.apiclient.interfaces.IServices;
+import com.versionone.apiclient.services.Query;
+import com.versionone.apiclient.services.QueryResult;
+import com.versionone.apiclient.services.Services;
 
 @Ignore("This test requires a proxy server.")
 public class ProxyTests {

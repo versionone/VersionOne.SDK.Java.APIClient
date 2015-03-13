@@ -2,10 +2,24 @@ package com.versionone.apiclient.unit.tests;
 
 import com.versionone.Oid;
 import com.versionone.apiclient.*;
-import com.versionone.apiclient.IAttributeDefinition.AttributeType;
+import com.versionone.apiclient.exceptions.APIException;
+import com.versionone.apiclient.filters.AndFilterTerm;
+import com.versionone.apiclient.filters.FilterTerm;
+import com.versionone.apiclient.interfaces.IAPIConnector;
+import com.versionone.apiclient.interfaces.IAssetType;
+import com.versionone.apiclient.interfaces.IAttributeDefinition;
+import com.versionone.apiclient.interfaces.IMetaModel;
+import com.versionone.apiclient.interfaces.IAttributeDefinition.AttributeType;
+import com.versionone.apiclient.services.OrderBy;
+import com.versionone.apiclient.services.Query;
+import com.versionone.apiclient.services.QueryFind;
+import com.versionone.apiclient.services.QueryURLBuilder;
+import com.versionone.apiclient.services.QueryVariable;
+
 import org.junit.Assert;
 import org.junit.Ignore;
 import org.junit.Test;
+
 import java.util.Calendar;
 
 public class QueryURLBuilderTests {

@@ -8,24 +8,24 @@ import java.util.Iterator;
 import java.util.List;
 
 import com.versionone.Oid;
-import com.versionone.apiclient.APIException;
 import com.versionone.apiclient.Asset;
 import com.versionone.apiclient.AssetState;
 import com.versionone.apiclient.AttributeSelection;
-import com.versionone.apiclient.ConnectionException;
 import com.versionone.apiclient.EnvironmentContext;
-import com.versionone.apiclient.FilterTerm;
-import com.versionone.apiclient.IAssetType;
-import com.versionone.apiclient.IAttributeDefinition;
-import com.versionone.apiclient.IMetaModel;
 import com.versionone.apiclient.IOperation;
-import com.versionone.apiclient.IServices;
-import com.versionone.apiclient.OidException;
-import com.versionone.apiclient.OrderBy;
-import com.versionone.apiclient.Query;
-import com.versionone.apiclient.QueryResult;
 import com.versionone.apiclient.V1APIConnector;
 import com.versionone.apiclient.V1Configuration;
+import com.versionone.apiclient.exceptions.APIException;
+import com.versionone.apiclient.exceptions.ConnectionException;
+import com.versionone.apiclient.exceptions.OidException;
+import com.versionone.apiclient.filters.FilterTerm;
+import com.versionone.apiclient.interfaces.IAssetType;
+import com.versionone.apiclient.interfaces.IAttributeDefinition;
+import com.versionone.apiclient.interfaces.IMetaModel;
+import com.versionone.apiclient.interfaces.IServices;
+import com.versionone.apiclient.services.OrderBy;
+import com.versionone.apiclient.services.Query;
+import com.versionone.apiclient.services.QueryResult;
 
 /**
  * This class contains the examples used : the API documentation

@@ -2,6 +2,9 @@ package com.versionone.apiclient;
 
 import java.io.IOException;
 
+import com.versionone.apiclient.interfaces.IAPIConfiguration;
+import com.versionone.apiclient.interfaces.ICredentials;
+
 public final class Credentials implements ICredentials {
 
     private IAPIConfiguration _config;

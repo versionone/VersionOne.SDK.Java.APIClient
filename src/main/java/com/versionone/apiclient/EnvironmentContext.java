@@ -2,6 +2,10 @@ package com.versionone.apiclient;
 
 import java.net.URISyntaxException;
 
+import com.versionone.apiclient.interfaces.IMetaModel;
+import com.versionone.apiclient.interfaces.IModelsAndServices;
+import com.versionone.apiclient.interfaces.IServices;
+
 /**
  * Note: This class has been deprecated from the VersionOne Java SDK. Use the {@link com.versionone.apiclient.V1Connector} class to make a connection to VersionOne. 
  */

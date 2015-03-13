@@ -1,6 +1,6 @@
 package com.versionone.apiclient.fitnesse.metamodel;
 
-import com.versionone.apiclient.Version;
+import com.versionone.utils.Version;
 
 /**
  * Check the version

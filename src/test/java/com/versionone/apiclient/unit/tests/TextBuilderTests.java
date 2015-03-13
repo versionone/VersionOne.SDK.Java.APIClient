@@ -7,7 +7,7 @@ import java.util.List;
 
 import org.junit.Test;
 
-import com.versionone.apiclient.TextBuilder;
+import com.versionone.apiclient.services.TextBuilder;
 
 public class TextBuilderTests {
 	

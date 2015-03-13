@@ -4,8 +4,8 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import com.versionone.apiclient.IOperation;
-import com.versionone.apiclient.MetaException;
-import com.versionone.apiclient.V1Exception;
+import com.versionone.apiclient.exceptions.MetaException;
+import com.versionone.apiclient.exceptions.V1Exception;
 
 public class OperationTests extends MetaTestBase {
 

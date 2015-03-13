@@ -8,10 +8,10 @@ import com.versionone.Oid;
 import com.versionone.apiclient.APIConfiguration;
 import com.versionone.apiclient.Asset;
 import com.versionone.apiclient.EnvironmentContext;
-import com.versionone.apiclient.IAssetType;
-import com.versionone.apiclient.IAttributeDefinition;
-import com.versionone.apiclient.IMetaModel;
-import com.versionone.apiclient.IServices;
+import com.versionone.apiclient.interfaces.IAssetType;
+import com.versionone.apiclient.interfaces.IAttributeDefinition;
+import com.versionone.apiclient.interfaces.IMetaModel;
+import com.versionone.apiclient.interfaces.IServices;
 
 //NOTE: Add classes here to include in integration test run using Maven "verify" goal.
 @RunWith(Suite.class)
@@ -25,8 +25,8 @@ import com.versionone.apiclient.IServices;
 	ModelsAndServicesTests.class, 
 	ProxyTests.class, 
 	FindAndQueryTests.class, 
-	UrlsTests.class 
-})
+	UrlsTests.class
+	})
 
 public class APIClientIntegrationTestSuiteIT {
 

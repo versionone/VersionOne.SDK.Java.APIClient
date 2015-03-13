@@ -3,6 +3,9 @@ package com.versionone.apiclient;
 import java.util.ArrayList;
 
 import com.versionone.DB;
+import com.versionone.apiclient.exceptions.APIException;
+import com.versionone.apiclient.exceptions.V1Exception;
+import com.versionone.apiclient.interfaces.IAttributeDefinition;
 
 /**
  * Represents an attribute that can contain multiple values

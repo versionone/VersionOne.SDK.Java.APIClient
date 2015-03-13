@@ -8,10 +8,10 @@ import org.junit.Before;
 import org.junit.Test;
 
 import com.versionone.apiclient.Connectors;
-import com.versionone.apiclient.IConnectors;
-import com.versionone.apiclient.ICredentials;
-import com.versionone.apiclient.IUrls;
 import com.versionone.apiclient.V1APIConnector;
+import com.versionone.apiclient.interfaces.IConnectors;
+import com.versionone.apiclient.interfaces.ICredentials;
+import com.versionone.apiclient.interfaces.IUrls;
 
 public class ConnectorsTests {
 

@@ -3,6 +3,9 @@ package com.versionone.apiclient;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.versionone.apiclient.interfaces.IAttributeDefinition;
+import com.versionone.apiclient.services.TextBuilder;
+
 /**
  * Attributes being selected in a Query
  */

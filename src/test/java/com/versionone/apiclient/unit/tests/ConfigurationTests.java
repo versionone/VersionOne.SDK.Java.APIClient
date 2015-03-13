@@ -3,10 +3,10 @@ package com.versionone.apiclient.unit.tests;
 import org.junit.Assert;
 import org.junit.Test;
 
-import com.versionone.apiclient.APIException;
-import com.versionone.apiclient.ConnectionException;
-import com.versionone.apiclient.IV1Configuration;
 import com.versionone.apiclient.V1Configuration;
+import com.versionone.apiclient.exceptions.APIException;
+import com.versionone.apiclient.exceptions.ConnectionException;
+import com.versionone.apiclient.interfaces.IV1Configuration;
 
 public class ConfigurationTests {
     public static final String TEST_DATA = "testdata/TestData.xml";

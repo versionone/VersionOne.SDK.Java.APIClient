@@ -1,5 +1,9 @@
 package com.versionone.apiclient;
 
+import com.versionone.apiclient.exceptions.MetaException;
+import com.versionone.apiclient.interfaces.IAssetType;
+import com.versionone.apiclient.interfaces.IAttributeDefinition;
+
 /**
  * Methods required by VersionOne Operation objects 
  */

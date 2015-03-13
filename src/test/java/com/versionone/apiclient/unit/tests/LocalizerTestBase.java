@@ -1,7 +1,7 @@
 package com.versionone.apiclient.unit.tests;
 
-import com.versionone.apiclient.ILocalizer;
 import com.versionone.apiclient.Localizer;
+import com.versionone.apiclient.interfaces.ILocalizer;
 
 public abstract class LocalizerTestBase {
 	private ILocalizer _loc;

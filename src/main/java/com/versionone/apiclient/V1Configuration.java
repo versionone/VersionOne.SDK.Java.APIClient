@@ -2,7 +2,13 @@ package com.versionone.apiclient;
 
 import org.w3c.dom.Document;
 
+import com.versionone.apiclient.exceptions.APIException;
+import com.versionone.apiclient.exceptions.ConnectionException;
+import com.versionone.apiclient.interfaces.IAPIConnector;
+import com.versionone.apiclient.interfaces.IV1Configuration;
+
 import javax.xml.xpath.*;
+
 import java.io.Reader;
 
 /**

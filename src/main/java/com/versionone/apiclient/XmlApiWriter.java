@@ -2,7 +2,11 @@ package com.versionone.apiclient;
 
 import com.versionone.DB.DateTime;
 import com.versionone.Oid;
-import com.versionone.apiclient.IAttributeDefinition.AttributeType;
+import com.versionone.apiclient.exceptions.APIException;
+import com.versionone.apiclient.interfaces.IAssetType;
+import com.versionone.apiclient.interfaces.IAttributeDefinition;
+import com.versionone.apiclient.interfaces.IAttributeDefinition.AttributeType;
+
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
@@ -11,6 +15,7 @@ import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.*;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
+
 import java.io.Writer;
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;

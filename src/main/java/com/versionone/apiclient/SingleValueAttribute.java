@@ -1,5 +1,9 @@
 package com.versionone.apiclient;
 
+import com.versionone.apiclient.exceptions.APIException;
+import com.versionone.apiclient.exceptions.V1Exception;
+import com.versionone.apiclient.interfaces.IAttributeDefinition;
+
 /**
  * A the value for a scalar attribute
  */

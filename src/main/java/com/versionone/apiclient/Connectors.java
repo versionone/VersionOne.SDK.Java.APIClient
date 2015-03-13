@@ -3,6 +3,10 @@ package com.versionone.apiclient;
 import java.net.URI;
 import java.net.URISyntaxException;
 
+import com.versionone.apiclient.interfaces.IConnectors;
+import com.versionone.apiclient.interfaces.ICredentials;
+import com.versionone.apiclient.interfaces.IUrls;
+
 public final class Connectors implements IConnectors {
 
     private V1APIConnector _dataConnector;

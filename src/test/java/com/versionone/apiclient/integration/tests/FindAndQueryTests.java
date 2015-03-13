@@ -11,21 +11,21 @@ import org.junit.Ignore;
 import org.junit.Test;
 
 import com.versionone.Oid;
-import com.versionone.apiclient.AndFilterTerm;
 import com.versionone.apiclient.Asset;
 import com.versionone.apiclient.AttributeSelection;
-import com.versionone.apiclient.FilterTerm;
-import com.versionone.apiclient.GroupFilterTerm;
-import com.versionone.apiclient.IAssetType;
-import com.versionone.apiclient.IAttributeDefinition;
-import com.versionone.apiclient.IFilterTerm;
-import com.versionone.apiclient.IMetaModel;
-import com.versionone.apiclient.IServices;
-import com.versionone.apiclient.OrderBy.Order;
-import com.versionone.apiclient.Query;
-import com.versionone.apiclient.QueryFind;
-import com.versionone.apiclient.QueryResult;
-import com.versionone.apiclient.V1Exception;
+import com.versionone.apiclient.exceptions.V1Exception;
+import com.versionone.apiclient.filters.AndFilterTerm;
+import com.versionone.apiclient.filters.FilterTerm;
+import com.versionone.apiclient.filters.GroupFilterTerm;
+import com.versionone.apiclient.filters.IFilterTerm;
+import com.versionone.apiclient.interfaces.IAssetType;
+import com.versionone.apiclient.interfaces.IAttributeDefinition;
+import com.versionone.apiclient.interfaces.IMetaModel;
+import com.versionone.apiclient.interfaces.IServices;
+import com.versionone.apiclient.services.Query;
+import com.versionone.apiclient.services.QueryFind;
+import com.versionone.apiclient.services.QueryResult;
+import com.versionone.apiclient.services.OrderBy.Order;
 
 
 public class FindAndQueryTests {

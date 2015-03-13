@@ -1,6 +1,6 @@
 package com.versionone;
 
-import com.versionone.apiclient.HashCode;
+import com.versionone.utils.HashCode;
 
 /**
  * Class representing some duration of time

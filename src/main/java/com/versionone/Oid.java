@@ -1,9 +1,9 @@
 package com.versionone;
 
-import com.versionone.apiclient.HashCode;
-import com.versionone.apiclient.IAssetType;
-import com.versionone.apiclient.IMetaModel;
-import com.versionone.apiclient.OidException;
+import com.versionone.apiclient.exceptions.OidException;
+import com.versionone.apiclient.interfaces.IAssetType;
+import com.versionone.apiclient.interfaces.IMetaModel;
+import com.versionone.utils.HashCode;
 
 /**
  * VersionOne object identifier
@@ -29,7 +29,7 @@ public class Oid {
 	 * @param assetType - IAssetType
 	 * @param id - DB.Int
 	 * @param moment - DB.Int
-     * @deprecated use {@link #Oid(com.versionone.apiclient.IAssetType, int, int)}
+     * @deprecated use {@link #Oid(com.versionone.apiclient.interfaces.IAssetType, int, int)}
 	 */
 	public Oid(IAssetType assetType, DB.Int id, DB.Int moment) {
 		if (assetType == null) {
@@ -50,7 +50,7 @@ public class Oid {
 	 * @param assetType - IAssetType
 	 * @param id -  int
 	 * @param moment - DB.Int
-     * @deprecated use {@link #Oid(com.versionone.apiclient.IAssetType, int)}
+     * @deprecated use {@link #Oid(com.versionone.apiclient.interfaces.IAssetType, int)}
 	 */
 	public Oid(IAssetType assetType, int id, DB.Int moment) {
 		this(assetType, new DB.Int(id), moment);

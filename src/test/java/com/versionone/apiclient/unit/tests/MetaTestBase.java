@@ -2,13 +2,13 @@ package com.versionone.apiclient.unit.tests;
 
 import com.versionone.DB;
 import com.versionone.Oid;
-import com.versionone.apiclient.IAssetType;
-import com.versionone.apiclient.IAttributeDefinition;
-import com.versionone.apiclient.IMetaModel;
 import com.versionone.apiclient.IOperation;
-import com.versionone.apiclient.MetaException;
 import com.versionone.apiclient.MetaModel;
-import com.versionone.apiclient.V1Exception;
+import com.versionone.apiclient.exceptions.MetaException;
+import com.versionone.apiclient.exceptions.V1Exception;
+import com.versionone.apiclient.interfaces.IAssetType;
+import com.versionone.apiclient.interfaces.IAttributeDefinition;
+import com.versionone.apiclient.interfaces.IMetaModel;
 
 public abstract class MetaTestBase {
 

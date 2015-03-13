@@ -2,7 +2,9 @@ package com.versionone.apiclient;
 
 import com.versionone.DB;
 import com.versionone.Oid;
-import com.versionone.apiclient.IAttributeDefinition.AttributeType;
+import com.versionone.apiclient.exceptions.APIException;
+import com.versionone.apiclient.interfaces.IAttributeDefinition;
+import com.versionone.apiclient.interfaces.IAttributeDefinition.AttributeType;
 
 /**
  * Base class for an attribute

@@ -1,8 +1,8 @@
 package com.versionone.apiclient.fitnesse.metamodel;
 
-import com.versionone.apiclient.IAssetType;
-import com.versionone.apiclient.MetaException;
-import com.versionone.apiclient.V1Exception;
+import com.versionone.apiclient.exceptions.MetaException;
+import com.versionone.apiclient.exceptions.V1Exception;
+import com.versionone.apiclient.interfaces.IAssetType;
 
 /**
  * Test the ability to retrieve the AssetTypes

@@ -1,7 +1,15 @@
 package com.versionone.apiclient.integration.tests;
 
 import com.versionone.apiclient.*;
+import com.versionone.apiclient.interfaces.IAssetType;
+import com.versionone.apiclient.interfaces.IAttributeDefinition;
+import com.versionone.apiclient.services.BuildResult;
+import com.versionone.apiclient.services.FindBuilder;
+import com.versionone.apiclient.services.Query;
+import com.versionone.apiclient.services.QueryFind;
+
 import junit.framework.Assert;
+
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;

@@ -5,8 +5,8 @@ import org.junit.Test;
 
 import com.versionone.DB;
 import com.versionone.Oid;
-import com.versionone.apiclient.IAssetType;
-import com.versionone.apiclient.OidException;
+import com.versionone.apiclient.exceptions.OidException;
+import com.versionone.apiclient.interfaces.IAssetType;
 
 public class OidTests extends MetaTestBase {
 

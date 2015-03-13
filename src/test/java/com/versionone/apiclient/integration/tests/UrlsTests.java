@@ -8,8 +8,8 @@ import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 
-import com.versionone.apiclient.IUrls;
 import com.versionone.apiclient.Urls;
+import com.versionone.apiclient.interfaces.IUrls;
 
 @Ignore
 public class UrlsTests {

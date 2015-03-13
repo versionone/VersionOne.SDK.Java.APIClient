@@ -8,6 +8,8 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
+import com.versionone.apiclient.interfaces.ICookiesManager;
+
 /**
  * Class for process and store cookies for requests to the VersionOne service
  */

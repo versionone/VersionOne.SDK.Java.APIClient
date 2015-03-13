@@ -1,9 +1,9 @@
 package com.versionone.apiclient.unit.tests;
 
-import com.versionone.apiclient.IAssetType;
-import com.versionone.apiclient.IAttributeDefinition;
 import com.versionone.apiclient.IOperation;
-import com.versionone.apiclient.MetaException;
+import com.versionone.apiclient.exceptions.MetaException;
+import com.versionone.apiclient.interfaces.IAssetType;
+import com.versionone.apiclient.interfaces.IAttributeDefinition;
 
 /**
  * AssetType used for testing

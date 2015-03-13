@@ -2,8 +2,10 @@ package com.versionone.apiclient.unit.tests;
 
 
 import com.versionone.apiclient.Credentials;
-import com.versionone.apiclient.ICredentials;
+import com.versionone.apiclient.interfaces.ICredentials;
+
 import junit.framework.Assert;
+
 import org.junit.Before;
 import org.junit.Test;
 

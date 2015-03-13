@@ -1,5 +1,7 @@
 package com.versionone.apiclient;
 
+import com.versionone.apiclient.filters.IFilterTerm;
+
 public class TokenTerm implements IFilterTerm {
     private final String token;
 

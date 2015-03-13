@@ -11,10 +11,13 @@ import org.w3c.dom.Document;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
+import com.versionone.apiclient.exceptions.APIException;
+import com.versionone.apiclient.exceptions.ConnectionException;
+
 /**
  * This class centralizes the process of reading XML to create a DOM document
  */
-class XMLHandler {
+public class XMLHandler {
 
 	/**
 	 * @param reader

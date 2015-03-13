@@ -9,7 +9,7 @@ import org.junit.Test;
 
 import com.versionone.Oid;
 import com.versionone.apiclient.Asset;
-import com.versionone.apiclient.IAttributeDefinition.AttributeType;
+import com.versionone.apiclient.interfaces.IAttributeDefinition.AttributeType;
 import com.versionone.apiclient.XmlApiWriter;
 
 

@@ -10,10 +10,11 @@ import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 
-import com.versionone.apiclient.ConnectionException;
-import com.versionone.apiclient.ICookiesManager;
 import com.versionone.apiclient.ProxyProvider;
 import com.versionone.apiclient.V1APIConnector;
+import com.versionone.apiclient.V1Connector;
+import com.versionone.apiclient.exceptions.ConnectionException;
+import com.versionone.apiclient.interfaces.ICookiesManager;
 
 public class ConnectorTests {
 

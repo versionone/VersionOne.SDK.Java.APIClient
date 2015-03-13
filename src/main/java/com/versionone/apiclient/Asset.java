@@ -1,6 +1,11 @@
 package com.versionone.apiclient;
 
 import com.versionone.Oid;
+import com.versionone.apiclient.exceptions.APIException;
+import com.versionone.apiclient.exceptions.MetaException;
+import com.versionone.apiclient.exceptions.OidException;
+import com.versionone.apiclient.interfaces.IAssetType;
+import com.versionone.apiclient.interfaces.IAttributeDefinition;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -118,7 +123,7 @@ public class Asset {
 	 * @param value value
 	 * @throws Exception
 	 */
-	void forceAttributeValue(IAttributeDefinition attributeDefinition, Object value) throws APIException {
+	public void forceAttributeValue(IAttributeDefinition attributeDefinition, Object value) throws APIException {
 		ensureAttribute(attributeDefinition).forceValue(value);
 	}
 
