@@ -1,8 +1,8 @@
 package com.versionone.apiclient.fitnesse.metamodel;
 
-import com.versionone.apiclient.IOperation;
 import com.versionone.apiclient.exceptions.MetaException;
 import com.versionone.apiclient.exceptions.V1Exception;
+import com.versionone.apiclient.interfaces.IOperation;
 
 /**
  * Test the ability to return operations

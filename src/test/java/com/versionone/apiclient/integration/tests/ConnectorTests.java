@@ -114,5 +114,14 @@ public class ConnectorTests {
 		header = header + " " + app_name + "/" + app_version;
 		Assert.assertEquals("", header, testMe.getUserAgentHeader());
 	}
-
+	
+	//testing new V1Connector
+	@Test(expected = ConnectionException.class)
+	public void testInvalidUrlV1Connector() throws ConnectionException {
+//		V1Connector testMe = V1Connector.withInstanceUrl("")
+//		.withUserAgentHeader("", "")
+//		.useQueryAPI()
+//		.withAccessToken("")
+	}
+	
 }

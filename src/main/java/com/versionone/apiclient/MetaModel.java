@@ -20,6 +20,7 @@ import com.versionone.apiclient.interfaces.IAPIConnector;
 import com.versionone.apiclient.interfaces.IAssetType;
 import com.versionone.apiclient.interfaces.IAttributeDefinition;
 import com.versionone.apiclient.interfaces.IMetaModel;
+import com.versionone.apiclient.interfaces.IOperation;
 import com.versionone.apiclient.services.TextBuilder;
 import com.versionone.utils.Version;
 

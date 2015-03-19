@@ -3,12 +3,12 @@ package com.versionone.apiclient.unit.tests;
 import org.junit.Assert;
 import org.junit.Test;
 
-import com.versionone.apiclient.IOperation;
 import com.versionone.apiclient.MetaModel;
 import com.versionone.apiclient.exceptions.MetaException;
 import com.versionone.apiclient.exceptions.V1Exception;
 import com.versionone.apiclient.interfaces.IAssetType;
 import com.versionone.apiclient.interfaces.IAttributeDefinition;
+import com.versionone.apiclient.interfaces.IOperation;
 import com.versionone.utils.Version;
 
 public class MetaModelTests extends MetaTestBase {

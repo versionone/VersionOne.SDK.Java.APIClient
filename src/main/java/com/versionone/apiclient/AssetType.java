@@ -12,6 +12,7 @@ import com.versionone.apiclient.exceptions.MetaException;
 import com.versionone.apiclient.interfaces.IAssetType;
 import com.versionone.apiclient.interfaces.IAttributeDefinition;
 import com.versionone.apiclient.interfaces.IMetaModel;
+import com.versionone.apiclient.interfaces.IOperation;
 
 /**
  * Represents information about an asset type

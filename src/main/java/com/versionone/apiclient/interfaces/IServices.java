@@ -2,7 +2,6 @@ package com.versionone.apiclient.interfaces;
 
 import com.versionone.Oid;
 import com.versionone.apiclient.Asset;
-import com.versionone.apiclient.IOperation;
 import com.versionone.apiclient.exceptions.APIException;
 import com.versionone.apiclient.exceptions.ConnectionException;
 import com.versionone.apiclient.exceptions.MetaException;

@@ -1,6 +1,5 @@
 package com.versionone.apiclient.interfaces;
 
-import com.versionone.apiclient.IOperation;
 import com.versionone.apiclient.exceptions.MetaException;
 
 /**

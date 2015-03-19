@@ -8,6 +8,8 @@ import java.io.Writer;
 import java.lang.reflect.Array;
 import java.util.List;
 
+import com.versionone.apiclient.exceptions.V1Exception;
+
 /**
  * Set of units.
  */
@@ -117,4 +119,5 @@ public final class V1Util {
     public static boolean isNullOrEmpty(String string) {
         return (string == null) || (string.trim().length() == 0);
     }
+    
 }

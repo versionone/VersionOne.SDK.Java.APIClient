@@ -22,7 +22,6 @@ import org.w3c.dom.NodeList;
 import com.versionone.DB;
 import com.versionone.Oid;
 import com.versionone.apiclient.Asset;
-import com.versionone.apiclient.IOperation;
 import com.versionone.apiclient.XMLHandler;
 import com.versionone.apiclient.XmlApiWriter;
 import com.versionone.apiclient.exceptions.APIException;
@@ -36,6 +35,7 @@ import com.versionone.apiclient.interfaces.IAPIConnector;
 import com.versionone.apiclient.interfaces.IAssetType;
 import com.versionone.apiclient.interfaces.IAttributeDefinition;
 import com.versionone.apiclient.interfaces.IMetaModel;
+import com.versionone.apiclient.interfaces.IOperation;
 import com.versionone.apiclient.interfaces.IServices;
 
 /**
