@@ -1,78 +1,139 @@
 package com.versionone.apiclient.integration.tests;
 
-import org.junit.AfterClass;
-import org.junit.Assert;
+import static org.junit.Assert.assertNotNull;
+
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.io.Reader;
+
+import jdk.nashorn.internal.ir.annotations.Ignore;
+
+import org.junit.After;
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
 
+import com.versionone.apiclient.Services;
 import com.versionone.apiclient.V1Connector;
-import com.versionone.apiclient.exceptions.V1Exception;
 
+
+
+
+
+/**
+ * The class <code>V1ConnectorTest</code> contains tests for the class <code>{@link V1Connector}</code>.
+ *
+ * 
+ * @author vplechuc
+ * @version $Revision: 1.0 $
+ */
 public class V1ConnectorTest {
-
 	
-	 String V1_URL;
-	 String V1_USERNAME;
-	 String V1_PASSWORD;
-	
-	
-	@BeforeClass
-	public static void setUpBeforeClass() throws Exception {
-		
-	}
-
-	@AfterClass
-	public static void tearDownAfterClass() throws Exception {
-	}
-
+	String url;
+	private String username;
+	private String password;
+	private V1Connector result;
+	/**
+	 * Perform pre-test initialization.
+	 *
+	 * @throws Exception
+	 *             if the initialization fails for some reason
+	 *
+	 * @generatedBy CodePro at 20/03/15 15:50
+	 */
 	@Before
 	public void setUp() throws Exception {
-		V1_URL = "http://localhost/versionone/";
-		 V1_USERNAME = "admin" ;
-		 V1_PASSWORD = "admin";
+		// add additional set up code here
+		url = "http://localhost/versionone";
+		username = "admin";
+		password = "admin";
 	}
 
-	@Test
-	public void testWithInstanceUrl() throws Exception {
-//		throw new RuntimeException("not yet implemented");
-		V1Connector testMe = V1Connector
-				.withInstanceUrl(V1_URL)
-				.withUserAgentHeader("", "")
-				.withWindowsIntegrated(V1_USERNAME, V1_PASSWORD).build();
-	 Assert.assertNotNull(testMe);
+	/**
+	 * Perform post-test clean-up.
+	 *
+	 * @throws Exception
+	 *             if the clean-up fails for some reason
+	 *
+	 * @generatedBy CodePro at 20/03/15 15:50
+	 */
+	@After
+	public void tearDown() throws Exception {
+		// Add additional tear down code here
 	}
-
-	@Test
-	public void testGetDataString() throws Exception {
-		throw new RuntimeException("not yet implemented");
-	}
-
-	@Test
-	public void testSendData() throws Exception {
-		throw new RuntimeException("not yet implemented");
-	}
-
-	@Test
-	public void testBeginRequest() throws Exception {
-		throw new RuntimeException("not yet implemented");
-	}
-
-	@Test
-	public void testEndRequest() throws Exception {
-		throw new RuntimeException("not yet implemented");
-	}
-
 	
-	//testing new V1Connector
+	
+	/**
+	 * Run the V1Connector(String) constructor test.
+	 *
+	 * @throws Exception
+	 *
+	 * @generatedBy CodePro at 20/03/15 15:50
+	 */
 	@Test()
-	public void testInvalidUrlV1Connector() throws V1Exception {
-		V1Connector testMe = V1Connector
-				.withInstanceUrl(V1_URL)
-				.withUserAgentHeader("", "")
-				.withWindowsIntegrated(V1_USERNAME, V1_PASSWORD).build();
-	 Assert.assertNotNull(testMe);
-	
-		}
+	public void testV1Connector_1() throws Exception {
+		String url = "http://localhost/versionone/";
 
+		V1Connector result = V1Connector.withInstanceUrl(url)
+					.withUserAgentHeader("name",  "1.0")
+					.withWindowsIntegrated(username, password)
+					.build();
+
+		// add additional test code here
+		assertNotNull(result);
+	}
+
+
+
+	/**
+	 * Run the void useDataAPI() method test.
+	 *
+	 * @throws Exception
+	 *
+	 * @generatedBy CodePro at 20/03/15 15:50
+	 */
+	@Test
+	@Ignore
+	public void testUseDataAPI_1() throws Exception {
+		V1Connector fixture = V1Connector.withInstanceUrl(url)
+				.withUserAgentHeader("", "")
+				.withWindowsIntegrated(username, password)
+				.build();
+
+		fixture.useDataAPI();
+
+		// add additional test code here
+		// An unexpected exception was thrown in user code while executing this test:
+		// com.versionone.apiclient.exceptions.V1Exception: Error processing url
+		// at com.versionone.apiclient.V1Connector.<init>(V1Connector.java:107)
+	}
+
+
+	/**
+	 * Run the V1Connector.ISetUserAgentMakeRequest withInstanceUrl(String) method test.
+	 *
+	 * @throws Exception
+	 *
+	 * @generatedBy CodePro at 20/03/15 15:50
+	 */
+	@Test(expected = com.versionone.apiclient.exceptions.V1Exception.class)
+	public void testWithInstanceUrl_1() throws Exception {
+		String versionOneInstanceUrl = "";
+
+		V1Connector.ISetUserAgentMakeRequest result = V1Connector.withInstanceUrl(versionOneInstanceUrl);
+
+		// add additional test code here
+		assertNotNull(result);
+	}
+
+	/**
+	 * Launch the test.
+	 *
+	 * @param args
+	 *            the command line arguments
+	 *
+	 * @generatedBy CodePro at 20/03/15 15:50
+	 */
+	public static void main(String[] args) {
+		new org.junit.runner.JUnitCore().run(V1ConnectorTest.class);
+	}
 }

@@ -7,7 +7,6 @@ import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.Reader;
 import java.io.UnsupportedEncodingException;
-import java.net.HttpURLConnection;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -108,9 +107,8 @@ public class V1Connector {
 			throw new V1Exception("Error processing url " + url);
 		}
 		// VALIDATE URL
-		String[] schemes = { "http", "https" }; // DEFAULT schemes = "http", "https", "ftp"
-		UrlValidator urlValidator = new UrlValidator(schemes);
-		if (!urlValidator.isValid(_url)) {
+		UrlValidator urlValidator = new UrlValidator(UrlValidator.ALLOW_LOCAL_URLS);
+		if (urlValidator.isValid(url) == false) {
 			throw new V1Exception("Error processing url " + url);
 		}
 		this._url = url;
@@ -142,7 +140,7 @@ public class V1Connector {
 			if (!V1Util.isNullOrEmpty(name) && !V1Util.isNullOrEmpty(version)) {
 				headerString = headerString + " " + name + "/" + version;
 			} else {
-				throw new V1Exception("Error processing User Agent " + name + version);
+				throw new V1Exception("Error processing User Agent null/empty" + name + version);
 			}
 
 			Header header = new BasicHeader(HttpHeaders.USER_AGENT, headerString);
@@ -281,7 +279,7 @@ public class V1Connector {
 
 	// end builder
 
-	public Reader getData() throws ConnectionException {
+	protected Reader getData() throws ConnectionException {
 		return getData("");
 	}
 
