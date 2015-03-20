@@ -1,5 +1,6 @@
 package com.versionone.apiclient.services;
 
+import com.versionone.apiclient.Query;
 import com.versionone.apiclient.exceptions.APIException;
 import com.versionone.apiclient.filters.IFilterTerm;
 

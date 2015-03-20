@@ -6,11 +6,11 @@ import java.util.Map;
 import com.versionone.apiclient.Asset;
 import com.versionone.apiclient.Attribute;
 import com.versionone.apiclient.MetaModel;
+import com.versionone.apiclient.Query;
+import com.versionone.apiclient.Services;
 import com.versionone.apiclient.V1APIConnector;
 import com.versionone.apiclient.exceptions.V1Exception;
-import com.versionone.apiclient.services.Query;
 import com.versionone.apiclient.services.QueryResult;
-import com.versionone.apiclient.services.Services;
 
 import fit.RowFixture;
 

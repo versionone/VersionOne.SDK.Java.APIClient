@@ -12,6 +12,7 @@ import com.versionone.apiclient.Asset;
 import com.versionone.apiclient.AssetState;
 import com.versionone.apiclient.AttributeSelection;
 import com.versionone.apiclient.EnvironmentContext;
+import com.versionone.apiclient.Query;
 import com.versionone.apiclient.V1APIConnector;
 import com.versionone.apiclient.V1Configuration;
 import com.versionone.apiclient.exceptions.APIException;
@@ -24,7 +25,6 @@ import com.versionone.apiclient.interfaces.IMetaModel;
 import com.versionone.apiclient.interfaces.IOperation;
 import com.versionone.apiclient.interfaces.IServices;
 import com.versionone.apiclient.services.OrderBy;
-import com.versionone.apiclient.services.Query;
 import com.versionone.apiclient.services.QueryResult;
 
 /**

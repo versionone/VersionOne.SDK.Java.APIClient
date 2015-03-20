@@ -1,6 +1,7 @@
 package com.versionone.apiclient.services;
 
 import com.versionone.apiclient.Asset;
+import com.versionone.apiclient.Query;
 
 /**
  * This class is used to wrap the results of a query and to allow the caller to know how many total items are available

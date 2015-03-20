@@ -1,5 +1,7 @@
 package com.versionone.apiclient.services;
 
+import com.versionone.apiclient.Query;
+
 
 public class HierarchicalPartBuilder extends QueryBuilder {
 	

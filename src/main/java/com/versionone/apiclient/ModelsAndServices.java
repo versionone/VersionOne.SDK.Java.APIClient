@@ -6,7 +6,6 @@ import com.versionone.apiclient.interfaces.IConnectors;
 import com.versionone.apiclient.interfaces.IMetaModel;
 import com.versionone.apiclient.interfaces.IModelsAndServices;
 import com.versionone.apiclient.interfaces.IServices;
-import com.versionone.apiclient.services.Services;
 
 public final class ModelsAndServices implements IModelsAndServices  {
 
@@ -40,7 +39,7 @@ public final class ModelsAndServices implements IModelsAndServices  {
 
     public IServices getServices(){
         if (_services != null) return _services;
-        _services = new com.versionone.apiclient.services.Services(
+        _services = new com.versionone.apiclient.Services(
                 getMetaModel(),
                 _connectors.getDataConnector()
         );

@@ -1,5 +1,7 @@
 package com.versionone.apiclient.services;
 
+import com.versionone.apiclient.Query;
+import com.versionone.apiclient.SelectionBuilder;
 import com.versionone.apiclient.SortBuilder;
 
 /**

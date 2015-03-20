@@ -14,6 +14,7 @@ import com.versionone.apiclient.ProxyProvider;
 import com.versionone.apiclient.V1APIConnector;
 import com.versionone.apiclient.V1Connector;
 import com.versionone.apiclient.exceptions.ConnectionException;
+import com.versionone.apiclient.exceptions.V1Exception;
 import com.versionone.apiclient.interfaces.ICookiesManager;
 
 public class ConnectorTests {
@@ -114,14 +115,4 @@ public class ConnectorTests {
 		header = header + " " + app_name + "/" + app_version;
 		Assert.assertEquals("", header, testMe.getUserAgentHeader());
 	}
-	
-	//testing new V1Connector
-	@Test(expected = ConnectionException.class)
-	public void testInvalidUrlV1Connector() throws ConnectionException {
-//		V1Connector testMe = V1Connector.withInstanceUrl("")
-//		.withUserAgentHeader("", "")
-//		.useQueryAPI()
-//		.withAccessToken("")
-	}
-	
 }

@@ -11,7 +11,6 @@ import com.versionone.apiclient.interfaces.IAttributeDefinition;
 import com.versionone.apiclient.interfaces.IMetaModel;
 import com.versionone.apiclient.interfaces.IAttributeDefinition.AttributeType;
 import com.versionone.apiclient.services.OrderBy;
-import com.versionone.apiclient.services.Query;
 import com.versionone.apiclient.services.QueryFind;
 import com.versionone.apiclient.services.QueryURLBuilder;
 import com.versionone.apiclient.services.QueryVariable;

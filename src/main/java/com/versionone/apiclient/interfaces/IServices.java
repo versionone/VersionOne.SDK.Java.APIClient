@@ -2,12 +2,12 @@ package com.versionone.apiclient.interfaces;
 
 import com.versionone.Oid;
 import com.versionone.apiclient.Asset;
+import com.versionone.apiclient.Query;
 import com.versionone.apiclient.exceptions.APIException;
 import com.versionone.apiclient.exceptions.ConnectionException;
 import com.versionone.apiclient.exceptions.MetaException;
 import com.versionone.apiclient.exceptions.OidException;
 import com.versionone.apiclient.exceptions.V1Exception;
-import com.versionone.apiclient.services.Query;
 import com.versionone.apiclient.services.QueryResult;
 
 /**

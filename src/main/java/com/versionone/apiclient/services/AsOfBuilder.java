@@ -2,6 +2,8 @@ package com.versionone.apiclient.services;
 
 import java.text.SimpleDateFormat;
 
+import com.versionone.apiclient.Query;
+
 public class AsOfBuilder extends QueryBuilder {
 	
     @Override

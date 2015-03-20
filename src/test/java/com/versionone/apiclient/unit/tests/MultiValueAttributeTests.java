@@ -5,10 +5,10 @@ import org.junit.Test;
 
 import com.versionone.Oid;
 import com.versionone.apiclient.Asset;
+import com.versionone.apiclient.Query;
+import com.versionone.apiclient.Services;
 import com.versionone.apiclient.interfaces.IAttributeDefinition;
-import com.versionone.apiclient.services.Query;
 import com.versionone.apiclient.services.QueryResult;
-import com.versionone.apiclient.services.Services;
 
 public class MultiValueAttributeTests extends ServicesTesterBase  {
 	@Test

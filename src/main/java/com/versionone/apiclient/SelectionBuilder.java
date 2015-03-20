@@ -1,4 +1,7 @@
-package com.versionone.apiclient.services;
+package com.versionone.apiclient;
+
+import com.versionone.apiclient.services.BuildResult;
+import com.versionone.apiclient.services.QueryBuilder;
 
 
 public class SelectionBuilder extends QueryBuilder {

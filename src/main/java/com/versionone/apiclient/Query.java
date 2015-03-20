@@ -1,16 +1,17 @@
-package com.versionone.apiclient.services;
+package com.versionone.apiclient;
 
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 import com.versionone.Oid;
-import com.versionone.apiclient.AttributeSelection;
-import com.versionone.apiclient.Paging;
 import com.versionone.apiclient.filters.IFilterTerm;
 import com.versionone.apiclient.interfaces.IAssetType;
 import com.versionone.apiclient.interfaces.IAttributeDefinition;
 import com.versionone.apiclient.interfaces.IAttributeDefinition.AttributeType;
+import com.versionone.apiclient.services.OrderBy;
+import com.versionone.apiclient.services.QueryFind;
+import com.versionone.apiclient.services.QueryVariable;
 
 /**
  * Represents a VersionOne API Query

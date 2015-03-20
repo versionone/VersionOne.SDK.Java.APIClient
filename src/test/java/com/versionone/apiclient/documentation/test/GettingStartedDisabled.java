@@ -7,7 +7,6 @@ import com.versionone.apiclient.filters.AndFilterTerm;
 import com.versionone.apiclient.filters.FilterTerm;
 import com.versionone.apiclient.interfaces.IAssetType;
 import com.versionone.apiclient.interfaces.IAttributeDefinition;
-import com.versionone.apiclient.services.Query;
 import com.versionone.apiclient.services.QueryResult;
 
 import org.junit.*;

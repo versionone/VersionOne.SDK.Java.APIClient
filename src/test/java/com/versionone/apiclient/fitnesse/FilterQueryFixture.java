@@ -9,9 +9,7 @@ import com.versionone.apiclient.filters.AndFilterTerm;
 import com.versionone.apiclient.filters.FilterTerm;
 import com.versionone.apiclient.filters.IFilterTerm;
 import com.versionone.apiclient.filters.OrFilterTerm;
-import com.versionone.apiclient.services.Query;
 import com.versionone.apiclient.services.QueryResult;
-import com.versionone.apiclient.services.Services;
 
 import fit.RowFixture;
 

@@ -2,6 +2,7 @@ package com.versionone.apiclient.services;
 
 import java.net.URLEncoder;
 
+import com.versionone.apiclient.Query;
 import com.versionone.utils.V1Util;
 
 public class FindBuilder extends QueryBuilder {
