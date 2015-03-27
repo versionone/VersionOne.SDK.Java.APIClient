@@ -184,6 +184,8 @@ public class MetaModel implements IMetaModel {
 		Document doc = null;
 
 		doc = createDocument(token);
+		
+		String dc = doc.toString();
 
 		AssetType assetType = new AssetType(this, doc.getDocumentElement(), _map);
 		saveAssetType(assetType);

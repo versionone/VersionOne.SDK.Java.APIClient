@@ -301,7 +301,9 @@ public class V1Connector {
 		// do we really need the path?? backward compatibility
 		String responseBody = "";
 
-		HttpGet request = new HttpGet(_url+_endpoint);
+		String url = V1Util.isNullOrEmpty(path)?_url+_endpoint:_url+_endpoint+path;
+		
+		HttpGet request = new HttpGet(url);
 
 		createConnection();
 	
@@ -333,7 +335,7 @@ public class V1Connector {
 			case HttpStatus.SC_OK:
 				try {
 				
-					data = new InputStreamReader(httpResponse.getEntity().getContent());
+					data = new InputStreamReader(entity.getContent());
 				} catch (UnsupportedEncodingException ex) {
 //					log.error(ex.getMessage());
 					throw new ConnectionException("Error processing response content unsupported encoding " + ex.getMessage());

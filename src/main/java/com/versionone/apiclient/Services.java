@@ -148,7 +148,8 @@ public class Services implements IServices {
 				reader = _connector.getData(path);
 			} else {
 				_v1Connector.useNewAPI();
-				reader =_v1Connector.getData();
+				path = assetType.getToken() + "?ctx=" + context.getToken();
+				reader =_v1Connector.getData(path);
 			}
 
 			Document doc = XMLHandler.buildDocument(reader, path);

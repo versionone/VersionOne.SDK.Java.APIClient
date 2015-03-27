@@ -7,11 +7,13 @@ import org.junit.Before;
 import org.junit.Test;
 
 import com.versionone.Oid;
+import com.versionone.apiclient.Asset;
 import com.versionone.apiclient.MetaModel;
 import com.versionone.apiclient.Query;
 import com.versionone.apiclient.Services;
 import com.versionone.apiclient.V1Connector;
 import com.versionone.apiclient.exceptions.V1Exception;
+import com.versionone.apiclient.interfaces.IAssetType;
 import com.versionone.apiclient.interfaces.IAttributeDefinition;
 import com.versionone.apiclient.services.QueryResult;
 
@@ -86,14 +88,14 @@ public class V1ConnectorTest {
 
 		Services services = new Services(connector);
 
-		Oid memberId = Oid.fromToken("Member:20", services.get_meta());
-		Query query = new Query(memberId);
-		IAttributeDefinition nameAttribute = services.get_meta().getAttributeDefinition("Member.Username");
-		query.getSelection().add(nameAttribute);
-		QueryResult queryresult = services.retrieve(query);
+	    Oid oid = Oid.fromToken("Scope:0", services.get_meta());
+        IAssetType storyType = services.get_meta().getAssetType("Story");
+        Asset firstStory = services.createNew(storyType, oid);
+        IAttributeDefinition nameAttribute = storyType.getAttributeDefinition("Name");
+        firstStory.setAttributeValue(nameAttribute, "Services Test Story");
+        services.save(firstStory);
 
-		assertNotNull(queryresult);
-
+       assertNotNull(firstStory.getOid());
 	}
 
 	// @Test(expected = ConnectionException.class)
