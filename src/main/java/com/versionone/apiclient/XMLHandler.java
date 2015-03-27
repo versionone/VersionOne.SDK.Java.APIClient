@@ -8,9 +8,11 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
 import org.w3c.dom.Document;
+import org.xml.sax.EntityResolver;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
+import com.sun.org.apache.xml.internal.resolver.Resolver;
 import com.versionone.apiclient.exceptions.APIException;
 import com.versionone.apiclient.exceptions.ConnectionException;
 
@@ -29,7 +31,7 @@ public class XMLHandler {
 	public static Document buildDocument(Reader reader, String url) throws APIException, ConnectionException {
 		try {
 			DocumentBuilder builder = createDocumentBuilder();
-			Document doc = builder.parse(new InputSource(reader));
+			 Document doc = builder.parse(new InputSource(reader));
 			return doc;
 		} catch (ParserConfigurationException e) {
 			throw new APIException("Parser Configuration Error ", url, e);
@@ -39,7 +41,13 @@ public class XMLHandler {
 			throw new APIException("SAX Error ", url, e);
 		}
 		finally {
-			if(null != reader){try {reader.close();} catch (IOException e) {}}
+			if(null != reader){
+				try {
+						reader.close();
+					} catch (IOException e) {
+						e.printStackTrace();
+					}
+				}
 		}
 	}
 

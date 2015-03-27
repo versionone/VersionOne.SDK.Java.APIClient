@@ -47,6 +47,23 @@ public class Services implements IServices {
 	private Oid _loggedin;
 	private V1Connector _v1Connector;
 
+		
+	public IMetaModel get_meta() {
+		return _meta;
+	}
+
+	public IAPIConnector get_connector() {
+		return _connector;
+	}
+
+	public Oid get_loggedin() {
+		return _loggedin;
+	}
+
+	public V1Connector get_v1Connector() {
+		return _v1Connector;
+	}
+
 	/**
 	 * @param metaModel
 	 *            - VersionOne MetaModel

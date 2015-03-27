@@ -85,6 +85,7 @@ public class MetaModel implements IMetaModel {
 		try {
 			return findAssetType(token);
 		} catch (Exception ex) {
+			ex.printStackTrace();
 			throw new MetaException("Unknown AssetType", token, ex);
 		}
 	}
@@ -253,12 +254,15 @@ public class MetaModel implements IMetaModel {
 			rc = XMLHandler.buildDocument(reader, token);
 			_versionString = rc.getDocumentElement().getAttribute("version").toString();
 		} catch (ConnectionException e) {
+			e.printStackTrace();
 			throw new MetaException("Error creating Document", token, e);
+			
 		} finally {
 			if (null != reader) {
 				try {
 					reader.close();
 				} catch (IOException e) {
+					e.printStackTrace();
 				}
 			}
 		}

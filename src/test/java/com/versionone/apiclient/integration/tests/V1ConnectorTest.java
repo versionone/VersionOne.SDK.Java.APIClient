@@ -2,22 +2,18 @@ package com.versionone.apiclient.integration.tests;
 
 import static org.junit.Assert.assertNotNull;
 
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.io.Reader;
-
-import jdk.nashorn.internal.ir.annotations.Ignore;
-
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
+import com.versionone.Oid;
+import com.versionone.apiclient.MetaModel;
+import com.versionone.apiclient.Query;
 import com.versionone.apiclient.Services;
 import com.versionone.apiclient.V1Connector;
-
-
-
-
+import com.versionone.apiclient.exceptions.V1Exception;
+import com.versionone.apiclient.interfaces.IAttributeDefinition;
+import com.versionone.apiclient.services.QueryResult;
 
 /**
  * The class <code>V1ConnectorTest</code> contains tests for the class <code>{@link V1Connector}</code>.
@@ -27,11 +23,12 @@ import com.versionone.apiclient.V1Connector;
  * @version $Revision: 1.0 $
  */
 public class V1ConnectorTest {
-	
+
 	String url;
 	private String username;
 	private String password;
 	private V1Connector result;
+
 	/**
 	 * Perform pre-test initialization.
 	 *
@@ -43,7 +40,7 @@ public class V1ConnectorTest {
 	@Before
 	public void setUp() throws Exception {
 		// add additional set up code here
-		url = "http://localhost/versionone";
+		url = "http://localhost/versionone/";
 		username = "admin";
 		password = "admin";
 	}
@@ -60,8 +57,7 @@ public class V1ConnectorTest {
 	public void tearDown() throws Exception {
 		// Add additional tear down code here
 	}
-	
-	
+
 	/**
 	 * Run the V1Connector(String) constructor test.
 	 *
@@ -69,61 +65,49 @@ public class V1ConnectorTest {
 	 *
 	 * @generatedBy CodePro at 20/03/15 15:50
 	 */
-	@Test()
+	//@Test()
 	public void testV1Connector_1() throws Exception {
 		String url = "http://localhost/versionone/";
 
-		V1Connector result = V1Connector.withInstanceUrl(url)
-					.withUserAgentHeader("name",  "1.0")
-					.withWindowsIntegrated(username, password)
-					.build();
+		V1Connector result = V1Connector.withInstanceUrl(url).withUserAgentHeader("name", "1.0").withWindowsIntegrated(username, password).connet();
 
-		// add additional test code here
 		assertNotNull(result);
 	}
 
+	@Test()
+	public void testInvalidUser() throws V1Exception {
+		//username = "damin";
 
+		V1Connector connector = V1Connector
+				.withInstanceUrl(url)
+				.withUserAgentHeader("name", "1.0")
+				.withUsernameAndPassword(username, password)
+				.connet();
 
-	/**
-	 * Run the void useDataAPI() method test.
-	 *
-	 * @throws Exception
-	 *
-	 * @generatedBy CodePro at 20/03/15 15:50
-	 */
-	@Test
-	@Ignore
-	public void testUseDataAPI_1() throws Exception {
-		V1Connector fixture = V1Connector.withInstanceUrl(url)
-				.withUserAgentHeader("", "")
-				.withWindowsIntegrated(username, password)
-				.build();
+		Services services = new Services(connector);
 
-		fixture.useDataAPI();
+		Oid memberId = Oid.fromToken("Member:20", services.get_meta());
+		Query query = new Query(memberId);
+		IAttributeDefinition nameAttribute = services.get_meta().getAttributeDefinition("Member.Username");
+		query.getSelection().add(nameAttribute);
+		QueryResult queryresult = services.retrieve(query);
 
-		// add additional test code here
-		// An unexpected exception was thrown in user code while executing this test:
-		// com.versionone.apiclient.exceptions.V1Exception: Error processing url
-		// at com.versionone.apiclient.V1Connector.<init>(V1Connector.java:107)
+		assertNotNull(queryresult);
+
 	}
 
+	// @Test(expected = ConnectionException.class)
+	// public void testInvalidUrl() throws ConnectionException {
+	// // V1APIConnector testMe = new V1APIConnector(V1_URL,V1_USERNAME, V1_PASSWORD);
+	// // testMe.getData("rest-1.v1/bogus");
+	// }
 
-	/**
-	 * Run the V1Connector.ISetUserAgentMakeRequest withInstanceUrl(String) method test.
-	 *
-	 * @throws Exception
-	 *
-	 * @generatedBy CodePro at 20/03/15 15:50
-	 */
-	@Test(expected = com.versionone.apiclient.exceptions.V1Exception.class)
-	public void testWithInstanceUrl_1() throws Exception {
-		String versionOneInstanceUrl = "";
-
-		V1Connector.ISetUserAgentMakeRequest result = V1Connector.withInstanceUrl(versionOneInstanceUrl);
-
-		// add additional test code here
-		assertNotNull(result);
-	}
+	// @Test
+	// public void testValidUser() throws ConnectionException {
+	// // V1APIConnector testMe = new V1APIConnector(V1_URL, V1_USERNAME, V1_PASSWORD);
+	// // Reader results = testMe.getData("/rest-1.v1/Data/Scope/0");
+	// // Assert.assertTrue(results != null);
+	// }
 
 	/**
 	 * Launch the test.

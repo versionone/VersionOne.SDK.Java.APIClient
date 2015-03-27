@@ -41,7 +41,7 @@ public class V1Connector {
 
 	private static final String UTF8 = "UTF-8";
 
-	private static Logger log = Logger.getLogger(V1Connector.class.getName());
+	private static Logger log ;//= Logger.getLogger(V1Connector.class);
 
 	private static CloseableHttpResponse httpResponse = null;
 	private static HttpClientBuilder httpclientBuilder = HttpClientBuilder.create();
@@ -99,7 +99,7 @@ public class V1Connector {
 
 	// get the connector (terminating build method)
 	interface IBuild {
-		V1Connector build();
+		V1Connector connet();
 	}
 
 	protected V1Connector(String url) throws V1Exception {
@@ -125,6 +125,7 @@ public class V1Connector {
 
 		// builder constructor
 		public Builder(String url) throws V1Exception {
+//			log.info("Builder with url: " + url);
 			instance = new V1Connector(url);
 
 		}
@@ -132,7 +133,10 @@ public class V1Connector {
 		// set the user agent header
 		@Override
 		public IAuthenticationMethods withUserAgentHeader(String name, String version) throws V1Exception {
-
+//			log.info("called V1Connector.withUserAgentHeader ");
+//			log.info("with name/version: " + name + " / " + version);
+			
+			
 			Package p = this.getClass().getPackage();
 			String headerString = "Java/" + System.getProperty("java.version") + " " + p.getImplementationTitle() + "/"
 					+ p.getImplementationVersion();
@@ -154,8 +158,8 @@ public class V1Connector {
 		@Override
 		public IProxy withUsernameAndPassword(String username, String password) throws V1Exception {
 
-			log.trace("called V1Connector.withUsernameAndPassword ");
-			log.trace("with name/version: " + username + "/" + password);
+//			log.info("called V1Connector.withUsernameAndPassword ");
+//			log.info("with username/password: " + username + " / " + password);
 
 			if (V1Util.isNullOrEmpty(username) || V1Util.isNullOrEmpty(username))
 				throw new V1Exception("Error processing accessToken Null/Empty ");
@@ -172,8 +176,8 @@ public class V1Connector {
 		@Override
 		public IProxy withAccessToken(String accessToken) throws V1Exception {
 
-			log.trace("called V1Connector.withAccessToken ");
-			log.trace("with accesstoken: " + accessToken);
+//			log.info("called V1Connector.withAccessToken ");
+//			log.info("with accesstoken: " + accessToken);
 
 			if (!V1Util.isNullOrEmpty(accessToken))
 				throw new V1Exception("Error processing accessToken Null/Empty ");
@@ -188,8 +192,9 @@ public class V1Connector {
 		@Override
 		public IProxy withWindowsIntegrated(String username, String password) throws V1Exception {
 
-			log.trace("called V1Connector.withWindowsIntegrated ");
-			log.trace("with username and password: ");
+//			log.info("called V1Connector.withWindowsIntegrated ");
+//			log.info("with username : "+ username );
+//			log.info("with password: "+ password );
 
 			if (V1Util.isNullOrEmpty(username) || V1Util.isNullOrEmpty(username)) {
 				// use the logued user to the domain
@@ -210,14 +215,17 @@ public class V1Connector {
 		@Override
 		public IProxy withWindowsIntegrated() throws V1Exception {
 
-			log.trace("called V1Connector.withWindowsIntegrated ");
-			log.trace("with username and password: ");
+//			log.info("called V1Connector.withWindowsIntegrated ");
+//			log.info("with username and password: ");
 
 			String domain = new com.sun.security.auth.module.NTSystem().getDomain();
 
 			String fullyQualifiedDomainUsername = domain + "\"" + new com.sun.security.auth.module.NTSystem().getName();
 
 			String authEncodedString = encodingLoginInfo(fullyQualifiedDomainUsername, "");
+
+//			log.info("fullyQualifiedDomainUsername:  " + fullyQualifiedDomainUsername);
+//			log.info("authEncodedString : " + authEncodedString);
 
 			CredentialsProvider credsProvider = new BasicCredentialsProvider();
 
@@ -231,8 +239,8 @@ public class V1Connector {
 		@Override
 		public IProxy withOAuth2(String oAuth2) throws V1Exception {
 
-			log.trace("called V1Connector.withOAth2 ");
-			log.trace("with accesstoken: " + oAuth2);
+//			log.info("called V1Connector.withOAth2 ");
+//			log.info("with accesstoken: " + oAuth2);
 
 			if (V1Util.isNullOrEmpty(oAuth2))
 				throw new V1Exception("Error processing accessToken Null/Empty ");
@@ -247,8 +255,8 @@ public class V1Connector {
 		@Override
 		public IBuild withProxy(ProxyProvider proxyProvider) throws V1Exception {
 
-			log.trace("called V1Connector.withOAth2 ");
-			log.trace("with accesstoken: " + proxyProvider.toString());
+//			log.info("called V1Connector.withOAth2 ");
+//			log.info("with accesstoken: " + proxyProvider.toString());
 
 			if (proxyProvider == null)
 				throw new V1Exception("Error processing proxy Null/Empty ");
@@ -263,7 +271,9 @@ public class V1Connector {
 
 		// build
 		@Override
-		public V1Connector build() {
+		public V1Connector connet() {
+//			log.info("called V1Connector.connet ");
+
 			return instance;
 		}
 
@@ -284,33 +294,36 @@ public class V1Connector {
 	}
 
 	protected Reader getData(String path) throws ConnectionException {
-
+//		log.info("called V1Connector.getData ");
+//		log.info("with : " + path );
+//		log.info("called V1Connector.getData with _url + _endpoint:  " + _url+_endpoint);
+		Reader data = null;
 		// do we really need the path?? backward compatibility
-		String responseBody = null;
+		String responseBody = "";
 
-		HttpGet request = new HttpGet(_url);
+		HttpGet request = new HttpGet(_url+_endpoint);
 
+		createConnection();
+	
 		try {
-			httpResponse = createConnection().execute(request);
-
-		} catch (ClientProtocolException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		} catch (IOException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
+			httpResponse = httpclient.execute(request);
+		} catch (IOException e) {
+			e.printStackTrace();
 		}
+
 
 		// execute connection
 		HttpEntity entity = httpResponse.getEntity();
 
-		try {
-			responseBody = EntityUtils.toString(entity, "UTF-8");
-		} catch (ParseException e) {
-			throw new ConnectionException("Error processing request parse exception " + e.getMessage());
-		} catch (IOException e) {
-			throw new ConnectionException("Error processing request " + e.getMessage());
-		}
+//		try {
+//			responseBody = EntityUtils.toString(entity);
+//		} catch (ParseException ex) {  
+////			log.error(ex.getMessage());
+//			throw new ConnectionException("Error processing request parse exception " + ex.getMessage());
+//		} catch (IOException ex) {
+////			log.error(ex.getMessage());
+//			throw new ConnectionException("Error processing request " + ex.getMessage());
+//		}
 
 		int errorCode = httpResponse.getStatusLine().getStatusCode();
 
@@ -319,15 +332,19 @@ public class V1Connector {
 		switch (errorCode) {
 			case HttpStatus.SC_OK:
 				try {
-					new InputStreamReader(httpResponse.getEntity().getContent(), UTF8);
-				} catch (UnsupportedEncodingException e) {
-					throw new ConnectionException("Error processing response content unsupported encoding " + e.getMessage());
-				} catch (IllegalStateException e) {
-					throw new ConnectionException("Error processing response Illegal state " + e.getMessage());
-				} catch (IOException e) {
-					throw new ConnectionException("Error processing response " + e.getMessage());
+				
+					data = new InputStreamReader(httpResponse.getEntity().getContent());
+				} catch (UnsupportedEncodingException ex) {
+//					log.error(ex.getMessage());
+					throw new ConnectionException("Error processing response content unsupported encoding " + ex.getMessage());
+				} catch (IllegalStateException ex) {
+//					log.error(ex.getMessage());
+					throw new ConnectionException("Error processing response Illegal state " + ex.getMessage());
+				} catch (IOException ex) {
+//					log.error(ex.getMessage());
+					throw new ConnectionException("Error processing response " + ex.getMessage());
 				}
-				;
+				return data;
 			case HttpStatus.SC_BAD_REQUEST:
 				throw new ConnectionException(errorMessage + " VersionOne could not process the request.");
 			case HttpStatus.SC_UNAUTHORIZED:
@@ -347,19 +364,19 @@ public class V1Connector {
 	/**
 	 * Creates the HTTP request to the VersionOne server.
 	 */
-	private CloseableHttpClient createConnection() {
+	private void createConnection() {
 
 		String localeName = Locale.getDefault().toString();
 		localeName = localeName.replace("_", "-");
 		Header header = new BasicHeader(HttpHeaders.ACCEPT_LANGUAGE, localeName);
+		
 		headers.add(header);
+	
 		// add all headers settings
 		httpclientBuilder.setDefaultHeaders(headers);
 
 		// creates a new httclient
 		httpclient = httpclientBuilder.build();
-
-		return httpclient;
 	}
 
 	protected Reader sendData(String path, String data) throws ConnectionException {
@@ -367,32 +384,35 @@ public class V1Connector {
 		OutputStreamWriter stream = null;
 		InputStream resultStream = null;
 
-		HttpPost httpPost = new HttpPost(_url);
+		HttpPost httpPost = new HttpPost(_url+_endpoint);
 
 		httpPost.setHeader("Content-Type", "text/xml");
 
 		try {
 
-			httpResponse = createConnection().execute(httpPost);
+			httpResponse = httpclient.execute(httpPost);
 //			stream = new OutputStreamWriter(httpResponse.getEntity().getOutputStream(), UTF8);
 //			stream.write(data);
 //			stream.flush();
 
 			resultStream = httpResponse.getEntity().getContent();
 
-		} catch (IOException e) {
+		} catch (IOException ex) {
+			log.error(ex.getMessage());
 			int code;
 			try {
 				code = httpResponse.getStatusLine().getStatusCode();
 			} catch (Exception e1) {
+				log.error(e1.getMessage());
 				code = -1;
 			}
-			throw new ConnectionException("Error writing to output stream", code, e);
+			throw new ConnectionException("Error writing to output stream", code, ex);
 		} finally {
 			if (stream != null) {
 				try {
 					stream.close();
-				} catch (Exception e) {
+				} catch (Exception ex) {
+					log.error(ex.getMessage());
 					// Do nothing
 				}
 			}
