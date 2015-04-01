@@ -2,6 +2,8 @@ package com.versionone.apiclient.integration.tests;
 
 import static org.junit.Assert.*;
 
+import java.net.MalformedURLException;
+
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
@@ -78,8 +80,8 @@ public class V1ConnectorTest {
 		assertNotNull(result);
 	}
 
-	@Test()
-	public void saveAndUpdateTest() throws V1Exception {
+//	@Test()
+	public void saveAndUpdateTest() throws V1Exception, MalformedURLException {
 
 		V1Connector connector = V1Connector
 				.withInstanceUrl(url)
@@ -125,7 +127,7 @@ public class V1ConnectorTest {
 	}
 	
 	//@Test()
-	public void pingQuery() throws V1Exception {
+	public void queryTest() throws V1Exception, MalformedURLException {
 	
 		V1Connector connector = V1Connector
 				.withInstanceUrl(url)
@@ -134,31 +136,41 @@ public class V1ConnectorTest {
 				.connet();
 
 		Services services = new Services(connector);
-        try 
-        {
-          IAssetType assetType = services.getAssetType("Member");
-          Query query = new Query(assetType);
-          IAttributeDefinition nameAttribute = assetType.getAttributeDefinition("Name");
-          query.getSelection().add(nameAttribute);
-          IAttributeDefinition isSelf = assetType.getAttributeDefinition("IsSelf");
-          FilterTerm filter = new FilterTerm(isSelf);
-          filter.equal("true");
+
+		IAssetType assetType = services.getAssetType("Member");
+         Query query = new Query(assetType);
+         IAttributeDefinition nameAttribute = assetType.getAttributeDefinition("Name");
+         query.getSelection().add(nameAttribute);
+         IAttributeDefinition isSelf = assetType.getAttributeDefinition("IsSelf");
+        FilterTerm filter = new FilterTerm(isSelf);
+        filter.equal("true");
+         
+        QueryResult result = services.retrieve(query);
           
-          QueryResult result = services.retrieve(query);
+        assertNotNull(result);
           
-          if (result.getAssets().length > 0)
-          {
-                Asset member = result.getAssets()[0];
-                System.out.println(member.getOid().getToken());
-                System.out.println(member.getAttribute(nameAttribute).getValue());
-          }
-        } 
-        catch (Exception ex)
-        {
-              System.out.println(ex.getMessage());
-        }
+        assertTrue(result.getAssets().length > 0);
+          
+
   }
 
+	
+	
+	@Test(expected = MalformedURLException.class)
+	public void validatePathTest() throws V1Exception, MalformedURLException {
+		
+		url = "https//localhost/versionone";
+		
+		V1Connector connector = V1Connector
+				.withInstanceUrl(url)
+				.withUserAgentHeader("name", "1.0")
+				.withUsernameAndPassword(username, password)
+				.connet();
+	
+		
+	}
+
+		
 	/**
 	 * Launch the test.
 	 *

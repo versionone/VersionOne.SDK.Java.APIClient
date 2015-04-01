@@ -6,6 +6,8 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.Reader;
 import java.io.UnsupportedEncodingException;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -103,26 +105,29 @@ public class V1Connector {
 		V1Connector connet();
 	}
 
-	protected V1Connector(String url) throws V1Exception {
+	protected V1Connector(String url) throws V1Exception, MalformedURLException {
 		log.info("called V1Connector construcor ");
 		log.info("with url: " + url);
 
-		if (V1Util.isNullOrEmpty(url)) {
-			log.error("Url empty or null ");
-			throw new V1Exception("Error processing url " + url);
-		}
-		// VALIDATE URL
-		UrlValidator urlValidator = new UrlValidator(
-				UrlValidator.ALLOW_LOCAL_URLS);
-		if (urlValidator.isValid(url) == false) {
-			log.error("Url not valid ");
-			throw new V1Exception("Error processing url " + url);
-		}
+//		if (V1Util.isNullOrEmpty(url)) {
+//			log.error("Url empty or null ");
+//			throw new V1Exception("Error processing url " + url);
+//		}
+//		// VALIDATE URL
+//		UrlValidator urlValidator = new UrlValidator(
+//				UrlValidator.ALLOW_LOCAL_URLS);
+//		if (urlValidator.isValid(url) == false) {
+//			log.error("Url not valid ");
+//			throw new V1Exception("Error processing url " + url);
+//		}
+		
+			URL urlData = new URL(url);
+	
 		this._url = url;
 	}
 
 	public static ISetUserAgentMakeRequest withInstanceUrl(
-			String versionOneInstanceUrl) throws V1Exception {
+			String versionOneInstanceUrl) throws V1Exception, MalformedURLException {
 		return new Builder(versionOneInstanceUrl);
 	}
 
@@ -133,7 +138,7 @@ public class V1Connector {
 		private V1Connector instance;
 
 		// builder constructor
-		public Builder(String url) throws V1Exception {
+		public Builder(String url) throws V1Exception, MalformedURLException {
 			log.info("Builder with url: " + url);
 			instance = new V1Connector(url);
 
