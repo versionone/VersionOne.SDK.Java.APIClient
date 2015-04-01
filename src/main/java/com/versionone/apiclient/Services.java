@@ -94,12 +94,14 @@ public class Services implements IServices {
 	 * @see IServices#retrieve(Query)
 	 */
 	public QueryResult retrieve(Query query) throws ConnectionException, APIException, OidException {
-		String queryUrl = new QueryURLBuilder(query).toString();
+		String queryUrl = null;
 		Reader reader = null;
 		try {
 			if (_connector != null) {
+				queryUrl =  new QueryURLBuilder(query, false).toString();
 				reader = _connector.getData(queryUrl);
 			} else {
+				queryUrl =  new QueryURLBuilder(query, true).toString();
 				if (query.isHistorical()) {
 					_v1Connector.useHistoryAPI();
 				} else {
@@ -137,7 +139,7 @@ public class Services implements IServices {
 	 */
 	public Asset createNew(IAssetType assetType, Oid context) throws V1Exception {
 
-		String path = "New/" + assetType.getToken();
+		String path = (_connector != null) ? "New/" + assetType.getToken():assetType.getToken();
 
 		if (context != null && !context.isNull())
 			path += "?ctx=" + context.getToken();
@@ -148,7 +150,6 @@ public class Services implements IServices {
 				reader = _connector.getData(path);
 			} else {
 				_v1Connector.useNewAPI();
-				path = assetType.getToken() + "?ctx=" + context.getToken();
 				reader =_v1Connector.getData(path);
 			}
 
@@ -172,7 +173,10 @@ public class Services implements IServices {
 	 * @see IServices#executeOperation(IOperation, Oid)
 	 */
 	public Oid executeOperation(IOperation op, Oid oid) throws APIException {
-		String path = "Data/" + oid.getAssetType().getToken() + "/" + oid.getKey().toString() + "?op=" + op.getName();
+		
+		String path = (_connector != null) ? 
+					"Data/" + oid.getAssetType().getToken() + "/" + oid.getKey().toString() + "?op=" + op.getName() :
+					 oid.getAssetType().getToken() + "/" + oid.getKey().toString() + "?op=" + op.getName();
 
 		Reader reader = null;
 		try {
@@ -268,8 +272,11 @@ public class Services implements IServices {
 	 * @see IServices#save(Asset, String)
 	 */
 	public void save(Asset asset, String comment) throws APIException, ConnectionException {
+		
+		
 		if (asset.hasChanged() || asset.getOid().isNull()) {
 
+			
 			StringWriter assetData = new StringWriter();
 			XmlApiWriter writer = new XmlApiWriter(true);
 			writer.write(asset, assetData);
@@ -278,8 +285,8 @@ public class Services implements IServices {
 				data = data.substring(data.indexOf("?>") + 2);
 			}
 
-			String path = "Data/" + asset.getAssetType().getToken();
-
+			String path = _connector != null ? "Data/" + asset.getAssetType().getToken(): asset.getAssetType().getToken();
+			
 			if (!asset.getOid().isNull())
 				path += "/" + asset.getOid().getKey().toString();
 

@@ -4,10 +4,17 @@ import com.versionone.apiclient.Query;
 
 
 public class HierarchicalPartBuilder extends QueryBuilder {
+	private boolean isV1connector =  false;
 	
-    @Override
+    public HierarchicalPartBuilder(boolean isV1connector) {
+		this.isV1connector = isV1connector;
+	}
+
+	@Override
     protected void doBuild(Query query, BuildResult result) {
-        result.pathParts.add(query.isHistorical() ? "Hist" : "Data");
+		if (!isV1connector == true)
+			result.pathParts.add(query.isHistorical() ? "Hist" : "Data");
+		
         result.pathParts.add(query.getAssetType().getToken());
 
         if (!query.getOid().isNull()) {

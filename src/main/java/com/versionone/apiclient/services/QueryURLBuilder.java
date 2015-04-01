@@ -10,10 +10,10 @@ import com.versionone.apiclient.SortBuilder;
 public class QueryURLBuilder extends CompositeBuilder {
     private final Query query;
 
-    public QueryURLBuilder(Query query) {
+    public QueryURLBuilder(Query query, boolean isV1connector) {
         this.query = query;
 
-        builders.add(new HierarchicalPartBuilder());
+        builders.add(new HierarchicalPartBuilder(isV1connector));
         builders.add(new SelectionBuilder());
         builders.add(new WhereBuilder());
         builders.add(new SortBuilder());
@@ -23,7 +23,8 @@ public class QueryURLBuilder extends CompositeBuilder {
         builders.add(new WithVariablesBuilder());
     }
 
-    @Override
+    
+	@Override
     public String toString() {
         return build(query, new BuildResult()).toUrl();
     }

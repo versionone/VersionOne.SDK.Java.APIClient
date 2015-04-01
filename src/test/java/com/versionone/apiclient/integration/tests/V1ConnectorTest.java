@@ -1,8 +1,9 @@
 package com.versionone.apiclient.integration.tests;
 
-import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.*;
 
 import org.junit.After;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -13,6 +14,7 @@ import com.versionone.apiclient.Query;
 import com.versionone.apiclient.Services;
 import com.versionone.apiclient.V1Connector;
 import com.versionone.apiclient.exceptions.V1Exception;
+import com.versionone.apiclient.filters.FilterTerm;
 import com.versionone.apiclient.interfaces.IAssetType;
 import com.versionone.apiclient.interfaces.IAttributeDefinition;
 import com.versionone.apiclient.services.QueryResult;
@@ -26,10 +28,10 @@ import com.versionone.apiclient.services.QueryResult;
  */
 public class V1ConnectorTest {
 
-	String url;
-	private String username;
-	private String password;
-	private V1Connector result;
+	public static String url;
+	public static String username;
+	public static String password;
+	public V1Connector result;
 
 	/**
 	 * Perform pre-test initialization.
@@ -77,8 +79,7 @@ public class V1ConnectorTest {
 	}
 
 	@Test()
-	public void testInvalidUser() throws V1Exception {
-		//username = "damin";
+	public void saveAndUpdateTest() throws V1Exception {
 
 		V1Connector connector = V1Connector
 				.withInstanceUrl(url)
@@ -88,28 +89,75 @@ public class V1ConnectorTest {
 
 		Services services = new Services(connector);
 
-	    Oid oid = Oid.fromToken("Scope:0", services.get_meta());
-        IAssetType storyType = services.get_meta().getAssetType("Story");
-        Asset firstStory = services.createNew(storyType, oid);
-        IAttributeDefinition nameAttribute = storyType.getAttributeDefinition("Name");
-        firstStory.setAttributeValue(nameAttribute, "Services Test Story");
-        services.save(firstStory);
+	    Oid projectId = Oid.fromToken("Scope:0", services.get_meta());
+	    IAssetType storyType = services.get_meta().getAssetType("Story");
+	    Asset newStory = services.createNew(storyType, projectId);
+	    IAttributeDefinition nameAttribute = storyType.getAttributeDefinition("Name");
+	    newStory.setAttributeValue(nameAttribute, "My New Story");
+	    services.save(newStory);
 
-       assertNotNull(firstStory.getOid());
+//	    System.out.println(newStory.getOid().getToken());
+//	    System.out.println(newStory.getAttribute(storyType.getAttributeDefinition("Scope")).getValue());
+//	    System.out.println(newStory.getAttribute(nameAttribute).getValue());
+
+	    assertNotNull("Token: " + newStory.getOid().getToken());
+	    assertEquals("Scope:0", newStory.getAttribute(storyType.getAttributeDefinition("Scope")).getValue().toString());
+	    assertEquals("My New Story", newStory.getAttribute(nameAttribute).getValue().toString());
+	    
+	
+	    Oid storyId = newStory.getOid();
+	    Query query = new Query(storyId);
+	    nameAttribute = services.get_meta().getAssetType("Story").getAttributeDefinition("Name");
+	    query.getSelection().add(nameAttribute);
+	    QueryResult result = services.retrieve(query);
+	    Asset story = result.getAssets()[0];
+	    String oldName = story.getAttribute(nameAttribute).getValue().toString();
+	    String newName = "This is my New Name";
+	    story.setAttributeValue(nameAttribute, newName);
+	    services.save(story);
+
+//	    System.out.println(story.getOid().getToken());
+//	    System.out.println("The OLD Name: " + oldName);
+//	    System.out.println("The NEW Name: " + story.getAttribute(nameAttribute).getValue());
+
+	    assertEquals("This is my New Name", story.getAttribute(nameAttribute).getValue().toString());
+		
 	}
+	
+	//@Test()
+	public void pingQuery() throws V1Exception {
+	
+		V1Connector connector = V1Connector
+				.withInstanceUrl(url)
+				.withUserAgentHeader("name", "1.0")
+				.withUsernameAndPassword(username, password)
+				.connet();
 
-	// @Test(expected = ConnectionException.class)
-	// public void testInvalidUrl() throws ConnectionException {
-	// // V1APIConnector testMe = new V1APIConnector(V1_URL,V1_USERNAME, V1_PASSWORD);
-	// // testMe.getData("rest-1.v1/bogus");
-	// }
-
-	// @Test
-	// public void testValidUser() throws ConnectionException {
-	// // V1APIConnector testMe = new V1APIConnector(V1_URL, V1_USERNAME, V1_PASSWORD);
-	// // Reader results = testMe.getData("/rest-1.v1/Data/Scope/0");
-	// // Assert.assertTrue(results != null);
-	// }
+		Services services = new Services(connector);
+        try 
+        {
+          IAssetType assetType = services.getAssetType("Member");
+          Query query = new Query(assetType);
+          IAttributeDefinition nameAttribute = assetType.getAttributeDefinition("Name");
+          query.getSelection().add(nameAttribute);
+          IAttributeDefinition isSelf = assetType.getAttributeDefinition("IsSelf");
+          FilterTerm filter = new FilterTerm(isSelf);
+          filter.equal("true");
+          
+          QueryResult result = services.retrieve(query);
+          
+          if (result.getAssets().length > 0)
+          {
+                Asset member = result.getAssets()[0];
+                System.out.println(member.getOid().getToken());
+                System.out.println(member.getAttribute(nameAttribute).getValue());
+          }
+        } 
+        catch (Exception ex)
+        {
+              System.out.println(ex.getMessage());
+        }
+  }
 
 	/**
 	 * Launch the test.

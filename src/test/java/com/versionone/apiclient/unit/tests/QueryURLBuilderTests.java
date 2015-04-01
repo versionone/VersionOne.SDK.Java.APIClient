@@ -27,7 +27,7 @@ public class QueryURLBuilderTests {
 
     @Test
     public void simpleQuery() throws APIException {
-        QueryURLBuilder testMe = new QueryURLBuilder(new Query(new MockAssetType()));
+        QueryURLBuilder testMe = new QueryURLBuilder(new Query(new MockAssetType()), false);
         Assert.assertEquals("Data/Mock?sel=", testMe.toString());
     }
 
@@ -38,7 +38,7 @@ public class QueryURLBuilderTests {
         query.getSelection().add(new MockAttributeDefinition("Name"));
         query.getSelection().add(new MockAttributeDefinition("Nickname"));
 
-        QueryURLBuilder testMe = new QueryURLBuilder(query);
+        QueryURLBuilder testMe = new QueryURLBuilder(query, false);
         Assert.assertEquals("Data/Mock?sel=Mock.DefaultRole,Mock.Name,Mock.Nickname", testMe.toString());
     }
 
@@ -47,7 +47,7 @@ public class QueryURLBuilderTests {
         Query query = new Query(new MockAssetType());
         query.setFind(new QueryFind("TextToFind"));
 
-        QueryURLBuilder testMe = new QueryURLBuilder(query);
+        QueryURLBuilder testMe = new QueryURLBuilder(query, false);
         Assert.assertEquals("Data/Mock?sel=&find=TextToFind", testMe.toString());
     }
 
@@ -59,7 +59,7 @@ public class QueryURLBuilderTests {
         findin.add(new MockAttributeDefinition("Description"));
         query.setFind(new QueryFind("TextToFind", findin));
 
-        QueryURLBuilder testMe = new QueryURLBuilder(query);
+        QueryURLBuilder testMe = new QueryURLBuilder(query, false);
         Assert.assertEquals("Data/Mock?sel=&find=TextToFind&findin=Mock.Name%2CMock.Description", testMe.toString());
     }
 
@@ -70,7 +70,7 @@ public class QueryURLBuilderTests {
         term.equal(new Object[]{"Jerry's Story"});
         query.setFilter(term);
 
-        QueryURLBuilder testMe = new QueryURLBuilder(query);
+        QueryURLBuilder testMe = new QueryURLBuilder(query,false);
         Assert.assertEquals("Data/Mock?sel=&where=Mock.Name='Jerry%27%27s+Story'", testMe.toString());
     }
 
@@ -81,7 +81,7 @@ public class QueryURLBuilderTests {
         term.equal(new Object[]{"test & #"});
         query.setFilter(term);
 
-        QueryURLBuilder testMe = new QueryURLBuilder(query);
+        QueryURLBuilder testMe = new QueryURLBuilder(query, false);
         Assert.assertEquals("Data/Mock?sel=&where=Mock.Name='test+%26+%23'", testMe.toString());
     }
 
@@ -92,7 +92,7 @@ public class QueryURLBuilderTests {
         term.exists();
         query.setFilter(term);
 
-        QueryURLBuilder testMe = new QueryURLBuilder(query);
+        QueryURLBuilder testMe = new QueryURLBuilder(query, false);
         Assert.assertEquals("Data/Mock?sel=&where=%2BMock.Name", testMe.toString());
     }
 
@@ -106,7 +106,7 @@ public class QueryURLBuilderTests {
         term.operate(FilterTerm.Operator.Equal, new Object[]{"Jerry"});
         query.setFilter(term);
 
-        QueryURLBuilder testMe = new QueryURLBuilder(query);
+        QueryURLBuilder testMe = new QueryURLBuilder(query, false);
         Assert.assertEquals("Data/Mock?sel=Mock.DefaultRole,Mock.Name,Mock.Nickname&where=Mock.Name='Jerry'",
                 testMe.toString());
     }
@@ -120,7 +120,7 @@ public class QueryURLBuilderTests {
         query.getSelection().add(estimateAttribute);
         query.getOrderBy().minorSort(estimateAttribute, OrderBy.Order.Ascending);
 
-        QueryURLBuilder testMe = new QueryURLBuilder(query);
+        QueryURLBuilder testMe = new QueryURLBuilder(query, false);
         Assert.assertEquals("Data/Mock?sel=Mock.Name,Mock.Estimate&sort=Mock.Estimate", testMe.toString());
     }
 
@@ -130,7 +130,7 @@ public class QueryURLBuilderTests {
         Query query = new Query(storyId);
         query.getSelection().add(new MockAttributeDefinition("Name"));
 
-        QueryURLBuilder testMe = new QueryURLBuilder(query);
+        QueryURLBuilder testMe = new QueryURLBuilder(query, false);
         Assert.assertEquals("Data/Story/1094/Name?", testMe.toString());
     }
 
@@ -140,7 +140,7 @@ public class QueryURLBuilderTests {
         Query query = new Query(storyId);
         query.getSelection().add(new MockAttributeDefinition("Name"));
 
-        QueryURLBuilder testMe = new QueryURLBuilder(query);
+        QueryURLBuilder testMe = new QueryURLBuilder(query, false);
         Assert.assertEquals("Data/Story/1094/15/Name?", testMe.toString());
     }
 
@@ -155,7 +155,7 @@ public class QueryURLBuilderTests {
     public void task() throws Exception {
         Query query = new Query(new MockAssetType("Task"), new MockAttributeDefinition("Story", AttributeType.Relation));
 
-        QueryURLBuilder testMe = new QueryURLBuilder(query);
+        QueryURLBuilder testMe = new QueryURLBuilder(query, false);
         Assert.assertEquals("Data/Task?sel=Mock.Story", testMe.toString());
     }
 
@@ -165,11 +165,11 @@ public class QueryURLBuilderTests {
         query.getSelection().add(new MockAttributeDefinition("Name"));
         query.getPaging().setStart(5);
 
-        QueryURLBuilder testMe = new QueryURLBuilder(query);
+        QueryURLBuilder testMe = new QueryURLBuilder(query, false);
         Assert.assertEquals("Data/Mock?sel=Mock.Name&page=2147483647,5", testMe.toString());
 
         query.getPaging().setPageSize(10);
-        testMe = new QueryURLBuilder(query);
+        testMe = new QueryURLBuilder(query, false);
         Assert.assertEquals("Data/Mock?sel=Mock.Name&page=10,5", testMe.toString());
     }
 
@@ -181,7 +181,7 @@ public class QueryURLBuilderTests {
         Query query = new Query(new MockAssetType());
         query.setAsOf(testDate.getTime());
 
-        QueryURLBuilder testMe = new QueryURLBuilder(query);
+        QueryURLBuilder testMe = new QueryURLBuilder(query, false);
         Assert.assertEquals("Data/Mock?sel=&asof=2007-10-01T03:00:00", testMe.toString());
     }
 
@@ -196,7 +196,7 @@ public class QueryURLBuilderTests {
         query.getSelection().add(new MockAttributeDefinition("Name"));
         FilterTerm filter = new FilterTerm(changeDateAttribute);
         filter.greater(cal.getTime());
-        QueryURLBuilder builder = new QueryURLBuilder(query);
+        QueryURLBuilder builder = new QueryURLBuilder(query, false);
         query.setFilter(filter);
 
         String queryString = builder.toString();
@@ -216,7 +216,7 @@ public class QueryURLBuilderTests {
         query.getVariables().add(variable);
         FilterTerm filter = new FilterTerm(changeDateAttribute);
         filter.operate(FilterTerm.Operator.Equal, variable);
-        QueryURLBuilder builder = new QueryURLBuilder(query);
+        QueryURLBuilder builder = new QueryURLBuilder(query, false);
         query.setFilter(filter);
 
         String queryString = builder.toString();
@@ -235,7 +235,7 @@ public class QueryURLBuilderTests {
         query.setFilter(filter);
         query.getSelection().add(new MockAttributeDefinition("Reference"));
 
-        QueryURLBuilder builder = new QueryURLBuilder(query);
+        QueryURLBuilder builder = new QueryURLBuilder(query, false);
         Assert.assertEquals("Data/Mock?sel=Mock.Reference&where=Mock.Name=$Name&with=$Name=Name1,Name2,Name3", builder.toString());
     }
 
@@ -272,7 +272,7 @@ public class QueryURLBuilderTests {
         AndFilterTerm filter = new AndFilterTerm(scopeTerm, notClosedEpicTerm, superAndUpTerm);
         query.setFilter(filter);
 
-        QueryURLBuilder builder = new QueryURLBuilder(query);
+        QueryURLBuilder builder = new QueryURLBuilder(query, false);
         String result = builder.toString();
         Assert.assertEquals("Data/Epic?sel=&where=(Epic.Scope.ParentMeAndUp[AssetState!='Closed']='Scope%3A1025';" +
                 "Epic.AssetState!='Closed';-Epic.SuperAndUp[Scope.ParentMeAndUp[AssetState!='Closed']='Scope:1025'])", result);
@@ -307,7 +307,7 @@ public class QueryURLBuilderTests {
         query.setFilter(filter);
         query.getVariables().add(scopeVariable);
 
-        QueryURLBuilder builder = new QueryURLBuilder(query);
+        QueryURLBuilder builder = new QueryURLBuilder(query, false);
         String result = builder.toString();
         Assert.assertEquals("Data/Epic?sel=&where=(Epic.AssetState!='Closed';Epic.Scope=$Scope;-Epic.SuperAndUp[Scope=$Scope])" +
                 "&with=$Scope=Scope%3A2176", result);
