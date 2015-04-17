@@ -13,7 +13,6 @@ import java.util.List;
 import java.util.Locale;
 
 import org.apache.commons.codec.binary.Base64;
-import org.apache.commons.validator.routines.UrlValidator;
 import org.apache.http.Header;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpHeaders;
@@ -22,22 +21,14 @@ import org.apache.http.HttpStatus;
 import org.apache.http.auth.AuthScope;
 import org.apache.http.auth.NTCredentials;
 import org.apache.http.auth.UsernamePasswordCredentials;
-import org.apache.http.client.AuthCache;
-import org.apache.http.client.AuthenticationStrategy;
 import org.apache.http.client.CredentialsProvider;
-import org.apache.http.client.config.AuthSchemes;
-import org.apache.http.client.config.RequestConfig;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
-import org.apache.http.config.ConnectionConfig;
 import org.apache.http.entity.StringEntity;
-import org.apache.http.impl.client.BasicAuthCache;
 import org.apache.http.impl.client.BasicCredentialsProvider;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClientBuilder;
-import org.apache.http.impl.client.HttpClients;
-import org.apache.http.impl.conn.DefaultProxyRoutePlanner;
 import org.apache.http.message.BasicHeader;
 import org.apache.log4j.Logger;
 
@@ -50,18 +41,17 @@ public class V1Connector {
 	private static final String UTF8 = "UTF-8";
 
 	private static Logger log = Logger.getLogger(V1Connector.class);
-
+	private static CredentialsProvider credsProvider = new BasicCredentialsProvider();
 	private static CloseableHttpResponse httpResponse = null;
-	private static HttpClientBuilder httpclientBuilder = HttpClientBuilder
-			.create();
+	private static HttpClientBuilder httpclientBuilder = HttpClientBuilder.create();
 	private static CloseableHttpClient httpclient;
 	static List<Header> headers = new ArrayList<Header>();
 
 	// local variables
 	static String _url = "";
 	static String _endpoint = "";
-	static String _user_agent_header;
-	static String _upstreamUserAgent;
+	static String _user_agent_header = "";
+	static String _upstreamUserAgent = "";
 	// ENDPOINTS
 	private final static String META_API_ENDPOINT = "meta.v1/";
 	private final static String DATA_API_ENDPOINT = "rest-1.v1/Data/";
@@ -72,8 +62,7 @@ public class V1Connector {
 	// INTERFACES
 
 	public interface ISetUserAgentMakeRequest {
-		IAuthenticationMethods withUserAgentHeader(String name, String version)
-				throws V1Exception;
+		IAuthenticationMethods withUserAgentHeader(String name, String version) throws V1Exception;
 	}
 
 	public interface IApiMethods {
@@ -92,8 +81,7 @@ public class V1Connector {
 	}
 
 	public interface IAuthenticationMethods {
-		IProxy withUsernameAndPassword(String userName, String password)
-				throws V1Exception;
+		IProxy withUsernameAndPassword(String userName, String password) throws V1Exception;
 
 		IProxy withWindowsIntegrated() throws V1Exception;
 
@@ -101,8 +89,7 @@ public class V1Connector {
 
 		IProxy withOAuth2(String oAuth2) throws V1Exception;
 
-		IProxy withWindowsIntegrated(String userName, String password)
-				throws V1Exception;
+		IProxy withWindowsIntegrated(String userName, String password) throws V1Exception;
 	}
 
 	public interface IProxy extends IBuild {
@@ -117,32 +104,16 @@ public class V1Connector {
 	protected V1Connector(String url) throws V1Exception, MalformedURLException {
 		log.info("called V1Connector construcor ");
 		log.info("with url: " + url);
-
-//		if (V1Util.isNullOrEmpty(url)) {
-//			log.error("Url empty or null ");
-//			throw new V1Exception("Error processing url " + url);
-//		}
-//		// VALIDATE URL
-//		UrlValidator urlValidator = new UrlValidator(
-//				UrlValidator.ALLOW_LOCAL_URLS);
-//		if (urlValidator.isValid(url) == false) {
-//			log.error("Url not valid ");
-//			throw new V1Exception("Error processing url " + url);
-//		}
-		
-			URL urlData = new URL(url);
-	
+		URL urlData = new URL(url);
 		this._url = url;
 	}
 
-	public static ISetUserAgentMakeRequest withInstanceUrl(
-			String versionOneInstanceUrl) throws V1Exception, MalformedURLException {
+	public static ISetUserAgentMakeRequest withInstanceUrl(String versionOneInstanceUrl) throws V1Exception, MalformedURLException {
 		return new Builder(versionOneInstanceUrl);
 	}
 
 	// BUILDER OF FLUENT
-	private static class Builder implements IAuthenticationMethods, IProxy,
-			ISetUserAgentMakeRequest {
+	private static class Builder implements IAuthenticationMethods, IProxy, ISetUserAgentMakeRequest {
 
 		private V1Connector instance;
 
@@ -155,25 +126,21 @@ public class V1Connector {
 
 		// set the user agent header
 		@Override
-		public IAuthenticationMethods withUserAgentHeader(String name,
-				String version) throws V1Exception {
+		public IAuthenticationMethods withUserAgentHeader(String name, String version) throws V1Exception {
 			log.info("called V1Connector.withUserAgentHeader ");
 			log.info("with name/version: " + name + " / " + version);
 
 			Package p = this.getClass().getPackage();
-			String headerString = "Java/" + System.getProperty("java.version")
-					+ " " + p.getImplementationTitle() + "/"
+			String headerString = "Java/" + System.getProperty("java.version") + " " + p.getImplementationTitle() + "/"
 					+ p.getImplementationVersion();
 
 			if (!V1Util.isNullOrEmpty(name) && !V1Util.isNullOrEmpty(version)) {
 				headerString = headerString + " " + name + "/" + version;
 			} else {
-				throw new V1Exception("Error processing User Agent null/empty"
-						+ name + version);
+				throw new V1Exception("Error processing User Agent null/empty" + name + version);
 			}
 
-			Header header = new BasicHeader(HttpHeaders.USER_AGENT,
-					headerString);
+			Header header = new BasicHeader(HttpHeaders.USER_AGENT, headerString);
 
 			instance.headers.add(header);
 
@@ -182,22 +149,22 @@ public class V1Connector {
 
 		// set the authentication type (if required by the endpoint)
 		@Override
-		public IProxy withUsernameAndPassword(String username, String password)
-				throws V1Exception {
+		public IProxy withUsernameAndPassword(String username, String password) throws V1Exception {
 			log.info("called V1Connector.withUsernameAndPassword ");
 			log.info("with username/password: " + username + " / " + password);
 
-			if (V1Util.isNullOrEmpty(username)
-					|| V1Util.isNullOrEmpty(username))
-				throw new V1Exception(
-						"Error processing accessToken Null/Empty ");
-
-			String authEncodedString = encodingLoginInfo(username, password);
-
-			Header header = new BasicHeader(HttpHeaders.AUTHORIZATION, "Basic "
-					+ authEncodedString);
-
-			instance.headers.add(header);
+			if (V1Util.isNullOrEmpty(username) || V1Util.isNullOrEmpty(username))
+				throw new V1Exception("Error processing User Name / Password ");
+			URL instanceUri = null;
+			try {
+				instanceUri = new URL(_url);
+			} catch (MalformedURLException e) {
+				e.printStackTrace();
+				throw new V1Exception("Error processing URL " + _url + " " + e.getMessage());
+			}
+			credsProvider.setCredentials(new AuthScope(instanceUri.getHost(), instanceUri.getPort()), new UsernamePasswordCredentials(username,
+					password));
+			httpclientBuilder.setDefaultCredentialsProvider(credsProvider);
 
 			return this;
 		}
@@ -209,11 +176,9 @@ public class V1Connector {
 			log.info("with accesstoken: " + accessToken);
 
 			if (!V1Util.isNullOrEmpty(accessToken))
-				throw new V1Exception(
-						"Error processing accessToken Null/Empty ");
+				throw new V1Exception("Error processing accessToken Null/Empty ");
 
-			Header header = new BasicHeader(HttpHeaders.AUTHORIZATION,
-					"Bearer " + accessToken);
+			Header header = new BasicHeader(HttpHeaders.AUTHORIZATION, "Bearer " + accessToken);
 
 			headers.add(header);
 
@@ -221,28 +186,23 @@ public class V1Connector {
 		}
 
 		@Override
-		public IProxy withWindowsIntegrated(String username, String password)
-				throws V1Exception {
+		public IProxy withWindowsIntegrated(String username, String password) throws V1Exception {
 			log.info("called V1Connector.withWindowsIntegrated ");
 			log.info("with username : " + username);
 			log.info("with password: " + password);
 
-			if (V1Util.isNullOrEmpty(username)
-					|| V1Util.isNullOrEmpty(username)) {
+			if (V1Util.isNullOrEmpty(username) || V1Util.isNullOrEmpty(username)) {
 				// use the logued user to the domain
-				throw new V1Exception(
-						"Error processing Windows integrated access ");
+				throw new V1Exception("Error processing Windows integrated access ");
 			}
 
 			String authEncodedString = encodingLoginInfo(username, password);
 
 			CredentialsProvider credsProvider = new BasicCredentialsProvider();
 
-			credsProvider.setCredentials(AuthScope.ANY, new NTCredentials(
-					authEncodedString));
+			credsProvider.setCredentials(AuthScope.ANY, new NTCredentials(authEncodedString));
 
-			httpclientBuilder
-					.setDefaultCredentialsProvider(credsProvider);
+			httpclientBuilder.setDefaultCredentialsProvider(credsProvider);
 
 			return this;
 		}
@@ -252,22 +212,18 @@ public class V1Connector {
 			log.info("called V1Connector.withWindowsIntegrated ");
 			log.info("with username and password: ");
 
-			String domain = new com.sun.security.auth.module.NTSystem()
-					.getDomain();
+			String domain = new com.sun.security.auth.module.NTSystem().getDomain();
 
 			String fullyQualifiedDomainUsername = new com.sun.security.auth.module.NTSystem().getName();
 
-			String authEncodedString = encodingLoginInfo(
-					fullyQualifiedDomainUsername, "");
+			String authEncodedString = encodingLoginInfo(fullyQualifiedDomainUsername, "");
 
-			log.info("fullyQualifiedDomainUsername:  "
-					+ fullyQualifiedDomainUsername);
+			log.info("fullyQualifiedDomainUsername:  " + fullyQualifiedDomainUsername);
 			log.info("authEncodedString : " + authEncodedString);
 
 			CredentialsProvider credsProvider = new BasicCredentialsProvider();
 
-			credsProvider.setCredentials(AuthScope.ANY, new NTCredentials(
-					authEncodedString));
+			credsProvider.setCredentials(AuthScope.ANY, new NTCredentials(authEncodedString));
 
 			httpclientBuilder.setDefaultCredentialsProvider(credsProvider);
 
@@ -280,8 +236,7 @@ public class V1Connector {
 			log.info("with accesstoken: " + oAuth2);
 
 			if (V1Util.isNullOrEmpty(oAuth2))
-				throw new V1Exception(
-						"Error processing accessToken Null/Empty ");
+				throw new V1Exception("Error processing accessToken Null/Empty ");
 			// TODO: Need to define Implementation
 
 			// Header header = new BasicHeader(HttpHeaders.AUTHORIZATION,
@@ -301,41 +256,16 @@ public class V1Connector {
 				log.error("Proxy Provider is null");
 				throw new V1Exception("Error processing proxy Null/Empty ");
 			}
-			
-//		    HttpHost proxy = new HttpHost(proxyProvider.getAddress().getHost(), proxyProvider.getAddress().getPort(), "http");
-//		    ArrayList<String> authPrefs = new ArrayList<String>();
-//		    authPrefs.add(AuthSchemes.NTLM);
-//	        RequestConfig config = RequestConfig.custom()
-//	        		.setProxyPreferredAuthSchemes(authPrefs)
-//	                .setConnectTimeout(5000)
-//	                .build();
-//	        CredentialsProvider credentialsProvider =  new BasicCredentialsProvider();
-//	        AuthScope auth = new AuthScope(proxyProvider.getAddress().getHost(), proxyProvider.getAddress().getPort());
-//	        UsernamePasswordCredentials creds = new UsernamePasswordCredentials(proxyProvider.getUserName(), proxyProvider.getPassword());
-//	        credentialsProvider.setCredentials(auth, creds);
-//	        credentialsProvider.setCredentials(
-//	        		new AuthScope(proxyProvider.getAddress().getHost(), proxyProvider.getAddress().getPort()), 
-//	        		new UsernamePasswordCredentials(proxyProvider.getUserName(),proxyProvider.getPassword()));
-//	        HttpHost proxy = new HttpHost(proxyProvider.getAddress().getHost(), proxyProvider.getAddress().getPort());
-//			DefaultProxyRoutePlanner routePlanner = new DefaultProxyRoutePlanner(proxy);
-			
-		
-		
-		   CredentialsProvider credsProvider = new BasicCredentialsProvider();
-		   credsProvider.setCredentials(
-				   new AuthScope("localhost/VersionOne", 8080),
-	                new UsernamePasswordCredentials("admin", "1234"));
-        
-		   credsProvider.setCredentials(     new AuthScope(proxyProvider.getAddress().getHost(), proxyProvider.getAddress().getPort()),
-	                new UsernamePasswordCredentials(proxyProvider.getUserName(), proxyProvider.getPassword()));
-				    
-		   HttpHost proxy = new HttpHost(proxyProvider.getAddress().getHost(), proxyProvider.getAddress().getPort());
-           
-		   DefaultProxyRoutePlanner routePlanner = new DefaultProxyRoutePlanner(proxy);
 
-		   httpclientBuilder.setDefaultCredentialsProvider(credsProvider).setProxy(proxy);
-	        		
-	        return this;
+			credsProvider.setCredentials(new AuthScope(proxyProvider.getAddress().getHost(), proxyProvider.getAddress().getPort()),
+					new UsernamePasswordCredentials(proxyProvider.getUserName(), proxyProvider.getPassword()));
+
+			httpclientBuilder.setDefaultCredentialsProvider(credsProvider);
+
+			HttpHost proxy = new HttpHost(proxyProvider.getAddress().getHost(), proxyProvider.getAddress().getPort());
+
+			httpclientBuilder.setDefaultCredentialsProvider(credsProvider).setProxy(proxy);
+			return this;
 		}
 
 		// build
@@ -347,8 +277,7 @@ public class V1Connector {
 
 		private String encodingLoginInfo(String username, String password) {
 			String authString = username + ":" + password;
-			byte[] authEncodedBytes = Base64
-					.encodeBase64(authString.getBytes());
+			byte[] authEncodedBytes = Base64.encodeBase64(authString.getBytes());
 
 			String authEncodedString = new String(authEncodedBytes);
 			return authEncodedString;
@@ -364,12 +293,10 @@ public class V1Connector {
 	protected Reader getData(String path) throws ConnectionException {
 		log.info("called V1Connector.getData ");
 		log.info("with : " + path);
-		log.info("called V1Connector.getData with _url + _endpoint:  " + _url
-				+ _endpoint);
+		log.info("called V1Connector.getData with _url + _endpoint:  " + _url + _endpoint);
 		Reader data = null;
 
-		String url = V1Util.isNullOrEmpty(path) ? _url + _endpoint : _url
-				+ _endpoint + path;
+		String url = V1Util.isNullOrEmpty(path) ? _url + _endpoint : _url + _endpoint + path;
 
 		HttpGet request = new HttpGet(url);
 
@@ -384,23 +311,9 @@ public class V1Connector {
 		// execute connection
 		HttpEntity entity = httpResponse.getEntity();
 
-		// try {
-		// responseBody = EntityUtils.toString(entity);
-		// } catch (ParseException ex) {
-		// // log.error(ex.getMessage());
-		// throw new
-		// ConnectionException("Error processing request parse exception " +
-		// ex.getMessage());
-		// } catch (IOException ex) {
-		// // log.error(ex.getMessage());
-		// throw new ConnectionException("Error processing request " +
-		// ex.getMessage());
-		// }
-
 		int errorCode = httpResponse.getStatusLine().getStatusCode();
 
-		String errorMessage = "\n" + httpResponse.getStatusLine()
-				+ "error code: " + errorCode;
+		String errorMessage = "\n" + httpResponse.getStatusLine() + "error code: " + errorCode;
 
 		switch (errorCode) {
 		case HttpStatus.SC_OK:
@@ -408,38 +321,26 @@ public class V1Connector {
 				data = new InputStreamReader(entity.getContent());
 			} catch (UnsupportedEncodingException ex) {
 				log.error(ex.getMessage());
-				throw new ConnectionException(
-						"Error processing response content unsupported encoding "
-								+ ex.getMessage());
+				throw new ConnectionException("Error processing response content unsupported encoding " + ex.getMessage());
 			} catch (IllegalStateException ex) {
 				log.error(ex.getMessage());
-				throw new ConnectionException(
-						"Error processing response Illegal state "
-								+ ex.getMessage());
+				throw new ConnectionException("Error processing response Illegal state " + ex.getMessage());
 			} catch (IOException ex) {
 				log.error(ex.getMessage());
-				throw new ConnectionException("Error processing response "
-						+ ex.getMessage());
+				throw new ConnectionException("Error processing response " + ex.getMessage());
 			}
 			return data;
 		case HttpStatus.SC_BAD_REQUEST:
-			throw new ConnectionException(errorMessage
-					+ " VersionOne could not process the request.");
+			throw new ConnectionException(errorMessage + " VersionOne could not process the request.");
 		case HttpStatus.SC_UNAUTHORIZED:
-			throw new ConnectionException(
-					errorMessage
-							+ " Could not authenticate. The VersionOne credentials may be incorrect or the access tokens may have expired.");
-		case HttpStatus.SC_NOT_FOUND:
-			throw new ConnectionException(
-					errorMessage
-							+ " The requested item may not exist, or the VersionOne server is unavailable.");
-		case HttpStatus.SC_METHOD_NOT_ALLOWED:
 			throw new ConnectionException(errorMessage
-					+ " Only GET and POST methods are supported by VersionOne.");
+					+ " Could not authenticate. The VersionOne credentials may be incorrect or the access tokens may have expired.");
+		case HttpStatus.SC_NOT_FOUND:
+			throw new ConnectionException(errorMessage + " The requested item may not exist, or the VersionOne server is unavailable.");
+		case HttpStatus.SC_METHOD_NOT_ALLOWED:
+			throw new ConnectionException(errorMessage + " Only GET and POST methods are supported by VersionOne.");
 		case HttpStatus.SC_INTERNAL_SERVER_ERROR:
-			throw new ConnectionException(
-					errorMessage
-							+ " VersionOne encountered a unexpected error occurred while processing the request.");
+			throw new ConnectionException(errorMessage + " VersionOne encountered a unexpected error occurred while processing the request.");
 		default:
 			throw new ConnectionException(errorMessage);
 		}
@@ -463,8 +364,7 @@ public class V1Connector {
 		httpclient = httpclientBuilder.build();
 	}
 
-	protected Reader sendData(String path, String data)
-			throws ConnectionException {
+	protected Reader sendData(String path, String data) throws ConnectionException {
 
 		InputStream resultStream = null;
 		String url = V1Util.isNullOrEmpty(path) ? _url + _endpoint : _url + _endpoint + path;
@@ -493,14 +393,12 @@ public class V1Connector {
 				log.error(e1.getMessage());
 				code = -1;
 			}
-			throw new ConnectionException("Error writing to output stream",
-					code, ex);
+			throw new ConnectionException("Error writing to output stream", code, ex);
 		}
 		return new InputStreamReader(resultStream);
 	}
 
-	protected OutputStream beginRequest(String path, String contentType)
-			throws ConnectionException {
+	protected OutputStream beginRequest(String path, String contentType) throws ConnectionException {
 		// OutputStream outputStream = null;
 		//
 		// HttpURLConnection req = createConnection(_url + path);

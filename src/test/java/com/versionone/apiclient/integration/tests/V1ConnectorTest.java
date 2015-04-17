@@ -164,7 +164,7 @@ public class V1ConnectorTest {
 				.build();
 	}
 
-	//@Test()
+	@Test()
 	public void connetionWithProxy() throws V1Exception, MalformedURLException {
 		
 		URI address = null;
@@ -198,7 +198,7 @@ public class V1ConnectorTest {
         assertTrue(result.getAssets().length > 0);
 	}
 		
-	@Test()
+	//@Test()
 	public void testConnectionNtlm() throws Exception {
 
 		url = "http://localhost/VersionOnenltm";
