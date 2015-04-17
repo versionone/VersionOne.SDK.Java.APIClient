@@ -33,6 +33,12 @@ public class ProxyProvider {
 		return password;
 	}
 
+	
+
+	public String getUserName() {
+		return userName;
+	}
+
 
 	protected java.net.Proxy getProxyObject() {
 		java.net.Proxy proxy = new java.net.Proxy(java.net.Proxy.Type.HTTP, new InetSocketAddress(address.getHost(), address.getPort()));

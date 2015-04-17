@@ -3,6 +3,8 @@ package com.versionone.apiclient.integration.tests;
 import static org.junit.Assert.*;
 
 import java.net.MalformedURLException;
+import java.net.URI;
+import java.net.URISyntaxException;
 
 import org.junit.After;
 import org.junit.Assert;
@@ -12,6 +14,7 @@ import org.junit.Test;
 import com.versionone.Oid;
 import com.versionone.apiclient.Asset;
 import com.versionone.apiclient.MetaModel;
+import com.versionone.apiclient.ProxyProvider;
 import com.versionone.apiclient.Query;
 import com.versionone.apiclient.Services;
 import com.versionone.apiclient.V1Connector;
@@ -25,7 +28,6 @@ import com.versionone.apiclient.services.QueryResult;
  * The class <code>V1ConnectorTest</code> contains tests for the class <code>{@link V1Connector}</code>.
  *
  * 
- * @author vplechuc
  * @version $Revision: 1.0 $
  */
 public class V1ConnectorTest {
@@ -46,9 +48,9 @@ public class V1ConnectorTest {
 	@Before
 	public void setUp() throws Exception {
 		// add additional set up code here
-		url = "http://localhost/versionone/";
+		url = "http://localhost/VersionOne/";
 		username = "admin";
-		password = "admin";
+		password = "1234";
 	}
 
 	/**
@@ -75,7 +77,7 @@ public class V1ConnectorTest {
 	public void testV1Connector_1() throws Exception {
 		String url = "http://localhost/versionone/";
 
-		V1Connector result = V1Connector.withInstanceUrl(url).withUserAgentHeader("name", "1.0").withWindowsIntegrated(username, password).connet();
+		V1Connector result = V1Connector.withInstanceUrl(url).withUserAgentHeader("name", "1.0").withWindowsIntegrated(username, password).build();
 
 		assertNotNull(result);
 	}
@@ -87,7 +89,7 @@ public class V1ConnectorTest {
 				.withInstanceUrl(url)
 				.withUserAgentHeader("name", "1.0")
 				.withUsernameAndPassword(username, password)
-				.connet();
+				.build();
 
 		Services services = new Services(connector);
 
@@ -133,7 +135,7 @@ public class V1ConnectorTest {
 				.withInstanceUrl(url)
 				.withUserAgentHeader("name", "1.0")
 				.withUsernameAndPassword(username, password)
-				.connet();
+				.build();
 
 		Services services = new Services(connector);
 
@@ -146,17 +148,11 @@ public class V1ConnectorTest {
         filter.equal("true");
          
         QueryResult result = services.retrieve(query);
-          
         assertNotNull(result);
-          
         assertTrue(result.getAssets().length > 0);
-          
-
   }
 
-	
-	
-	@Test(expected = MalformedURLException.class)
+	//@Test(expected = MalformedURLException.class)
 	public void validatePathTest() throws V1Exception, MalformedURLException {
 		
 		url = "https//localhost/versionone";
@@ -165,12 +161,84 @@ public class V1ConnectorTest {
 				.withInstanceUrl(url)
 				.withUserAgentHeader("name", "1.0")
 				.withUsernameAndPassword(username, password)
-				.connet();
-	
-		
+				.build();
 	}
 
+	//@Test()
+	public void connetionWithProxy() throws V1Exception, MalformedURLException {
 		
+		URI address = null;
+		try {
+			address = new URI("http://localhost:808");
+		} catch (URISyntaxException e) {
+			e.printStackTrace();
+		}
+		ProxyProvider proxy = new ProxyProvider(address , "user1", "user1");
+		
+		V1Connector connector = V1Connector
+				.withInstanceUrl(url)
+				.withUserAgentHeader("name", "1.0")
+				.withUsernameAndPassword(username, password)
+				.withProxy(proxy)
+				.build();
+		
+		Services services = new Services(connector);
+
+		IAssetType assetType = services.getAssetType("Member");
+        Query query = new Query(assetType);
+        IAttributeDefinition nameAttribute = assetType.getAttributeDefinition("Name");
+        query.getSelection().add(nameAttribute);
+        IAttributeDefinition isSelf = assetType.getAttributeDefinition("IsSelf");
+        FilterTerm filter = new FilterTerm(isSelf);
+        filter.equal("true");
+        
+        assertNotNull(assetType);
+        QueryResult result = services.retrieve(query);
+        assertNotNull(result);
+        assertTrue(result.getAssets().length > 0);
+	}
+		
+	@Test()
+	public void testConnectionNtlm() throws Exception {
+
+		url = "http://localhost/VersionOnenltm";
+		
+		V1Connector connector = V1Connector.withInstanceUrl(url)
+				.withUserAgentHeader("name", "1.0")
+				.withWindowsIntegrated()
+				.build();
+
+		Services services = new Services(connector);
+		Oid oid = services.getLoggedIn();
+		assertNotNull(services.get_loggedin());
+	}
+	
+	//@Test()
+	public void testConnectionNtlmWithProxy() throws Exception {
+		
+		String url = "http://localhost/versionone/";
+		
+		URI address = null;
+		try {
+			address = new URI("http://localhost:808");
+		} catch (URISyntaxException e) {
+			e.printStackTrace();
+		}
+		ProxyProvider proxy = new ProxyProvider(address , "user1", "user1");
+
+		V1Connector connector = V1Connector.withInstanceUrl(url)
+				.withUserAgentHeader("name", "1.0")
+				.withWindowsIntegrated()
+				.withProxy(proxy)
+				.build();
+
+		Services services = new Services(connector);
+
+		IAssetType assetType = services.getAssetType("Member");
+
+		assertNotNull(assetType);
+	}
+	
 	/**
 	 * Launch the test.
 	 *

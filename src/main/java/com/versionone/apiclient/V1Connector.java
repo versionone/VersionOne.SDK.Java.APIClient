@@ -21,14 +21,23 @@ import org.apache.http.HttpHost;
 import org.apache.http.HttpStatus;
 import org.apache.http.auth.AuthScope;
 import org.apache.http.auth.NTCredentials;
+import org.apache.http.auth.UsernamePasswordCredentials;
+import org.apache.http.client.AuthCache;
+import org.apache.http.client.AuthenticationStrategy;
 import org.apache.http.client.CredentialsProvider;
+import org.apache.http.client.config.AuthSchemes;
+import org.apache.http.client.config.RequestConfig;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
+import org.apache.http.config.ConnectionConfig;
 import org.apache.http.entity.StringEntity;
+import org.apache.http.impl.client.BasicAuthCache;
 import org.apache.http.impl.client.BasicCredentialsProvider;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClientBuilder;
+import org.apache.http.impl.client.HttpClients;
+import org.apache.http.impl.conn.DefaultProxyRoutePlanner;
 import org.apache.http.message.BasicHeader;
 import org.apache.log4j.Logger;
 
@@ -101,8 +110,8 @@ public class V1Connector {
 	}
 
 	// get the connector (terminating build method)
-	interface IBuild {
-		V1Connector connet();
+	public interface IBuild {
+		V1Connector build();
 	}
 
 	protected V1Connector(String url) throws V1Exception, MalformedURLException {
@@ -206,7 +215,7 @@ public class V1Connector {
 			Header header = new BasicHeader(HttpHeaders.AUTHORIZATION,
 					"Bearer " + accessToken);
 
-			instance.headers.add(header);
+			headers.add(header);
 
 			return this;
 		}
@@ -232,7 +241,7 @@ public class V1Connector {
 			credsProvider.setCredentials(AuthScope.ANY, new NTCredentials(
 					authEncodedString));
 
-			instance.httpclientBuilder
+			httpclientBuilder
 					.setDefaultCredentialsProvider(credsProvider);
 
 			return this;
@@ -246,8 +255,7 @@ public class V1Connector {
 			String domain = new com.sun.security.auth.module.NTSystem()
 					.getDomain();
 
-			String fullyQualifiedDomainUsername = domain + "\""
-					+ new com.sun.security.auth.module.NTSystem().getName();
+			String fullyQualifiedDomainUsername = new com.sun.security.auth.module.NTSystem().getName();
 
 			String authEncodedString = encodingLoginInfo(
 					fullyQualifiedDomainUsername, "");
@@ -261,8 +269,7 @@ public class V1Connector {
 			credsProvider.setCredentials(AuthScope.ANY, new NTCredentials(
 					authEncodedString));
 
-			instance.httpclientBuilder
-					.setDefaultCredentialsProvider(credsProvider);
+			httpclientBuilder.setDefaultCredentialsProvider(credsProvider);
 
 			return this;
 		}
@@ -294,21 +301,47 @@ public class V1Connector {
 				log.error("Proxy Provider is null");
 				throw new V1Exception("Error processing proxy Null/Empty ");
 			}
+			
+//		    HttpHost proxy = new HttpHost(proxyProvider.getAddress().getHost(), proxyProvider.getAddress().getPort(), "http");
+//		    ArrayList<String> authPrefs = new ArrayList<String>();
+//		    authPrefs.add(AuthSchemes.NTLM);
+//	        RequestConfig config = RequestConfig.custom()
+//	        		.setProxyPreferredAuthSchemes(authPrefs)
+//	                .setConnectTimeout(5000)
+//	                .build();
+//	        CredentialsProvider credentialsProvider =  new BasicCredentialsProvider();
+//	        AuthScope auth = new AuthScope(proxyProvider.getAddress().getHost(), proxyProvider.getAddress().getPort());
+//	        UsernamePasswordCredentials creds = new UsernamePasswordCredentials(proxyProvider.getUserName(), proxyProvider.getPassword());
+//	        credentialsProvider.setCredentials(auth, creds);
+//	        credentialsProvider.setCredentials(
+//	        		new AuthScope(proxyProvider.getAddress().getHost(), proxyProvider.getAddress().getPort()), 
+//	        		new UsernamePasswordCredentials(proxyProvider.getUserName(),proxyProvider.getPassword()));
+//	        HttpHost proxy = new HttpHost(proxyProvider.getAddress().getHost(), proxyProvider.getAddress().getPort());
+//			DefaultProxyRoutePlanner routePlanner = new DefaultProxyRoutePlanner(proxy);
+			
+		
+		
+		   CredentialsProvider credsProvider = new BasicCredentialsProvider();
+		   credsProvider.setCredentials(
+				   new AuthScope("localhost/VersionOne", 8080),
+	                new UsernamePasswordCredentials("admin", "1234"));
+        
+		   credsProvider.setCredentials(     new AuthScope(proxyProvider.getAddress().getHost(), proxyProvider.getAddress().getPort()),
+	                new UsernamePasswordCredentials(proxyProvider.getUserName(), proxyProvider.getPassword()));
+				    
+		   HttpHost proxy = new HttpHost(proxyProvider.getAddress().getHost(), proxyProvider.getAddress().getPort());
+           
+		   DefaultProxyRoutePlanner routePlanner = new DefaultProxyRoutePlanner(proxy);
 
-			// Set proxy if needed
-			HttpHost proxy = new HttpHost(proxyProvider.getAddress()
-					.getRawPath(), proxyProvider.getAddress().getPort());
-
-			instance.httpclientBuilder.setProxy(proxy);
-
-			return this;
+		   httpclientBuilder.setDefaultCredentialsProvider(credsProvider).setProxy(proxy);
+	        		
+	        return this;
 		}
 
 		// build
 		@Override
-		public V1Connector connet() {
+		public V1Connector build() {
 			log.info("called V1Connector.connet ");
-
 			return instance;
 		}
 
@@ -334,8 +367,6 @@ public class V1Connector {
 		log.info("called V1Connector.getData with _url + _endpoint:  " + _url
 				+ _endpoint);
 		Reader data = null;
-		// do we really need the path?? backward compatibility
-		String responseBody = "";
 
 		String url = V1Util.isNullOrEmpty(path) ? _url + _endpoint : _url
 				+ _endpoint + path;
@@ -347,6 +378,7 @@ public class V1Connector {
 		try {
 			httpResponse = httpclient.execute(request);
 		} catch (IOException e) {
+			log.error(e.getMessage());
 			e.printStackTrace();
 		}
 		// execute connection
@@ -435,10 +467,7 @@ public class V1Connector {
 			throws ConnectionException {
 
 		InputStream resultStream = null;
-		
-		String url = V1Util.isNullOrEmpty(path) ? _url + _endpoint : _url
-				+ _endpoint + path;
-
+		String url = V1Util.isNullOrEmpty(path) ? _url + _endpoint : _url + _endpoint + path;
 		HttpPost httpPost = new HttpPost(url);
 
 		httpPost.setHeader("Content-Type", "text/xml");
@@ -450,15 +479,11 @@ public class V1Connector {
 			e.printStackTrace();
 		}
 		httpPost.setEntity(xmlPayload);
-
 		createConnection();
 
 		try {
-
 			httpResponse = httpclient.execute(httpPost);
-
 			resultStream = httpResponse.getEntity().getContent();
-
 		} catch (IOException ex) {
 			log.error(ex.getMessage());
 			int code;
@@ -470,7 +495,6 @@ public class V1Connector {
 			}
 			throw new ConnectionException("Error writing to output stream",
 					code, ex);
-
 		}
 		return new InputStreamReader(resultStream);
 	}
