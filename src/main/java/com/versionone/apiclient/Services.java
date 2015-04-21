@@ -36,6 +36,7 @@ import com.versionone.apiclient.interfaces.IOperation;
 import com.versionone.apiclient.interfaces.IServices;
 import com.versionone.apiclient.services.QueryResult;
 import com.versionone.apiclient.services.QueryURLBuilder;
+import com.versionone.utils.V1Util;
 
 /**
  * Wraps the services available in the VersionOne API
@@ -419,9 +420,9 @@ public class Services implements IServices {
 				boolean force = element.hasAttribute("act") && element.getAttribute("act").equals("set");
 
 				if (!force)
-					asset.loadAttributeValue(attribdef, v.toString());
+					asset.loadAttributeValue(attribdef, V1Util.convertXmlCrToSystemCr(v.toString()));
 				else
-					asset.forceAttributeValue(attribdef, v.toString());
+					asset.forceAttributeValue(attribdef, V1Util.convertXmlCrToSystemCr(v.toString()));
 			}
 		}
 	}
