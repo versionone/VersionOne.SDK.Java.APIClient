@@ -9,6 +9,7 @@ import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
 
@@ -18,23 +19,32 @@ import org.apache.http.HttpEntity;
 import org.apache.http.HttpHeaders;
 import org.apache.http.HttpHost;
 import org.apache.http.HttpStatus;
+import org.apache.http.auth.AuthSchemeProvider;
 import org.apache.http.auth.AuthScope;
 import org.apache.http.auth.NTCredentials;
 import org.apache.http.auth.UsernamePasswordCredentials;
 import org.apache.http.client.CredentialsProvider;
+import org.apache.http.client.config.AuthSchemes;
+import org.apache.http.client.config.RequestConfig;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
+import org.apache.http.config.Lookup;
+import org.apache.http.config.RegistryBuilder;
 import org.apache.http.entity.StringEntity;
+import org.apache.http.impl.auth.NTLMSchemeFactory;
 import org.apache.http.impl.client.BasicCredentialsProvider;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClientBuilder;
+import org.apache.http.impl.client.WinHttpClients;
 import org.apache.http.message.BasicHeader;
 import org.apache.log4j.Logger;
 
 import com.versionone.apiclient.exceptions.ConnectionException;
 import com.versionone.apiclient.exceptions.V1Exception;
 import com.versionone.utils.V1Util;
+
+
 
 public class V1Connector {
 
@@ -211,22 +221,31 @@ public class V1Connector {
 		public IProxy withWindowsIntegrated() throws V1Exception {
 			log.info("called V1Connector.withWindowsIntegrated ");
 			log.info("with username and password: ");
+			
+//			String domain = new com.sun.security.auth.module.NTSystem().getDomain();
+//
+//			String fullyQualifiedDomainUsername = domain + "\\" +  new com.sun.security.auth.module.NTSystem().getName();
+//
+//			String authEncodedString = encodingLoginInfo(fullyQualifiedDomainUsername, "");
+//
+//			log.info("fullyQualifiedDomainUsername:  " + fullyQualifiedDomainUsername);
+//			log.info("authEncodedString : " + authEncodedString);
+//
+			  Lookup<AuthSchemeProvider> authProviders = RegistryBuilder.<AuthSchemeProvider>create()
+			            .register(AuthSchemes.NTLM, new NTLMSchemeFactory())                
+			            .build();
+//			CredentialsProvider credsProvider = new BasicCredentialsProvider();
+//			credsProvider.setCredentials(AuthScope.ANY, new NTCredentials(authEncodedString));
 
-			String domain = new com.sun.security.auth.module.NTSystem().getDomain();
-
-			String fullyQualifiedDomainUsername = new com.sun.security.auth.module.NTSystem().getName();
-
-			String authEncodedString = encodingLoginInfo(fullyQualifiedDomainUsername, "");
-
-			log.info("fullyQualifiedDomainUsername:  " + fullyQualifiedDomainUsername);
-			log.info("authEncodedString : " + authEncodedString);
-
-			CredentialsProvider credsProvider = new BasicCredentialsProvider();
-
-			credsProvider.setCredentials(AuthScope.ANY, new NTCredentials(authEncodedString));
-
-			httpclientBuilder.setDefaultCredentialsProvider(credsProvider);
-
+			RequestConfig config = RequestConfig.custom()
+			        .setTargetPreferredAuthSchemes(Arrays.asList(AuthSchemes.NTLM))
+			        .build();
+	        if (!WinHttpClients.isWinAuthAvailable()) {
+	            System.out.println("Integrated Win auth is not supported!!!");
+	        }
+	         httpclient = WinHttpClients.custom().setDefaultRequestConfig(config).setDefaultAuthSchemeRegistry(authProviders).build();
+	         
+			//httpclientBuilder.setDefaultRequestConfig(config).setDefaultAuthSchemeRegistry(authProviders);
 			return this;
 		}
 

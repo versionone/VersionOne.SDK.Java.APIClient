@@ -1,19 +1,19 @@
 package com.versionone.apiclient.integration.tests;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
 import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
 
 import org.junit.After;
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
 import com.versionone.Oid;
 import com.versionone.apiclient.Asset;
-import com.versionone.apiclient.MetaModel;
 import com.versionone.apiclient.ProxyProvider;
 import com.versionone.apiclient.Query;
 import com.versionone.apiclient.Services;
@@ -25,7 +25,8 @@ import com.versionone.apiclient.interfaces.IAttributeDefinition;
 import com.versionone.apiclient.services.QueryResult;
 
 /**
- * The class <code>V1ConnectorTest</code> contains tests for the class <code>{@link V1Connector}</code>.
+ * The class <code>V1ConnectorTest</code> contains tests for the class
+ * <code>{@link V1Connector}</code>.
  *
  * 
  * @version $Revision: 1.0 $
@@ -48,7 +49,7 @@ public class V1ConnectorTest {
 	@Before
 	public void setUp() throws Exception {
 		// add additional set up code here
-		url = "http://localhost/VersionOne/";
+		url = "http://localhost//VersionOne/";
 		username = "admin";
 		password = "1234";
 	}
@@ -73,163 +74,170 @@ public class V1ConnectorTest {
 	 *
 	 * @generatedBy CodePro at 20/03/15 15:50
 	 */
-	//@Test()
+	// @Test()
 	public void testV1Connector_1() throws Exception {
 		String url = "http://localhost/versionone/";
 
-		V1Connector result = V1Connector.withInstanceUrl(url).withUserAgentHeader("name", "1.0").withWindowsIntegrated(username, password).build();
+		V1Connector result = V1Connector.withInstanceUrl(url)
+				.withUserAgentHeader("name", "1.0")
+				.withWindowsIntegrated(username, password).build();
 
 		assertNotNull(result);
 	}
 
-//	@Test()
+	// @Test()
 	public void saveAndUpdateTest() throws V1Exception, MalformedURLException {
 
-		V1Connector connector = V1Connector
-				.withInstanceUrl(url)
+		V1Connector connector = V1Connector.withInstanceUrl(url)
 				.withUserAgentHeader("name", "1.0")
-				.withUsernameAndPassword(username, password)
-				.build();
+				.withUsernameAndPassword(username, password).build();
 
 		Services services = new Services(connector);
 
-	    Oid projectId = Oid.fromToken("Scope:0", services.get_meta());
-	    IAssetType storyType = services.get_meta().getAssetType("Story");
-	    Asset newStory = services.createNew(storyType, projectId);
-	    IAttributeDefinition nameAttribute = storyType.getAttributeDefinition("Name");
-	    newStory.setAttributeValue(nameAttribute, "My New Story");
-	    services.save(newStory);
+		Oid projectId = Oid.fromToken("Scope:0", services.get_meta());
+		IAssetType storyType = services.get_meta().getAssetType("Story");
+		Asset newStory = services.createNew(storyType, projectId);
+		IAttributeDefinition nameAttribute = storyType
+				.getAttributeDefinition("Name");
+		newStory.setAttributeValue(nameAttribute, "My New Story");
+		services.save(newStory);
 
-//	    System.out.println(newStory.getOid().getToken());
-//	    System.out.println(newStory.getAttribute(storyType.getAttributeDefinition("Scope")).getValue());
-//	    System.out.println(newStory.getAttribute(nameAttribute).getValue());
+		// System.out.println(newStory.getOid().getToken());
+		// System.out.println(newStory.getAttribute(storyType.getAttributeDefinition("Scope")).getValue());
+		// System.out.println(newStory.getAttribute(nameAttribute).getValue());
 
-	    assertNotNull("Token: " + newStory.getOid().getToken());
-	    assertEquals("Scope:0", newStory.getAttribute(storyType.getAttributeDefinition("Scope")).getValue().toString());
-	    assertEquals("My New Story", newStory.getAttribute(nameAttribute).getValue().toString());
-	    
-	
-	    Oid storyId = newStory.getOid();
-	    Query query = new Query(storyId);
-	    nameAttribute = services.get_meta().getAssetType("Story").getAttributeDefinition("Name");
-	    query.getSelection().add(nameAttribute);
-	    QueryResult result = services.retrieve(query);
-	    Asset story = result.getAssets()[0];
-	    String oldName = story.getAttribute(nameAttribute).getValue().toString();
-	    String newName = "This is my New Name";
-	    story.setAttributeValue(nameAttribute, newName);
-	    services.save(story);
+		assertNotNull("Token: " + newStory.getOid().getToken());
+		assertEquals(
+				"Scope:0",
+				newStory.getAttribute(storyType.getAttributeDefinition("Scope"))
+						.getValue().toString());
+		assertEquals("My New Story", newStory.getAttribute(nameAttribute)
+				.getValue().toString());
 
-//	    System.out.println(story.getOid().getToken());
-//	    System.out.println("The OLD Name: " + oldName);
-//	    System.out.println("The NEW Name: " + story.getAttribute(nameAttribute).getValue());
+		Oid storyId = newStory.getOid();
+		Query query = new Query(storyId);
+		nameAttribute = services.get_meta().getAssetType("Story")
+				.getAttributeDefinition("Name");
+		query.getSelection().add(nameAttribute);
+		QueryResult result = services.retrieve(query);
+		Asset story = result.getAssets()[0];
+		String oldName = story.getAttribute(nameAttribute).getValue()
+				.toString();
+		String newName = "This is my New Name";
+		story.setAttributeValue(nameAttribute, newName);
+		services.save(story);
 
-	    assertEquals("This is my New Name", story.getAttribute(nameAttribute).getValue().toString());
-		
+		// System.out.println(story.getOid().getToken());
+		// System.out.println("The OLD Name: " + oldName);
+		// System.out.println("The NEW Name: " +
+		// story.getAttribute(nameAttribute).getValue());
+
+		assertEquals("This is my New Name", story.getAttribute(nameAttribute)
+				.getValue().toString());
+
 	}
-	
-	//@Test()
+
+	// @Test()
 	public void queryTest() throws V1Exception, MalformedURLException {
-	
-		V1Connector connector = V1Connector
-				.withInstanceUrl(url)
+
+		V1Connector connector = V1Connector.withInstanceUrl(url)
 				.withUserAgentHeader("name", "1.0")
-				.withUsernameAndPassword(username, password)
-				.build();
+				.withUsernameAndPassword(username, password).build();
 
 		Services services = new Services(connector);
 
 		IAssetType assetType = services.getAssetType("Member");
-         Query query = new Query(assetType);
-         IAttributeDefinition nameAttribute = assetType.getAttributeDefinition("Name");
-         query.getSelection().add(nameAttribute);
-         IAttributeDefinition isSelf = assetType.getAttributeDefinition("IsSelf");
-        FilterTerm filter = new FilterTerm(isSelf);
-        filter.equal("true");
-         
-        QueryResult result = services.retrieve(query);
-        assertNotNull(result);
-        assertTrue(result.getAssets().length > 0);
-  }
+		Query query = new Query(assetType);
+		IAttributeDefinition nameAttribute = assetType
+				.getAttributeDefinition("Name");
+		query.getSelection().add(nameAttribute);
+		IAttributeDefinition isSelf = assetType
+				.getAttributeDefinition("IsSelf");
+		FilterTerm filter = new FilterTerm(isSelf);
+		filter.equal("true");
 
-	//@Test(expected = MalformedURLException.class)
-	public void validatePathTest() throws V1Exception, MalformedURLException {
-		
-		url = "https//localhost/versionone";
-		
-		V1Connector connector = V1Connector
-				.withInstanceUrl(url)
-				.withUserAgentHeader("name", "1.0")
-				.withUsernameAndPassword(username, password)
-				.build();
+		QueryResult result = services.retrieve(query);
+		assertNotNull(result);
+		assertTrue(result.getAssets().length > 0);
 	}
 
-	@Test()
+	// @Test(expected = MalformedURLException.class)
+	public void validatePathTest() throws V1Exception, MalformedURLException {
+
+		url = "https//localhost/versionone";
+
+		V1Connector connector = V1Connector.withInstanceUrl(url)
+				.withUserAgentHeader("name", "1.0")
+				.withUsernameAndPassword(username, password).build();
+	}
+
+	// @Test()
 	public void connetionWithProxy() throws V1Exception, MalformedURLException {
-		
+
 		URI address = null;
 		try {
 			address = new URI("http://localhost:808");
 		} catch (URISyntaxException e) {
 			e.printStackTrace();
 		}
-		ProxyProvider proxy = new ProxyProvider(address , "user1", "user1");
-		
-		V1Connector connector = V1Connector
-				.withInstanceUrl(url)
+		ProxyProvider proxy = new ProxyProvider(address, "user1", "user1");
+
+		V1Connector connector = V1Connector.withInstanceUrl(url)
 				.withUserAgentHeader("name", "1.0")
-				.withUsernameAndPassword(username, password)
-				.withProxy(proxy)
+				.withUsernameAndPassword(username, password).withProxy(proxy)
 				.build();
-		
+
 		Services services = new Services(connector);
 
 		IAssetType assetType = services.getAssetType("Member");
-        Query query = new Query(assetType);
-        IAttributeDefinition nameAttribute = assetType.getAttributeDefinition("Name");
-        query.getSelection().add(nameAttribute);
-        IAttributeDefinition isSelf = assetType.getAttributeDefinition("IsSelf");
-        FilterTerm filter = new FilterTerm(isSelf);
-        filter.equal("true");
-        
-        assertNotNull(assetType);
-        QueryResult result = services.retrieve(query);
-        assertNotNull(result);
-        assertTrue(result.getAssets().length > 0);
+		Query query = new Query(assetType);
+		IAttributeDefinition nameAttribute = assetType
+				.getAttributeDefinition("Name");
+		query.getSelection().add(nameAttribute);
+		IAttributeDefinition isSelf = assetType
+				.getAttributeDefinition("IsSelf");
+		FilterTerm filter = new FilterTerm(isSelf);
+		filter.equal("true");
+
+		assertNotNull(assetType);
+		QueryResult result = services.retrieve(query);
+		assertNotNull(result);
+		assertTrue(result.getAssets().length > 0);
 	}
-		
-	//@Test()
+
+	@Test()
 	public void testConnectionNtlm() throws Exception {
 
-		url = "http://localhost/VersionOnenltm";
-		
+		url = "http://localhost/VersionOneNtlm/";
+
 		V1Connector connector = V1Connector.withInstanceUrl(url)
-				.withUserAgentHeader("name", "1.0")
-				.withWindowsIntegrated()
+				.withUserAgentHeader("name", "1.0").withWindowsIntegrated()
 				.build();
 
 		Services services = new Services(connector);
 		Oid oid = services.getLoggedIn();
 		assertNotNull(services.get_loggedin());
 	}
-	
-	//@Test()
+
+	// @Test()
 	public void testConnectionNtlmWithProxy() throws Exception {
-		
-		String url = "http://localhost/versionone/";
-		
+
+		username = "admin";
+		password = "1234";
+
+		String url = "http://localhost/VersionOne/";
+
 		URI address = null;
 		try {
 			address = new URI("http://localhost:808");
 		} catch (URISyntaxException e) {
 			e.printStackTrace();
 		}
-		ProxyProvider proxy = new ProxyProvider(address , "user1", "user1");
+		ProxyProvider proxy = new ProxyProvider(address, "user1", "user1");
 
 		V1Connector connector = V1Connector.withInstanceUrl(url)
 				.withUserAgentHeader("name", "1.0")
-				.withWindowsIntegrated()
-				.withProxy(proxy)
+				.withUsernameAndPassword(username, password).withProxy(proxy)
 				.build();
 
 		Services services = new Services(connector);
@@ -238,7 +246,7 @@ public class V1ConnectorTest {
 
 		assertNotNull(assetType);
 	}
-	
+
 	/**
 	 * Launch the test.
 	 *
@@ -250,4 +258,5 @@ public class V1ConnectorTest {
 	public static void main(String[] args) {
 		new org.junit.runner.JUnitCore().run(V1ConnectorTest.class);
 	}
+
 }
