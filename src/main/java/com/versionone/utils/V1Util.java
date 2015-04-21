@@ -15,6 +15,9 @@ import com.versionone.apiclient.exceptions.V1Exception;
  */
 public final class V1Util {
 
+	private static String CR_XML = "&#10;";
+	private static String CR_SYSTEM = "\r";
+	
     private V1Util() {
     }
 
@@ -120,4 +123,21 @@ public final class V1Util {
         return (string == null) || (string.trim().length() == 0);
     }
     
+    /**
+     * Converts system specific end-of-line characters to xml specific end-of-line characters.
+     * @param string string to process.
+     * @return string with xml specific end-of-line characters.
+     */
+    public static String convertSystemCrToXmlCr(String string) {
+    	return string.replace(CR_SYSTEM, CR_XML);
+    }
+    
+    /**
+     * Converts xml specific end-of-line characters to system specific end-of-line characters.
+     * @param string string to process.
+     * @return string with system specific end-of-line characters.
+     */
+    public static String convertXmlCrToSystemCr(String string) {
+    	return string.replace(CR_XML, CR_SYSTEM);
+    }
 }

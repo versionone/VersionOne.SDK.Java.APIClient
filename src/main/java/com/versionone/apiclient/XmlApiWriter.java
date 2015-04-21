@@ -6,6 +6,7 @@ import com.versionone.apiclient.exceptions.APIException;
 import com.versionone.apiclient.interfaces.IAssetType;
 import com.versionone.apiclient.interfaces.IAttributeDefinition;
 import com.versionone.apiclient.interfaces.IAttributeDefinition.AttributeType;
+import com.versionone.utils.V1Util;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -204,7 +205,7 @@ public class XmlApiWriter {
             case State:
             case Password:
             case LongInt:
-                return value.toString();
+                return V1Util.convertSystemCrToXmlCr(value.toString());
 
             case Numeric:
                 NumberFormat nf = NumberFormat.getInstance(Locale.getDefault());
