@@ -14,6 +14,7 @@ import java.util.List;
 import java.util.Locale;
 
 import org.apache.commons.codec.binary.Base64;
+import org.apache.commons.lang.ArrayUtils;
 import org.apache.http.Header;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpHeaders;
@@ -29,6 +30,8 @@ import org.apache.http.client.config.RequestConfig;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
+import org.apache.http.client.params.AuthPolicy;
+import org.apache.http.client.protocol.HttpClientContext;
 import org.apache.http.config.Lookup;
 import org.apache.http.config.RegistryBuilder;
 import org.apache.http.entity.StringEntity;
@@ -55,7 +58,8 @@ public class V1Connector {
 	private static CloseableHttpResponse httpResponse = null;
 	private static HttpClientBuilder httpclientBuilder = HttpClientBuilder.create();
 	private static CloseableHttpClient httpclient;
-	static List<Header> headers = new ArrayList<Header>();
+	private static HttpGet request;
+	private static Header[] headerArray = {}; 
 
 	// local variables
 	static String _url = "";
@@ -152,7 +156,7 @@ public class V1Connector {
 
 			Header header = new BasicHeader(HttpHeaders.USER_AGENT, headerString);
 
-			instance.headers.add(header);
+			headerArray = (Header[]) ArrayUtils.add(headerArray, header);
 
 			return this;
 		}
@@ -181,18 +185,28 @@ public class V1Connector {
 
 		@Override
 		public IProxy withAccessToken(String accessToken) throws V1Exception {
-
 			log.info("called V1Connector.withAccessToken ");
 			log.info("with accesstoken: " + accessToken);
 
-			if (!V1Util.isNullOrEmpty(accessToken))
+			if (V1Util.isNullOrEmpty(accessToken))
 				throw new V1Exception("Error processing accessToken Null/Empty ");
 
 			Header header = new BasicHeader(HttpHeaders.AUTHORIZATION, "Bearer " + accessToken);
-
-			headers.add(header);
-
+			headerArray = (Header[]) ArrayUtils.add(headerArray, header);
 			return this;
+		}
+		
+		@Override
+		public IProxy withOAuth2(String oAuth2) throws V1Exception {
+			log.info("called V1Connector.withOAth2 ");
+			log.info("with accesstoken: " + oAuth2);
+
+			if (V1Util.isNullOrEmpty(oAuth2))
+				throw new V1Exception("Error processing accessToken Null/Empty ");
+
+			 Header header = new BasicHeader(HttpHeaders.AUTHORIZATION, "Bearer " + oAuth2);
+			 headerArray = (Header[]) ArrayUtils.add(headerArray, header);
+			 return this;
 		}
 
 		@Override
@@ -220,50 +234,24 @@ public class V1Connector {
 		@Override
 		public IProxy withWindowsIntegrated() throws V1Exception {
 			log.info("called V1Connector.withWindowsIntegrated ");
-			log.info("with username and password: ");
 			
-//			String domain = new com.sun.security.auth.module.NTSystem().getDomain();
-//
-//			String fullyQualifiedDomainUsername = domain + "\\" +  new com.sun.security.auth.module.NTSystem().getName();
-//
-//			String authEncodedString = encodingLoginInfo(fullyQualifiedDomainUsername, "");
-//
-//			log.info("fullyQualifiedDomainUsername:  " + fullyQualifiedDomainUsername);
-//			log.info("authEncodedString : " + authEncodedString);
-//
-			  Lookup<AuthSchemeProvider> authProviders = RegistryBuilder.<AuthSchemeProvider>create()
+			String fullyQualifiedDomainUsername = 
+						new com.sun.security.auth.module.NTSystem().getDomain() + "\\" +  
+						new com.sun.security.auth.module.NTSystem().getName();
+			
+			String authEncodedString = encodingLoginInfo(fullyQualifiedDomainUsername, "");
+
+			Lookup<AuthSchemeProvider> authProviders = RegistryBuilder.<AuthSchemeProvider>create()
 			            .register(AuthSchemes.NTLM, new NTLMSchemeFactory())                
 			            .build();
-//			CredentialsProvider credsProvider = new BasicCredentialsProvider();
-//			credsProvider.setCredentials(AuthScope.ANY, new NTCredentials(authEncodedString));
 
-			RequestConfig config = RequestConfig.custom()
-			        .setTargetPreferredAuthSchemes(Arrays.asList(AuthSchemes.NTLM))
-			        .build();
-	        if (!WinHttpClients.isWinAuthAvailable()) {
-	            System.out.println("Integrated Win auth is not supported!!!");
-	        }
-	         httpclient = WinHttpClients.custom().setDefaultRequestConfig(config).setDefaultAuthSchemeRegistry(authProviders).build();
-	         
-			//httpclientBuilder.setDefaultRequestConfig(config).setDefaultAuthSchemeRegistry(authProviders);
+			CredentialsProvider credsProvider = new BasicCredentialsProvider();
+			credsProvider.setCredentials(AuthScope.ANY, new NTCredentials(authEncodedString));
+
+			httpclientBuilder.setDefaultCredentialsProvider(credsProvider).setDefaultAuthSchemeRegistry(authProviders);
+
 			return this;
 		}
-
-		@Override
-		public IProxy withOAuth2(String oAuth2) throws V1Exception {
-			log.info("called V1Connector.withOAth2 ");
-			log.info("with accesstoken: " + oAuth2);
-
-			if (V1Util.isNullOrEmpty(oAuth2))
-				throw new V1Exception("Error processing accessToken Null/Empty ");
-			// TODO: Need to define Implementation
-
-			// Header header = new BasicHeader(HttpHeaders.AUTHORIZATION,
-			// "Bearer " + accessToken);
-			// instance.headers.add(header);
-			return this;
-		}
-
 		// set the proxy
 		@SuppressWarnings("unused")
 		@Override
@@ -313,13 +301,19 @@ public class V1Connector {
 		log.info("called V1Connector.getData ");
 		log.info("with : " + path);
 		log.info("called V1Connector.getData with _url + _endpoint:  " + _url + _endpoint);
+		
 		Reader data = null;
 
 		String url = V1Util.isNullOrEmpty(path) ? _url + _endpoint : _url + _endpoint + path;
 
 		HttpGet request = new HttpGet(url);
-
-		createConnection();
+		
+		setDefaultHeaderValue();
+		
+		setHeaderValuesToRequest(request);
+		
+		// creates a new httclient
+		httpclient = httpclientBuilder.build();
 
 		try {
 			httpResponse = httpclient.execute(request);
@@ -366,27 +360,29 @@ public class V1Connector {
 	}
 
 	/**
-	 * Creates the HTTP request to the VersionOne server.
+	 * @param request
 	 */
-	private void createConnection() {
+	private void setHeaderValuesToRequest(HttpGet request) {
+		request.setHeaders(headerArray);
+	}
 
+	/**
+	 * 
+	 */
+	private void setDefaultHeaderValue() {
 		String localeName = Locale.getDefault().toString();
 		localeName = localeName.replace("_", "-");
 		Header header = new BasicHeader(HttpHeaders.ACCEPT_LANGUAGE, localeName);
 
-		headers.add(header);
-
-		// add all headers settings
-		httpclientBuilder.setDefaultHeaders(headers);
-
-		// creates a new httclient
-		httpclient = httpclientBuilder.build();
+		headerArray = (Header[]) ArrayUtils.add(headerArray, header);
 	}
 
 	protected Reader sendData(String path, String data) throws ConnectionException {
 
 		InputStream resultStream = null;
+		
 		String url = V1Util.isNullOrEmpty(path) ? _url + _endpoint : _url + _endpoint + path;
+
 		HttpPost httpPost = new HttpPost(url);
 
 		httpPost.setHeader("Content-Type", "text/xml");
@@ -398,7 +394,11 @@ public class V1Connector {
 			e.printStackTrace();
 		}
 		httpPost.setEntity(xmlPayload);
-		createConnection();
+	
+		setDefaultHeaderValue();
+		
+		// creates a new httclient
+		httpclient = httpclientBuilder.build();
 
 		try {
 			httpResponse = httpclient.execute(httpPost);
