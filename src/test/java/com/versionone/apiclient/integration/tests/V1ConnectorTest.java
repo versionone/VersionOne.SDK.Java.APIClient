@@ -235,9 +235,6 @@ public class V1ConnectorTest {
 		assertNotNull(result);
 		assertTrue(result.getAssets().length > 0);
 	}
-
-	
-	
 	
 	
 	///// TO BE DEFINED //////////
@@ -296,8 +293,6 @@ public class V1ConnectorTest {
 		assertNotNull(assetType);
 	}
 	
-	
-
 	/**
 	 * Launch the test.
 	 *

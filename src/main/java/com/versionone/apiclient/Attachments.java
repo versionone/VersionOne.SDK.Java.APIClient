@@ -11,12 +11,17 @@ import com.versionone.apiclient.interfaces.IAttachments;
 
 
 public class Attachments implements IAttachments {
-    private final IAPIConnector _connector;
+    private  IAPIConnector _connector;
+    private  V1Connector _v1connector;
 
     public Attachments(IAPIConnector connector) {
         _connector = connector;
     }
 
+    public Attachments(V1Connector v1connector) {
+    	_v1connector = v1connector;
+    }
+    
     /**
      * Getting reader
      *
@@ -27,8 +32,14 @@ public class Attachments implements IAttachments {
     public InputStream getReader(String key) throws ConnectionException {
         if (key != null && key.length() > 0) {
             final String path = key.substring(key.lastIndexOf('/') + 1);
-            _connector.beginRequest(path, null);
-            return _connector.endRequest(path);
+            
+            if (_connector!=null){ 
+            		_connector.beginRequest(path, null);
+            		return _connector.endRequest(path);
+            }else if (_v1connector!=null) {
+                		_connector.beginRequest(path, null);
+                		return _connector.endRequest(path);
+                		}
         }
         return null;
     }
@@ -43,12 +54,14 @@ public class Attachments implements IAttachments {
      */
     public OutputStream getWriter(String key, String contentType) throws ConnectionException {
         if(key != null && key.length()>0){
-            return _connector.beginRequest(key.substring(key.lastIndexOf('/') + 1), contentType);
+        	  if (_connector!=null){ 
+        		  	return _connector.beginRequest(key.substring(key.lastIndexOf('/') + 1), contentType);
+        	  }else  if (_v1connector!=null){
+        		  return _v1connector.beginRequest(key.substring(key.lastIndexOf('/') + 1), contentType);
+        	  }
         }
         return null;
     }
-
-
     /**
      * Setting Writer
      *
@@ -60,7 +73,11 @@ public class Attachments implements IAttachments {
     public void setWriter(String key) throws ConnectionException, AttachmentLengthException {
         try {
             if (key != null && key.length()>0){
-                _connector.endRequest(key.substring(key.lastIndexOf('/') + 1));
+            	  if (_connector!=null){ 
+            		  _connector.endRequest(key.substring(key.lastIndexOf('/') + 1));
+            	  }else  if (_v1connector!=null){
+            		  _v1connector.endRequest(key.substring(key.lastIndexOf('/') + 1));
+            	  }
             }
         } catch (ConnectionException e) {
             if (e.getServerResponseCode() == HttpURLConnection.HTTP_ENTITY_TOO_LARGE) {

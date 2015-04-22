@@ -15,6 +15,7 @@ import java.util.Locale;
 
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.lang.ArrayUtils;
+import org.apache.commons.lang.StringUtils;
 import org.apache.http.Header;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpHeaders;
@@ -76,6 +77,13 @@ public class V1Connector {
 	// INTERFACES
 
 	public interface ISetUserAgentMakeRequest {
+		/**
+		 * Required method for setting a custom user agent header for all HTTP requests made to the VersionOne API.
+		 * @param name The name of the application.
+		 * @param version The version number of the application
+		 * @return IAuthenticationMethods
+		 * @throws V1Exception
+		 */
 		IAuthenticationMethods withUserAgentHeader(String name, String version) throws V1Exception;
 	}
 
@@ -95,23 +103,64 @@ public class V1Connector {
 	}
 
 	public interface IAuthenticationMethods {
+		/**
+		 * Optional method for setting the username and password for authentication.
+		 * @param userName The username of a valid VersionOne member account.
+		 * @param password The password of a valid VersionOne member account.
+		 * @return IProxy
+		 * @throws V1Exception
+		 */
 		IProxy withUsernameAndPassword(String userName, String password) throws V1Exception;
 
+		/**
+		 * Optional method for setting the Windows Integrated Authentication credentials for authentication based on the currently logged in user.
+		 * @return IProxy
+		 * @throws V1Exception
+		 */
 		IProxy withWindowsIntegrated() throws V1Exception;
 
+		/**
+		 * Optional method for setting the access token for authentication.
+		 * @param accessToken The access token.
+		 * @return IProxy
+		 * @throws V1Exception
+		 */
 		IProxy withAccessToken(String accessToken) throws V1Exception;
 
+		/**
+		 * Optional method for setting the OAuth2 access token for authentication.
+		 * @param oAuth2 The OAuth2 access token.
+		 * @return IProxy
+		 * @throws V1Exception
+		 */
 		IProxy withOAuth2(String oAuth2) throws V1Exception;
 
-		IProxy withWindowsIntegrated(String userName, String password) throws V1Exception;
+		/**
+		 * Optional method for setting the Windows Integrated Authentication credentials for authentication based on specified user credentials.
+		 * @param fullyQualifiedDomainUsername The fully qualified domain name in form "DOMAIN\\username".
+		 * @param password The password of a valid VersionOne member account.
+		 * @return IProxy
+		 * @throws V1Exception
+		 */
+		IProxy withWindowsIntegrated(String fullyQualifiedDomainUsername, String password) throws V1Exception;
 	}
 
 	public interface IProxy extends IBuild {
+		/**
+		 * Optional method for setting the proxy credentials.
+		 * @param proxyProvider The ProxyProvider containing the proxy URI, username, and password.
+		 * @return IBuild
+		 * @throws V1Exception
+		 */
 		IBuild withProxy(ProxyProvider proxyProvider) throws V1Exception;
 	}
 
 	// get the connector (terminating build method)
 	public interface IBuild {
+		/**
+		 * Required terminating method that returns the V1Connector object.
+		 * @return V1Connector
+		 */
 		V1Connector build();
 	}
 
@@ -119,6 +168,8 @@ public class V1Connector {
 		log.info("called V1Connector construcor ");
 		log.info("with url: " + url);
 		URL urlData = new URL(url);
+		if (!StringUtils.endsWith(url, "/"))
+			url += "/";
 		this._url = url;
 	}
 
@@ -126,7 +177,7 @@ public class V1Connector {
 		return new Builder(versionOneInstanceUrl);
 	}
 
-	// BUILDER OF FLUENT
+	//// Fluent BUILDER ///
 	private static class Builder implements IAuthenticationMethods, IProxy, ISetUserAgentMakeRequest {
 
 		private V1Connector instance;
@@ -135,7 +186,6 @@ public class V1Connector {
 		public Builder(String url) throws V1Exception, MalformedURLException {
 			log.info("Builder with url: " + url);
 			instance = new V1Connector(url);
-
 		}
 
 		// set the user agent header
@@ -151,7 +201,7 @@ public class V1Connector {
 			if (!V1Util.isNullOrEmpty(name) && !V1Util.isNullOrEmpty(version)) {
 				headerString = headerString + " " + name + "/" + version;
 			} else {
-				throw new V1Exception("Error processing User Agent null/empty" + name + version);
+				throw new V1Exception("Error processing User Agent name/version: " + name + version);
 			}
 
 			Header header = new BasicHeader(HttpHeaders.USER_AGENT, headerString);
@@ -183,6 +233,7 @@ public class V1Connector {
 			return this;
 		}
 
+		// set the access token 
 		@Override
 		public IProxy withAccessToken(String accessToken) throws V1Exception {
 			log.info("called V1Connector.withAccessToken ");
@@ -221,11 +272,8 @@ public class V1Connector {
 			}
 
 			String authEncodedString = encodingLoginInfo(username, password);
-
 			CredentialsProvider credsProvider = new BasicCredentialsProvider();
-
 			credsProvider.setCredentials(AuthScope.ANY, new NTCredentials(authEncodedString));
-
 			httpclientBuilder.setDefaultCredentialsProvider(credsProvider);
 
 			return this;
@@ -247,7 +295,6 @@ public class V1Connector {
 
 			CredentialsProvider credsProvider = new BasicCredentialsProvider();
 			credsProvider.setCredentials(AuthScope.ANY, new NTCredentials(authEncodedString));
-
 			httpclientBuilder.setDefaultCredentialsProvider(credsProvider).setDefaultAuthSchemeRegistry(authProviders);
 
 			return this;
@@ -290,7 +337,6 @@ public class V1Connector {
 			return authEncodedString;
 		}
 	}
-
 	// end builder
 
 	protected Reader getData() throws ConnectionException {
@@ -310,7 +356,7 @@ public class V1Connector {
 		
 		setDefaultHeaderValue();
 		
-		setHeaderValuesToRequest(request);
+		request.setHeaders(headerArray);
 		
 		// creates a new httclient
 		httpclient = httpclientBuilder.build();
@@ -359,16 +405,6 @@ public class V1Connector {
 		}
 	}
 
-	/**
-	 * @param request
-	 */
-	private void setHeaderValuesToRequest(HttpGet request) {
-		request.setHeaders(headerArray);
-	}
-
-	/**
-	 * 
-	 */
 	private void setDefaultHeaderValue() {
 		String localeName = Locale.getDefault().toString();
 		localeName = localeName.replace("_", "-");
@@ -384,8 +420,8 @@ public class V1Connector {
 		String url = V1Util.isNullOrEmpty(path) ? _url + _endpoint : _url + _endpoint + path;
 
 		HttpPost httpPost = new HttpPost(url);
-
-		httpPost.setHeader("Content-Type", "text/xml");
+		Header header = new BasicHeader(HttpHeaders.CONTENT_TYPE, "text/xml");
+		headerArray = (Header[]) ArrayUtils.add(headerArray, header);
 
 		StringEntity xmlPayload = null;
 		try {
@@ -394,7 +430,7 @@ public class V1Connector {
 			e.printStackTrace();
 		}
 		httpPost.setEntity(xmlPayload);
-	
+		httpPost.setHeaders(headerArray);
 		setDefaultHeaderValue();
 		
 		// creates a new httclient
@@ -418,31 +454,37 @@ public class V1Connector {
 	}
 
 	protected OutputStream beginRequest(String path, String contentType) throws ConnectionException {
-		// OutputStream outputStream = null;
-		//
-		// HttpURLConnection req = createConnection(_url + path);
-		//
-		// if (contentType != null)
-		// try {
-		// req.setDoOutput(true);
-		// req.setDoInput(true);
-		// req.setUseCaches(false);
-		// req.setRequestProperty("Content-Type", contentType);
-		// req.setRequestMethod("POST");
-		// outputStream = req.getOutputStream();
-		// } catch (IOException e) {
-		// req.disconnect();
-		// throw new ConnectionException("Error writing to output stream", e);
-		// }
-		// _requests.put(path, req);
 
-		// return outputStream;
-		return null;
+		String url = "";
+		OutputStream outputStream = null;
 
+		if (contentType != null)
+			
+			url = V1Util.isNullOrEmpty(path) ? _url + _endpoint : _url + _endpoint + path;
+			HttpPost httpPost = new HttpPost(url);
+
+			Header header = new BasicHeader(HttpHeaders.CONTENT_TYPE, "text/xml");
+			headerArray = (Header[]) ArrayUtils.add(headerArray, header);
+			httpPost.setHeaders(headerArray);
+			
+			try {
+				httpResponse = httpclient.execute(httpPost);
+			} catch (IOException e) {
+				try {
+					httpResponse.close();
+				} catch (IOException e1) {
+					throw new ConnectionException("Error writing to output stream", e);
+				}
+				throw new ConnectionException("Error writing to output stream", e);
+			}
+			//outputStream = httpResponse.getEntity()
+			// _requests.put(path, req);
+			return outputStream;
 	}
 
 	protected InputStream endRequest(String path) throws ConnectionException {
-		// InputStream resultStream = null;
+		 InputStream resultStream = null;
+		
 		// HttpURLConnection req = _requests.remove(path);
 		//
 		// try {
@@ -461,9 +503,7 @@ public class V1Connector {
 		// }
 		// }
 		//
-		// return resultStream;
-		return null;
-
+		  return resultStream;
 	}
 
 	// endpoint definition
