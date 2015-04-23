@@ -14,6 +14,7 @@ import java.util.List;
 import java.util.Locale;
 
 import org.apache.commons.codec.binary.Base64;
+import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.ArrayUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.http.Header;
@@ -477,32 +478,38 @@ public class V1Connector {
 				}
 				throw new ConnectionException("Error writing to output stream", e);
 			}
-			//outputStream = httpResponse.getEntity()
-			// _requests.put(path, req);
+			
+			try {
+				IOUtils.copy(httpResponse.getEntity().getContent(), outputStream);
+			} catch (IllegalStateException | IOException e) {
+				throw new ConnectionException("Error writing to output stream", e);
+			}
 			return outputStream;
 	}
 
 	protected InputStream endRequest(String path) throws ConnectionException {
-		 InputStream resultStream = null;
+		String url = ""; 
+		InputStream resultStream = null;
 		
-		// HttpURLConnection req = _requests.remove(path);
-		//
-		// try {
-		// if (req.getDoOutput()) {
-		// OutputStream writeStream = req.getOutputStream();
-		// writeStream.flush();
-		// }
-		// resultStream = req.getInputStream();
-		// cookiesManager.addCookie(req.getHeaderFields());
-		// } catch (IOException e) {
-		// try {
-		// throw new ConnectionException("Error writing to output stream",
-		// req.getResponseCode(), e);
-		// } catch (IOException e1) {
-		// throw new ConnectionException("Error writing to output stream", e);
-		// }
-		// }
-		//
+			url = V1Util.isNullOrEmpty(path) ? _url + _endpoint : _url + _endpoint + path;
+			HttpPost httpPost = new HttpPost(url);
+
+			Header header = new BasicHeader(HttpHeaders.CONTENT_TYPE, "text/xml");
+			headerArray = (Header[]) ArrayUtils.add(headerArray, header);
+			httpPost.setHeaders(headerArray);
+
+			try {
+				httpResponse = httpclient.execute(httpPost);
+			} catch (IOException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+			try {
+				resultStream = httpResponse.getEntity().getContent();
+			} catch (IllegalStateException | IOException e) {
+				 throw new ConnectionException("Error writing to output stream",
+						 httpResponse.getStatusLine().getStatusCode(), e);
+			}
 		  return resultStream;
 	}
 
