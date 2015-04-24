@@ -76,6 +76,41 @@ public class V1Connector {
 	private final static String QUERY_API_ENDPOINT = "query.v1/";
 
 	// INTERFACES
+	public interface IsetEndPoint{
+		/**
+		 * Optional method for specifying an API endpoint to connect to.
+		 * @param endPoint The API endpoint.
+		 * @return IsetProxyOrConnector
+		 */
+		IsetProxyOrConnector useEndPoint(String endPoint);
+	}
+	
+	public interface IsetProxyOrConnector extends IBuild{
+		/**
+		 * Optional method for setting the proxy credentials.
+		 * @param proxyProvider The ProxyProvider containing the proxy URI, username, and password.
+		 * @return IBuild
+		 */
+		IBuild withProxy(ProxyProvider proxyProvider);
+	}
+	
+	public interface IsetEndPointOrConnector extends IBuild{
+		/**
+		 *  Optional method for specifying an API endpoint to connect to.
+		 * @param endPoint The API endpoint.
+		 * @return IBuild
+		 */
+		IBuild useEndPoint(String endPoint);
+	}
+	
+	public interface IsetProxyOrEndPointOrConnector extends IsetEndPoint, IBuild{
+		/**
+		 * Optional method for setting the proxy credentials.
+		 * @param proxyProvider The ProxyProvider containing the proxy URI, username, and password.
+		 * @return IsetEndPointOrConnector
+		 */
+		IsetEndPointOrConnector withProxy(ProxyProvider proxyProvider);
+	}
 
 	public interface ISetUserAgentMakeRequest {
 		/**
@@ -88,21 +123,6 @@ public class V1Connector {
 		IAuthenticationMethods withUserAgentHeader(String name, String version) throws V1Exception;
 	}
 
-	public interface IApiMethods {
-
-		IProxy useMetaAPI();
-
-		IAuthenticationMethods useDataAPI();
-
-		IAuthenticationMethods useNewAPI();
-
-		IAuthenticationMethods useHistoryAPI();
-
-		IAuthenticationMethods useQueryAPI();
-
-		IAuthenticationMethods useEndPoint(String userAgent);
-	}
-
 	public interface IAuthenticationMethods {
 		/**
 		 * Optional method for setting the username and password for authentication.
@@ -111,14 +131,14 @@ public class V1Connector {
 		 * @return IProxy
 		 * @throws V1Exception
 		 */
-		IProxy withUsernameAndPassword(String userName, String password) throws V1Exception;
+		IsetProxyOrEndPointOrConnector withUsernameAndPassword(String userName, String password) throws V1Exception;
 
 		/**
 		 * Optional method for setting the Windows Integrated Authentication credentials for authentication based on the currently logged in user.
 		 * @return IProxy
 		 * @throws V1Exception
 		 */
-		IProxy withWindowsIntegrated() throws V1Exception;
+		IsetProxyOrEndPointOrConnector withWindowsIntegrated() throws V1Exception;
 
 		/**
 		 * Optional method for setting the access token for authentication.
@@ -126,7 +146,7 @@ public class V1Connector {
 		 * @return IProxy
 		 * @throws V1Exception
 		 */
-		IProxy withAccessToken(String accessToken) throws V1Exception;
+		IsetProxyOrEndPointOrConnector withAccessToken(String accessToken) throws V1Exception;
 
 		/**
 		 * Optional method for setting the OAuth2 access token for authentication.
@@ -134,7 +154,7 @@ public class V1Connector {
 		 * @return IProxy
 		 * @throws V1Exception
 		 */
-		IProxy withOAuth2(String oAuth2) throws V1Exception;
+		IsetProxyOrEndPointOrConnector withOAuth2(String oAuth2) throws V1Exception;
 
 		/**
 		 * Optional method for setting the Windows Integrated Authentication credentials for authentication based on specified user credentials.
@@ -143,7 +163,7 @@ public class V1Connector {
 		 * @return IProxy
 		 * @throws V1Exception
 		 */
-		IProxy withWindowsIntegrated(String fullyQualifiedDomainUsername, String password) throws V1Exception;
+		IsetProxyOrEndPointOrConnector withWindowsIntegrated(String fullyQualifiedDomainUsername, String password) throws V1Exception;
 	}
 
 	public interface IProxy extends IBuild {
@@ -179,7 +199,7 @@ public class V1Connector {
 	}
 
 	//// Fluent BUILDER ///
-	private static class Builder implements IAuthenticationMethods, IProxy, ISetUserAgentMakeRequest {
+	private static class Builder implements ISetUserAgentMakeRequest, IAuthenticationMethods, IsetProxyOrEndPointOrConnector, IsetProxyOrConnector, IsetEndPointOrConnector  {
 
 		private V1Connector instance;
 
@@ -214,7 +234,7 @@ public class V1Connector {
 
 		// set the authentication type (if required by the endpoint)
 		@Override
-		public IProxy withUsernameAndPassword(String username, String password) throws V1Exception {
+		public IsetProxyOrEndPointOrConnector withUsernameAndPassword(String username, String password) throws V1Exception {
 			log.info("called V1Connector.withUsernameAndPassword ");
 			log.info("with username/password: " + username + " / " + password);
 
@@ -236,7 +256,7 @@ public class V1Connector {
 
 		// set the access token 
 		@Override
-		public IProxy withAccessToken(String accessToken) throws V1Exception {
+		public IsetProxyOrEndPointOrConnector withAccessToken(String accessToken) throws V1Exception {
 			log.info("called V1Connector.withAccessToken ");
 			log.info("with accesstoken: " + accessToken);
 
@@ -249,7 +269,7 @@ public class V1Connector {
 		}
 		
 		@Override
-		public IProxy withOAuth2(String oAuth2) throws V1Exception {
+		public IsetProxyOrEndPointOrConnector withOAuth2(String oAuth2) throws V1Exception {
 			log.info("called V1Connector.withOAth2 ");
 			log.info("with accesstoken: " + oAuth2);
 
@@ -262,7 +282,7 @@ public class V1Connector {
 		}
 
 		@Override
-		public IProxy withWindowsIntegrated(String username, String password) throws V1Exception {
+		public IsetProxyOrEndPointOrConnector withWindowsIntegrated(String username, String password) throws V1Exception {
 			log.info("called V1Connector.withWindowsIntegrated ");
 			log.info("with username : " + username);
 			log.info("with password: " + password);
@@ -281,7 +301,7 @@ public class V1Connector {
 		}
 
 		@Override
-		public IProxy withWindowsIntegrated() throws V1Exception {
+		public IsetProxyOrEndPointOrConnector withWindowsIntegrated() throws V1Exception {
 			log.info("called V1Connector.withWindowsIntegrated ");
 			
 			String fullyQualifiedDomainUsername = 
@@ -300,16 +320,21 @@ public class V1Connector {
 
 			return this;
 		}
+
 		// set the proxy
-		@SuppressWarnings("unused")
 		@Override
-		public IBuild withProxy(ProxyProvider proxyProvider) throws V1Exception {
+		public IsetEndPointOrConnector withProxy(ProxyProvider proxyProvider)  {
 			log.info("called V1Connector.withproxy ");
 			log.info("with proxyProvider: " + proxyProvider.toString());
 
 			if (proxyProvider == null) {
 				log.error("Proxy Provider is null");
-				throw new V1Exception("Error processing proxy Null/Empty ");
+				try {
+					throw new V1Exception("Error processing proxy Null/Empty ");
+				} catch (V1Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 			}
 
 			credsProvider.setCredentials(new AuthScope(proxyProvider.getAddress().getHost(), proxyProvider.getAddress().getPort()),
@@ -322,7 +347,36 @@ public class V1Connector {
 			httpclientBuilder.setDefaultCredentialsProvider(credsProvider).setProxy(proxy);
 			return this;
 		}
+	
 
+		@Override
+		public IsetProxyOrConnector useEndPoint(String endPoint) {
+			log.info("called V1Connector.useEndPoint ");
+			log.info("with useEndPoint: " + endPoint);
+
+			if (V1Util.isNullOrEmpty(endPoint))
+				try {
+					throw new V1Exception("Error processing endPoint Null/Empty ");
+				} catch (V1Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			
+			instance._endpoint = endPoint;
+
+			return this;
+		}
+		
+//		@Override
+//		IBuild IsetEndPointOrConnector.withProxy(ProxyProvider proxyProvider){
+//			return this;
+//		}
+////		
+//		IBuild useEndPoint(String endPoint){
+//			return this;
+//		}
+
+		
 		// build
 		@Override
 		public V1Connector build() {
@@ -330,6 +384,7 @@ public class V1Connector {
 			return instance;
 		}
 
+		
 		private String encodingLoginInfo(String username, String password) {
 			String authString = username + ":" + password;
 			byte[] authEncodedBytes = Base64.encodeBase64(authString.getBytes());
