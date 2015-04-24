@@ -178,13 +178,18 @@ public class V1Connector {
 		V1Connector build();
 	}
 
-	protected V1Connector(String url) throws V1Exception, MalformedURLException {
+	protected V1Connector(String instanceUrl) throws V1Exception, MalformedURLException {
 		log.info("called V1Connector construcor ");
-		log.info("with url: " + url);
-		URL urlData = new URL(url);
-		if (!StringUtils.endsWith(url, "/"))
-			url += "/";
-		this._url = url;
+		log.info("with url: " + instanceUrl);
+		
+		if (StringUtils.isBlank(instanceUrl)) {
+			throw new IllegalArgumentException();
+		}
+		
+		if (!StringUtils.endsWith(instanceUrl, "/"))
+			instanceUrl += "/";
+		
+		_url = instanceUrl;
 	}
 
 	public static ISetUserAgentMakeRequest withInstanceUrl(String instanceUrl) throws V1Exception, MalformedURLException {
@@ -373,7 +378,7 @@ public class V1Connector {
 		// build
 		@Override
 		public V1Connector build() {
-			log.info("called V1Connector.connet ");
+			log.info("called V1Connector.connect ");
 			return instance;
 		}
 
