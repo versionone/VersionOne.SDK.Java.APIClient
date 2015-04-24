@@ -147,7 +147,7 @@ public class V1Connector {
 		 * @return IProxy
 		 * @throws V1Exception
 		 */
-		IsetProxyOrEndPointOrConnector withOAuth2Token(String oAuth2Token) throws V1Exception;
+		IsetProxyOrEndPointOrConnector withOAuth2Token(String accessToken) throws V1Exception;
 
 		/**
 		 * Optional method for setting the Windows Integrated Authentication credentials for authentication based on specified user credentials.
@@ -262,14 +262,14 @@ public class V1Connector {
 		}
 		
 		@Override
-		public IsetProxyOrEndPointOrConnector withOAuth2Token(String oAuth2Token) throws V1Exception {
+		public IsetProxyOrEndPointOrConnector withOAuth2Token(String accessToken) throws V1Exception {
 			log.info("called V1Connector.withOAth2 ");
-			log.info("with accesstoken: " + oAuth2Token);
+			log.info("with accesstoken: " + accessToken);
 
-			if (V1Util.isNullOrEmpty(oAuth2Token))
+			if (V1Util.isNullOrEmpty(accessToken))
 				throw new V1Exception("Error processing accessToken Null/Empty ");
 
-			 Header header = new BasicHeader(HttpHeaders.AUTHORIZATION, "Bearer " + oAuth2Token);
+			 Header header = new BasicHeader(HttpHeaders.AUTHORIZATION, "Bearer " + accessToken);
 			 headerArray = (Header[]) ArrayUtils.add(headerArray, header);
 			 return this;
 		}
