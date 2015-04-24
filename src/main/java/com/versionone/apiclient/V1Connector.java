@@ -186,6 +186,8 @@ public class V1Connector {
 			throw new IllegalArgumentException();
 		}
 		
+		URL urlData = new URL(instanceUrl);
+		
 		if (!StringUtils.endsWith(instanceUrl, "/"))
 			instanceUrl += "/";
 		
