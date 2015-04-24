@@ -3,6 +3,7 @@ package com.versionone.apiclient.interfaces;
 import com.versionone.Oid;
 import com.versionone.apiclient.Asset;
 import com.versionone.apiclient.Query;
+import com.versionone.apiclient.V1Connector;
 import com.versionone.apiclient.exceptions.APIException;
 import com.versionone.apiclient.exceptions.ConnectionException;
 import com.versionone.apiclient.exceptions.MetaException;
@@ -118,4 +119,19 @@ public interface IServices {
 	 * @throws APIException - when the operation fails
 	 */
 	Oid executeOperation(IOperation op, Oid oid) throws APIException;
+	
+	/**
+	 * Get Meta Information
+	 * 
+	 * @return IMetaModel
+	 */
+	IMetaModel get_meta();
+	
+	/**
+	 * Get V1connector 
+	 * 
+	 * @return V1Connector
+	 */
+	
+	V1Connector get_v1Connector();
 }
