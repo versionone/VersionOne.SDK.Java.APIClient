@@ -124,11 +124,7 @@ public class V1Connector {
 		 * @return IProxy
 		 * @throws V1Exception
 		 */
-<<<<<<< HEAD
-		IsetProxyOrEndPointOrConnector withUsernameAndPassword(String userName, String password) throws V1Exception;
-=======
-		IProxy withUsernameAndPassword(String username, String password) throws V1Exception;
->>>>>>> 89d5b43c493a2e528b8cb736aa3541158c831629
+		IsetProxyOrEndPointOrConnector withUsernameAndPassword(String username, String password) throws V1Exception;
 
 		/**
 		 * Optional method for setting the Windows Integrated Authentication credentials for authentication based on the currently logged in user.
@@ -151,11 +147,7 @@ public class V1Connector {
 		 * @return IProxy
 		 * @throws V1Exception
 		 */
-<<<<<<< HEAD
-		IsetProxyOrEndPointOrConnector withOAuth2(String oAuth2) throws V1Exception;
-=======
-		IProxy withOAuth2Token(String accessToken) throws V1Exception;
->>>>>>> 89d5b43c493a2e528b8cb736aa3541158c831629
+		IsetProxyOrEndPointOrConnector withOAuth2Token(String oAuth2Token) throws V1Exception;
 
 		/**
 		 * Optional method for setting the Windows Integrated Authentication credentials for authentication based on specified user credentials.
@@ -270,20 +262,14 @@ public class V1Connector {
 		}
 		
 		@Override
-<<<<<<< HEAD
-		public IsetProxyOrEndPointOrConnector withOAuth2(String oAuth2) throws V1Exception {
+		public IsetProxyOrEndPointOrConnector withOAuth2Token(String oAuth2Token) throws V1Exception {
 			log.info("called V1Connector.withOAth2 ");
-			log.info("with accesstoken: " + oAuth2);
-=======
-		public IProxy withOAuth2Token(String accessToken) throws V1Exception {
-			log.info("called V1Connector.withOAuth2 ");
-			log.info("with accesstoken: " + accessToken);
->>>>>>> 89d5b43c493a2e528b8cb736aa3541158c831629
+			log.info("with accesstoken: " + oAuth2Token);
 
-			if (V1Util.isNullOrEmpty(accessToken))
+			if (V1Util.isNullOrEmpty(oAuth2Token))
 				throw new V1Exception("Error processing accessToken Null/Empty ");
 
-			 Header header = new BasicHeader(HttpHeaders.AUTHORIZATION, "Bearer " + accessToken);
+			 Header header = new BasicHeader(HttpHeaders.AUTHORIZATION, "Bearer " + oAuth2Token);
 			 headerArray = (Header[]) ArrayUtils.add(headerArray, header);
 			 return this;
 		}
