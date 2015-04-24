@@ -25,7 +25,7 @@ import sun.net.www.protocol.http.AuthCacheImpl;
 import sun.net.www.protocol.http.AuthCacheValue;
 
 /**
- * Note: This class has been deprecated from the VersionOne Java SDK. Use the {@link com.versionone.apiclient.V1Connector} class to make a connection to VersionOne. 
+ * @deprecated This class has been deprecated as of release 15.0.0. Use the {@link com.versionone.apiclient.V1Connector} class instead. 
  */
 @Deprecated
 @SuppressWarnings("restriction")
