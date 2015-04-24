@@ -49,7 +49,7 @@ public class Services implements IServices {
 	private V1Connector _v1Connector;
 
 		
-	public IMetaModel get_meta() {
+	public IMetaModel getMeta() {
 		return _meta;
 	}
 
@@ -61,7 +61,7 @@ public class Services implements IServices {
 		return _loggedin;
 	}
 
-	public V1Connector get_v1Connector() {
+	public V1Connector getV1Connector() {
 		return _v1Connector;
 	}
 

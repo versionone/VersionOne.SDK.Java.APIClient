@@ -125,7 +125,7 @@ public interface IServices {
 	 * 
 	 * @return IMetaModel
 	 */
-	IMetaModel get_meta();
+	IMetaModel getMeta();
 	
 	/**
 	 * Get V1connector 
@@ -133,5 +133,5 @@ public interface IServices {
 	 * @return V1Connector
 	 */
 	
-	V1Connector get_v1Connector();
+	V1Connector getV1Connector();
 }
