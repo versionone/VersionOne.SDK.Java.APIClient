@@ -8,9 +8,6 @@ import java.io.Reader;
 import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 import java.util.Locale;
 
 import org.apache.commons.codec.binary.Base64;
@@ -28,12 +25,9 @@ import org.apache.http.auth.NTCredentials;
 import org.apache.http.auth.UsernamePasswordCredentials;
 import org.apache.http.client.CredentialsProvider;
 import org.apache.http.client.config.AuthSchemes;
-import org.apache.http.client.config.RequestConfig;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
-import org.apache.http.client.params.AuthPolicy;
-import org.apache.http.client.protocol.HttpClientContext;
 import org.apache.http.config.Lookup;
 import org.apache.http.config.RegistryBuilder;
 import org.apache.http.entity.StringEntity;
@@ -41,7 +35,6 @@ import org.apache.http.impl.auth.NTLMSchemeFactory;
 import org.apache.http.impl.client.BasicCredentialsProvider;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClientBuilder;
-import org.apache.http.impl.client.WinHttpClients;
 import org.apache.http.message.BasicHeader;
 import org.apache.log4j.Logger;
 
@@ -131,7 +124,11 @@ public class V1Connector {
 		 * @return IProxy
 		 * @throws V1Exception
 		 */
+<<<<<<< HEAD
 		IsetProxyOrEndPointOrConnector withUsernameAndPassword(String userName, String password) throws V1Exception;
+=======
+		IProxy withUsernameAndPassword(String username, String password) throws V1Exception;
+>>>>>>> 89d5b43c493a2e528b8cb736aa3541158c831629
 
 		/**
 		 * Optional method for setting the Windows Integrated Authentication credentials for authentication based on the currently logged in user.
@@ -150,11 +147,15 @@ public class V1Connector {
 
 		/**
 		 * Optional method for setting the OAuth2 access token for authentication.
-		 * @param oAuth2 The OAuth2 access token.
+		 * @param accessToken The OAuth2 access token.
 		 * @return IProxy
 		 * @throws V1Exception
 		 */
+<<<<<<< HEAD
 		IsetProxyOrEndPointOrConnector withOAuth2(String oAuth2) throws V1Exception;
+=======
+		IProxy withOAuth2Token(String accessToken) throws V1Exception;
+>>>>>>> 89d5b43c493a2e528b8cb736aa3541158c831629
 
 		/**
 		 * Optional method for setting the Windows Integrated Authentication credentials for authentication based on specified user credentials.
@@ -194,8 +195,8 @@ public class V1Connector {
 		this._url = url;
 	}
 
-	public static ISetUserAgentMakeRequest withInstanceUrl(String versionOneInstanceUrl) throws V1Exception, MalformedURLException {
-		return new Builder(versionOneInstanceUrl);
+	public static ISetUserAgentMakeRequest withInstanceUrl(String instanceUrl) throws V1Exception, MalformedURLException {
+		return new Builder(instanceUrl);
 	}
 
 	//// Fluent BUILDER ///
@@ -269,14 +270,20 @@ public class V1Connector {
 		}
 		
 		@Override
+<<<<<<< HEAD
 		public IsetProxyOrEndPointOrConnector withOAuth2(String oAuth2) throws V1Exception {
 			log.info("called V1Connector.withOAth2 ");
 			log.info("with accesstoken: " + oAuth2);
+=======
+		public IProxy withOAuth2Token(String accessToken) throws V1Exception {
+			log.info("called V1Connector.withOAuth2 ");
+			log.info("with accesstoken: " + accessToken);
+>>>>>>> 89d5b43c493a2e528b8cb736aa3541158c831629
 
-			if (V1Util.isNullOrEmpty(oAuth2))
+			if (V1Util.isNullOrEmpty(accessToken))
 				throw new V1Exception("Error processing accessToken Null/Empty ");
 
-			 Header header = new BasicHeader(HttpHeaders.AUTHORIZATION, "Bearer " + oAuth2);
+			 Header header = new BasicHeader(HttpHeaders.AUTHORIZATION, "Bearer " + accessToken);
 			 headerArray = (Header[]) ArrayUtils.add(headerArray, header);
 			 return this;
 		}
@@ -288,7 +295,7 @@ public class V1Connector {
 			log.info("with password: " + password);
 
 			if (V1Util.isNullOrEmpty(username) || V1Util.isNullOrEmpty(username)) {
-				// use the logued user to the domain
+				// use the logged user to the domain
 				throw new V1Exception("Error processing Windows integrated access ");
 			}
 
