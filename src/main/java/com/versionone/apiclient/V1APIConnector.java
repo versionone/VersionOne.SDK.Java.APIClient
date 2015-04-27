@@ -28,14 +28,12 @@ import sun.net.www.protocol.http.AuthCacheValue;
  * @deprecated This class has been deprecated as of release 15.0.0. Use the {@link com.versionone.apiclient.V1Connector} class instead. 
  */
 @Deprecated
-@SuppressWarnings("restriction")
 public class V1APIConnector implements IAPIConnector {
 
 	private static final String UTF8 = "UTF-8";
 
 	private final CookiesManager cookiesManager;
 	private String _url = null;
-	private String _accessToken = null;
 	private ProxyProvider proxy = null;
 	private final Map<String, HttpURLConnection> _requests = new HashMap<String, HttpURLConnection>();
 	public final Map<String, String> customHttpHeaders = new HashMap<String, String>();
@@ -105,19 +103,6 @@ public class V1APIConnector implements IAPIConnector {
 		setUserAgentHeader(null, null);
 	}
 	
-	/**
-	 * Create a connection using a VersionOne access token. If not using a proxy, pass null for the proxy parameter.
-	 * 
-	 * @param url URL of the VersionOne server
-	 * @param accessToken VersionOne access token
-	 */
-	public V1APIConnector(String url, String accessToken) {
-		_url = url;
-		_accessToken = accessToken;
-		cookiesManager = CookiesManager.getCookiesManager(url, accessToken, accessToken);
-		setUserAgentHeader(null, null);
-	}
-
 	/**
 	 * Set a value for custom the user-agent header.
 	 * 
@@ -338,11 +323,6 @@ public class V1APIConnector implements IAPIConnector {
 			localeName = localeName.replace("_", "-");
 			request.setRequestProperty("Accept-Language", localeName);
 			request.setRequestProperty("User-Agent", _user_agent_header);
-			
-			// 1-27-2015 AJB Check if using access tokens, if so, add authorization header.
-			if (null != _accessToken) {
-				request.setRequestProperty("Authorization","Bearer " + _accessToken);
-			}
 			
 			cookiesManager.addCookiesToRequest(request);
 			addHeaders(request);
