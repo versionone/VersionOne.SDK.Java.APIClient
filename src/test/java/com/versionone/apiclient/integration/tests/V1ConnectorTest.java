@@ -253,14 +253,14 @@ public class V1ConnectorTest {
 		assertNotNull(oid);
 	}
 	
-	//@Test()
+	@Test()
 	public void testConnectionNtlmWithUsernamePass() throws Exception {
 
 		url = "http://localhost/VersionOneNtlm/";
 
 		V1Connector connector = V1Connector.withInstanceUrl(url)
 				.withUserAgentHeader("name", "1.0")
-				.withWindowsIntegrated("", "")
+				.withWindowsIntegrated("username", "password")
 				.build();
 
 		Services services = new Services(connector);
@@ -268,7 +268,7 @@ public class V1ConnectorTest {
 		assertNotNull(oid);
 	}
 	
-	@Test()
+	//@Test()
 	public void testConnectionNtlmWithProxy() throws Exception {
 
 		String url = "http://localhost/VersionOne/";

@@ -60,16 +60,14 @@ import com.versionone.utils.V1Util;
 
 public class V1Connector {
 
-	private static final String UTF8 = "UTF-8";
+	//private static final String UTF8 = "UTF-8";
 
 	private static Logger log = Logger.getLogger(V1Connector.class);
 	private static CredentialsProvider credsProvider = new BasicCredentialsProvider();
 	private static CloseableHttpResponse httpResponse = null;
 	private static HttpClientBuilder httpclientBuilder = HttpClientBuilder.create();
 	private static CloseableHttpClient httpclient;
-	private static HttpGet request;
 	private static Header[] headerArray = {}; 
-	private static   HttpContext localContext = new BasicHttpContext();
 	
 	private static boolean isWindowsAuth =  false;
 
@@ -243,11 +241,8 @@ public class V1Connector {
 			} else {
 				throw new V1Exception("Error processing User Agent name/version: " + name + version);
 			}
-
 			Header header = new BasicHeader(HttpHeaders.USER_AGENT, headerString);
-
 			headerArray = (Header[]) ArrayUtils.add(headerArray, header);
-			
 			isWindowsAuth=false;
 
 			return this;
@@ -271,7 +266,6 @@ public class V1Connector {
 			credsProvider.setCredentials(new AuthScope(instanceUri.getHost(), instanceUri.getPort()), new UsernamePasswordCredentials(username,
 					password));
 			httpclientBuilder.setDefaultCredentialsProvider(credsProvider);
-			
 			isWindowsAuth=false;
 
 			return this;
@@ -285,10 +279,8 @@ public class V1Connector {
 
 			if (V1Util.isNullOrEmpty(accessToken))
 				throw new V1Exception("Error processing accessToken Null/Empty ");
-
 			Header header = new BasicHeader(HttpHeaders.AUTHORIZATION, "Bearer " + accessToken);
 			headerArray = (Header[]) ArrayUtils.add(headerArray, header);
-			
 			isWindowsAuth=false;
 			
 			return this;
@@ -304,7 +296,6 @@ public class V1Connector {
 
 			 Header header = new BasicHeader(HttpHeaders.AUTHORIZATION, "Bearer " + accessToken);
 			 headerArray = (Header[]) ArrayUtils.add(headerArray, header);
-		
 			 isWindowsAuth=false;
 			 
 			 return this;
@@ -315,18 +306,16 @@ public class V1Connector {
 			log.info("called V1Connector.withWindowsIntegrated ");
 			log.info("with username : " + username);
 			log.info("with password: " + password);
-
-			if (V1Util.isNullOrEmpty(username) || V1Util.isNullOrEmpty(username)) {
+			
+			if (V1Util.isNullOrEmpty(username) || V1Util.isNullOrEmpty(username)
+					|| V1Util.isNullOrEmpty(password) || V1Util.isNullOrEmpty(password)) {
 				// use the logged user to the domain
 				throw new V1Exception("Error processing Windows integrated access ");
 			}
-
-			String authEncodedString = encodingLoginInfo(username, password);
-
-			credsProvider.setCredentials(AuthScope.ANY, new NTCredentials(authEncodedString));
-			
+			 // domain/username:password formed string
+			String fullyQualifiedDomainUsername = new com.sun.security.auth.module.NTSystem().getDomain() + "/" + username+ ":"+password;
+			credsProvider.setCredentials(AuthScope.ANY, new NTCredentials(fullyQualifiedDomainUsername));
 			httpclientBuilder.setDefaultCredentialsProvider(credsProvider);
-			
 			isWindowsAuth =  false;
 			
 			return this;
@@ -337,13 +326,13 @@ public class V1Connector {
 			log.info("called V1Connector.withWindowsIntegrated ");
 			
 			httpclient =  WinHttpClients.createDefault();
-			
 			isWindowsAuth=true;
 			
 			return this;
 		}
 
 		// set the proxy
+		@SuppressWarnings("unused")
 		@Override
 		public IsetEndPointOrConnector withProxy(ProxyProvider proxyProvider)  {
 			log.info("called V1Connector.withproxy ");
@@ -362,10 +351,7 @@ public class V1Connector {
 			credsProvider.setCredentials(new AuthScope(proxyProvider.getAddress().getHost(), proxyProvider.getAddress().getPort()),
 					new UsernamePasswordCredentials(proxyProvider.getUserName(), proxyProvider.getPassword()));
 
-		//	httpclientBuilder.setDefaultCredentialsProvider(credsProvider);
-
 			HttpHost proxy = new HttpHost(proxyProvider.getAddress().getHost(), proxyProvider.getAddress().getPort());
-
 			httpclientBuilder.setDefaultCredentialsProvider(credsProvider).setProxy(proxy);
 			
 			isWindowsAuth=false;
@@ -392,7 +378,6 @@ public class V1Connector {
 			return this;
 		}
 		
-		
 		// build
 		@Override
 		public V1Connector build() {
@@ -400,13 +385,6 @@ public class V1Connector {
 			return instance;
 		}
 
-		private String encodingLoginInfo(String username, String password) {
-			String authString = username + ":" + password;
-			byte[] authEncodedBytes = Base64.encodeBase64(authString.getBytes());
-
-			String authEncodedString = new String(authEncodedBytes);
-			return authEncodedString;
-		}
 	}
 	// end builder
 
@@ -420,13 +398,10 @@ public class V1Connector {
 		log.info("called V1Connector.getData with _url + _endpoint:  " + _url + _endpoint);
 		
 		Reader data = null;
-
 		String url = V1Util.isNullOrEmpty(path) ? _url + _endpoint : _url + _endpoint + path;
 
 		HttpGet request = new HttpGet(url);
-		
 		setDefaultHeaderValue();
-		
 		request.setHeaders(headerArray);
 		
 		// creates a new httclient
@@ -435,16 +410,14 @@ public class V1Connector {
 		}
 
 		try {
-			httpResponse = httpclient.execute(request);//, localContext);
+			httpResponse = httpclient.execute(request);
 		} catch (IOException e) {
 			log.error(e.getMessage());
 			e.printStackTrace();
 		}
 
 		HttpEntity entity = httpResponse.getEntity();
-
 		int errorCode = httpResponse.getStatusLine().getStatusCode();
-
 		String errorMessage = "\n" + httpResponse.getStatusLine() + "error code: " + errorCode;
 
 		switch (errorCode) {
@@ -604,11 +577,4 @@ public class V1Connector {
 	public void useQueryAPI() {
 		_endpoint = QUERY_API_ENDPOINT;
 	}
-
-//	public void useEndPoint(String endPoint) throws V1Exception {
-//		if (V1Util.isNullOrEmpty(endPoint))
-//			throw new V1Exception("Error processing endpoint Null/Empty ");
-//		_endpoint = endPoint;
-//	}
-
 }
