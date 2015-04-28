@@ -152,10 +152,10 @@ public class V1ConnectorTest {
 		assertTrue(result.getAssets().length > 0);
 	}
 
-	@Test(expected = MalformedURLException.class)
+	//@Test(expected = MalformedURLException.class)
 	public void validatePathTest() throws V1Exception, MalformedURLException {
 
-		url = null;
+		url = "http//localhost/versionone/";
 
 		V1Connector connector = V1Connector.withInstanceUrl(url)
 				.withUserAgentHeader("name", "1.0")
@@ -237,7 +237,6 @@ public class V1ConnectorTest {
 	}
 	
 	
-	///// TO BE DEFINED //////////
 	//@Test()
 	public void testConnectionNtlm() throws Exception {
 
@@ -250,8 +249,10 @@ public class V1ConnectorTest {
 
 		Services services = new Services(connector);
 		Oid oid = services.getLoggedIn();
+		System.out.println(oid.getAssetType().getDisplayName());
 		assertNotNull(oid);
 	}
+	
 	//@Test()
 	public void testConnectionNtlmWithUsernamePass() throws Exception {
 
@@ -259,7 +260,7 @@ public class V1ConnectorTest {
 
 		V1Connector connector = V1Connector.withInstanceUrl(url)
 				.withUserAgentHeader("name", "1.0")
-				.withWindowsIntegrated("ExoI7\\vplechuc", "")
+				.withWindowsIntegrated("", "")
 				.build();
 
 		Services services = new Services(connector);
@@ -267,11 +268,9 @@ public class V1ConnectorTest {
 		assertNotNull(oid);
 	}
 	
-	// @Test()
+	@Test()
 	public void testConnectionNtlmWithProxy() throws Exception {
 
-		username = "admin";
-		password = "1234";
 		String url = "http://localhost/VersionOne/";
 		URI address = null;
 		try {
@@ -283,7 +282,8 @@ public class V1ConnectorTest {
 
 		V1Connector connector = V1Connector.withInstanceUrl(url)
 				.withUserAgentHeader("name", "1.0")
-				.withUsernameAndPassword(username, password).withProxy(proxy)
+				.withWindowsIntegrated()
+				.withProxy(proxy)
 				.build();
 
 		Services services = new Services(connector);
@@ -293,6 +293,26 @@ public class V1ConnectorTest {
 		assertNotNull(assetType);
 	}
 	
+	
+	
+	//@Test()
+		public void useEndPointTest() throws V1Exception, MalformedURLException {
+
+			String accessToken = "1.yL3CcovObgbQnmMKP8PKTt3fo7A=";
+			String endPoint = "";
+			ProxyProvider proxyProvider = null;
+			V1Connector connector = V1Connector.withInstanceUrl(url)
+					.withUserAgentHeader("name", "1.0")
+					.withOAuth2Token(accessToken)
+					.useEndPoint(endPoint)
+//					.withProxy(proxyProvider)
+					.build();
+			
+			Services services = new Services(connector);
+			Oid oid = services.getLoggedIn();
+			assertNotNull(oid);
+		}
+
 	/**
 	 * Launch the test.
 	 *

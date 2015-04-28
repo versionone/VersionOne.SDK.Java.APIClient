@@ -6,8 +6,12 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.Reader;
 import java.io.UnsupportedEncodingException;
+import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Locale;
 
 import org.apache.commons.codec.binary.Base64;
@@ -23,19 +27,29 @@ import org.apache.http.auth.AuthSchemeProvider;
 import org.apache.http.auth.AuthScope;
 import org.apache.http.auth.NTCredentials;
 import org.apache.http.auth.UsernamePasswordCredentials;
+import org.apache.http.auth.params.AuthPNames;
 import org.apache.http.client.CredentialsProvider;
 import org.apache.http.client.config.AuthSchemes;
+import org.apache.http.client.config.RequestConfig;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
+import org.apache.http.client.params.AuthPolicy;
+import org.apache.http.client.protocol.ClientContext;
+import org.apache.http.client.protocol.HttpClientContext;
 import org.apache.http.config.Lookup;
 import org.apache.http.config.RegistryBuilder;
+import org.apache.http.cookie.Cookie;
 import org.apache.http.entity.StringEntity;
+import org.apache.http.impl.auth.NTLMScheme;
 import org.apache.http.impl.auth.NTLMSchemeFactory;
 import org.apache.http.impl.client.BasicCredentialsProvider;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClientBuilder;
+import org.apache.http.impl.client.WinHttpClients;
 import org.apache.http.message.BasicHeader;
+import org.apache.http.protocol.BasicHttpContext;
+import org.apache.http.protocol.HttpContext;
 import org.apache.log4j.Logger;
 
 import com.versionone.apiclient.exceptions.ConnectionException;
@@ -55,6 +69,9 @@ public class V1Connector {
 	private static CloseableHttpClient httpclient;
 	private static HttpGet request;
 	private static Header[] headerArray = {}; 
+	private static   HttpContext localContext = new BasicHttpContext();
+	
+	private static boolean isWindowsAuth =  false;
 
 	// local variables
 	static String _url = "";
@@ -178,6 +195,8 @@ public class V1Connector {
 		V1Connector build();
 	}
 
+
+
 	protected V1Connector(String instanceUrl) throws V1Exception, MalformedURLException {
 		log.info("called V1Connector construcor ");
 		log.info("with url: " + instanceUrl);
@@ -228,6 +247,8 @@ public class V1Connector {
 			Header header = new BasicHeader(HttpHeaders.USER_AGENT, headerString);
 
 			headerArray = (Header[]) ArrayUtils.add(headerArray, header);
+			
+			isWindowsAuth=false;
 
 			return this;
 		}
@@ -250,6 +271,8 @@ public class V1Connector {
 			credsProvider.setCredentials(new AuthScope(instanceUri.getHost(), instanceUri.getPort()), new UsernamePasswordCredentials(username,
 					password));
 			httpclientBuilder.setDefaultCredentialsProvider(credsProvider);
+			
+			isWindowsAuth=false;
 
 			return this;
 		}
@@ -265,6 +288,9 @@ public class V1Connector {
 
 			Header header = new BasicHeader(HttpHeaders.AUTHORIZATION, "Bearer " + accessToken);
 			headerArray = (Header[]) ArrayUtils.add(headerArray, header);
+			
+			isWindowsAuth=false;
+			
 			return this;
 		}
 		
@@ -278,6 +304,9 @@ public class V1Connector {
 
 			 Header header = new BasicHeader(HttpHeaders.AUTHORIZATION, "Bearer " + accessToken);
 			 headerArray = (Header[]) ArrayUtils.add(headerArray, header);
+		
+			 isWindowsAuth=false;
+			 
 			 return this;
 		}
 
@@ -293,10 +322,13 @@ public class V1Connector {
 			}
 
 			String authEncodedString = encodingLoginInfo(username, password);
-			CredentialsProvider credsProvider = new BasicCredentialsProvider();
-			credsProvider.setCredentials(AuthScope.ANY, new NTCredentials(authEncodedString));
-			httpclientBuilder.setDefaultCredentialsProvider(credsProvider);
 
+			credsProvider.setCredentials(AuthScope.ANY, new NTCredentials(authEncodedString));
+			
+			httpclientBuilder.setDefaultCredentialsProvider(credsProvider);
+			
+			isWindowsAuth =  false;
+			
 			return this;
 		}
 
@@ -304,20 +336,10 @@ public class V1Connector {
 		public IsetProxyOrEndPointOrConnector withWindowsIntegrated() throws V1Exception {
 			log.info("called V1Connector.withWindowsIntegrated ");
 			
-			String fullyQualifiedDomainUsername = 
-						new com.sun.security.auth.module.NTSystem().getDomain() + "\\" +  
-						new com.sun.security.auth.module.NTSystem().getName();
+			httpclient =  WinHttpClients.createDefault();
 			
-			String authEncodedString = encodingLoginInfo(fullyQualifiedDomainUsername, "");
-
-			Lookup<AuthSchemeProvider> authProviders = RegistryBuilder.<AuthSchemeProvider>create()
-			            .register(AuthSchemes.NTLM, new NTLMSchemeFactory())                
-			            .build();
-
-			CredentialsProvider credsProvider = new BasicCredentialsProvider();
-			credsProvider.setCredentials(AuthScope.ANY, new NTCredentials(authEncodedString));
-			httpclientBuilder.setDefaultCredentialsProvider(credsProvider).setDefaultAuthSchemeRegistry(authProviders);
-
+			isWindowsAuth=true;
+			
 			return this;
 		}
 
@@ -340,11 +362,14 @@ public class V1Connector {
 			credsProvider.setCredentials(new AuthScope(proxyProvider.getAddress().getHost(), proxyProvider.getAddress().getPort()),
 					new UsernamePasswordCredentials(proxyProvider.getUserName(), proxyProvider.getPassword()));
 
-			httpclientBuilder.setDefaultCredentialsProvider(credsProvider);
+		//	httpclientBuilder.setDefaultCredentialsProvider(credsProvider);
 
 			HttpHost proxy = new HttpHost(proxyProvider.getAddress().getHost(), proxyProvider.getAddress().getPort());
 
 			httpclientBuilder.setDefaultCredentialsProvider(credsProvider).setProxy(proxy);
+			
+			isWindowsAuth=false;
+			
 			return this;
 		}
 	
@@ -367,15 +392,6 @@ public class V1Connector {
 			return this;
 		}
 		
-//		@Override
-//		IBuild IsetEndPointOrConnector.withProxy(ProxyProvider proxyProvider){
-//			return this;
-//		}
-////		
-//		IBuild useEndPoint(String endPoint){
-//			return this;
-//		}
-
 		
 		// build
 		@Override
@@ -384,7 +400,6 @@ public class V1Connector {
 			return instance;
 		}
 
-		
 		private String encodingLoginInfo(String username, String password) {
 			String authString = username + ":" + password;
 			byte[] authEncodedBytes = Base64.encodeBase64(authString.getBytes());
@@ -415,15 +430,17 @@ public class V1Connector {
 		request.setHeaders(headerArray);
 		
 		// creates a new httclient
-		httpclient = httpclientBuilder.build();
+		if (!isWindowsAuth){
+			httpclient = httpclientBuilder.build();
+		}
 
 		try {
-			httpResponse = httpclient.execute(request);
+			httpResponse = httpclient.execute(request);//, localContext);
 		} catch (IOException e) {
 			log.error(e.getMessage());
 			e.printStackTrace();
 		}
-		// execute connection
+
 		HttpEntity entity = httpResponse.getEntity();
 
 		int errorCode = httpResponse.getStatusLine().getStatusCode();
@@ -489,9 +506,9 @@ public class V1Connector {
 		httpPost.setHeaders(headerArray);
 		setDefaultHeaderValue();
 		
-		// creates a new httclient
-		httpclient = httpclientBuilder.build();
-
+		if (!isWindowsAuth){
+			httpclient = httpclientBuilder.build();
+		}
 		try {
 			httpResponse = httpclient.execute(httpPost);
 			resultStream = httpResponse.getEntity().getContent();
@@ -556,7 +573,6 @@ public class V1Connector {
 			try {
 				httpResponse = httpclient.execute(httpPost);
 			} catch (IOException e1) {
-				// TODO Auto-generated catch block
 				e1.printStackTrace();
 			}
 			try {
@@ -589,10 +605,10 @@ public class V1Connector {
 		_endpoint = QUERY_API_ENDPOINT;
 	}
 
-	public void useEndPoint(String endPoint) throws V1Exception {
-		if (V1Util.isNullOrEmpty(endPoint))
-			throw new V1Exception("Error processing endpoint Null/Empty ");
-		_endpoint = endPoint;
-	}
+//	public void useEndPoint(String endPoint) throws V1Exception {
+//		if (V1Util.isNullOrEmpty(endPoint))
+//			throw new V1Exception("Error processing endpoint Null/Empty ");
+//		_endpoint = endPoint;
+//	}
 
 }
