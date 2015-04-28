@@ -140,6 +140,6 @@ public interface IServices {
 	 * @param query the query string
 	 * @return String
 	 */
-    String ExecutePassThroughQuery(String query);
+    String executePassThroughQuery(String query);
 
 }

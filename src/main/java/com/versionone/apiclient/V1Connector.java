@@ -6,15 +6,10 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.Reader;
 import java.io.UnsupportedEncodingException;
-import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 import java.util.Locale;
 
-import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.ArrayUtils;
 import org.apache.commons.lang.StringUtils;
@@ -23,33 +18,19 @@ import org.apache.http.HttpEntity;
 import org.apache.http.HttpHeaders;
 import org.apache.http.HttpHost;
 import org.apache.http.HttpStatus;
-import org.apache.http.auth.AuthSchemeProvider;
 import org.apache.http.auth.AuthScope;
 import org.apache.http.auth.NTCredentials;
 import org.apache.http.auth.UsernamePasswordCredentials;
-import org.apache.http.auth.params.AuthPNames;
 import org.apache.http.client.CredentialsProvider;
-import org.apache.http.client.config.AuthSchemes;
-import org.apache.http.client.config.RequestConfig;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
-import org.apache.http.client.params.AuthPolicy;
-import org.apache.http.client.protocol.ClientContext;
-import org.apache.http.client.protocol.HttpClientContext;
-import org.apache.http.config.Lookup;
-import org.apache.http.config.RegistryBuilder;
-import org.apache.http.cookie.Cookie;
 import org.apache.http.entity.StringEntity;
-import org.apache.http.impl.auth.NTLMScheme;
-import org.apache.http.impl.auth.NTLMSchemeFactory;
 import org.apache.http.impl.client.BasicCredentialsProvider;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.impl.client.WinHttpClients;
 import org.apache.http.message.BasicHeader;
-import org.apache.http.protocol.BasicHttpContext;
-import org.apache.http.protocol.HttpContext;
 import org.apache.log4j.Logger;
 
 import com.versionone.apiclient.exceptions.ConnectionException;
@@ -69,16 +50,15 @@ public class V1Connector {
 	private static CloseableHttpClient httpclient;
 	private static Header[] headerArray = {}; 
 	private static HttpPost httpPost;
-	
-	
 	private static boolean isWindowsAuth =  false;
 
-	// local variables
+	// LOCAL VARIABLES
 	static String _url = "";
 	static String _endpoint = "";
 	static String _user_agent_header = "";
 	static String _upstreamUserAgent = "";
-	// ENDPOINTS
+
+	// VERSIONONE ENDPOINTS
 	private final static String META_API_ENDPOINT = "meta.v1/";
 	private final static String DATA_API_ENDPOINT = "rest-1.v1/Data/";
 	private final static String NEW_API_ENDPOINT = "rest-1.v1/New/";
@@ -186,7 +166,7 @@ public class V1Connector {
 		IBuild withProxy(ProxyProvider proxyProvider) throws V1Exception;
 	}
 
-	// get the connector (terminating build method)
+	// Get the connector (terminating fluent builder method).
 	public interface IBuild {
 		/**
 		 * Required terminating method that returns the V1Connector object.
@@ -194,8 +174,6 @@ public class V1Connector {
 		 */
 		V1Connector build();
 	}
-
-
 
 	protected V1Connector(String instanceUrl) throws V1Exception, MalformedURLException {
 		log.info("called V1Connector construcor ");
@@ -205,6 +183,8 @@ public class V1Connector {
 			throw new IllegalArgumentException();
 		}
 		
+		// Used to validate the URL, throws exception when invalid.
+		@SuppressWarnings("unused")
 		URL urlData = new URL(instanceUrl);
 		
 		if (!StringUtils.endsWith(instanceUrl, "/"))
@@ -312,7 +292,7 @@ public class V1Connector {
 			if (V1Util.isNullOrEmpty(fullyQualifiedDomainUsername) || V1Util.isNullOrEmpty(fullyQualifiedDomainUsername)
 					|| V1Util.isNullOrEmpty(password) || V1Util.isNullOrEmpty(password)) {
 				// use the logged user to the domain
-				throw new V1Exception("Error processing Windows integrated access ");
+				throw new V1Exception("Error processing Windows Integrated Autentication (NTLM) access.");
 			}
 			 // domain/username:password formed string
 			 fullyQualifiedDomainUsername += ":" + password;

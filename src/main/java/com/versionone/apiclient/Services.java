@@ -76,14 +76,11 @@ public class Services implements IServices {
 		_connector = connector;
 	}
 
-    public String ExecutePassThroughQuery(String query)
+    public String executePassThroughQuery(String query)
     {
         _v1Connector.useQueryAPI();
-
         return _v1Connector.stringSendData(query, "application/json");
     }
-
-	
 	
 	public Services(V1Connector v1Connector) {
 		if (v1Connector == null)
