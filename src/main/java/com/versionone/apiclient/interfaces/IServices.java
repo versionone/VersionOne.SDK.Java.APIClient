@@ -134,4 +134,12 @@ public interface IServices {
 	 */
 	
 	V1Connector getV1Connector();
+	
+	/**
+	 * 
+	 * @param query the query string
+	 * @return String
+	 */
+    String ExecutePassThroughQuery(String query);
+
 }

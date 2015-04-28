@@ -68,6 +68,7 @@ public class V1Connector {
 	private static HttpClientBuilder httpclientBuilder = HttpClientBuilder.create();
 	private static CloseableHttpClient httpclient;
 	private static Header[] headerArray = {}; 
+	private static HttpPost httpPost;
 	
 	private static boolean isWindowsAuth =  false;
 
@@ -302,18 +303,18 @@ public class V1Connector {
 		}
 
 		@Override
-		public IsetProxyOrEndPointOrConnector withWindowsIntegrated(String username, String password) throws V1Exception {
+		public IsetProxyOrEndPointOrConnector withWindowsIntegrated(String fullyQualifiedDomainUsername, String password) throws V1Exception {
 			log.info("called V1Connector.withWindowsIntegrated ");
-			log.info("with username : " + username);
+			log.info("with username : " + fullyQualifiedDomainUsername);
 			log.info("with password: " + password);
 			
-			if (V1Util.isNullOrEmpty(username) || V1Util.isNullOrEmpty(username)
+			if (V1Util.isNullOrEmpty(fullyQualifiedDomainUsername) || V1Util.isNullOrEmpty(fullyQualifiedDomainUsername)
 					|| V1Util.isNullOrEmpty(password) || V1Util.isNullOrEmpty(password)) {
 				// use the logged user to the domain
 				throw new V1Exception("Error processing Windows integrated access ");
 			}
 			 // domain/username:password formed string
-			String fullyQualifiedDomainUsername = new com.sun.security.auth.module.NTSystem().getDomain() + "/" + username+ ":"+password;
+			 fullyQualifiedDomainUsername += ":" + password;
 			credsProvider.setCredentials(AuthScope.ANY, new NTCredentials(fullyQualifiedDomainUsername));
 			httpclientBuilder.setDefaultCredentialsProvider(credsProvider);
 			isWindowsAuth =  false;
@@ -455,28 +456,23 @@ public class V1Connector {
 		String localeName = Locale.getDefault().toString();
 		localeName = localeName.replace("_", "-");
 		Header header = new BasicHeader(HttpHeaders.ACCEPT_LANGUAGE, localeName);
-
 		headerArray = (Header[]) ArrayUtils.add(headerArray, header);
 	}
 
 	protected Reader sendData(String path, String data) throws ConnectionException {
 
 		InputStream resultStream = null;
-		
-		String url = V1Util.isNullOrEmpty(path) ? _url + _endpoint : _url + _endpoint + path;
-
-		HttpPost httpPost = new HttpPost(url);
-		Header header = new BasicHeader(HttpHeaders.CONTENT_TYPE, "text/xml");
-		headerArray = (Header[]) ArrayUtils.add(headerArray, header);
-
 		StringEntity xmlPayload = null;
+		
+		httpPost = setPostHeader(path);
+		
 		try {
 			xmlPayload = new StringEntity(data);
+			
 		} catch (UnsupportedEncodingException e) {
 			e.printStackTrace();
 		}
 		httpPost.setEntity(xmlPayload);
-		httpPost.setHeaders(headerArray);
 		setDefaultHeaderValue();
 		
 		if (!isWindowsAuth){
@@ -499,21 +495,32 @@ public class V1Connector {
 		return new InputStreamReader(resultStream);
 	}
 
+	/**
+	 * @param path
+	 * @return HttpPost
+	 */
+	private HttpPost setPostHeader(String path) {
+		String url = V1Util.isNullOrEmpty(path) ? _url + _endpoint : _url + _endpoint + path;
+		HttpPost httpPost = new HttpPost(url);
+		Header header = new BasicHeader(HttpHeaders.CONTENT_TYPE, "text/xml");
+		headerArray = (Header[]) ArrayUtils.add(headerArray, header);
+		httpPost.setHeaders(headerArray);
+		return httpPost;
+	}
+	
+	
+	public String stringSendData(String query, String string) {
+		//String theString = IOUtils.toString(inputStream, encoding); 
+		return null;
+	}
+
 	protected OutputStream beginRequest(String path, String contentType) throws ConnectionException {
 
-		String url = "";
 		OutputStream outputStream = null;
 
 		if (contentType != null)
-			
-			url = V1Util.isNullOrEmpty(path) ? _url + _endpoint : _url + _endpoint + path;
-			HttpPost httpPost = new HttpPost(url);
-
-			Header header = new BasicHeader(HttpHeaders.CONTENT_TYPE, "text/xml");
-			headerArray = (Header[]) ArrayUtils.add(headerArray, header);
-			httpPost.setHeaders(headerArray);
-			
-			try {
+			httpPost = setPostHeader(path);
+		try {
 				httpResponse = httpclient.execute(httpPost);
 			} catch (IOException e) {
 				try {
@@ -533,16 +540,10 @@ public class V1Connector {
 	}
 
 	protected InputStream endRequest(String path) throws ConnectionException {
-		String url = ""; 
+
 		InputStream resultStream = null;
 		
-			url = V1Util.isNullOrEmpty(path) ? _url + _endpoint : _url + _endpoint + path;
-			HttpPost httpPost = new HttpPost(url);
-
-			Header header = new BasicHeader(HttpHeaders.CONTENT_TYPE, "text/xml");
-			headerArray = (Header[]) ArrayUtils.add(headerArray, header);
-			httpPost.setHeaders(headerArray);
-
+		httpPost = setPostHeader(path);
 			try {
 				httpResponse = httpclient.execute(httpPost);
 			} catch (IOException e1) {
@@ -577,4 +578,6 @@ public class V1Connector {
 	public void useQueryAPI() {
 		_endpoint = QUERY_API_ENDPOINT;
 	}
+
+	
 }

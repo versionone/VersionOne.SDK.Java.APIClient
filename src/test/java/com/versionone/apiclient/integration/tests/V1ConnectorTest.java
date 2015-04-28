@@ -260,7 +260,7 @@ public class V1ConnectorTest {
 
 		V1Connector connector = V1Connector.withInstanceUrl(url)
 				.withUserAgentHeader("name", "1.0")
-				.withWindowsIntegrated("username", "password")
+				.withWindowsIntegrated("", "")
 				.build();
 
 		Services services = new Services(connector);
