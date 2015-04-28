@@ -60,8 +60,8 @@ import com.versionone.utils.V1Util;
 
 public class V1Connector {
 
-	//private static final String UTF8 = "UTF-8";
-
+	private static final String UTF8 = "UTF-8";
+	private static final String contentType = "text/xml";
 	private static Logger log = Logger.getLogger(V1Connector.class);
 	private static CredentialsProvider credsProvider = new BasicCredentialsProvider();
 	private static CloseableHttpResponse httpResponse = null;
@@ -69,6 +69,7 @@ public class V1Connector {
 	private static CloseableHttpClient httpclient;
 	private static Header[] headerArray = {}; 
 	private static HttpPost httpPost;
+	
 	
 	private static boolean isWindowsAuth =  false;
 
@@ -460,11 +461,16 @@ public class V1Connector {
 	}
 
 	protected Reader sendData(String path, String data) throws ConnectionException {
+		return sendData(path, data, contentType);
+	}
+	
+	
+	protected Reader sendData(String path, String data, String contentType) throws ConnectionException {
 
 		InputStream resultStream = null;
 		StringEntity xmlPayload = null;
 		
-		httpPost = setPostHeader(path);
+		httpPost = setPostHeader(path, contentType);
 		
 		try {
 			xmlPayload = new StringEntity(data);
@@ -499,19 +505,54 @@ public class V1Connector {
 	 * @param path
 	 * @return HttpPost
 	 */
-	private HttpPost setPostHeader(String path) {
+	private HttpPost setPostHeader(String path, String contentType) {
 		String url = V1Util.isNullOrEmpty(path) ? _url + _endpoint : _url + _endpoint + path;
 		HttpPost httpPost = new HttpPost(url);
-		Header header = new BasicHeader(HttpHeaders.CONTENT_TYPE, "text/xml");
+		Header header = new BasicHeader(HttpHeaders.CONTENT_TYPE, contentType);
 		headerArray = (Header[]) ArrayUtils.add(headerArray, header);
 		httpPost.setHeaders(headerArray);
 		return httpPost;
 	}
 	
 	
-	public String stringSendData(String query, String string) {
-		//String theString = IOUtils.toString(inputStream, encoding); 
-		return null;
+	public String stringSendData(String data, String contentType) {
+		String resultStream = null;
+		StringEntity xmlPayload = null;
+		
+		httpPost = setPostHeader("", contentType);
+		
+		try {
+			xmlPayload = new StringEntity(data);
+			
+		} catch (UnsupportedEncodingException e) {
+			e.printStackTrace();
+		}
+		httpPost.setEntity(xmlPayload);
+		setDefaultHeaderValue();
+		
+		if (!isWindowsAuth){
+			httpclient = httpclientBuilder.build();
+		}
+		try {
+			httpResponse = httpclient.execute(httpPost);
+			resultStream =  IOUtils.toString(httpResponse.getEntity().getContent(), UTF8); 
+		} catch (IOException ex) {
+			log.error(ex.getMessage());
+			int code;
+			try {
+				code = httpResponse.getStatusLine().getStatusCode();
+			} catch (Exception e1) {
+				log.error(e1.getMessage());
+				code = -1;
+			}
+			try {
+				throw new ConnectionException("Error writing to output stream", code, ex);
+			} catch (ConnectionException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		return resultStream;
 	}
 
 	protected OutputStream beginRequest(String path, String contentType) throws ConnectionException {
@@ -519,7 +560,7 @@ public class V1Connector {
 		OutputStream outputStream = null;
 
 		if (contentType != null)
-			httpPost = setPostHeader(path);
+			httpPost = setPostHeader(path, contentType);
 		try {
 				httpResponse = httpclient.execute(httpPost);
 			} catch (IOException e) {
@@ -543,7 +584,7 @@ public class V1Connector {
 
 		InputStream resultStream = null;
 		
-		httpPost = setPostHeader(path);
+		httpPost = setPostHeader(path, contentType);
 			try {
 				httpResponse = httpclient.execute(httpPost);
 			} catch (IOException e1) {
