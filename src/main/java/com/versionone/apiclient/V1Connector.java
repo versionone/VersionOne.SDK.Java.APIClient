@@ -341,7 +341,6 @@ public class V1Connector {
 			return this;
 		}
 	
-
 		@Override
 		public IsetProxyOrConnector useEndPoint(String endPoint) {
 			log.info("called V1Connector.useEndPoint ");
@@ -375,6 +374,7 @@ public class V1Connector {
 	}
 
 	protected Reader getData(String path) throws ConnectionException {
+		
 		log.info("called V1Connector.getData ");
 		log.info("with : " + path);
 		log.info("called V1Connector.getData with _url + _endpoint:  " + _url + _endpoint);
@@ -386,7 +386,7 @@ public class V1Connector {
 		setDefaultHeaderValue();
 		request.setHeaders(headerArray);
 		
-		// creates a new httclient
+		// Creates a new httpclient if not using NTLM.
 		if (!isWindowsAuth){
 			httpclient = httpclientBuilder.build();
 		}
@@ -400,7 +400,7 @@ public class V1Connector {
 
 		HttpEntity entity = httpResponse.getEntity();
 		int errorCode = httpResponse.getStatusLine().getStatusCode();
-		String errorMessage = "\n" + httpResponse.getStatusLine() + "error code: " + errorCode;
+		String errorMessage = "\n" + httpResponse.getStatusLine() + " error code: " + errorCode;
 
 		switch (errorCode) {
 		case HttpStatus.SC_OK:
@@ -417,17 +417,23 @@ public class V1Connector {
 				throw new ConnectionException("Error processing response " + ex.getMessage());
 			}
 			return data;
+			
 		case HttpStatus.SC_BAD_REQUEST:
 			throw new ConnectionException(errorMessage + " VersionOne could not process the request.");
+			
 		case HttpStatus.SC_UNAUTHORIZED:
 			throw new ConnectionException(errorMessage
 					+ " Could not authenticate. The VersionOne credentials may be incorrect or the access tokens may have expired.");
+			
 		case HttpStatus.SC_NOT_FOUND:
 			throw new ConnectionException(errorMessage + " The requested item may not exist, or the VersionOne server is unavailable.");
+			
 		case HttpStatus.SC_METHOD_NOT_ALLOWED:
 			throw new ConnectionException(errorMessage + " Only GET and POST methods are supported by VersionOne.");
+			
 		case HttpStatus.SC_INTERNAL_SERVER_ERROR:
 			throw new ConnectionException(errorMessage + " VersionOne encountered a unexpected error occurred while processing the request.");
+			
 		default:
 			throw new ConnectionException(errorMessage);
 		}
