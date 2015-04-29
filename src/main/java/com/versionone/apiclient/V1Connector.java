@@ -53,7 +53,7 @@ public class V1Connector {
 	private static boolean isWindowsAuth =  false;
 
 	// LOCAL VARIABLES
-	static String _url = "";
+	static URL INSTANCE_URL ;
 	static String _endpoint = "";
 	static String _user_agent_header = "";
 	static String _upstreamUserAgent = "";
@@ -147,7 +147,7 @@ public class V1Connector {
 		 * @return IProxy
 		 * @throws V1Exception
 		 */
-		IsetProxyOrEndPointOrConnector withOAuth2Token(String accessToken) throws V1Exception;
+		IsetProxyOrEndPointOrConnector withOAuth2Token(String oauth2Token) throws V1Exception;
 
 		/**
 		 * Optional method for setting the Windows Integrated Authentication credentials for authentication based on specified user credentials.
@@ -187,15 +187,16 @@ public class V1Connector {
 			throw new NullPointerException("The VersionOne instance URL cannot be null or empty.");
 		}
 		
-		// Validates the V1 instance URL, throws MalformedURLException exception when invalid.
-		@SuppressWarnings("unused")
-		URL urlData = new URL(instanceUrl);
-		
 		// Ensure that we have a forward slash at the end of the V1 instance URL.
 		if (!StringUtils.endsWith(instanceUrl, "/"))
 			instanceUrl += "/";
 		
-		_url = instanceUrl;
+		// Validates the V1 instance URL, throws MalformedURLException exception when invalid.
+		@SuppressWarnings("unused")
+		URL urlData = new URL(instanceUrl);
+
+		
+		INSTANCE_URL = urlData;
 	}
 
 	public static ISetUserAgentMakeRequest withInstanceUrl(String instanceUrl) throws V1Exception, MalformedURLException {
@@ -242,16 +243,7 @@ public class V1Connector {
 			if (V1Util.isNullOrEmpty(username) || V1Util.isNullOrEmpty(username))
 				throw new NullPointerException("Username and password values cannot be null or empty.");
 			
-			//TODO: Do we need to validate the URL here? Isn't this done in the constructor?
-			URL instanceUri = null;
-			try {
-				instanceUri = new URL(_url);
-			} catch (MalformedURLException e) {
-				e.printStackTrace();
-				throw new V1Exception("Error processing URL " + _url + " " + e.getMessage());
-			}
-			
-			credsProvider.setCredentials(new AuthScope(instanceUri.getHost(), instanceUri.getPort()), new UsernamePasswordCredentials(username, password));
+			credsProvider.setCredentials(new AuthScope(INSTANCE_URL.getHost(), INSTANCE_URL.getPort()), new UsernamePasswordCredentials(username, password));
 			httpclientBuilder.setDefaultCredentialsProvider(credsProvider);
 			isWindowsAuth=false;
 
@@ -369,10 +361,10 @@ public class V1Connector {
 		
 		log.info("called V1Connector.getData ");
 		log.info("with : " + path);
-		log.info("called V1Connector.getData with _url + _endpoint:  " + _url + _endpoint);
+		log.info("called V1Connector.getData with _url + _endpoint:  " + INSTANCE_URL + _endpoint);
 		
 		Reader data = null;
-		String url = V1Util.isNullOrEmpty(path) ? _url + _endpoint : _url + _endpoint + path;
+		String url = V1Util.isNullOrEmpty(path) ? INSTANCE_URL + _endpoint : INSTANCE_URL + _endpoint + path;
 
 		HttpGet request = new HttpGet(url);
 		setDefaultHeaderValue();
@@ -484,7 +476,7 @@ public class V1Connector {
 	 * @return HttpPost
 	 */
 	private HttpPost setPostHeader(String path, String contentType) {
-		String url = V1Util.isNullOrEmpty(path) ? _url + _endpoint : _url + _endpoint + path;
+		String url = V1Util.isNullOrEmpty(path) ? INSTANCE_URL + _endpoint : INSTANCE_URL + _endpoint + path;
 		HttpPost httpPost = new HttpPost(url);
 		Header header = new BasicHeader(HttpHeaders.CONTENT_TYPE, contentType);
 		headerArray = (Header[]) ArrayUtils.add(headerArray, header);
@@ -598,5 +590,14 @@ public class V1Connector {
 		_endpoint = QUERY_API_ENDPOINT;
 	}
 
+	public void useLocAPI() {
+		_endpoint = LOC_API_ENDPOINT;
+	}
+	public void useLoc2API() {
+		_endpoint = LOC2_API_ENDPOINT;
+	}
+	public void useConfigAPI() {
+		_endpoint = CONFIG_API_ENDPOINT;
+	}
 	
 }

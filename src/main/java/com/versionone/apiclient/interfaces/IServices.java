@@ -1,5 +1,7 @@
 package com.versionone.apiclient.interfaces;
 
+import java.util.Map;
+
 import com.versionone.Oid;
 import com.versionone.apiclient.Asset;
 import com.versionone.apiclient.Query;
@@ -136,10 +138,28 @@ public interface IServices {
 	V1Connector getV1Connector();
 	
 	/**
-	 * 
+	 * send a query using json format
 	 * @param query the query string
 	 * @return String
 	 */
     String executePassThroughQuery(String query);
+
+   /**
+    *  localize
+    * @param attribute
+    * @return String
+ * @throws V1Exception 
+    */
+    String loc(IAttributeDefinition attribute) throws V1Exception;
+   
+    /**
+     * 
+     * @param key
+     * @return String
+     * @throws V1Exception 
+     */
+     String loc(String key) throws V1Exception;
+     
+     Map<String, String> Loc(IAttributeDefinition[] attributes);
 
 }

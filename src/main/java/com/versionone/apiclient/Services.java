@@ -1,5 +1,6 @@
 package com.versionone.apiclient;
 
+import java.io.IOException;
 import java.io.Reader;
 import java.io.StringWriter;
 import java.io.UnsupportedEncodingException;
@@ -9,12 +10,14 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.StringJoiner;
 
 import javax.xml.xpath.XPath;
 import javax.xml.xpath.XPathConstants;
 import javax.xml.xpath.XPathExpressionException;
 import javax.xml.xpath.XPathFactory;
 
+import org.apache.commons.io.IOUtils;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
@@ -76,11 +79,6 @@ public class Services implements IServices {
 		_connector = connector;
 	}
 
-    public String executePassThroughQuery(String query)
-    {
-        _v1Connector.useQueryAPI();
-        return _v1Connector.stringSendData(query, "application/json");
-    }
 	
 	public Services(V1Connector v1Connector) {
 		if (v1Connector == null)
@@ -518,4 +516,64 @@ public class Services implements IServices {
 		asset.setOid(getOid(element.getAttribute("id")));
 		asset.acceptChanges();
 	}
+
+	@Override
+    public String executePassThroughQuery(String query)
+    {
+        _v1Connector.useQueryAPI();
+        return _v1Connector.stringSendData(query, "application/json");
+    }
+	
+	@Override
+	public String loc(IAttributeDefinition attribute) throws V1Exception {
+
+			String attributeName = "'"+attribute.getName()+"'";
+            StringJoiner sj = new StringJoiner(",");
+            String joinedStrings = sj.add("?AttributeDefinition").add(attributeName).add(attribute.getToken()).toString();
+            
+            return getStringData(joinedStrings);
+        }
+
+	/**
+	 * @param joinedStrings
+	 * @return
+	 * @throws ConnectionException
+	 */
+	private String getStringData(String joinedStrings) throws ConnectionException {
+
+		Reader stream;
+		
+		if (_connector != null)
+		{
+		    stream = _connector.getData("loc.v1/" + joinedStrings);
+		}
+		else
+		{
+		    _v1Connector.useLocAPI();
+		    stream = _v1Connector.getData(joinedStrings);
+		}
+
+		String result = null;
+		try {
+			result = IOUtils.toString(stream);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return result;
+	}
+
+	@Override
+	public String loc(String key) throws V1Exception {
+
+            String path ="?"+ key; 
+            return getStringData(path);
+        }
+
+	@Override
+	public Map<String, String> Loc(IAttributeDefinition[] attributes) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	
 }

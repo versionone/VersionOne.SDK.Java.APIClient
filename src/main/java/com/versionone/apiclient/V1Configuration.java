@@ -1,5 +1,6 @@
 package com.versionone.apiclient;
 
+import org.apache.commons.lang.NullArgumentException;
 import org.w3c.dom.Document;
 
 import com.versionone.apiclient.exceptions.APIException;
@@ -16,8 +17,15 @@ import java.io.Reader;
  */
 public class V1Configuration implements IV1Configuration {
 
-    private final IAPIConnector _connector;
+	 private final String EffortTrackingKey = "EffortTracking";
+     private final String StoryTrackingLevelKey = "StoryTrackingLevel";
+     private final String DefectTrackingLevelKey = "DefectTrackingLevel";
+     private final String MaxAttachmentSizeKey = "MaximumAttachmentSize";
+     private final String CapacityPlanningKey = "CapacityPlanning";
+	
+    private IAPIConnector _connector;
     private Document _doc;
+    private V1Connector _v1connector;
 
     /**
      * Creates V1Configuration object
@@ -25,9 +33,19 @@ public class V1Configuration implements IV1Configuration {
      * @param connector used to access to VersionOne server
      */
     public V1Configuration(IAPIConnector connector) {
-        this._connector = connector;
+    	if (connector == null)
+    		throw new NullArgumentException("connector");
+    	this._connector = connector;
     }
 
+    public V1Configuration(V1Connector connector) {
+    	if (connector == null)
+    		throw new NullArgumentException("_v1connector");
+
+        this._v1connector = connector;
+    }
+    
+    
     /**
      * Gets EffortTracking
      *
@@ -36,7 +54,7 @@ public class V1Configuration implements IV1Configuration {
      * @throws ConnectionException if any connection problems occur
      */
     public boolean isEffortTracking() throws ConnectionException, APIException {
-        final String value = getSetting("EffortTracking");
+        final String value = getSetting(EffortTrackingKey);
         return Boolean.parseBoolean(value);
     }
 
@@ -48,7 +66,7 @@ public class V1Configuration implements IV1Configuration {
      * @throws ConnectionException if any connection problems occur
      */
     public TrackingLevel getStoryTrackingLevel() throws ConnectionException, APIException {
-        final String value = getSetting("StoryTrackingLevel");
+        final String value = getSetting(StoryTrackingLevelKey);
         if (value != null && value.length() > 0) {
             return TrackingLevel.valueOf(value);
         }
@@ -63,7 +81,7 @@ public class V1Configuration implements IV1Configuration {
      * @throws ConnectionException if any connection problems occur
      */
     public TrackingLevel getDefectTrackingLevel() throws ConnectionException, APIException {
-        final String value = getSetting("DefectTrackingLevel");
+        final String value = getSetting(DefectTrackingLevelKey);
         if (value != null && value.length() > 0) {
             return TrackingLevel.valueOf(value);
         }
@@ -78,7 +96,7 @@ public class V1Configuration implements IV1Configuration {
      * @throws ConnectionException if any connection problems occur
      */
     public int getMaxAttachmentSize() throws ConnectionException, APIException {
-        final String value = getSetting("MaximumAttachmentSize");
+        final String value = getSetting(MaxAttachmentSizeKey);
         if (value != null && value.length() > 0) {
             try {
                 return Integer.parseInt(value);
@@ -103,10 +121,19 @@ public class V1Configuration implements IV1Configuration {
     }
 
     private Document get_doc() throws ConnectionException, APIException {
-        if (_doc == null) {
+    	
+    	final Reader reader;
+    	
+    	if (_doc == null) {
             // Build the request document
-            final Reader reader = _connector.getData();
-            _doc = XMLHandler.buildDocument(reader, "");
+    		if (_connector!= null){
+    				
+    			reader = _connector.getData();
+    		}else{
+    			_v1connector.useConfigAPI();
+    			reader = _v1connector.getData();
+    		}
+    		_doc = XMLHandler.buildDocument(reader, "");
         }
         return _doc;
     }
