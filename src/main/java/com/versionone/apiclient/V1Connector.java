@@ -64,6 +64,9 @@ public class V1Connector {
 	private final static String NEW_API_ENDPOINT = "rest-1.v1/New/";
 	private final static String HISTORY_API_ENDPOINT = "rest-1.v1/Hist/";
 	private final static String QUERY_API_ENDPOINT = "query.v1/";
+	private final static String LOC_API_ENDPOINT = "loc.v1/"; //TODO: Need to support this endpoint.
+	private final static String LOC2_API_ENDPOINT = "loc-2.v1/"; //TODO: Need to support this endpoint.
+	private final static String CONFIG_API_ENDPOINT = "config.v1/"; //TODO: Need to support this endpoint.
 
 	// INTERFACES
 	public interface IsetEndPoint{
