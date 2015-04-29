@@ -250,6 +250,7 @@ public class V1Connector {
 				e.printStackTrace();
 				throw new V1Exception("Error processing URL " + _url + " " + e.getMessage());
 			}
+			
 			credsProvider.setCredentials(new AuthScope(instanceUri.getHost(), instanceUri.getPort()), new UsernamePasswordCredentials(username, password));
 			httpclientBuilder.setDefaultCredentialsProvider(credsProvider);
 			isWindowsAuth=false;
@@ -423,7 +424,7 @@ public class V1Connector {
 			throw new ConnectionException(errorMessage + " Only GET and POST methods are supported by VersionOne.");
 			
 		case HttpStatus.SC_INTERNAL_SERVER_ERROR:
-			throw new ConnectionException(errorMessage + " VersionOne encountered a unexpected error occurred while processing the request.");
+			throw new ConnectionException(errorMessage + " VersionOne encountered an unexpected error occurred while processing the request.");
 			
 		default:
 			throw new ConnectionException(errorMessage);
