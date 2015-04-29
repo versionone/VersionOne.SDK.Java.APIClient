@@ -296,15 +296,15 @@ public class V1ConnectorTest {
 	
 	
 	//@Test()
-		public void useEndPointTest() throws V1Exception, MalformedURLException {
+		public void useEndpointTest() throws V1Exception, MalformedURLException {
 
 			String accessToken = "1.yL3CcovObgbQnmMKP8PKTt3fo7A=";
-			String endPoint = "";
+			String endpoint = "";
 			ProxyProvider proxyProvider = null;
 			V1Connector connector = V1Connector.withInstanceUrl(url)
 					.withUserAgentHeader("name", "1.0")
 					.withOAuth2Token(accessToken)
-					.useEndPoint(endPoint)
+					.useEndpoint(endpoint)
 //					.withProxy(proxyProvider)
 					.build();
 			

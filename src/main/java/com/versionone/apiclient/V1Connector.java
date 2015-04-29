@@ -69,13 +69,13 @@ public class V1Connector {
 	private final static String CONFIG_API_ENDPOINT = "config.v1/"; //TODO: Need to support this endpoint.
 
 	// INTERFACES
-	public interface IsetEndPoint{
+	public interface IsetEndpoint{
 		/**
 		 * Optional method for specifying an API endpoint to connect to.
-		 * @param endPoint The API endpoint.
+		 * @param endpoint The API endpoint.
 		 * @return IsetProxyOrConnector
 		 */
-		IsetProxyOrConnector useEndPoint(String endPoint);
+		IsetProxyOrConnector useEndpoint(String endpoint);
 	}
 	
 	public interface IsetProxyOrConnector extends IBuild{
@@ -93,10 +93,10 @@ public class V1Connector {
 		 * @param endPoint The API endpoint.
 		 * @return IBuild
 		 */
-		IBuild useEndPoint(String endPoint);
+		IBuild useEndpoint(String endpoint);
 	}
 	
-	public interface IsetProxyOrEndPointOrConnector extends IsetEndPoint, IBuild{
+	public interface IsetProxyOrEndPointOrConnector extends IsetEndpoint, IBuild{
 		/**
 		 * Optional method for setting the proxy credentials.
 		 * @param proxyProvider The ProxyProvider containing the proxy URI, username, and password.
@@ -179,17 +179,19 @@ public class V1Connector {
 	}
 
 	protected V1Connector(String instanceUrl) throws V1Exception, MalformedURLException {
+		
 		log.info("called V1Connector construcor ");
 		log.info("with url: " + instanceUrl);
 		
-		if (StringUtils.isBlank(instanceUrl)) {
-			throw new IllegalArgumentException();
+		if (V1Util.isNullOrEmpty(instanceUrl)) {
+			throw new NullPointerException("The VersionOne instance URL cannot be null or empty.");
 		}
 		
-		// Used to validate the URL, throws exception when invalid.
+		// Validates the V1 instance URL, throws MalformedURLException exception when invalid.
 		@SuppressWarnings("unused")
 		URL urlData = new URL(instanceUrl);
 		
+		// Ensure that we have a forward slash at the end of the V1 instance URL.
 		if (!StringUtils.endsWith(instanceUrl, "/"))
 			instanceUrl += "/";
 		
@@ -217,15 +219,13 @@ public class V1Connector {
 			log.info("called V1Connector.withUserAgentHeader ");
 			log.info("with name/version: " + name + " / " + version);
 
-			Package p = this.getClass().getPackage();
-			String headerString = "Java/" + System.getProperty("java.version") + " " + p.getImplementationTitle() + "/"
-					+ p.getImplementationVersion();
-
-			if (!V1Util.isNullOrEmpty(name) && !V1Util.isNullOrEmpty(version)) {
-				headerString = headerString + " " + name + "/" + version;
-			} else {
-				throw new V1Exception("Error processing User Agent name/version: " + name + version);
+			if (V1Util.isNullOrEmpty(name) || V1Util.isNullOrEmpty(version)) {
+				throw new NullPointerException("UserAgent header values cannot be null or empty.");
 			}
+			
+			Package p = this.getClass().getPackage();
+			String headerString = "Java/" + System.getProperty("java.version") + " " + p.getImplementationTitle() + "/" + p.getImplementationVersion();
+
 			Header header = new BasicHeader(HttpHeaders.USER_AGENT, headerString);
 			headerArray = (Header[]) ArrayUtils.add(headerArray, header);
 			isWindowsAuth=false;
@@ -240,7 +240,9 @@ public class V1Connector {
 			log.info("with username/password: " + username + " / " + password);
 
 			if (V1Util.isNullOrEmpty(username) || V1Util.isNullOrEmpty(username))
-				throw new V1Exception("Error processing User Name / Password ");
+				throw new NullPointerException("Username and password values cannot be null or empty.");
+			
+			//TODO: Do we need to validate the URL here? Isn't this done in the constructor?
 			URL instanceUri = null;
 			try {
 				instanceUri = new URL(_url);
@@ -248,8 +250,7 @@ public class V1Connector {
 				e.printStackTrace();
 				throw new V1Exception("Error processing URL " + _url + " " + e.getMessage());
 			}
-			credsProvider.setCredentials(new AuthScope(instanceUri.getHost(), instanceUri.getPort()), new UsernamePasswordCredentials(username,
-					password));
+			credsProvider.setCredentials(new AuthScope(instanceUri.getHost(), instanceUri.getPort()), new UsernamePasswordCredentials(username, password));
 			httpclientBuilder.setDefaultCredentialsProvider(credsProvider);
 			isWindowsAuth=false;
 
@@ -263,7 +264,8 @@ public class V1Connector {
 			log.info("with accesstoken: " + accessToken);
 
 			if (V1Util.isNullOrEmpty(accessToken))
-				throw new V1Exception("Error processing accessToken Null/Empty ");
+				throw new NullPointerException("Access token value cannot be null or empty.");
+			
 			Header header = new BasicHeader(HttpHeaders.AUTHORIZATION, "Bearer " + accessToken);
 			headerArray = (Header[]) ArrayUtils.add(headerArray, header);
 			isWindowsAuth=false;
@@ -277,7 +279,7 @@ public class V1Connector {
 			log.info("with accesstoken: " + accessToken);
 
 			if (V1Util.isNullOrEmpty(accessToken))
-				throw new V1Exception("Error processing accessToken Null/Empty ");
+				throw new NullPointerException("Access token value cannot be null or empty.");
 
 			 Header header = new BasicHeader(HttpHeaders.AUTHORIZATION, "Bearer " + accessToken);
 			 headerArray = (Header[]) ArrayUtils.add(headerArray, header);
@@ -292,13 +294,12 @@ public class V1Connector {
 			log.info("with username : " + fullyQualifiedDomainUsername);
 			log.info("with password: " + password);
 			
-			if (V1Util.isNullOrEmpty(fullyQualifiedDomainUsername) || V1Util.isNullOrEmpty(fullyQualifiedDomainUsername)
-					|| V1Util.isNullOrEmpty(password) || V1Util.isNullOrEmpty(password)) {
-				// use the logged user to the domain
-				throw new V1Exception("Error processing Windows Integrated Autentication (NTLM) access.");
+			if (V1Util.isNullOrEmpty(fullyQualifiedDomainUsername) || V1Util.isNullOrEmpty(password)) {
+				throw new NullPointerException("NTLM credential values cannot be null or empty.");
 			}
-			 // domain/username:password formed string
-			 fullyQualifiedDomainUsername += ":" + password;
+			
+			// Domain/username:password formed string.
+			fullyQualifiedDomainUsername += ":" + password;
 			credsProvider.setCredentials(AuthScope.ANY, new NTCredentials(fullyQualifiedDomainUsername));
 			httpclientBuilder.setDefaultCredentialsProvider(credsProvider);
 			isWindowsAuth =  false;
@@ -323,14 +324,8 @@ public class V1Connector {
 			log.info("called V1Connector.withproxy ");
 			log.info("with proxyProvider: " + proxyProvider.toString());
 
-			if (proxyProvider == null) {
-				log.error("Proxy Provider is null");
-				try {
-					throw new V1Exception("Error processing proxy Null/Empty ");
-				} catch (V1Exception e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
+			if (null == proxyProvider) {
+				throw new NullPointerException("ProxyProvider value cannot be null or empty.");
 			}
 
 			credsProvider.setCredentials(new AuthScope(proxyProvider.getAddress().getHost(), proxyProvider.getAddress().getPort()),
@@ -338,27 +333,21 @@ public class V1Connector {
 
 			HttpHost proxy = new HttpHost(proxyProvider.getAddress().getHost(), proxyProvider.getAddress().getPort());
 			httpclientBuilder.setDefaultCredentialsProvider(credsProvider).setProxy(proxy);
-			
 			isWindowsAuth=false;
 			
 			return this;
 		}
 	
 		@Override
-		public IsetProxyOrConnector useEndPoint(String endPoint) {
-			log.info("called V1Connector.useEndPoint ");
-			log.info("with useEndPoint: " + endPoint);
+		public IsetProxyOrConnector useEndpoint(String endpoint) {
+			log.info("called V1Connector.useEndpoint ");
+			log.info("with useEndpoint: " + endpoint);
 
-			if (V1Util.isNullOrEmpty(endPoint))
-				try {
-					throw new V1Exception("Error processing endPoint Null/Empty ");
-				} catch (V1Exception e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
+			if (V1Util.isNullOrEmpty(endpoint)) {
+				throw new NullPointerException("Endpoint value cannot be null or empty.");
+			}	
 			
-			instance._endpoint = endPoint;
-
+			_endpoint = endpoint;
 			return this;
 		}
 		
@@ -368,7 +357,6 @@ public class V1Connector {
 			log.info("called V1Connector.connect ");
 			return instance;
 		}
-
 	}
 	// end builder
 
