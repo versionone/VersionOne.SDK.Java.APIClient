@@ -36,9 +36,9 @@ public class Attachments implements IAttachments {
             if (_connector!=null){ 
             		_connector.beginRequest(path, null);
             		return _connector.endRequest(path);
-            }else if (_v1connector!=null) {
-                		_connector.beginRequest(path, null);
-                		return _connector.endRequest(path);
+            }else if (this._v1connector!=null) {
+            				this._v1connector.beginRequest(path, null);
+                		return this._v1connector.endRequest(path);
                 		}
         }
         return null;
@@ -56,8 +56,8 @@ public class Attachments implements IAttachments {
         if(key != null && key.length()>0){
         	  if (_connector!=null){ 
         		  	return _connector.beginRequest(key.substring(key.lastIndexOf('/') + 1), contentType);
-        	  }else  if (_v1connector!=null){
-        		  return _v1connector.beginRequest(key.substring(key.lastIndexOf('/') + 1), contentType);
+        	  }else  if (this._v1connector!=null){
+        		  return this._v1connector.beginRequest(key.substring(key.lastIndexOf('/') + 1), contentType);
         	  }
         }
         return null;
@@ -75,8 +75,8 @@ public class Attachments implements IAttachments {
             if (key != null && key.length()>0){
             	  if (_connector!=null){ 
             		  _connector.endRequest(key.substring(key.lastIndexOf('/') + 1));
-            	  }else  if (_v1connector!=null){
-            		  _v1connector.endRequest(key.substring(key.lastIndexOf('/') + 1));
+            	  }else  if (this._v1connector!=null){
+            		 this._v1connector.endRequest(key.substring(key.lastIndexOf('/') + 1));
             	  }
             }
         } catch (ConnectionException e) {

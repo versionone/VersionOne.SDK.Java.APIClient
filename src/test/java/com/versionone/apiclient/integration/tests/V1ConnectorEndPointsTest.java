@@ -78,7 +78,7 @@ public class V1ConnectorEndPointsTest {
 
 
 	// @Test
-	public void LocEpicName() {
+	public void LocEpicNameTest() {
 
 		IAssetType epicType = services.getMeta().getAssetType("Epic");
 		IAttributeDefinition nameAttribute = epicType.getAttributeDefinition("Name");
@@ -94,7 +94,7 @@ public class V1ConnectorEndPointsTest {
 	}
 
 	// @Test
-	public void LocStoryName() {
+	public void LocStoryNameTest() {
 
 		IAssetType storyType = services.getMeta().getAssetType("Story");
 		IAttributeDefinition nameAttribute = storyType.getAttributeDefinition("Name");
@@ -113,7 +113,7 @@ public class V1ConnectorEndPointsTest {
 
 	// Config
 //	@Test
-	public void getConfig() {
+	public void getConfigTest() {
 
 		V1Configuration configuration = new V1Configuration(connector);
 

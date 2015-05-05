@@ -2,20 +2,38 @@ package com.versionone.apiclient.integration.tests;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.net.MalformedURLException;
+import java.util.stream.Stream;
 
+import junit.framework.Assert;
+
+import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang.time.DateUtils;
+import org.codehaus.plexus.util.FileUtils;
 import org.junit.Before;
 import org.junit.BeforeClass;
+import org.junit.Test;
+
+import util.StreamReader;
 
 import com.versionone.DB.DateTime;
 import com.versionone.Oid;
 import com.versionone.apiclient.Asset;
+import com.versionone.apiclient.Attachments;
+import com.versionone.apiclient.MimeType;
 import com.versionone.apiclient.Query;
 import com.versionone.apiclient.Services;
 import com.versionone.apiclient.V1Connector;
+import com.versionone.apiclient.exceptions.MetaException;
 import com.versionone.apiclient.exceptions.V1Exception;
 import com.versionone.apiclient.interfaces.IAssetType;
+import com.versionone.apiclient.interfaces.IAttachments;
 import com.versionone.apiclient.interfaces.IAttributeDefinition;
 import com.versionone.apiclient.interfaces.IOperation;
 import com.versionone.apiclient.services.QueryResult;
@@ -58,7 +76,7 @@ public class V1ConnectorCreatesTests {
 	}
 
 	// @Test
-	public void CreateEpic() throws V1Exception {
+	public void createEpic() throws V1Exception {
 
 		IAssetType epicType = services.getMeta().getAssetType("Epic");
 		Asset newEpic = null;
@@ -112,7 +130,7 @@ public class V1ConnectorCreatesTests {
 	}
 
 	// @Test
-	public void CreateStoryWithConversation() throws V1Exception {
+	public void createStoryWithConversation() throws V1Exception {
 		init();
 
 		IAssetType storyType = services.getMeta().getAssetType("Story");
@@ -150,7 +168,7 @@ public class V1ConnectorCreatesTests {
 
 		Asset answerExpression = services.createNew(expressionType, questionExpression.getOid());
 		answerExpression.setAttributeValue(authorAttribute, services.getOid("Member:20"));
-		answerExpression.setAttributeValue(authoredAtAttribute, DateTime.now());
+		answerExpression.setAttributeValue(authoredAtAttribute, DateUtils.addMinutes(DateTime.now().getValue(), 15));
 		answerExpression.setAttributeValue(contentAttribute, "Yes it is!");
 		answerExpression.setAttributeValue(inReplyToAttribute, questionExpression.getOid());
 		services.save(answerExpression);
@@ -164,179 +182,189 @@ public class V1ConnectorCreatesTests {
 		assertEquals(1, result.getTotalAvaliable());
 
 	}
-	//
-	// [TestMethod]
-	// public void CreateStoryWithConversationAndMention()
-	// {
-	// var services = GetServices();
-	//
-	// var contextId = IntegrationTestsHelper.TestProjectOid;
-	// var storyType = services.Meta.GetAssetType("Story");
-	// var newStory = services.New(storyType, contextId);
-	// var nameAttribute = storyType.GetAttributeDefinition("Name");
-	// var mentionedInExpressionsAttribute = storyType.GetAttributeDefinition("MentionedInExpressions");
-	// var name = string.Format("Test Story {0} Create story with conversation and mention", contextId);
-	// newStory.SetAttributeValue(nameAttribute, name);
-	// services.Save(newStory);
-	//
-	// var storyTobeMentioned = services.New(storyType, contextId);
-	// storyTobeMentioned.SetAttributeValue(nameAttribute, name + " (to be mentioned)");
-	// services.Save(storyTobeMentioned);
-	//
-	// var conversationType = services.Meta.GetAssetType("Conversation");
-	// var expressionType = services.Meta.GetAssetType("Expression");
-	// var authorAttribute = expressionType.GetAttributeDefinition("Author");
-	// var authoredAtAttribute = expressionType.GetAttributeDefinition("AuthoredAt");
-	// var contentAttribute = expressionType.GetAttributeDefinition("Content");
-	// var belongsToAttribute = expressionType.GetAttributeDefinition("BelongsTo");
-	// var inReplyToAttribute = expressionType.GetAttributeDefinition("InReplyTo");
-	//
-	// var newConversation = services.New(conversationType, newStory.Oid);
-	// var questionExpression = services.New(expressionType, newStory.Oid);
-	//
-	// services.Save(newConversation);
-	// questionExpression.SetAttributeValue(authorAttribute, services.GetOid("Member:20"));
-	// questionExpression.SetAttributeValue(authoredAtAttribute, DateTime.Now);
-	// questionExpression.SetAttributeValue(contentAttribute, "Can I mention another story in a conversation?");
-	// questionExpression.SetAttributeValue(belongsToAttribute, newConversation.Oid);
-	// services.Save(questionExpression);
-	// var answerExpression = services.New(expressionType, questionExpression.Oid);
-	// answerExpression.SetAttributeValue(authorAttribute, services.GetOid("Member:20"));
-	// answerExpression.SetAttributeValue(authoredAtAttribute, DateTime.Now.AddMinutes(15));
-	// answerExpression.SetAttributeValue(contentAttribute, "Yes I can!");
-	// answerExpression.SetAttributeValue(inReplyToAttribute, questionExpression.Oid);
-	// services.Save(answerExpression);
-	//
-	// newStory.AddAttributeValue(mentionedInExpressionsAttribute, questionExpression.Oid);
-	// services.Save(newStory);
-	// storyTobeMentioned.AddAttributeValue(mentionedInExpressionsAttribute, answerExpression.Oid);
-	// services.Save(storyTobeMentioned);
-	// }
-	//
-	// [TestMethod]
-	// public void CreateStoryWithNestedTask()
-	// {
-	// var services = GetServices();
-	//
-	// var contextId = IntegrationTestsHelper.TestProjectOid;
-	// var storyType = services.Meta.GetAssetType("Story");
-	// var newStory = services.New(storyType, contextId);
-	// var nameAttribute = storyType.GetAttributeDefinition("Name");
-	// var childrenAttribute = storyType.GetAttributeDefinition("Children");
-	// var name = string.Format("Test Story {0} Create story with nested task", contextId);
-	// newStory.SetAttributeValue(nameAttribute, name);
-	// services.Save(newStory);
-	//
-	// var taskType = services.Meta.GetAssetType("Task");
-	// var newTask = services.New(taskType, newStory.Oid);
-	// newTask.SetAttributeValue(nameAttribute, "Test Task Nested in " + newStory.Oid);
-	//
-	// services.Save(newTask);
-	//
-	// Assert.IsNotNull(newStory.Oid);
-	// Assert.IsNotNull(newTask.Oid);
-	//
-	// var query = new Query(newStory.Oid.Momentless);
-	// query.Selection.Add(childrenAttribute);
-	// var story = services.Retrieve(query).Assets[0];
-	//
-	// Assert.AreEqual(1, story.GetAttribute(childrenAttribute).Values.Cast<object>().Count());
-	// }
-	//
-	// [TestMethod]
-	// public void CreateStoryWithNestedTest()
-	// {
-	// var services = GetServices();
-	//
-	// var contextId = IntegrationTestsHelper.TestProjectOid;
-	// var storyType = services.Meta.GetAssetType("Story");
-	// var newStory = services.New(storyType, contextId);
-	// var nameAttribute = storyType.GetAttributeDefinition("Name");
-	// var childrenAttribute = storyType.GetAttributeDefinition("Children");
-	// var name = string.Format("Test Story {0} Create story with nested test", contextId);
-	// newStory.SetAttributeValue(nameAttribute, name);
-	// services.Save(newStory);
-	//
-	// var testType = services.Meta.GetAssetType("Test");
-	// var newTest = services.New(testType, newStory.Oid);
-	// newTest.SetAttributeValue(nameAttribute, "Test Test Nested in " + newStory.Oid);
-	//
-	// services.Save(newTest);
-	//
-	// Assert.IsNotNull(newStory.Oid);
-	// Assert.IsNotNull(newTest.Oid);
-	//
-	// var query = new Query(newStory.Oid.Momentless);
-	// query.Selection.Add(childrenAttribute);
-	// var story = services.Retrieve(query).Assets[0];
-	//
-	// Assert.AreEqual(1, story.GetAttribute(childrenAttribute).Values.Cast<object>().Count());
-	// }
-	//
-	// [TestMethod]
-	// [DeploymentItem("versionone.png")]
-	// public void CreateStoryWithAttachment()
-	// {
-	// var services = GetServices();
-	// string file = "versionone.png";
-	//
-	// Assert.IsTrue(File.Exists(file));
-	//
-	// string mimeType = MimeType.Resolve(file);
-	// IAttachments attachments = new Attachments(V1Connector
-	// .WithInstanceUrl(_v1InstanceUrl)
-	// .WithUserAgentHeader(".NET_SDK_Integration_Test", "1.0")
-	// .WithAccessToken(_v1AccessToken).UseEndpoint("attachment.img/")
-	// .Build());
-	//
-	// var contextId = IntegrationTestsHelper.TestProjectOid;
-	// var storyType = services.Meta.GetAssetType("Story");
-	// var newStory = services.New(storyType, contextId);
-	// var nameAttribute = storyType.GetAttributeDefinition("Name");
-	// var attachmentsAttribute = storyType.GetAttributeDefinition("Attachments");
-	// var name = string.Format("Test Story {0} Create story with attachment", contextId);
-	// newStory.SetAttributeValue(nameAttribute, name);
-	// services.Save(newStory);
-	//
-	// IAssetType attachmentType = services.Meta.GetAssetType("Attachment");
-	// IAttributeDefinition attachmentAssetDef = attachmentType.GetAttributeDefinition("Asset");
-	// IAttributeDefinition attachmentContent = attachmentType.GetAttributeDefinition("Content");
-	// IAttributeDefinition attachmentContentType =
-	// attachmentType.GetAttributeDefinition("ContentType");
-	// IAttributeDefinition attachmentFileName = attachmentType.GetAttributeDefinition("Filename");
-	// IAttributeDefinition attachmentName = attachmentType.GetAttributeDefinition("Name");
-	// Asset attachment = services.New(attachmentType, Oid.Null);
-	// attachment.SetAttributeValue(attachmentName, "Test Attachment on " + newStory.Oid);
-	// attachment.SetAttributeValue(attachmentFileName, file);
-	// attachment.SetAttributeValue(attachmentContentType, mimeType);
-	// attachment.SetAttributeValue(attachmentContent, string.Empty);
-	// attachment.SetAttributeValue(attachmentAssetDef, newStory.Oid);
-	// services.Save(attachment);
-	// string key = attachment.Oid.Key.ToString();
-	// using (Stream input = new FileStream(file, FileMode.Open, FileAccess.Read))
-	// {
-	// using (Stream output = attachments.GetWriteStream(key))
-	// {
-	// byte[] buffer = new byte[input.Length + 1];
-	// while (true)
-	// {
-	// int read = input.Read(buffer, 0, buffer.Length);
-	// if (read <= 0)
-	// break;
-	//
-	// output.Write(buffer, 0, read);
-	// }
-	// }
-	// }
-	// attachments.SetWriteStream(key, mimeType);
-	//
-	// var query = new Query(newStory.Oid.Momentless);
-	// query.Selection.Add(attachmentsAttribute);
-	// var story = services.Retrieve(query).Assets[0];
-	//
-	// Assert.AreEqual(1, story.GetAttribute(attachmentsAttribute).Values.Cast<object>().Count());
-	// }
-	//
+
+	// @Test
+	public void createStoryWithConversationAndMentionTest() throws V1Exception {
+
+		IAssetType storyType = services.getMeta().getAssetType("Story");
+		Asset newStory = services.createNew(storyType, _testProjectId);
+		IAttributeDefinition nameAttribute = storyType.getAttributeDefinition("Name");
+		IAttributeDefinition mentionedInExpressionsAttribute = storyType.getAttributeDefinition("MentionedInExpressions");
+		String name = "Test Story " + _testProjectId + " Create story with conversation and mention";
+		newStory.setAttributeValue(nameAttribute, name);
+		services.save(newStory);
+
+		Asset storyTobeMentioned = services.createNew(storyType, _testProjectId);
+		storyTobeMentioned.setAttributeValue(nameAttribute, name + " (to be mentioned)");
+		services.save(storyTobeMentioned);
+
+		IAssetType conversationType = services.getMeta().getAssetType("Conversation");
+		IAssetType expressionType = services.getMeta().getAssetType("Expression");
+		IAttributeDefinition authorAttribute = expressionType.getAttributeDefinition("Author");
+		IAttributeDefinition authoredAtAttribute = expressionType.getAttributeDefinition("AuthoredAt");
+		IAttributeDefinition contentAttribute = expressionType.getAttributeDefinition("Content");
+		IAttributeDefinition belongsToAttribute = expressionType.getAttributeDefinition("BelongsTo");
+		IAttributeDefinition inReplyToAttribute = expressionType.getAttributeDefinition("InReplyTo");
+
+		Asset newConversation = services.createNew(conversationType, newStory.getOid());
+		Asset questionExpression = services.createNew(expressionType, newStory.getOid());
+
+		services.save(newConversation);
+
+		questionExpression.setAttributeValue(authorAttribute, services.getOid("Member:20"));
+		questionExpression.setAttributeValue(authoredAtAttribute, DateTime.now());
+		questionExpression.setAttributeValue(contentAttribute, "Can I mention another story in a conversation?");
+		questionExpression.setAttributeValue(belongsToAttribute, newConversation.getOid());
+		services.save(questionExpression);
+
+		Query query = new Query(questionExpression.getOid().getMomentless());
+		IAttributeDefinition subsAttributeDefinition = questionExpression.getAssetType().getAttributeDefinition("Content");
+		query.getSelection().add(subsAttributeDefinition);
+		QueryResult result = services.retrieve(query);
+
+		assertEquals("Can I mention another story in a conversation?", result.getAssets()[0].getAttribute(contentAttribute).getValue().toString());
+
+		Asset answerExpression = services.createNew(expressionType, questionExpression.getOid());
+		answerExpression.setAttributeValue(authorAttribute, services.getOid("Member:20"));
+		answerExpression.setAttributeValue(authoredAtAttribute, DateUtils.addMinutes(DateTime.now().getValue(), 15));
+		answerExpression.setAttributeValue(contentAttribute, "Yes I can!");
+		answerExpression.setAttributeValue(inReplyToAttribute, questionExpression.getOid());
+		services.save(answerExpression);
+
+		newStory.addAttributeValue(mentionedInExpressionsAttribute, questionExpression.getOid());
+		services.save(newStory);
+		storyTobeMentioned.addAttributeValue(mentionedInExpressionsAttribute, answerExpression.getOid());
+		services.save(storyTobeMentioned);
+
+		query = new Query(answerExpression.getOid().getMomentless());
+		subsAttributeDefinition = answerExpression.getAssetType().getAttributeDefinition("Content");
+		query.getSelection().add(subsAttributeDefinition);
+		result = services.retrieve(query);
+
+		assertEquals("Yes I can!", result.getAssets()[0].getAttribute(contentAttribute).getValue().toString());
+		assertEquals(1, result.getTotalAvaliable());
+	}
+
+	// @Test
+	public void CreateStoryWithNestedTaskTest() throws V1Exception {
+
+		IAssetType storyType = services.getMeta().getAssetType("Story");
+		Asset newStory = services.createNew(storyType, _testProjectId);
+		IAttributeDefinition nameAttribute = storyType.getAttributeDefinition("Name");
+		IAttributeDefinition childrenAttribute = storyType.getAttributeDefinition("Children");
+		String name = "Test Story" + _testProjectId + " Create story with nested task";
+		newStory.setAttributeValue(nameAttribute, name);
+		services.save(newStory);
+
+		IAssetType taskType = services.getMeta().getAssetType("Task");
+		Asset newTask = services.createNew(taskType, newStory.getOid());
+		newTask.setAttributeValue(nameAttribute, "Test Task Nested in " + newStory.getOid());
+
+		services.save(newTask);
+
+		assertNotNull(newStory.getOid());
+		assertNotNull(newTask.getOid());
+
+		Query query = new Query(newStory.getOid().getMomentless());
+		query.getSelection().add(childrenAttribute);
+		Asset story = services.retrieve(query).getAssets()[0];
+
+		assertEquals(1, story.getAttributes().size());
+	}
+
+	// @Test
+	public void createStoryWithNestedTest() throws V1Exception {
+
+		IAssetType storyType = services.getMeta().getAssetType("Story");
+		Asset newStory = services.createNew(storyType, _testProjectId);
+		IAttributeDefinition nameAttribute = storyType.getAttributeDefinition("Name");
+		IAttributeDefinition childrenAttribute = storyType.getAttributeDefinition("Children");
+		String name = "Test Story " + _testProjectId + " Create story with nested test";
+		newStory.setAttributeValue(nameAttribute, name);
+		services.save(newStory);
+
+		IAssetType testType = services.getMeta().getAssetType("Test");
+		Asset newTest = services.createNew(testType, newStory.getOid());
+		newTest.setAttributeValue(nameAttribute, "Test Test Nested in " + newStory.getOid());
+
+		services.save(newTest);
+
+		assertNotNull(newStory.getOid());
+		assertNotNull(newTest.getOid());
+
+		Query query = new Query(newStory.getOid().getMomentless());
+		query.getSelection().add(childrenAttribute);
+		Asset story = services.retrieve(query).getAssets()[0];
+
+		assertEquals(1, story.getAttributes().size());
+	}
+
+	
+	@Test
+	 public void CreateStoryWithAttachmentTest() throws V1Exception, IOException {
+	
+	 String file = "/versionone.png";
+	
+	 assertNotNull("Test file missing", getClass().getResource(file));
+	
+	 String mimeType = MimeType.resolve(file);
+
+	
+	 IAttachments attachments = new Attachments(V1Connector
+			 .withInstanceUrl(url)
+			 .withUserAgentHeader("JavaSDKIntegrationTest", "1.0")
+			 .withAccessToken(accessToken)
+			 .useEndpoint("attachment.img/")
+			 .build());
+
+	 IAssetType storyType = services.getMeta().getAssetType("Story");
+	 Asset newStory = services.createNew(storyType, _testProjectId);
+	 IAttributeDefinition nameAttribute = storyType.getAttributeDefinition("Name");
+	 IAttributeDefinition attachmentsAttribute = storyType.getAttributeDefinition("Attachments");
+	 String name = "Test Story " + _testProjectId + "Create story with attachment";
+	 newStory.setAttributeValue(nameAttribute, name);
+	 services.save(newStory);
+	
+	 IAssetType attachmentType = services.getMeta().getAssetType("Attachment");
+	 IAttributeDefinition attachmentAssetDef = attachmentType.getAttributeDefinition("Asset");
+	 IAttributeDefinition attachmentContent = attachmentType.getAttributeDefinition("Content");
+	 IAttributeDefinition attachmentContentType =
+	 attachmentType.getAttributeDefinition("ContentType");
+	 IAttributeDefinition attachmentFileName = attachmentType.getAttributeDefinition("Filename");
+	 IAttributeDefinition attachmentName = attachmentType.getAttributeDefinition("Name");
+	 Asset attachment = services.createNew(attachmentType, Oid.Null);
+	 attachment.setAttributeValue(attachmentName, "Test Attachment on " + newStory.getOid());
+	 attachment.setAttributeValue(attachmentFileName, file);
+	 attachment.setAttributeValue(attachmentContentType, mimeType);
+	 attachment.setAttributeValue(attachmentContent, "");
+	 attachment.setAttributeValue(attachmentAssetDef, newStory.getOid());
+	 services.save(attachment);
+//	
+	 String key = attachment.getOid().getKey().toString();
+//	 //Stream input = new FileStream(file, FileMode.Open, FileAccess.Read)
+	 InputStream inStream  = getClass().getResourceAsStream(file);
+	 OutputStream output =  attachments.getWriter(key, mimeType);
+//	 
+	 byte[] buffer = new byte[inStream.available() + 1];
+	 while (true){
+		 int read = inStream.read(buffer, 0, buffer.length);
+		 if (read <= 0)
+			 break;
+	
+		 output.write(buffer, 0, read);
+	 	}
+	 
+	 attachments.setWriter(key);
+//	
+	 Query query = new Query(newStory.getOid().getMomentless());
+	 query.getSelection().add(attachmentsAttribute);
+	 Asset story = services.retrieve(query).getAssets()[0];
+	
+	 assertEquals(1, story.getAttribute(attachmentsAttribute).getValues().length);
+	 }
+
+	 
+	 //
 	// [TestMethod]
 	// [DeploymentItem("versionone.png")]
 	// public void CreateStoryWithEmbeddedImage()
@@ -396,81 +424,73 @@ public class V1ConnectorCreatesTests {
 	// services.Save(newStory);
 	// }
 	//
-	// [TestMethod]
-	// public void CreateDefect()
-	// {
-	// var services = GetServices();
-	//
-	// var contextId = IntegrationTestsHelper.TestProjectOid;
-	// var defectType = services.Meta.GetAssetType("Defect");
-	// var newDefect = services.New(defectType, contextId);
-	// var nameAttribute = defectType.GetAttributeDefinition("Name");
-	// var name = string.Format("Test Defect {0} Create defect", contextId);
-	// newDefect.SetAttributeValue(nameAttribute, name);
-	// services.Save(newDefect);
-	//
-	// Assert.IsNotNull(newDefect.Oid);
-	// }
-	//
-	// [TestMethod]
-	// public void CreateDefectWithNestedTask()
-	// {
-	// var services = GetServices();
-	//
-	// var contextId = IntegrationTestsHelper.TestProjectOid;
-	// var defectType = services.Meta.GetAssetType("Defect");
-	// var newDefect = services.New(defectType, contextId);
-	// var nameAttribute = defectType.GetAttributeDefinition("Name");
-	// var childrenAttribute = defectType.GetAttributeDefinition("Children");
-	// var name = string.Format("Test Defect {0} Create defect with nested task", contextId);
-	// newDefect.SetAttributeValue(nameAttribute, name);
-	// services.Save(newDefect);
-	//
-	// var taskType = services.Meta.GetAssetType("Task");
-	// var newTask = services.New(taskType, newDefect.Oid);
-	// newTask.SetAttributeValue(nameAttribute, "Test Task Nested in " + newDefect.Oid);
-	//
-	// services.Save(newTask);
-	//
-	// Assert.IsNotNull(newDefect.Oid);
-	// Assert.IsNotNull(newTask.Oid);
-	//
-	// var query = new Query(newDefect.Oid.Momentless);
-	// query.Selection.Add(childrenAttribute);
-	// var story = services.Retrieve(query).Assets[0];
-	//
-	// Assert.AreEqual(1, story.GetAttribute(childrenAttribute).Values.Cast<object>().Count());
-	// }
-	//
-	// [TestMethod]
-	// public void CreateDefectWithNestedTest()
-	// {
-	// var services = GetServices();
-	//
-	// var contextId = IntegrationTestsHelper.TestProjectOid;
-	// var defectType = services.Meta.GetAssetType("Defect");
-	// var newDefect = services.New(defectType, contextId);
-	// var nameAttribute = defectType.GetAttributeDefinition("Name");
-	// var childrenAttribute = defectType.GetAttributeDefinition("Children");
-	// var name = string.Format("Test Defect {0} Create defect with nested test", contextId);
-	// newDefect.SetAttributeValue(nameAttribute, name);
-	// services.Save(newDefect);
-	//
-	// var testType = services.Meta.GetAssetType("Test");
-	// var newTest = services.New(testType, newDefect.Oid);
-	// newTest.SetAttributeValue(nameAttribute, "Test Test Nested in " + newDefect.Oid);
-	//
-	// services.Save(newTest);
-	//
-	// Assert.IsNotNull(newDefect.Oid);
-	// Assert.IsNotNull(newTest.Oid);
-	//
-	// var query = new Query(newDefect.Oid.Momentless);
-	// query.Selection.Add(childrenAttribute);
-	// var story = services.Retrieve(query).Assets[0];
-	//
-	// Assert.AreEqual(1, story.GetAttribute(childrenAttribute).Values.Cast<object>().Count());
-	// }
+
+	//@Test
+	public void createDefectTest() throws V1Exception {
+
+		IAssetType defectType = services.getMeta().getAssetType("Defect");
+		Asset newDefect = services.createNew(defectType, _testProjectId);
+		IAttributeDefinition nameAttribute = defectType.getAttributeDefinition("Name");
+		String name = "Test Defect " + _testProjectId + " Create defect";
+		newDefect.setAttributeValue(nameAttribute, name);
+		services.save(newDefect);
+
+		assertNotNull(newDefect.getOid());
+	}
+
+	//@Test
+	public void createDefectWithNestedTaskTest() throws V1Exception {
+
+		IAssetType defectType = services.getMeta().getAssetType("Defect");
+		Asset newDefect = services.createNew(defectType, _testProjectId);
+		IAttributeDefinition nameAttribute = defectType.getAttributeDefinition("Name");
+		IAttributeDefinition childrenAttribute = defectType.getAttributeDefinition("Children");
+		String name = "Test Defect " + _testProjectId + " Create defect with nested task";
+		newDefect.setAttributeValue(nameAttribute, name);
+		services.save(newDefect);
+
+		IAssetType taskType = services.getMeta().getAssetType("Task");
+		Asset newTask = services.createNew(taskType, newDefect.getOid());
+		newTask.setAttributeValue(nameAttribute, "Test Task Nested in " + newDefect.getOid());
+
+		services.save(newTask);
+
+		assertNotNull(newDefect.getOid());
+		assertNotNull(newTask.getOid());
+
+		Query query = new Query(newDefect.getOid().getMomentless());
+		query.getSelection().add(childrenAttribute);
+		Asset story = services.retrieve(query).getAssets()[0];
+
+		assertEquals(1, story.getAttribute(childrenAttribute).getValues().length);
+	}
+
+	//@Test
+	public void createDefectWithNestedTest() throws V1Exception {
+
+		IAssetType defectType = services.getMeta().getAssetType("Defect");
+		Asset newDefect = services.createNew(defectType, _testProjectId);
+		IAttributeDefinition nameAttribute = defectType.getAttributeDefinition("Name");
+		IAttributeDefinition childrenAttribute = defectType.getAttributeDefinition("Children");
+		String name = "Test Defect " + _testProjectId + " Create defect with nested test";
+		newDefect.setAttributeValue(nameAttribute, name);
+		services.save(newDefect);
+
+		IAssetType testType = services.getMeta().getAssetType("Test");
+		Asset newTest = services.createNew(testType, newDefect.getOid());
+		newTest.setAttributeValue(nameAttribute, "Test Test Nested in " + newDefect.getOid());
+		services.save(newTest);
+
+		assertNotNull(newDefect.getOid());
+		assertNotNull(newTest.getOid());
+
+		Query query = new Query(newDefect.getOid().getMomentless());
+		query.getSelection().add(childrenAttribute);
+		Asset story = services.retrieve(query).getAssets()[0];
+
+		assertEquals(1, story.getAttribute(childrenAttribute).getValues().length);
+	}
+
 	//
 	// [TestMethod]
 	// [DeploymentItem("versionone.png")]
@@ -590,44 +610,36 @@ public class V1ConnectorCreatesTests {
 	// services.Save(newDefect);
 	// }
 	//
-	// [TestMethod]
-	// public void CreateRequest()
-	// {
-	// var services = GetServices();
-	//
-	// var contextId = IntegrationTestsHelper.TestProjectOid;
-	// var requestType = services.Meta.GetAssetType("Request");
-	// var newRequest = services.New(requestType, contextId);
-	// var nameAttribute = requestType.GetAttributeDefinition("Name");
-	// var name = string.Format("Test Request {0} Create request", contextId);
-	// newRequest.SetAttributeValue(nameAttribute, name);
-	// services.Save(newRequest);
-	//
-	// Assert.IsNotNull(newRequest.Oid);
-	// }
-	//
-	// [TestMethod]
-	// public void CreateIssue()
-	// {
-	// var services = GetServices();
-	//
-	// var contextId = IntegrationTestsHelper.TestProjectOid;
-	// var issueType = services.Meta.GetAssetType("Issue");
-	// var newIssue = services.New(issueType, contextId);
-	// var nameAttribute = issueType.GetAttributeDefinition("Name");
-	// var name = string.Format("Test Issue {0} Create issue", contextId);
-	// newIssue.SetAttributeValue(nameAttribute, name);
-	// services.Save(newIssue);
-	//
-	// Assert.IsNotNull(newIssue.Oid);
-	// }
-	//
-	// [TestMethod]
-	// [ExpectedException(typeof(MetaException))]
-	// public void CreateUnknownSingleAsset()
-	// {
-	// var services = GetServices();
-	// var unknownAsset = services.Meta.GetAssetType("Unknown");
-	// }
+	//@Test
+	public void createRequestTest() throws V1Exception {
+
+		IAssetType requestType = services.getMeta().getAssetType("Request");
+		 Asset newRequest = services.createNew(requestType, _testProjectId);
+		IAttributeDefinition nameAttribute = requestType.getAttributeDefinition("Name");
+		String name = "Test Request "+ _testProjectId + " Create request";
+		newRequest.setAttributeValue(nameAttribute, name);
+		services.save(newRequest);
+
+		assertNotNull(newRequest.getOid());
+	}
+
+	//@Test
+	public void createIssueTest() throws V1Exception {
+	
+		IAssetType issueType = services.getMeta().getAssetType("Issue");
+		Asset newIssue = services.createNew(issueType, _testProjectId);
+		IAttributeDefinition nameAttribute = issueType.getAttributeDefinition("Name");
+		String name = "Test Issue " + _testProjectId + " Create issue";
+		newIssue.setAttributeValue(nameAttribute, name);
+		services.save(newIssue);
+
+		assertNotNull(newIssue.getOid());
+	}
+
+	//@Test(expected = MetaException.class)
+	public void CreateUnknownSingleAsset() {
+
+		IAssetType unknownAsset = services.getMeta().getAssetType("Unknown");
+	}
 
 }

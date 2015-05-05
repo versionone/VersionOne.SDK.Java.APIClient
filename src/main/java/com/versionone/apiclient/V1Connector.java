@@ -200,11 +200,12 @@ public class V1Connector {
 	}
 
 	public static ISetUserAgentMakeRequest withInstanceUrl(String instanceUrl) throws V1Exception, MalformedURLException {
-		return new Builder(instanceUrl);
+		
+		return  new V1Connector(instanceUrl).new Builder(instanceUrl); 
 	}
 
 	//// Fluent BUILDER ///
-	private static class Builder implements ISetUserAgentMakeRequest, IAuthenticationMethods, IsetProxyOrEndPointOrConnector, IsetProxyOrConnector, IsetEndPointOrConnector  {
+	private  class Builder implements ISetUserAgentMakeRequest, IAuthenticationMethods, IsetProxyOrEndPointOrConnector, IsetProxyOrConnector, IsetEndPointOrConnector  {
 
 		private V1Connector instance;
 
@@ -340,7 +341,7 @@ public class V1Connector {
 				throw new NullPointerException("Endpoint value cannot be null or empty.");
 			}	
 			
-			_endpoint = endpoint;
+			instance._endpoint = endpoint;
 			return this;
 		}
 		
@@ -518,7 +519,6 @@ public class V1Connector {
 			try {
 				throw new ConnectionException("Error writing to output stream", code, ex);
 			} catch (ConnectionException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}
