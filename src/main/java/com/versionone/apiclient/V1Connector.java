@@ -41,7 +41,7 @@ import com.versionone.utils.V1Util;
 
 public class V1Connector {
 
-	private static final String UTF8 = "UTF-8";
+	//private static final String UTF8 = "UTF-8";
 	private static final String contentType = "text/xml";
 	private static Logger log = Logger.getLogger(V1Connector.class);
 	private static CredentialsProvider credsProvider = new BasicCredentialsProvider();
@@ -53,10 +53,10 @@ public class V1Connector {
 	private static boolean isWindowsAuth =  false;
 
 	// LOCAL VARIABLES
-	static URL INSTANCE_URL ;
-	static String _endpoint = "";
-	static String _user_agent_header = "";
-	static String _upstreamUserAgent = "";
+	 URL INSTANCE_URL ;
+	 String _endpoint = "";
+	 String _user_agent_header = "";
+	 String _upstreamUserAgent = "";
 
 	// VERSIONONE ENDPOINTS
 	private final static String META_API_ENDPOINT = "meta.v1/";
@@ -179,7 +179,6 @@ public class V1Connector {
 	}
 
 	protected V1Connector(String instanceUrl) throws V1Exception, MalformedURLException {
-		
 		log.info("called V1Connector construcor ");
 		log.info("with url: " + instanceUrl);
 		
@@ -190,29 +189,25 @@ public class V1Connector {
 		// Ensure that we have a forward slash at the end of the V1 instance URL.
 		if (!StringUtils.endsWith(instanceUrl, "/"))
 			instanceUrl += "/";
-		
 		// Validates the V1 instance URL, throws MalformedURLException exception when invalid.
 		@SuppressWarnings("unused")
 		URL urlData = new URL(instanceUrl);
-
-		
 		INSTANCE_URL = urlData;
 	}
 
 	public static ISetUserAgentMakeRequest withInstanceUrl(String instanceUrl) throws V1Exception, MalformedURLException {
-		
-		return  new V1Connector(instanceUrl).new Builder(instanceUrl); 
+		return new Builder(instanceUrl);
 	}
 
 	//// Fluent BUILDER ///
-	private  class Builder implements ISetUserAgentMakeRequest, IAuthenticationMethods, IsetProxyOrEndPointOrConnector, IsetProxyOrConnector, IsetEndPointOrConnector  {
+	private static class Builder implements ISetUserAgentMakeRequest, IAuthenticationMethods, IsetProxyOrEndPointOrConnector, IsetProxyOrConnector, IsetEndPointOrConnector  {
 
-		private V1Connector instance;
+		private V1Connector v1Connector_instance;
 
 		// builder constructor
 		public Builder(String url) throws V1Exception, MalformedURLException {
 			log.info("Builder with url: " + url);
-			instance = new V1Connector(url);
+			v1Connector_instance = new V1Connector(url);
 		}
 
 		// set the user agent header
@@ -244,7 +239,7 @@ public class V1Connector {
 			if (V1Util.isNullOrEmpty(username) || V1Util.isNullOrEmpty(username))
 				throw new NullPointerException("Username and password values cannot be null or empty.");
 			
-			credsProvider.setCredentials(new AuthScope(INSTANCE_URL.getHost(), INSTANCE_URL.getPort()), new UsernamePasswordCredentials(username, password));
+			credsProvider.setCredentials(new AuthScope(v1Connector_instance.INSTANCE_URL.getHost(), v1Connector_instance.INSTANCE_URL.getPort()), new UsernamePasswordCredentials(username, password));
 			httpclientBuilder.setDefaultCredentialsProvider(credsProvider);
 			isWindowsAuth=false;
 
@@ -341,7 +336,7 @@ public class V1Connector {
 				throw new NullPointerException("Endpoint value cannot be null or empty.");
 			}	
 			
-			instance._endpoint = endpoint;
+			v1Connector_instance._endpoint = endpoint;
 			return this;
 		}
 		
@@ -349,7 +344,7 @@ public class V1Connector {
 		@Override
 		public V1Connector build() {
 			log.info("called V1Connector.connect ");
-			return instance;
+			return v1Connector_instance;
 		}
 	}
 	// end builder
@@ -506,7 +501,7 @@ public class V1Connector {
 		}
 		try {
 			httpResponse = httpclient.execute(httpPost);
-			resultStream =  IOUtils.toString(httpResponse.getEntity().getContent(), UTF8); 
+			resultStream =  IOUtils.toString(httpResponse.getEntity().getContent()); 
 		} catch (IOException ex) {
 			log.error(ex.getMessage());
 			int code;
