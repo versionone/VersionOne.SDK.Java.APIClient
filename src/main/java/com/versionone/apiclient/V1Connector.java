@@ -189,8 +189,8 @@ public class V1Connector {
 		// Ensure that we have a forward slash at the end of the V1 instance URL.
 		if (!StringUtils.endsWith(instanceUrl, "/"))
 			instanceUrl += "/";
+		
 		// Validates the V1 instance URL, throws MalformedURLException exception when invalid.
-		@SuppressWarnings("unused")
 		URL urlData = new URL(instanceUrl);
 		INSTANCE_URL = urlData;
 	}
