@@ -1,4 +1,4 @@
-package com.versionone.apiclient.documentation.test;
+package com.versionone.apiclient.documentation.tests;
 
 import java.util.Date;
 
@@ -13,13 +13,13 @@ import org.junit.*;
 
 import com.versionone.Oid;
 
-public class GettingStartedDisabled {
+public class JavaSDKCodeSampleTests {
 
-    private GettingStarted _docExamples;
+    private JavaSDKCodeSamples _docExamples;
 
     @Before
     public void SetUp() throws Exception {
-        _docExamples = new GettingStarted();
+        _docExamples = new JavaSDKCodeSamples();
     }
 
     @Test

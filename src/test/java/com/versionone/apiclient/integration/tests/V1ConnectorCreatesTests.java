@@ -2,25 +2,16 @@ package com.versionone.apiclient.integration.tests;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
 
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.MalformedURLException;
-import java.util.stream.Stream;
 
-import junit.framework.Assert;
-
-import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.time.DateUtils;
-import org.codehaus.plexus.util.FileUtils;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
-
-import util.StreamReader;
 
 import com.versionone.DB.DateTime;
 import com.versionone.Oid;
@@ -30,7 +21,6 @@ import com.versionone.apiclient.MimeType;
 import com.versionone.apiclient.Query;
 import com.versionone.apiclient.Services;
 import com.versionone.apiclient.V1Connector;
-import com.versionone.apiclient.exceptions.MetaException;
 import com.versionone.apiclient.exceptions.V1Exception;
 import com.versionone.apiclient.interfaces.IAssetType;
 import com.versionone.apiclient.interfaces.IAttachments;
@@ -39,7 +29,7 @@ import com.versionone.apiclient.interfaces.IOperation;
 import com.versionone.apiclient.services.QueryResult;
 
 public class V1ConnectorCreatesTests {
-	private final static String TEST_PROJECT_NAME = "JavaSDK Integration Tests";
+	private final static String TEST_PROJECT_NAME = "Java SDK Integration Tests";
 	private static Oid _testProjectId;
 	private static String url = "http://localhost//VersionOne/";
 	private static V1Connector connector;
