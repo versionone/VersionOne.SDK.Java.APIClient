@@ -1,4 +1,4 @@
-package com.versionone.apiclient.documentation.test;
+package com.versionone.apiclient.documentation.tests;
 
 import java.util.Date;
 
