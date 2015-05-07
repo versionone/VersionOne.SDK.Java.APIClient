@@ -1,4 +1,4 @@
-package com.versionone.apiclient.integration.tests;
+package com.versionone.apiclient.legacy.integration.tests;
 
 import java.io.IOException;
 

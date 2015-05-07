@@ -1,4 +1,4 @@
-package com.versionone.apiclient.integration.tests;
+package com.versionone.apiclient.legacy.integration.tests;
 
 import com.versionone.apiclient.*;
 import com.versionone.apiclient.interfaces.IAssetType;

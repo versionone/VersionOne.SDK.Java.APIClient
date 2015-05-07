@@ -1,4 +1,4 @@
-package com.versionone.apiclient.integration.tests;
+package com.versionone.apiclient.legacy.integration.tests;
 
 import org.junit.BeforeClass;
 import org.junit.runner.RunWith;
