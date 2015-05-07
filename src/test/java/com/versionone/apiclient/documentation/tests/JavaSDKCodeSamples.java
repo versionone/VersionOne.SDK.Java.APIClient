@@ -28,9 +28,9 @@ import com.versionone.apiclient.services.OrderBy;
 import com.versionone.apiclient.services.QueryResult;
 
 /**
- * This class contains the examples used : the API documentation
+ * This class contains the examples used in the Java SDK documentation.
  */
-public class GettingStarted {
+public class JavaSDKCodeSamples {
 
     private EnvironmentContext _context;
 
@@ -40,7 +40,7 @@ public class GettingStarted {
     private IServices _servicesWithProxy;
     private V1Configuration _config;
 
-    public GettingStarted() throws Exception {
+    public JavaSDKCodeSamples() throws Exception {
 
         _context = new EnvironmentContext();
 

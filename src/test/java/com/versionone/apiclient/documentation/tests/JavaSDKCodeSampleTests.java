@@ -13,13 +13,13 @@ import org.junit.*;
 
 import com.versionone.Oid;
 
-public class GettingStartedDisabled {
+public class JavaSDKCodeSampleTests {
 
-    private GettingStarted _docExamples;
+    private JavaSDKCodeSamples _docExamples;
 
     @Before
     public void SetUp() throws Exception {
-        _docExamples = new GettingStarted();
+        _docExamples = new JavaSDKCodeSamples();
     }
 
     @Test
