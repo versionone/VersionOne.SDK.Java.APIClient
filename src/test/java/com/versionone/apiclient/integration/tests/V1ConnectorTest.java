@@ -8,9 +8,9 @@ import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
 
-import org.apache.commons.lang.StringUtils;
 import org.junit.After;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import com.versionone.Oid;
@@ -18,15 +18,11 @@ import com.versionone.apiclient.Asset;
 import com.versionone.apiclient.ProxyProvider;
 import com.versionone.apiclient.Query;
 import com.versionone.apiclient.Services;
-import com.versionone.apiclient.V1Configuration;
 import com.versionone.apiclient.V1Connector;
-import com.versionone.apiclient.exceptions.APIException;
-import com.versionone.apiclient.exceptions.ConnectionException;
 import com.versionone.apiclient.exceptions.V1Exception;
 import com.versionone.apiclient.filters.FilterTerm;
 import com.versionone.apiclient.interfaces.IAssetType;
 import com.versionone.apiclient.interfaces.IAttributeDefinition;
-import com.versionone.apiclient.interfaces.IV1Configuration;
 import com.versionone.apiclient.services.QueryResult;
 
 /**
@@ -42,14 +38,6 @@ public class V1ConnectorTest {
 	public static String password;
 	public V1Connector result;
 
-	/**
-	 * Perform pre-test initialization.
-	 *
-	 * @throws Exception
-	 *             if the initialization fails for some reason
-	 *
-	 * @generatedBy CodePro at 20/03/15 15:50
-	 */
 	@Before
 	public void setUp() throws Exception {
 		// add additional set up code here
@@ -58,27 +46,12 @@ public class V1ConnectorTest {
 		password = "1234";
 	}
 
-	/**
-	 * Perform post-test clean-up.
-	 *
-	 * @throws Exception
-	 *             if the clean-up fails for some reason
-	 *
-	 * @generatedBy CodePro at 20/03/15 15:50
-	 */
 	@After
 	public void tearDown() throws Exception {
 		// Add additional tear down code here
 	}
 
-	/**
-	 * Run the V1Connector(String) constructor test.
-	 *
-	 * @throws Exception
-	 *
-	 * @generatedBy CodePro at 20/03/15 15:50
-	 */
-	// @Test()
+	@Test()
 	public void v1ConnectorTest() throws Exception {
 		String url = "http://localhost/versionone/";
 
@@ -87,7 +60,7 @@ public class V1ConnectorTest {
 		assertNotNull(result);
 	}
 
-	// @Test()
+	@Test()
 	public void saveAndUpdateTest() throws V1Exception, MalformedURLException {
 
 		V1Connector connector = V1Connector.withInstanceUrl(url).withUserAgentHeader("name", "1.0").withUsernameAndPassword(username, password)
@@ -112,7 +85,6 @@ public class V1ConnectorTest {
 		query.getSelection().add(nameAttribute);
 		QueryResult result = services.retrieve(query);
 		Asset story = result.getAssets()[0];
-		String oldName = story.getAttribute(nameAttribute).getValue().toString();
 		String newName = "This is my New Name";
 		story.setAttributeValue(nameAttribute, newName);
 		services.save(story);
@@ -121,7 +93,7 @@ public class V1ConnectorTest {
 
 	}
 
-	// @Test()
+	@Test()
 	public void queryTest() throws V1Exception, MalformedURLException {
 
 		V1Connector connector = V1Connector.withInstanceUrl(url).withUserAgentHeader("name", "1.0").withUsernameAndPassword(username, password)
@@ -142,7 +114,7 @@ public class V1ConnectorTest {
 		assertTrue(result.getAssets().length > 0);
 	}
 
-	// @Test(expected = MalformedURLException.class)
+	@Test(expected = MalformedURLException.class)
 	public void validatePathTest() throws V1Exception, MalformedURLException {
 
 		url = "http//localhost/versionone/";
@@ -151,10 +123,10 @@ public class V1ConnectorTest {
 				.build();
 	}
 
-	// @Test()
+	@Test()
 	public void withAccessTokenTest() throws V1Exception, MalformedURLException {
 
-		String accessToken = "1.yL3CcovObgbQnmMKP8PKTt3fo7A=";
+		String accessToken = "access_token";
 
 		V1Connector connector = V1Connector.withInstanceUrl(url).withUserAgentHeader("name", "1.0").withAccessToken(accessToken).build();
 
@@ -163,10 +135,11 @@ public class V1ConnectorTest {
 		assertNotNull(oid);
 	}
 
-	// @Test()
+	@Test()
+	@Ignore
 	public void withAccessTokenThruAProxyTest() throws V1Exception, MalformedURLException {
 
-		String accessToken = "1.yL3CcovObgbQnmMKP8PKTt3fo7A=";
+		String accessToken = "access_token";
 		URI address = null;
 		try {
 			address = new URI("http://localhost:808");
@@ -183,8 +156,8 @@ public class V1ConnectorTest {
 		assertNotNull(oid);
 	}
 
-	// connection with proxy and username/pass
-	// @Test()
+	@Test()
+	@Ignore
 	public void connetionWithProxyUsingUsernameAndPasswordTest() throws V1Exception, MalformedURLException {
 
 		URI address = null;
@@ -214,7 +187,7 @@ public class V1ConnectorTest {
 		assertTrue(result.getAssets().length > 0);
 	}
 
-	// @Test()
+	@Test()
 	public void testConnectionNtlm() throws Exception {
 
 		url = "http://localhost/VersionOneNtlm/";
@@ -227,19 +200,24 @@ public class V1ConnectorTest {
 		assertNotNull(oid);
 	}
 
-	// @Test()
+	@Test()
+	@Ignore
 	public void testConnectionNtlmWithUsernamePass() throws Exception {
 
 		url = "http://localhost/VersionOneNtlm/";
 
-		V1Connector connector = V1Connector.withInstanceUrl(url).withUserAgentHeader("name", "1.0").withWindowsIntegrated("", "").build();
+		V1Connector connector = V1Connector.withInstanceUrl(url)
+				.withUserAgentHeader("name", "1.0")
+				.withWindowsIntegrated("vplechuc", "moifaku72")
+				.build();
 
 		Services services = new Services(connector);
 		Oid oid = services.getLoggedIn();
 		assertNotNull(oid);
 	}
 
-	// @Test()
+	@Test()
+	@Ignore
 	public void testConnectionNtlmWithProxy() throws Exception {
 
 		String url = "http://localhost/VersionOne/";
@@ -266,8 +244,6 @@ public class V1ConnectorTest {
 	 *
 	 * @param args
 	 *            the command line arguments
-	 *
-	 * @generatedBy CodePro at 20/03/15 15:50
 	 */
 	public static void main(String[] args) {
 		new org.junit.runner.JUnitCore().run(V1ConnectorTest.class);

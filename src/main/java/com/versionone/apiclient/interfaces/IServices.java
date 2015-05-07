@@ -3,6 +3,8 @@ package com.versionone.apiclient.interfaces;
 import java.util.ArrayList;
 import java.util.Map;
 
+import org.json.JSONException;
+
 import com.versionone.Oid;
 import com.versionone.apiclient.Asset;
 import com.versionone.apiclient.Query;
@@ -161,6 +163,6 @@ public interface IServices {
      */
      String loc(String key) throws V1Exception;
      
-     Map<String, String> loc(ArrayList<IAttributeDefinition> attributes) throws ConnectionException;
+     Map<String, String> loc(ArrayList<IAttributeDefinition> attributes)  throws ConnectionException, JSONException;
 
 }

@@ -30,10 +30,6 @@ import com.versionone.apiclient.interfaces.IAssetType;
 import com.versionone.apiclient.interfaces.IAttributeDefinition;
 import com.versionone.apiclient.interfaces.IV1Configuration;
 
-/**
- * @author 
- *
- */
 public class V1ConnectorEndPointsTest {
 
 	public static String url;
@@ -46,9 +42,6 @@ public class V1ConnectorEndPointsTest {
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception {
 	}
-
-	private String username;
-	private String password;
 
 	/**
 	 * @throws java.lang.Exception
@@ -68,7 +61,7 @@ public class V1ConnectorEndPointsTest {
 		 services = new Services(connector);
 	}
 	
-	// @Test
+	@Test
 	public void LocEpicNameTest() {
 
 		IAssetType epicType = services.getMeta().getAssetType("Epic");
@@ -84,68 +77,45 @@ public class V1ConnectorEndPointsTest {
 		assertTrue(StringUtils.isNotBlank(locName));
 	}
 
-	// @Test
-	public void LocStoryNameTest() throws ConnectionException {
+	@Test
+	public void LocStoryNameTest() throws ConnectionException, JSONException {
 
 		IAssetType storyType = services.getMeta().getAssetType("Story");
 		IAttributeDefinition nameAttribute = storyType.getAttributeDefinition("Name");
 		IAttributeDefinition estimateAttribute = storyType.getAttributeDefinition("Estimate");
 
-		ArrayList<IAttributeDefinition> attributes = new ArrayList(Arrays.asList(nameAttribute, estimateAttribute));
+		ArrayList<IAttributeDefinition> attributes = new ArrayList<IAttributeDefinition>(Arrays.asList(nameAttribute, estimateAttribute));
 		
 		Map<String, String> locData = services.loc(attributes);
-		//
+
 		assertTrue(locData.size() > 0);
+		
 		String locName = locData.get(nameAttribute.getToken());
 		assertTrue(StringUtils.isNotBlank(locName));
-		// var locEstimate = locDict[estimateAttribute.Token];
-		// Assert.IsTrue(!string.IsNullOrWhiteSpace(locEstimate));
+	
+		String locEstimate = locData.get(estimateAttribute.getToken());
+		assertTrue(StringUtils.isNotBlank(locEstimate));
 	}
 
-
-
-	// Config
-//	@Test
-	public void getConfigTest() {
+	@Test
+	public void getConfigTest() throws ConnectionException, APIException {
 
 		V1Configuration configuration = new V1Configuration(connector);
 
-		try {
 			assertNotNull(configuration.isEffortTracking());
-		} catch (ConnectionException | APIException e) {
-			e.printStackTrace();
-		}
-		try {
 			assertEquals(IV1Configuration.TrackingLevel.On, configuration.getStoryTrackingLevel().On);
-		} catch (ConnectionException | APIException e) {
-			e.printStackTrace();
-		}
-		try {
 			assertNotNull(configuration.getDefectTrackingLevel());
-		} catch (ConnectionException | APIException e) {
-			e.printStackTrace();
-		}
-		try {
 			assertNotNull(configuration.getMaxAttachmentSize());
-		} catch (ConnectionException | APIException e) {
-			e.printStackTrace();
-		}
-		try {
 			assertNotNull(configuration.getStoryTrackingLevel());
-		} catch (ConnectionException | APIException e) {
-			e.printStackTrace();
-		}
 	}
 	
-	//	 QUERY_API_ENDPOINT = "query.v1/";
 	@Test
-	  public void executeSingleJsonQueryTest() throws Exception{
+	public void executeSingleJsonQueryTest() throws Exception{
 
           String jsonQuery =
               "{" +
               "  \"from\": \"Story\"," +
               "  \"select\": [\"Name\",\"Number\"]" +
-       //       "  \"filter\": [\"Name='StoryName'|Estimate>'0'\"]" +
               "}";
           
           String res = services.executePassThroughQuery(jsonQuery);
@@ -155,7 +125,6 @@ public class V1ConnectorEndPointsTest {
           JSONArray story_arr = new JSONArray(res).getJSONArray(0);
           JSONObject jsonProductObject = null;
 
-          //loop through each object
           for (int i=0; i<story_arr.length(); i++){
         	 
         	   jsonProductObject = story_arr.getJSONObject(i);
@@ -166,15 +135,13 @@ public class V1ConnectorEndPointsTest {
           }
    
       }
-		//@Test
+		@Test
 		public void ExecuteSingleYamlQueryTest() throws JSONException {
 
 			String yaml = "from: Story\n" +
                      "select:\n" +
                      "  - Name\n" +
-                     "  - Number\n";// +
-//                     "filter:\n" +
-//                     "  - Name='StoryName'";
+                     "  - Number\n";
 
            String res = services.executePassThroughQuery(yaml);
            assertNotNull(res);
@@ -187,8 +154,8 @@ public class V1ConnectorEndPointsTest {
           }
       }
 
-      //@Test
-      public void ExecuteMultipleJsonQueryTest() throws Exception{
+     @Test
+     public void ExecuteMultipleJsonQueryTest() throws Exception{
 
           String json =
               "[" +
@@ -223,13 +190,12 @@ public class V1ConnectorEndPointsTest {
           }
       }
 
-       //@Test
+      @Test
       public void ExecuteMultipleYamlQueryTest() throws Exception{
 
           String yaml = "  - from: Story\n" +
                      "    select:\n" +
                      "      - Name\n" +
-//                     "      - Estimate\n" +
                      "    filter:\n" +
                      "      - Name='StoryName'\n" +
                      "  - from: Member\n" +
@@ -256,7 +222,7 @@ public class V1ConnectorEndPointsTest {
 		}
       }
 
-      //@Test
+      @Test
       public void ExecuteSubSelectJsonQueryTest() throws Exception{
 
           String json =
@@ -294,13 +260,12 @@ public class V1ConnectorEndPointsTest {
           }
       }
 
-      //@Test
+     @Test
       public void ExecuteSubSelectYamlQueryTest() throws Exception{
 
           String yaml = "  - from: Story\n" +
                      "    select:\n" +
                      "      - Name\n" +
-//                     "      - Estimate\n" +
                      "      - from: Owners\n" +
                      "        select:\n" +
                      "          - Name\n" +
@@ -332,8 +297,8 @@ public class V1ConnectorEndPointsTest {
          }
       }
 
-     //@Test
-      public void ExecuteGroupJsonQueryTest() throws Exception  {
+   @Test
+   public void ExecuteGroupJsonQueryTest() throws Exception  {
 
           String json =
               "{" +
@@ -365,7 +330,7 @@ public class V1ConnectorEndPointsTest {
 		}
       }
 
-   //  @Test
+    @Test
      public void ExecuteGroupYamlQueryTest() throws Exception  {
 
           String yaml = "  - from: Story\n" +
@@ -390,9 +355,8 @@ public class V1ConnectorEndPointsTest {
 			assertNotNull(childrens);
 		}
       }
-     	
      
-     @Test()
+    @Test()
      public void MalformedJsonQuery(){
 
      		String json =
@@ -406,7 +370,7 @@ public class V1ConnectorEndPointsTest {
           assertEquals("Server Error", res.trim());
       }
 
-        @Test
+      @Test
       public void MalformedYamlQueryTest() {
 
           String yaml = "from: Story\n" +
@@ -420,5 +384,4 @@ public class V1ConnectorEndPointsTest {
           assertEquals("Server Error", res.trim());
 
       }
-
 }

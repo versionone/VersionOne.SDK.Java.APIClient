@@ -22,6 +22,8 @@ import org.apache.commons.beanutils.converters.StringArrayConverter;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.ArrayUtils;
 import org.apache.commons.lang.StringUtils;
+import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.w3c.dom.Document;
@@ -578,13 +580,14 @@ public class Services implements IServices {
         }
 
 	@Override
-	public Map<String, String> loc(ArrayList<IAttributeDefinition> attributes) throws ConnectionException {
+	public Map<String, String> loc(ArrayList<IAttributeDefinition> attributes) throws ConnectionException, JSONException {
 	
 		Map<String, String> locs = new HashMap<String, String>();
 		List<String> data = new ArrayList<String>();
+		String result = null;
 
 		for (IAttributeDefinition iAttributeDefinition : attributes) {
-			data.add("AttributeDefinition"+iAttributeDefinition.getName()+ iAttributeDefinition.getAssetType().getToken());
+			data.add("AttributeDefinition'"+iAttributeDefinition.getName()+"'"+ iAttributeDefinition.getAssetType().getToken());
 		}
 			
 		String path = "?[" + StringUtils.join(data, ",") + "]";
@@ -598,32 +601,18 @@ public class Services implements IServices {
 	                stream = _v1Connector.getData(path);
 	            }
 		try {
-			String result = IOUtils.toString(stream);
+			result = IOUtils.toString(stream);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		
-		
-//
-//            string result;
-//            using (StreamReader reader = new StreamReader(stream))
-//            {
-//                result = reader.ReadToEnd();
-//            }
-//
-//            var jsonResult = JObject.Parse(result);
-//            foreach (var attributeDefinition in attributes)
-//            {
-//                var param = string.Format("AttributeDefinition'{0}'{1}", attributeDefinition.Name,
-//                    attributeDefinition.AssetType.Token);
-//                locs.Add(attributeDefinition.Token, jsonResult[param].Value<string>());
-//            }
-//
-//            return locs;
-		
-		
-		
-		return null;
+
+		  JSONObject jsonObject = new JSONObject(result);
+		 
+		  for (IAttributeDefinition iAttribute : attributes) {
+				String param = "AttributeDefinition'"+ iAttribute.getName()+"'"+  iAttribute.getAssetType().getToken();
+				locs.put( iAttribute.getToken(), jsonObject.getString(param));
+			}
+		return locs;
 	}
 	
 }
