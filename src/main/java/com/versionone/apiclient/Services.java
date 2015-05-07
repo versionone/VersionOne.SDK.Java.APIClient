@@ -11,17 +11,24 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.StringJoiner;
+import java.util.stream.Stream;
 
 import javax.xml.xpath.XPath;
 import javax.xml.xpath.XPathConstants;
 import javax.xml.xpath.XPathExpressionException;
 import javax.xml.xpath.XPathFactory;
 
+import org.apache.commons.beanutils.converters.StringArrayConverter;
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang.ArrayUtils;
+import org.apache.commons.lang.StringUtils;
+import org.json.JSONObject;
+import org.json.simple.parser.JSONParser;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 
+import com.sun.jna.StringArray;
 import com.versionone.DB;
 import com.versionone.Oid;
 import com.versionone.apiclient.exceptions.APIException;
@@ -571,8 +578,51 @@ public class Services implements IServices {
         }
 
 	@Override
-	public Map<String, String> Loc(IAttributeDefinition[] attributes) {
-		// TODO Auto-generated method stub
+	public Map<String, String> loc(ArrayList<IAttributeDefinition> attributes) throws ConnectionException {
+	
+		Map<String, String> locs = new HashMap<String, String>();
+		List<String> data = new ArrayList<String>();
+
+		for (IAttributeDefinition iAttributeDefinition : attributes) {
+			data.add("AttributeDefinition"+iAttributeDefinition.getName()+ iAttributeDefinition.getAssetType().getToken());
+		}
+			
+		String path = "?[" + StringUtils.join(data, ",") + "]";
+		
+		Reader stream = null;
+		   if (_connector != null){
+	                path = "loc-2.v1/" + path;
+	                stream = _connector.getData(path);
+	      }else{
+	                _v1Connector.useLoc2API();
+	                stream = _v1Connector.getData(path);
+	            }
+		try {
+			String result = IOUtils.toString(stream);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
+		
+//
+//            string result;
+//            using (StreamReader reader = new StreamReader(stream))
+//            {
+//                result = reader.ReadToEnd();
+//            }
+//
+//            var jsonResult = JObject.Parse(result);
+//            foreach (var attributeDefinition in attributes)
+//            {
+//                var param = string.Format("AttributeDefinition'{0}'{1}", attributeDefinition.Name,
+//                    attributeDefinition.AssetType.Token);
+//                locs.Add(attributeDefinition.Token, jsonResult[param].Value<string>());
+//            }
+//
+//            return locs;
+		
+		
+		
 		return null;
 	}
 	

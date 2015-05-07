@@ -1,5 +1,6 @@
 package com.versionone.apiclient.interfaces;
 
+import java.util.ArrayList;
 import java.util.Map;
 
 import com.versionone.Oid;
@@ -160,6 +161,6 @@ public interface IServices {
      */
      String loc(String key) throws V1Exception;
      
-     Map<String, String> Loc(IAttributeDefinition[] attributes);
+     Map<String, String> loc(ArrayList<IAttributeDefinition> attributes) throws ConnectionException;
 
 }

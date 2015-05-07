@@ -114,7 +114,7 @@ public class V1ConnectorCreatesTests {
 		assertEquals(1, result.getTotalAvaliable());
 	}
 
-	// @Test
+	 @Test
 	public void createStoryTest() throws V1Exception {
 
 		init();
@@ -122,7 +122,7 @@ public class V1ConnectorCreatesTests {
 		IAssetType storyType = services.getMeta().getAssetType("Story");
 		Asset newStory = services.createNew(storyType, _testProjectId);
 		IAttributeDefinition nameAttribute = storyType.getAttributeDefinition("Name");
-		String name = "Test Story " + _testProjectId + " Create story";
+		String name = "Story ";
 		newStory.setAttributeValue(nameAttribute, name);
 		services.save(newStory);
 
@@ -300,7 +300,7 @@ public class V1ConnectorCreatesTests {
 	}
 
 	
-	@Test
+	//@Test
 	 public void CreateStoryWithAttachmentTest() throws V1Exception, IOException {
 	
 	 String file = "/versionone.png";
