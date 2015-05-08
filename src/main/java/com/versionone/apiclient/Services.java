@@ -10,7 +10,6 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.StringJoiner;
 
 import javax.xml.xpath.XPath;
 import javax.xml.xpath.XPathConstants;
@@ -18,8 +17,8 @@ import javax.xml.xpath.XPathExpressionException;
 import javax.xml.xpath.XPathFactory;
 
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang.NullArgumentException;
 import org.apache.commons.lang.StringUtils;
-import org.json.JSONException;
 import org.json.JSONObject;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -188,10 +187,10 @@ public class Services implements IServices {
 		Reader reader = null;
 		try {
 			if (_connector != null) {
-				reader = _connector.getData(path);
+				reader = _connector.sendData(path, "");
 			} else {
 				_v1Connector.useDataAPI();
-				reader = _v1Connector.getData(path);
+				reader = _v1Connector.sendData(path, "");
 			}
 			Document doc = XMLHandler.buildDocument(reader, path);
 			Asset asset = parseAssetNode(doc.getDocumentElement());
@@ -528,13 +527,12 @@ public class Services implements IServices {
 	
 	@Override
 	public String getLocalization(IAttributeDefinition attribute) throws V1Exception {
-
-			String attributeName = "'"+attribute.getName()+"'";
-            StringJoiner sj = new StringJoiner(",");
-            String joinedStrings = sj.add("?AttributeDefinition").add(attributeName).add(attribute.getToken()).toString();
-            
-            return getStringData(joinedStrings);
-        }
+		if (null != attribute) {
+			return getStringData("?" + attribute.getDisplayName());
+		} else {
+			throw new NullArgumentException("IAttributeDefinition");
+		}
+    }
 
 	/**
 	 * @param joinedStrings
@@ -578,7 +576,7 @@ public class Services implements IServices {
 		String result = null;
 
 		for (IAttributeDefinition iAttributeDefinition : attributes) {
-			data.add("AttributeDefinition'"+iAttributeDefinition.getName()+"'"+ iAttributeDefinition.getAssetType().getToken());
+			data.add("AttributeDefinition'" + iAttributeDefinition.getName() + "'" + iAttributeDefinition.getAssetType().getToken());
 		}
 			
 		String path = "?[" + StringUtils.join(data, ",") + "]";
@@ -600,7 +598,7 @@ public class Services implements IServices {
 		  JSONObject jsonObject = new JSONObject(result);
 		 
 		  for (IAttributeDefinition iAttribute : attributes) {
-				String param = "AttributeDefinition'"+ iAttribute.getName()+"'"+  iAttribute.getAssetType().getToken();
+				String param = "AttributeDefinition'" + iAttribute.getName() + "'" + iAttribute.getAssetType().getToken();
 				locs.put( iAttribute.getToken(), jsonObject.getString(param));
 			}
 		return locs;
