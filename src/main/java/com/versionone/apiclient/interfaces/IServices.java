@@ -159,7 +159,8 @@ public interface IServices {
      * 
      * @param key
      * @return String
-     * @throws V1Exception 
+     * @throws ConnectionException 
+     * @throws JSONException 
      */
      String loc(String key) throws V1Exception;
      

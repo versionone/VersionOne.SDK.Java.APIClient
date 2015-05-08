@@ -15,14 +15,14 @@ import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 
+import sun.net.www.protocol.http.AuthCacheImpl;
+import sun.net.www.protocol.http.AuthCacheValue;
+
 import com.versionone.apiclient.exceptions.ConnectionException;
 import com.versionone.apiclient.exceptions.SecurityException;
 import com.versionone.apiclient.interfaces.IAPIConnector;
 import com.versionone.apiclient.interfaces.ICookiesManager;
 import com.versionone.utils.V1Util;
-
-import sun.net.www.protocol.http.AuthCacheImpl;
-import sun.net.www.protocol.http.AuthCacheValue;
 
 /**
  * @deprecated This class has been deprecated as of release 15.0.0. Use the {@link com.versionone.apiclient.V1Connector} class instead. 

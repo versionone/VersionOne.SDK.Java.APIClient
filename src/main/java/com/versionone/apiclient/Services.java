@@ -11,26 +11,20 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.StringJoiner;
-import java.util.stream.Stream;
 
 import javax.xml.xpath.XPath;
 import javax.xml.xpath.XPathConstants;
 import javax.xml.xpath.XPathExpressionException;
 import javax.xml.xpath.XPathFactory;
 
-import org.apache.commons.beanutils.converters.StringArrayConverter;
 import org.apache.commons.io.IOUtils;
-import org.apache.commons.lang.ArrayUtils;
 import org.apache.commons.lang.StringUtils;
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.json.simple.parser.JSONParser;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 
-import com.sun.jna.StringArray;
 import com.versionone.DB;
 import com.versionone.Oid;
 import com.versionone.apiclient.exceptions.APIException;
