@@ -30,7 +30,7 @@ import com.versionone.apiclient.interfaces.IAssetType;
 import com.versionone.apiclient.interfaces.IAttributeDefinition;
 import com.versionone.apiclient.interfaces.IV1Configuration;
 
-public class V1ConnectorEndPointsTest {
+public class V1ConnectorEndpointsTest {
 
 	public static String url;
 	public static Services services;
@@ -49,11 +49,11 @@ public class V1ConnectorEndPointsTest {
 	@Before
 	public void setUp() throws Exception {
 		
-		url = "http://localhost//VersionOne/";
+		url = "http://localhost//VersionOne";
 		try {
 			connector = V1Connector.withInstanceUrl(url)
-						.withUserAgentHeader("name", "1.0")
-						.withUsernameAndPassword("admin", "1234")
+						.withUserAgentHeader("AppName", "1.0")
+						.withUsernameAndPassword("admin", "admin")
 						.build();
 		} catch (MalformedURLException | V1Exception e) {
 			e.printStackTrace();
@@ -62,23 +62,34 @@ public class V1ConnectorEndPointsTest {
 	}
 	
 	@Test
-	public void LocEpicNameTest() {
+	public void LocalizationWithKeyTest() {
+
+		String locName = null;
+		try {
+			locName = services.getLocalization("Epic");
+		} catch (V1Exception e) {
+			e.printStackTrace();
+		}
+		assertTrue(StringUtils.isNotBlank(locName));
+	}
+	
+	@Test
+	public void LocalizationWithSingleAttributeTest() {
 
 		IAssetType epicType = services.getMeta().getAssetType("Epic");
 		IAttributeDefinition nameAttribute = epicType.getAttributeDefinition("Name");
 
 		String locName = null;
 		try {
-			locName = services.loc(nameAttribute);
+			locName = services.getLocalization(nameAttribute);
 		} catch (V1Exception e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		assertTrue(StringUtils.isNotBlank(locName));
 	}
 
 	@Test
-	public void LocStoryNameTest() throws ConnectionException, JSONException {
+	public void LocalizationWithMultipleAttibutesTest() throws ConnectionException, JSONException {
 
 		IAssetType storyType = services.getMeta().getAssetType("Story");
 		IAttributeDefinition nameAttribute = storyType.getAttributeDefinition("Name");
@@ -86,7 +97,7 @@ public class V1ConnectorEndPointsTest {
 
 		ArrayList<IAttributeDefinition> attributes = new ArrayList<IAttributeDefinition>(Arrays.asList(nameAttribute, estimateAttribute));
 		
-		Map<String, String> locData = services.loc(attributes);
+		Map<String, String> locData = services.getLocalization(attributes);
 
 		assertTrue(locData.size() > 0);
 		
@@ -102,11 +113,11 @@ public class V1ConnectorEndPointsTest {
 
 		V1Configuration configuration = new V1Configuration(connector);
 
-			assertNotNull(configuration.isEffortTracking());
-			assertEquals(IV1Configuration.TrackingLevel.On, configuration.getStoryTrackingLevel().On);
-			assertNotNull(configuration.getDefectTrackingLevel());
-			assertNotNull(configuration.getMaxAttachmentSize());
-			assertNotNull(configuration.getStoryTrackingLevel());
+		assertNotNull(configuration.isEffortTracking());
+		assertEquals(IV1Configuration.TrackingLevel.On, configuration.getStoryTrackingLevel().On);
+		assertNotNull(configuration.getDefectTrackingLevel());
+		assertNotNull(configuration.getMaxAttachmentSize());
+		assertNotNull(configuration.getStoryTrackingLevel());
 	}
 	
 	@Test

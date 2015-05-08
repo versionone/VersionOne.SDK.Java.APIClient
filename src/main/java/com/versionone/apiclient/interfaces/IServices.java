@@ -22,45 +22,45 @@ import com.versionone.apiclient.services.QueryResult;
 public interface IServices {
 
 	/**
-	 * Get type information for an asset specified in a token
+	 * Returns the type information for an asset specified in a token.
 	 *  
-	 * @param token - token to process
-	 * @return IAssetType based on token
+	 * @param token The token to process
+	 * @return IAssetType Based on the token
 	 * @throws MetaException if the token is invalid
 	 */
 	IAssetType getAssetType(String token) throws MetaException;
 
 	/**
-	 * Get type information for an attribute specified in a token
+	 * Returns the type information for an attribute specified in a token.
 	 * 
-	 * @param token - token to process
-	 * @return IAttributeDefinition based on token
+	 * @param token The token to process
+	 * @return IAttributeDefinition Based on the token
 	 * @throws MetaException if the token is invalid
 	 */
 	IAttributeDefinition getAttributeDefinition(String token) throws MetaException;
 
 	/**
-	 * Get type information for an operation specified in a token
+	 * Returns the type information for an operation specified in a token.
 	 * 
-	 * @param token - token to process
-	 * @return IOperation based on token
+	 * @param token The token to process
+	 * @return IOperation Based on the token
 	 * @throws MetaException if the token is invalid
 	 */
 	IOperation getOperation(String token) throws MetaException;
 
 	/**
-	 * Get a Object Identifier for the specified token
+	 * Returns an object identifier for the specified token.
 	 * 
-	 * @param token - token to process
+	 * @param token The token to process
 	 * @return Object Identifier
 	 * @throws OidException if the token is invalid
 	 */
 	Oid getOid(String token) throws OidException;
 
 	/**
-	 * Execute a Query and return the results
+	 * Executes a query and returns the results.
 	 * 
-	 * @param query - Query to execute
+	 * @param query The query to execute.
 	 * @return QueryResult of the query
      * @throws ConnectionException - if connection to VersionOne down
      * @throws OidException - if there is problem related to Object Identifiers
@@ -69,18 +69,18 @@ public interface IServices {
 	QueryResult retrieve(Query query) throws ConnectionException, APIException, OidException;
 
 	/**
-	 * Persist changes to an asset without comment
+	 * Persists changes to an asset without a comment.
 	 * 
-	 * @param asset - asset that changed
+	 * @param asset The asset that changed
      * @throws ConnectionException - if connection to VersionOne down
      * @throws APIException - if the save fails
 	 */
 	void save(Asset asset) throws APIException, ConnectionException;
 
 	/**
-	 * Persist changes to as asset with comment
+	 * Persists changes to as asset with a comment.
 	 * 
-	 * @param asset - asset that changed
+	 * @param asset The asset that changed
 	 * @param comment - comment
      * @throws ConnectionException - if connection to VersionOne down
      * @throws APIException - if the save fails
@@ -88,15 +88,15 @@ public interface IServices {
 	void save(Asset asset, String comment) throws APIException, ConnectionException;
 
 	/**
-	 * Save multiple assets without comment
+	 * Saves multiple assets without a comment.
 	 * 
-	 * @param assetList - array of assets to save
+	 * @param assetList An array of assets to save
 	 * @throws V1Exception - if the save fails
 	 */
 	void save(Asset[] assetList) throws V1Exception;
 
 	/**
-	 * Determine the OID of the currently logged in user
+	 * Determines the OID of the currently logged in user.
 	 * 
 	 * @return Object Identifier for current user
      * @throws ConnectionException - if connection to VersionOne down
@@ -106,9 +106,9 @@ public interface IServices {
 	Oid getLoggedIn() throws APIException, ConnectionException, OidException;
 
 	/**
-	 * Create a new Asset 
+	 * Creates a new asset.
 	 * 
-	 * @param assetType - type of asset to create
+	 * @param assetType The type of asset to create
 	 * @param context - context under which to create the asset
 	 * @return New Asset
 	 * @throws V1Exception - when the create fails
@@ -116,9 +116,9 @@ public interface IServices {
 	Asset createNew(IAssetType assetType, Oid context) throws V1Exception;
 
 	/**
-	 * Execute an operation
+	 * Executes an operation.
 	 * 
-	 * @param op - Operation to execute
+	 * @param op The operation to execute
 	 * @param oid - OID of object on which method is executed
 	 * @return Oid result of operation
 	 * @throws APIException - when the operation fails
@@ -126,43 +126,53 @@ public interface IServices {
 	Oid executeOperation(IOperation op, Oid oid) throws APIException;
 	
 	/**
-	 * Get Meta Information
+	 * Returns the MetaModel.
 	 * 
 	 * @return IMetaModel
 	 */
 	IMetaModel getMeta();
 	
 	/**
-	 * Get V1connector 
+	 * Returns the V1Connector. 
 	 * 
 	 * @return V1Connector
 	 */
-	
 	V1Connector getV1Connector();
 	
 	/**
-	 * send a query using json format
-	 * @param query the query string
+	 * Executes a Query API query using in JSON or YAML format.
+	 * 
+	 * @param query The query JSON or YAML query string
 	 * @return String
 	 */
     String executePassThroughQuery(String query);
 
    /**
-    *  localize
-    * @param attribute
+    * Returns a localization value based on an attribute definition.
+    * 
+    * @param attribute An attribute definition
     * @return String
- * @throws V1Exception 
+    * @throws V1Exception 
     */
-    String loc(IAttributeDefinition attribute) throws V1Exception;
+    String getLocalization(IAttributeDefinition attribute) throws V1Exception;
    
     /**
+     * Returns a localization value based on key.
      * 
-     * @param key
+     * @param key A string value of the key
      * @return String
      * @throws V1Exception 
      */
-     String loc(String key) throws V1Exception;
+     String getLocalization(String key) throws V1Exception;
      
-     Map<String, String> loc(ArrayList<IAttributeDefinition> attributes)  throws ConnectionException, JSONException;
+     /**
+      * Returns a Map of localized values.
+      * 
+      * @param attributes An array of attribute definitions
+      * @return A map of localized values
+      * @throws ConnectionException
+      * @throws JSONException
+      */
+     Map<String, String> getLocalization(ArrayList<IAttributeDefinition> attributes)  throws ConnectionException;
 
 }
