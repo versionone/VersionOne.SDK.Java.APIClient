@@ -187,10 +187,10 @@ public class Services implements IServices {
 		Reader reader = null;
 		try {
 			if (_connector != null) {
-				reader = _connector.getData(path);
+				reader = _connector.sendData(path, "");
 			} else {
 				_v1Connector.useDataAPI();
-				reader = _v1Connector.getData(path);
+				reader = _v1Connector.sendData(path, "");
 			}
 			Document doc = XMLHandler.buildDocument(reader, path);
 			Asset asset = parseAssetNode(doc.getDocumentElement());
