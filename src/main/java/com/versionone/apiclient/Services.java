@@ -10,7 +10,6 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.StringJoiner;
 
 import javax.xml.xpath.XPath;
 import javax.xml.xpath.XPathConstants;
@@ -20,7 +19,6 @@ import javax.xml.xpath.XPathFactory;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.NullArgumentException;
 import org.apache.commons.lang.StringUtils;
-import org.json.JSONException;
 import org.json.JSONObject;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -578,7 +576,7 @@ public class Services implements IServices {
 		String result = null;
 
 		for (IAttributeDefinition iAttributeDefinition : attributes) {
-			data.add("AttributeDefinition'"+iAttributeDefinition.getName()+"'"+ iAttributeDefinition.getAssetType().getToken());
+			data.add("AttributeDefinition'" + iAttributeDefinition.getName() + "'" + iAttributeDefinition.getAssetType().getToken());
 		}
 			
 		String path = "?[" + StringUtils.join(data, ",") + "]";
@@ -600,7 +598,7 @@ public class Services implements IServices {
 		  JSONObject jsonObject = new JSONObject(result);
 		 
 		  for (IAttributeDefinition iAttribute : attributes) {
-				String param = "AttributeDefinition'"+ iAttribute.getName()+"'"+  iAttribute.getAssetType().getToken();
+				String param = "AttributeDefinition'" + iAttribute.getName() + "'" + iAttribute.getAssetType().getToken();
 				locs.put( iAttribute.getToken(), jsonObject.getString(param));
 			}
 		return locs;
