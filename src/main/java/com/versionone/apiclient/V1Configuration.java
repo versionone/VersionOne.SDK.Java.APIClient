@@ -106,6 +106,23 @@ public class V1Configuration implements IV1Configuration {
         }
         return Integer.MAX_VALUE;
     }
+    
+    /**
+     * Gets capacity planning setting.
+     *
+     * @return String Capacity planning setting
+     * @throws APIException if any problems occur with reading settings
+     * @throws ConnectionException if any connection problems occur
+     */
+    public String getCapacityPlanning() throws ConnectionException, APIException {
+        final String value = getSetting(CapacityPlanningKey);
+        if (value != null && value.length() > 0) {
+            return value;
+        }
+        else {
+        	return null;
+        }
+    }
 
     private String getSetting(String keyToFind) throws ConnectionException, APIException {
         try {

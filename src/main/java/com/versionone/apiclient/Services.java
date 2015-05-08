@@ -88,7 +88,6 @@ public class Services implements IServices {
 			try {
 				throw new V1Exception("null value v1Connector");
 			} catch (V1Exception e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 
@@ -528,7 +527,7 @@ public class Services implements IServices {
     }
 	
 	@Override
-	public String loc(IAttributeDefinition attribute) throws V1Exception {
+	public String getLocalization(IAttributeDefinition attribute) throws V1Exception {
 
 			String attributeName = "'"+attribute.getName()+"'";
             StringJoiner sj = new StringJoiner(",");
@@ -560,21 +559,19 @@ public class Services implements IServices {
 		try {
 			result = IOUtils.toString(stream);
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		return result;
 	}
 
 	@Override
-	public String loc(String key) throws V1Exception {
-
-            String path ="?"+ key; 
-            return getStringData(path);
-        }
+	public String getLocalization(String key) throws V1Exception {
+		String path ="?"+ key; 
+        return getStringData(path);
+    }
 
 	@Override
-	public Map<String, String> loc(ArrayList<IAttributeDefinition> attributes) throws ConnectionException, JSONException {
+	public Map<String, String> getLocalization(ArrayList<IAttributeDefinition> attributes) throws ConnectionException {
 	
 		Map<String, String> locs = new HashMap<String, String>();
 		List<String> data = new ArrayList<String>();
