@@ -18,6 +18,7 @@ import javax.xml.xpath.XPathExpressionException;
 import javax.xml.xpath.XPathFactory;
 
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang.NullArgumentException;
 import org.apache.commons.lang.StringUtils;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -528,13 +529,12 @@ public class Services implements IServices {
 	
 	@Override
 	public String getLocalization(IAttributeDefinition attribute) throws V1Exception {
-
-			String attributeName = "'"+attribute.getName()+"'";
-            StringJoiner sj = new StringJoiner(",");
-            String joinedStrings = sj.add("?AttributeDefinition").add(attributeName).add(attribute.getToken()).toString();
-            
-            return getStringData(joinedStrings);
-        }
+		if (null != attribute) {
+			return getStringData("?" + attribute.getDisplayName());
+		} else {
+			throw new NullArgumentException("IAttributeDefinition");
+		}
+    }
 
 	/**
 	 * @param joinedStrings

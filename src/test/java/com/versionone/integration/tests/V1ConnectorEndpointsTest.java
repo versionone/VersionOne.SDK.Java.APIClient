@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Map;
 
+import org.apache.commons.lang.NullArgumentException;
 import org.apache.commons.lang.StringUtils;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -62,30 +63,36 @@ public class V1ConnectorEndpointsTest {
 	}
 	
 	@Test
-	public void LocalizationWithKeyTest() {
+	public void LocalizationWithKeyTest() throws V1Exception {
 
+		String assetName = "Defect";
 		String locName = null;
-		try {
-			locName = services.getLocalization("Epic");
-		} catch (V1Exception e) {
-			e.printStackTrace();
-		}
+
+		locName = services.getLocalization(assetName);
+
 		assertTrue(StringUtils.isNotBlank(locName));
+		assertEquals(assetName, locName);
 	}
 	
 	@Test
-	public void LocalizationWithSingleAttributeTest() {
+	public void LocalizationWithSingleAttributeTest() throws V1Exception {
 
-		IAssetType epicType = services.getMeta().getAssetType("Epic");
-		IAttributeDefinition nameAttribute = epicType.getAttributeDefinition("Name");
+		String assetName = "Defect";
+		String attributeName = "Title";
+		IAssetType assetType = services.getMeta().getAssetType(assetName);
+		IAttributeDefinition nameAttribute = assetType.getAttributeDefinition("Name");
 
 		String locName = null;
-		try {
-			locName = services.getLocalization(nameAttribute);
-		} catch (V1Exception e) {
-			e.printStackTrace();
-		}
+		locName = services.getLocalization(nameAttribute);
+		
 		assertTrue(StringUtils.isNotBlank(locName));
+		assertEquals(attributeName, locName);
+	}
+	
+	@Test(expected = NullArgumentException.class)
+	public void LocalizationWithNullSingleAttributeTest() throws V1Exception {
+		IAttributeDefinition nameAttribute = null;
+		services.getLocalization(nameAttribute);
 	}
 
 	@Test
