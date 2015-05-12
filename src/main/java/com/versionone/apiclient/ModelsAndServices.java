@@ -7,6 +7,10 @@ import com.versionone.apiclient.interfaces.IMetaModel;
 import com.versionone.apiclient.interfaces.IModelsAndServices;
 import com.versionone.apiclient.interfaces.IServices;
 
+/**
+ * @deprecated This class has been deprecated. Please use V1Connector instead. 
+ */
+@Deprecated
 public final class ModelsAndServices implements IModelsAndServices  {
 
     private IConnectors _connectors;

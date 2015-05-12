@@ -5,12 +5,9 @@ import java.net.URISyntaxException;
 import com.versionone.apiclient.V1APIConnector;
 
 /**
- * Created with IntelliJ IDEA.
- * User: GJohnson
- * Date: 12/18/12
- * Time: 2:35 PM
- * To change this template use File | Settings | File Templates.
+ * @deprecated This interface has been deprecated. Please use V1Connector instead. 
  */
+@Deprecated
 public interface IConnectors {
     V1APIConnector getDataConnector();
     V1APIConnector getMetaConnector();

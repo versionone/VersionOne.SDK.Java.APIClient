@@ -5,6 +5,10 @@ import java.io.IOException;
 import com.versionone.apiclient.interfaces.IAPIConfiguration;
 import com.versionone.apiclient.interfaces.IUrls;
 
+/**
+ * @deprecated This class has been deprecated. Please use V1Connector instead. 
+ */
+@Deprecated
 public final class Urls implements IUrls {
 
     private IAPIConfiguration _config;

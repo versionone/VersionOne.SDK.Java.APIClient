@@ -4,6 +4,10 @@ import java.net.URISyntaxException;
 
 import com.versionone.apiclient.V1Configuration;
 
+/**
+ * @deprecated This interface has been deprecated. Please use V1Connector instead. 
+ */
+@Deprecated
 public interface IModelsAndServices {
         IMetaModel getMetaModel();
         IMetaModel getMetaModelWithProxy() throws URISyntaxException;

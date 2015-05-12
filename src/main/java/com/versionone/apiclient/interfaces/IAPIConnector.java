@@ -8,8 +8,9 @@ import com.versionone.apiclient.exceptions.ConnectionException;
 import com.versionone.apiclient.exceptions.V1Exception;
 
 /**
- * Interface that connector classes must implement
+ * @deprecated This interface has been deprecated. Please use V1Connector instead. 
  */
+@Deprecated
 public interface IAPIConnector {
 
 	/**

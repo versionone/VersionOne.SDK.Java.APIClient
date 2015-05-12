@@ -25,7 +25,7 @@ import com.versionone.apiclient.interfaces.ICookiesManager;
 import com.versionone.utils.V1Util;
 
 /**
- * @deprecated This class has been deprecated as of release 15.0.0. Use the {@link com.versionone.apiclient.V1Connector} class instead. 
+ * @deprecated This class has been deprecated. Please use V1Connector instead. 
  */
 @Deprecated
 public class V1APIConnector implements IAPIConnector {
