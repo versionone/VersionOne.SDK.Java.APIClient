@@ -126,7 +126,7 @@ public class V1ConnectorTest {
 	@Test()
 	public void withAccessTokenTest() throws V1Exception, MalformedURLException {
 
-		String accessToken = "access_token";
+		String accessToken = "1.yL3CcovObgbQnmMKP8PKTt3fo7A=";
 
 		V1Connector connector = V1Connector.withInstanceUrl(url).withUserAgentHeader("name", "1.0").withAccessToken(accessToken).build();
 
@@ -188,6 +188,7 @@ public class V1ConnectorTest {
 	}
 
 	@Test()
+	@Ignore
 	public void testConnectionNtlm() throws Exception {
 
 		url = "http://localhost/VersionOneNtlm/";
@@ -206,9 +207,7 @@ public class V1ConnectorTest {
 
 		url = "http://localhost/VersionOneNtlm/";
 
-		V1Connector connector = V1Connector.withInstanceUrl(url)
-				.withUserAgentHeader("name", "1.0")
-				.withWindowsIntegrated("vplechuc", "moifaku72")
+		V1Connector connector = V1Connector.withInstanceUrl(url).withUserAgentHeader("name", "1.0").withWindowsIntegrated("vplechuc", "moifaku72")
 				.build();
 
 		Services services = new Services(connector);
@@ -237,7 +236,6 @@ public class V1ConnectorTest {
 
 		assertNotNull(assetType);
 	}
-
 
 	/**
 	 * Launch the test.

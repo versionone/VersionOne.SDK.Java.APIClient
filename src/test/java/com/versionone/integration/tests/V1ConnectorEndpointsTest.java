@@ -12,7 +12,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Map;
 
-import org.apache.commons.lang.NullArgumentException;
 import org.apache.commons.lang.StringUtils;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -62,41 +61,51 @@ public class V1ConnectorEndpointsTest {
 		 services = new Services(connector);
 	}
 	
+	
 	@Test
-	public void LocalizationWithKeyTest() throws V1Exception {
+    public void localizationWithSingleAttribute2Test() throws V1Exception {
 
-		String assetName = "Defect";
+        String assetName = "Defect";
+        IAssetType assetType = services.getMeta().getAssetType(assetName);
+        IAttributeDefinition nameAttribute = assetType.getAttributeDefinition("Name");
+
+        String locName = null;
+        locName = services.getLocalization(nameAttribute);
+        
+        assertTrue(StringUtils.isNotBlank(locName));
+        assertEquals(assetName, locName);
+    }
+	
+	
+	@Test
+	public void localizationWithKeyTest() {
+
 		String locName = null;
-
-		locName = services.getLocalization(assetName);
-
+		try {
+			locName = services.getLocalization("Epic");
+		} catch (V1Exception e) {
+			e.printStackTrace();
+		}
 		assertTrue(StringUtils.isNotBlank(locName));
-		assertEquals(assetName, locName);
 	}
 	
 	@Test
-	public void LocalizationWithSingleAttributeTest() throws V1Exception {
+	public void localizationWithSingleAttributeTest() {
 
-		String assetName = "Defect";
-		String attributeName = "Title";
-		IAssetType assetType = services.getMeta().getAssetType(assetName);
-		IAttributeDefinition nameAttribute = assetType.getAttributeDefinition("Name");
+		IAssetType epicType = services.getMeta().getAssetType("Epic");
+		IAttributeDefinition nameAttribute = epicType.getAttributeDefinition("Name");
 
 		String locName = null;
-		locName = services.getLocalization(nameAttribute);
-		
+		try {
+			locName = services.getLocalization(nameAttribute);
+		} catch (V1Exception e) {
+			e.printStackTrace();
+		}
 		assertTrue(StringUtils.isNotBlank(locName));
-		assertEquals(attributeName, locName);
-	}
-	
-	@Test(expected = NullArgumentException.class)
-	public void LocalizationWithNullSingleAttributeTest() throws V1Exception {
-		IAttributeDefinition nameAttribute = null;
-		services.getLocalization(nameAttribute);
 	}
 
 	@Test
-	public void LocalizationWithMultipleAttibutesTest() throws ConnectionException, JSONException {
+	public void localizationWithMultipleAttibutesTest() throws ConnectionException, JSONException {
 
 		IAssetType storyType = services.getMeta().getAssetType("Story");
 		IAttributeDefinition nameAttribute = storyType.getAttributeDefinition("Name");
@@ -154,7 +163,7 @@ public class V1ConnectorEndpointsTest {
    
       }
 		@Test
-		public void ExecuteSingleYamlQueryTest() throws JSONException {
+		public void executeSingleYamlQueryTest() throws JSONException {
 
 			String yaml = "from: Story\n" +
                      "select:\n" +
@@ -173,7 +182,7 @@ public class V1ConnectorEndpointsTest {
       }
 
      @Test
-     public void ExecuteMultipleJsonQueryTest() throws Exception{
+     public void executeMultipleJsonQueryTest() throws Exception{
 
           String json =
               "[" +
@@ -209,7 +218,7 @@ public class V1ConnectorEndpointsTest {
       }
 
       @Test
-      public void ExecuteMultipleYamlQueryTest() throws Exception{
+      public void executeMultipleYamlQueryTest() throws Exception{
 
           String yaml = "  - from: Story\n" +
                      "    select:\n" +
@@ -241,7 +250,7 @@ public class V1ConnectorEndpointsTest {
       }
 
       @Test
-      public void ExecuteSubSelectJsonQueryTest() throws Exception{
+      public void executeSubSelectJsonQueryTest() throws Exception{
 
           String json =
               "{" +
@@ -279,7 +288,7 @@ public class V1ConnectorEndpointsTest {
       }
 
      @Test
-      public void ExecuteSubSelectYamlQueryTest() throws Exception{
+      public void executeSubSelectYamlQueryTest() throws Exception{
 
           String yaml = "  - from: Story\n" +
                      "    select:\n" +
@@ -316,7 +325,7 @@ public class V1ConnectorEndpointsTest {
       }
 
    @Test
-   public void ExecuteGroupJsonQueryTest() throws Exception  {
+   public void executeGroupJsonQueryTest() throws Exception  {
 
           String json =
               "{" +
@@ -349,7 +358,7 @@ public class V1ConnectorEndpointsTest {
       }
 
     @Test
-     public void ExecuteGroupYamlQueryTest() throws Exception  {
+     public void executeGroupYamlQueryTest() throws Exception  {
 
           String yaml = "  - from: Story\n" +
                      "    select:\n" +
@@ -375,7 +384,7 @@ public class V1ConnectorEndpointsTest {
       }
      
     @Test()
-     public void MalformedJsonQuery(){
+     public void malformedJsonQuery(){
 
      		String json =
               "{" +
@@ -389,7 +398,7 @@ public class V1ConnectorEndpointsTest {
       }
 
       @Test
-      public void MalformedYamlQueryTest() {
+      public void malformedYamlQueryTest() {
 
           String yaml = "from: Story\n" +
                      "   select:\n" +

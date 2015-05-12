@@ -53,7 +53,6 @@ public class Services implements IServices {
 	private Oid _loggedin;
 	private V1Connector _v1Connector;
 
-		
 	public IMetaModel getMeta() {
 		return _meta;
 	}
@@ -81,7 +80,6 @@ public class Services implements IServices {
 		_connector = connector;
 	}
 
-	
 	public Services(V1Connector v1Connector) {
 		if (v1Connector == null)
 			try {
@@ -104,10 +102,10 @@ public class Services implements IServices {
 		Reader reader = null;
 		try {
 			if (_connector != null) {
-				queryUrl =  new QueryURLBuilder(query, false).toString();
+				queryUrl = new QueryURLBuilder(query, false).toString();
 				reader = _connector.getData(queryUrl);
 			} else {
-				queryUrl =  new QueryURLBuilder(query, true).toString();
+				queryUrl = new QueryURLBuilder(query, true).toString();
 				if (query.isHistorical()) {
 					_v1Connector.useHistoryAPI();
 				} else {
@@ -145,7 +143,7 @@ public class Services implements IServices {
 	 */
 	public Asset createNew(IAssetType assetType, Oid context) throws V1Exception {
 
-		String path = (_connector != null) ? "New/" + assetType.getToken():assetType.getToken();
+		String path = (_connector != null) ? "New/" + assetType.getToken() : assetType.getToken();
 
 		if (context != null && !context.isNull())
 			path += "?ctx=" + context.getToken();
@@ -156,7 +154,7 @@ public class Services implements IServices {
 				reader = _connector.getData(path);
 			} else {
 				_v1Connector.useNewAPI();
-				reader =_v1Connector.getData(path);
+				reader = _v1Connector.getData(path);
 			}
 
 			Document doc = XMLHandler.buildDocument(reader, path);
@@ -179,10 +177,9 @@ public class Services implements IServices {
 	 * @see IServices#executeOperation(IOperation, Oid)
 	 */
 	public Oid executeOperation(IOperation op, Oid oid) throws APIException {
-		
-		String path = (_connector != null) ? 
-					"Data/" + oid.getAssetType().getToken() + "/" + oid.getKey().toString() + "?op=" + op.getName() :
-					 oid.getAssetType().getToken() + "/" + oid.getKey().toString() + "?op=" + op.getName();
+
+		String path = (_connector != null) ? "Data/" + oid.getAssetType().getToken() + "/" + oid.getKey().toString() + "?op=" + op.getName() : oid
+				.getAssetType().getToken() + "/" + oid.getKey().toString() + "?op=" + op.getName();
 
 		Reader reader = null;
 		try {
@@ -278,11 +275,9 @@ public class Services implements IServices {
 	 * @see IServices#save(Asset, String)
 	 */
 	public void save(Asset asset, String comment) throws APIException, ConnectionException {
-		
-		
+
 		if (asset.hasChanged() || asset.getOid().isNull()) {
 
-			
 			StringWriter assetData = new StringWriter();
 			XmlApiWriter writer = new XmlApiWriter(true);
 			writer.write(asset, assetData);
@@ -291,8 +286,8 @@ public class Services implements IServices {
 				data = data.substring(data.indexOf("?>") + 2);
 			}
 
-			String path = _connector != null ? "Data/" + asset.getAssetType().getToken(): asset.getAssetType().getToken();
-			
+			String path = _connector != null ? "Data/" + asset.getAssetType().getToken() : asset.getAssetType().getToken();
+
 			if (!asset.getOid().isNull())
 				path += "/" + asset.getOid().getKey().toString();
 
@@ -519,12 +514,11 @@ public class Services implements IServices {
 	}
 
 	@Override
-    public String executePassThroughQuery(String query)
-    {
-        _v1Connector.useQueryAPI();
-        return _v1Connector.stringSendData(query, "application/json");
-    }
-	
+	public String executePassThroughQuery(String query) {
+		_v1Connector.useQueryAPI();
+		return _v1Connector.stringSendData(query, "application/json");
+	}
+
 	@Override
 	public String getLocalization(IAttributeDefinition attribute) throws V1Exception {
 		if (null != attribute) {
@@ -532,7 +526,7 @@ public class Services implements IServices {
 		} else {
 			throw new NullArgumentException("IAttributeDefinition");
 		}
-    }
+	}
 
 	/**
 	 * @param joinedStrings
@@ -542,15 +536,12 @@ public class Services implements IServices {
 	private String getStringData(String joinedStrings) throws ConnectionException {
 
 		Reader stream;
-		
-		if (_connector != null)
-		{
-		    stream = _connector.getData("loc.v1/" + joinedStrings);
-		}
-		else
-		{
-		    _v1Connector.useLocAPI();
-		    stream = _v1Connector.getData(joinedStrings);
+
+		if (_connector != null) {
+			stream = _connector.getData("loc.v1/" + joinedStrings);
+		} else {
+			_v1Connector.useLocAPI();
+			stream = _v1Connector.getData(joinedStrings);
 		}
 
 		String result = null;
@@ -564,13 +555,13 @@ public class Services implements IServices {
 
 	@Override
 	public String getLocalization(String key) throws V1Exception {
-		String path ="?"+ key; 
-        return getStringData(path);
-    }
+		String path = "?" + key;
+		return getStringData(path);
+	}
 
 	@Override
 	public Map<String, String> getLocalization(ArrayList<IAttributeDefinition> attributes) throws ConnectionException {
-	
+
 		Map<String, String> locs = new HashMap<String, String>();
 		List<String> data = new ArrayList<String>();
 		String result = null;
@@ -578,30 +569,30 @@ public class Services implements IServices {
 		for (IAttributeDefinition iAttributeDefinition : attributes) {
 			data.add("AttributeDefinition'" + iAttributeDefinition.getName() + "'" + iAttributeDefinition.getAssetType().getToken());
 		}
-			
+
 		String path = "?[" + StringUtils.join(data, ",") + "]";
-		
+
 		Reader stream = null;
-		   if (_connector != null){
-	                path = "loc-2.v1/" + path;
-	                stream = _connector.getData(path);
-	      }else{
-	                _v1Connector.useLoc2API();
-	                stream = _v1Connector.getData(path);
-	            }
+		if (_connector != null) {
+			path = "loc-2.v1/" + path;
+			stream = _connector.getData(path);
+		} else {
+			_v1Connector.useLoc2API();
+			stream = _v1Connector.getData(path);
+		}
 		try {
 			result = IOUtils.toString(stream);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 
-		  JSONObject jsonObject = new JSONObject(result);
-		 
-		  for (IAttributeDefinition iAttribute : attributes) {
-				String param = "AttributeDefinition'" + iAttribute.getName() + "'" + iAttribute.getAssetType().getToken();
-				locs.put( iAttribute.getToken(), jsonObject.getString(param));
-			}
+		JSONObject jsonObject = new JSONObject(result);
+
+		for (IAttributeDefinition iAttribute : attributes) {
+			String param = "AttributeDefinition'" + iAttribute.getName() + "'" + iAttribute.getAssetType().getToken();
+			locs.put(iAttribute.getToken(), jsonObject.getString(param));
+		}
 		return locs;
 	}
-	
+
 }

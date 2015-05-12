@@ -3,11 +3,14 @@ package com.versionone.integration.tests;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.MalformedURLException;
 
+import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.time.DateUtils;
 import org.junit.Before;
 import org.junit.BeforeClass;
@@ -31,7 +34,7 @@ import com.versionone.apiclient.services.QueryResult;
 public class V1ConnectorCreatesTests {
 	private final static String TEST_PROJECT_NAME = "Java SDK Integration Tests";
 	private static Oid _testProjectId;
-	private static String url = "http://localhost//VersionOne/";
+	private static String url = "http://localhost/VersionOne/";
 	private static V1Connector connector;
 	private static Services services;
 	private static String accessToken = "1.yL3CcovObgbQnmMKP8PKTt3fo7A=";
@@ -104,7 +107,7 @@ public class V1ConnectorCreatesTests {
 		assertEquals(1, result.getTotalAvaliable());
 	}
 
-	 @Test
+	// @Test
 	public void createStoryTest() throws V1Exception {
 
 		init();
@@ -290,130 +293,109 @@ public class V1ConnectorCreatesTests {
 	}
 
 	
-	//@Test
+	@Test
 	 public void CreateStoryWithAttachmentTest() throws V1Exception, IOException {
 	
-	 String file = "/versionone.png";
-	
-	 assertNotNull("Test file missing", getClass().getResource(file));
-	
-	 String mimeType = MimeType.resolve(file);
+		String file = "com/versionone/apiclient/versionone.png";
 
-	
-	 IAttachments attachments = new Attachments(V1Connector
-			 .withInstanceUrl(url)
-			 .withUserAgentHeader("JavaSDKIntegrationTest", "1.0")
-			 .withAccessToken(accessToken)
-			 .useEndpoint("attachment.img/")
-			 .build());
+		assertNotNull("Test file missing", Thread.currentThread().getContextClassLoader().getResource(file));
 
-	 IAssetType storyType = services.getMeta().getAssetType("Story");
-	 Asset newStory = services.createNew(storyType, _testProjectId);
-	 IAttributeDefinition nameAttribute = storyType.getAttributeDefinition("Name");
-	 IAttributeDefinition attachmentsAttribute = storyType.getAttributeDefinition("Attachments");
-	 String name = "Test Story " + _testProjectId + "Create story with attachment";
-	 newStory.setAttributeValue(nameAttribute, name);
-	 services.save(newStory);
-	
-	 IAssetType attachmentType = services.getMeta().getAssetType("Attachment");
-	 IAttributeDefinition attachmentAssetDef = attachmentType.getAttributeDefinition("Asset");
-	 IAttributeDefinition attachmentContent = attachmentType.getAttributeDefinition("Content");
-	 IAttributeDefinition attachmentContentType =
-	 attachmentType.getAttributeDefinition("ContentType");
-	 IAttributeDefinition attachmentFileName = attachmentType.getAttributeDefinition("Filename");
-	 IAttributeDefinition attachmentName = attachmentType.getAttributeDefinition("Name");
-	 Asset attachment = services.createNew(attachmentType, Oid.Null);
-	 attachment.setAttributeValue(attachmentName, "Test Attachment on " + newStory.getOid());
-	 attachment.setAttributeValue(attachmentFileName, file);
-	 attachment.setAttributeValue(attachmentContentType, mimeType);
-	 attachment.setAttributeValue(attachmentContent, "");
-	 attachment.setAttributeValue(attachmentAssetDef, newStory.getOid());
-	 services.save(attachment);
-//	
-	 String key = attachment.getOid().getKey().toString();
-//	 //Stream input = new FileStream(file, FileMode.Open, FileAccess.Read)
-	 InputStream inStream  = getClass().getResourceAsStream(file);
-	 OutputStream output =  attachments.getWriter(key, mimeType);
-//	 
-	 byte[] buffer = new byte[inStream.available() + 1];
-	 while (true){
-		 int read = inStream.read(buffer, 0, buffer.length);
-		 if (read <= 0)
-			 break;
-	
-		 output.write(buffer, 0, read);
-	 	}
-	 
-	 attachments.setWriter(key);
-//	
-	 Query query = new Query(newStory.getOid().getMomentless());
-	 query.getSelection().add(attachmentsAttribute);
-	 Asset story = services.retrieve(query).getAssets()[0];
-	
-	 assertEquals(1, story.getAttribute(attachmentsAttribute).getValues().length);
+		String mimeType = MimeType.resolve(file);
+
+		IAttachments attachments = new Attachments(V1Connector.withInstanceUrl(url).withUserAgentHeader("JavaSDKIntegrationTest", "1.0")
+				.withAccessToken(accessToken).useEndpoint("attachment.img/").build());
+
+		IAssetType storyType = services.getMeta().getAssetType("Story");
+		Asset newStory = services.createNew(storyType, _testProjectId);
+		IAttributeDefinition nameAttribute = storyType.getAttributeDefinition("Name");
+		IAttributeDefinition attachmentsAttribute = storyType.getAttributeDefinition("Attachments");
+		String name = "Test Story " + _testProjectId + "Create story with attachment";
+		newStory.setAttributeValue(nameAttribute, name);
+		services.save(newStory);
+
+		IAssetType attachmentType = services.getMeta().getAssetType("Attachment");
+		IAttributeDefinition attachmentAssetDef = attachmentType.getAttributeDefinition("Asset");
+		IAttributeDefinition attachmentContent = attachmentType.getAttributeDefinition("Content");
+		IAttributeDefinition attachmentContentType = attachmentType.getAttributeDefinition("ContentType");
+		IAttributeDefinition attachmentFileName = attachmentType.getAttributeDefinition("Filename");
+		IAttributeDefinition attachmentName = attachmentType.getAttributeDefinition("Name");
+		Asset attachment = services.createNew(attachmentType, Oid.Null);
+		attachment.setAttributeValue(attachmentName, "Test Attachment on " + newStory.getOid());
+		attachment.setAttributeValue(attachmentFileName, file);
+		attachment.setAttributeValue(attachmentContentType, mimeType);
+		attachment.setAttributeValue(attachmentContent, "");
+		attachment.setAttributeValue(attachmentAssetDef, newStory.getOid());
+		services.save(attachment);
+		//
+		String key = attachment.getOid().getKey().toString();
+	     FileInputStream inStream = new FileInputStream(Thread.currentThread().getContextClassLoader().getResource(file).getPath());
+	     OutputStream output =  attachments.getWriter(key, mimeType);
+	     byte[] buffer = new byte[inStream.available() + 1];
+	     while (true){
+	         int read = inStream.read(buffer, 0, buffer.length);
+	         if (read <= 0)
+	             break;
+	    
+	         output.write(buffer, 0, read);
+	         }
+	     
+	     attachments.setWriter(key);
+		
+		Query query = new Query(newStory.getOid().getMomentless());
+		query.getSelection().add(attachmentsAttribute);
+		Asset story = services.retrieve(query).getAssets()[0];
+
+		assertEquals(1, story.getAttribute(attachmentsAttribute).getValues().length);
 	 }
 
 	 
-	 //
-	// [TestMethod]
-	// [DeploymentItem("versionone.png")]
-	// public void CreateStoryWithEmbeddedImage()
-	// {
-	// var services = GetServices();
-	// string file = "versionone.png";
-	//
-	// Assert.IsTrue(File.Exists(file));
-	//
-	// string mimeType = MimeType.Resolve(file);
-	// IAttachments attachments = new Attachments(V1Connector
-	// .WithInstanceUrl(_v1InstanceUrl)
-	// .WithUserAgentHeader(".NET_SDK_Integration_Test", "1.0")
-	// .WithAccessToken(_v1AccessToken).UseEndpoint("embedded.img/")
-	// .Build());
-	//
-	// var contextId = IntegrationTestsHelper.TestProjectOid;
-	// var storyType = services.Meta.GetAssetType("Story");
-	// var newStory = services.New(storyType, contextId);
-	// var nameAttribute = storyType.GetAttributeDefinition("Name");
-	// var descriptionAttribute = storyType.GetAttributeDefinition("Description");
-	// var name = string.Format("Test Story {0} Create story with embedded image", contextId);
-	// newStory.SetAttributeValue(nameAttribute, name);
-	// newStory.SetAttributeValue(descriptionAttribute, "Test description");
-	// services.Save(newStory);
-	//
-	// var embeddedImageType = services.Meta.GetAssetType("EmbeddedImage");
-	// var newEmbeddedImage = services.New(embeddedImageType, Oid.Null);
-	// var assetAttribute = embeddedImageType.GetAttributeDefinition("Asset");
-	// var contentAttribute = embeddedImageType.GetAttributeDefinition("Content");
-	// var contentTypeAttribute = embeddedImageType.GetAttributeDefinition("ContentType");
-	// newEmbeddedImage.SetAttributeValue(assetAttribute, newStory.Oid);
-	// newEmbeddedImage.SetAttributeValue(contentTypeAttribute, mimeType);
-	// newEmbeddedImage.SetAttributeValue(contentAttribute, string.Empty);
-	// services.Save(newEmbeddedImage);
-	//
-	// string key = newEmbeddedImage.Oid.Key.ToString();
-	// using (Stream input = new FileStream(file, FileMode.Open, FileAccess.Read))
-	// {
-	// using (Stream output = attachments.GetWriteStream(key))
-	// {
-	// byte[] buffer = new byte[input.Length + 1];
-	// while (true)
-	// {
-	// int read = input.Read(buffer, 0, buffer.Length);
-	// if (read <= 0)
-	// break;
-	//
-	// output.Write(buffer, 0, read);
-	// }
-	// }
-	// }
-	// attachments.SetWriteStream(key, mimeType);
-	// newStory.SetAttributeValue(descriptionAttribute,
-	// string.Format("<img src=\"{0}\" alt=\"\" data-oid=\"{1}\" />", "embedded.img/" + key,
-	// newEmbeddedImage.Oid.Momentless));
-	// services.Save(newStory);
-	// }
-	//
+	// @Test
+	 public void CreateStoryWithEmbeddedImage() throws V1Exception, IOException {
+		String file = "com/versionone/apiclient/versionone.png";
+
+		assertNotNull("Test file missing", Thread.currentThread().getContextClassLoader().getResource(file));
+
+		String mimeType = MimeType.resolve(file);
+
+		IAttachments attachments = new Attachments(V1Connector.withInstanceUrl(url).withUserAgentHeader(".NET_SDK_Integration_Test", "1.0")
+				.withAccessToken(accessToken).useEndpoint("embedded.img/").build());
+
+		IAssetType storyType = services.getMeta().getAssetType("Story");
+		Asset newStory = services.createNew(storyType, _testProjectId);
+		IAttributeDefinition nameAttribute = storyType.getAttributeDefinition("Name");
+		IAttributeDefinition descriptionAttribute = storyType.getAttributeDefinition("Description");
+		String name = "Test Story " + _testProjectId + " Create story with embedded image";
+		newStory.setAttributeValue(nameAttribute, name);
+		newStory.setAttributeValue(descriptionAttribute, "Test description");
+		services.save(newStory);
+
+		IAssetType embeddedImageType = services.getMeta().getAssetType("EmbeddedImage");
+		Asset newEmbeddedImage = services.createNew(embeddedImageType, Oid.Null);
+		IAttributeDefinition assetAttribute = embeddedImageType.getAttributeDefinition("Asset");
+		IAttributeDefinition contentAttribute = embeddedImageType.getAttributeDefinition("Content");
+		IAttributeDefinition contentTypeAttribute = embeddedImageType.getAttributeDefinition("ContentType");
+		newEmbeddedImage.setAttributeValue(assetAttribute, newStory.getOid());
+		newEmbeddedImage.setAttributeValue(contentTypeAttribute, mimeType);
+		newEmbeddedImage.setAttributeValue(contentAttribute, "");
+		services.save(newEmbeddedImage);
+
+		String key = newEmbeddedImage.getOid().getKey().toString();
+	     FileInputStream inStream = new FileInputStream(Thread.currentThread().getContextClassLoader().getResource(file).getPath());
+	     OutputStream output =  attachments.getWriter(key, mimeType);
+	     byte[] buffer = new byte[inStream.available() + 1];
+	     while (true){
+	         int read = inStream.read(buffer, 0, buffer.length);
+	         if (read <= 0)
+	             break;
+	    
+	         output.write(buffer, 0, read);
+	         }
+	     
+	     attachments.setWriter(key);
+
+		 newStory.setAttributeValue(descriptionAttribute, "<img src="+"embedded.img/" + key+ " alt=\"\" data-oid=" +newEmbeddedImage.getOid().getMomentless()+" />");
+		 services.save(newStory);
+	 }
 
 	//@Test
 	public void createDefectTest() throws V1Exception {
@@ -480,126 +462,112 @@ public class V1ConnectorCreatesTests {
 
 		assertEquals(1, story.getAttribute(childrenAttribute).getValues().length);
 	}
+	
+	//@Test
+	public void CreateDefectWithAttachment() throws V1Exception, IOException {
 
-	//
-	// [TestMethod]
-	// [DeploymentItem("versionone.png")]
-	// public void CreateDefectWithAttachment()
-	// {
-	// var services = GetServices();
-	// string file = "versionone.png";
-	//
-	// string mimeType = MimeType.Resolve(file);
-	// IAttachments attachments = new Attachments(V1Connector
-	// .WithInstanceUrl(_v1InstanceUrl)
-	// .WithUserAgentHeader(".NET_SDK_Integration_Test", "1.0")
-	// .WithAccessToken(_v1AccessToken).UseEndpoint("attachment.img/")
-	// .Build());
-	//
-	// var contextId = IntegrationTestsHelper.TestProjectOid;
-	// var defectType = services.Meta.GetAssetType("Defect");
-	// var newDefect = services.New(defectType, contextId);
-	// var nameAttribute = defectType.GetAttributeDefinition("Name");
-	// var attachmentsAttribute = defectType.GetAttributeDefinition("Attachments");
-	// var name = string.Format("Test Defect {0} Create defect with attachment", contextId);
-	// newDefect.SetAttributeValue(nameAttribute, name);
-	// services.Save(newDefect);
-	//
-	// IAssetType attachmentType = services.Meta.GetAssetType("Attachment");
-	// IAttributeDefinition attachmentAssetDef = attachmentType.GetAttributeDefinition("Asset");
-	// IAttributeDefinition attachmentContent = attachmentType.GetAttributeDefinition("Content");
-	// IAttributeDefinition attachmentContentType =
-	// attachmentType.GetAttributeDefinition("ContentType");
-	// IAttributeDefinition attachmentFileName = attachmentType.GetAttributeDefinition("Filename");
-	// IAttributeDefinition attachmentName = attachmentType.GetAttributeDefinition("Name");
-	// Asset attachment = services.New(attachmentType, Oid.Null);
-	// attachment.SetAttributeValue(attachmentName, "Test Attachment on " + newDefect.Oid);
-	// attachment.SetAttributeValue(attachmentFileName, file);
-	// attachment.SetAttributeValue(attachmentContentType, mimeType);
-	// attachment.SetAttributeValue(attachmentContent, string.Empty);
-	// attachment.SetAttributeValue(attachmentAssetDef, newDefect.Oid);
-	// services.Save(attachment);
-	// string key = attachment.Oid.Key.ToString();
-	// using (Stream input = new FileStream(file, FileMode.Open, FileAccess.Read))
-	// {
-	// using (Stream output = attachments.GetWriteStream(key))
-	// {
-	// byte[] buffer = new byte[input.Length + 1];
-	// while (true)
-	// {
-	// int read = input.Read(buffer, 0, buffer.Length);
-	// if (read <= 0)
-	// break;
-	//
-	// output.Write(buffer, 0, read);
-	// }
-	// }
-	// }
-	// attachments.SetWriteStream(key, mimeType);
-	//
-	// var query = new Query(newDefect.Oid.Momentless);
-	// query.Selection.Add(attachmentsAttribute);
-	// var story = services.Retrieve(query).Assets[0];
-	//
-	// Assert.AreEqual(1, story.GetAttribute(attachmentsAttribute).Values.Cast<object>().Count());
-	// }
-	//
-	// [TestMethod]
-	// [DeploymentItem("versionone.png")]
-	// public void CreateDefectWithEmbeddedImage()
-	// {
-	// var services = GetServices();
-	// string file = "versionone.png";
-	//
-	// string mimeType = MimeType.Resolve(file);
-	// IAttachments attachments = new Attachments(V1Connector
-	// .WithInstanceUrl(_v1InstanceUrl)
-	// .WithUserAgentHeader(".NET_SDK_Integration_Test", "1.0")
-	// .WithAccessToken(_v1AccessToken).UseEndpoint("embedded.img/")
-	// .Build());
-	//
-	// var contextId = IntegrationTestsHelper.TestProjectOid;
-	// var defectType = services.Meta.GetAssetType("Defect");
-	// var newDefect = services.New(defectType, contextId);
-	// var nameAttribute = defectType.GetAttributeDefinition("Name");
-	// var descriptionAttribute = defectType.GetAttributeDefinition("Description");
-	// var name = string.Format("Test Defect {0} Create defect with embedded image", contextId);
-	// newDefect.SetAttributeValue(nameAttribute, name);
-	// services.Save(newDefect);
-	//
-	// var embeddedImageType = services.Meta.GetAssetType("EmbeddedImage");
-	// var newEmbeddedImage = services.New(embeddedImageType, Oid.Null);
-	// var assetAttribute = embeddedImageType.GetAttributeDefinition("Asset");
-	// var contentAttribute = embeddedImageType.GetAttributeDefinition("Content");
-	// var contentTypeAttribute = embeddedImageType.GetAttributeDefinition("ContentType");
-	// newEmbeddedImage.SetAttributeValue(assetAttribute, newDefect.Oid);
-	// newEmbeddedImage.SetAttributeValue(contentTypeAttribute, mimeType);
-	// newEmbeddedImage.SetAttributeValue(contentAttribute, string.Empty);
-	// services.Save(newEmbeddedImage);
-	//
-	// string key = newEmbeddedImage.Oid.Key.ToString();
-	// using (Stream input = new FileStream(file, FileMode.Open, FileAccess.Read))
-	// {
-	// using (Stream output = attachments.GetWriteStream(key))
-	// {
-	// byte[] buffer = new byte[input.Length + 1];
-	// while (true)
-	// {
-	// int read = input.Read(buffer, 0, buffer.Length);
-	// if (read <= 0)
-	// break;
-	//
-	// output.Write(buffer, 0, read);
-	// }
-	// }
-	// }
-	// attachments.SetWriteStream(key, mimeType);
-	// newDefect.SetAttributeValue(descriptionAttribute,
-	// string.Format("<img src=\"{0}\" alt=\"\" data-oid=\"{1}\" />", "embedded.img/" + key,
-	// newEmbeddedImage.Oid.Momentless));
-	// services.Save(newDefect);
-	// }
-	//
+		String file = "com/versionone/apiclient/versionone.png";
+		assertNotNull("Test file missing", Thread.currentThread().getContextClassLoader().getResource(file));
+		String mimeType = MimeType.resolve(file);
+	
+		 IAttachments attachments = new Attachments(V1Connector
+		 .withInstanceUrl(url)
+		 .withUserAgentHeader(".NET_SDK_Integration_Test", "1.0")
+		 .withAccessToken(accessToken).useEndpoint("attachment.img/")
+		 .build());
+	
+		  IAssetType defectType = services.getMeta().getAssetType("Defect");
+		  Asset newDefect = services.createNew(defectType, _testProjectId);
+		  IAttributeDefinition nameAttribute = defectType.getAttributeDefinition("Name");
+		  IAttributeDefinition attachmentsAttribute = defectType.getAttributeDefinition("Attachments");
+		  String name = "Test Defect " + _testProjectId + " Create defect with attachment";
+		 newDefect.setAttributeValue(nameAttribute, name);
+		 services.save(newDefect);
+		
+		 IAssetType attachmentType = services.getMeta().getAssetType("Attachment");
+		 IAttributeDefinition attachmentAssetDef = attachmentType.getAttributeDefinition("Asset");
+		 IAttributeDefinition attachmentContent = attachmentType.getAttributeDefinition("Content");
+		 IAttributeDefinition attachmentContentType = attachmentType.getAttributeDefinition("ContentType");
+		 IAttributeDefinition attachmentFileName = attachmentType.getAttributeDefinition("Filename");
+		 IAttributeDefinition attachmentName = attachmentType.getAttributeDefinition("Name");
+		 Asset attachment = services.createNew(attachmentType, Oid.Null);
+		 attachment.setAttributeValue(attachmentName, "Test Attachment on " + newDefect.getOid());
+		 attachment.setAttributeValue(attachmentFileName, file);
+		 attachment.setAttributeValue(attachmentContentType, mimeType);
+		 attachment.setAttributeValue(attachmentContent, "");
+		 attachment.setAttributeValue(attachmentAssetDef, newDefect.getOid());
+		 services.save(attachment);
+
+			String key = attachment.getOid().getKey().toString();
+		     FileInputStream inStream = new FileInputStream(Thread.currentThread().getContextClassLoader().getResource(file).getPath());
+		     OutputStream output =  attachments.getWriter(key, mimeType);
+		     byte[] buffer = new byte[inStream.available() + 1];
+		     while (true){
+		         int read = inStream.read(buffer, 0, buffer.length);
+		         if (read <= 0)
+		             break;
+		    
+		         output.write(buffer, 0, read);
+		         }
+		     
+		     attachments.setWriter(key);
+		 Query query = new Query(newDefect.getOid().getMomentless());
+		 query.getSelection().add(attachmentsAttribute);
+		 Asset story = services.retrieve(query).getAssets()[0];
+		
+		 assertEquals(1, story.getAttribute(attachmentsAttribute).getValues().length);
+	 }
+
+	//@Test
+	public void CreateDefectWithEmbeddedImage() throws V1Exception, IOException {
+
+	String file = "com/versionone/apiclient/versionone.png";
+	assertNotNull("Test file missing", Thread.currentThread().getContextClassLoader().getResource(file));
+	String mimeType = MimeType.resolve(file);
+
+	 IAttachments attachments = new Attachments(V1Connector
+	 .withInstanceUrl(url)
+	 .withUserAgentHeader(".NET_SDK_Integration_Test", "1.0")
+	 .withAccessToken(accessToken).useEndpoint("embedded.img/")
+	 .build());
+	
+	  IAssetType defectType = services.getMeta().getAssetType("Defect");
+	  Asset newDefect = services.createNew(defectType, _testProjectId);
+	  IAttributeDefinition nameAttribute = defectType.getAttributeDefinition("Name");
+	  IAttributeDefinition descriptionAttribute = defectType.getAttributeDefinition("Description");
+	  String name = "Test Defect " + _testProjectId + " Create defect with embedded image";
+	 newDefect.setAttributeValue(nameAttribute, name);
+	 services.save(newDefect);
+	
+	  IAssetType embeddedImageType = services.getMeta().getAssetType("EmbeddedImage");
+	  Asset newEmbeddedImage = services.createNew(embeddedImageType, Oid.Null);
+	  IAttributeDefinition assetAttribute = embeddedImageType.getAttributeDefinition("Asset");
+	  IAttributeDefinition contentAttribute = embeddedImageType.getAttributeDefinition("Content");
+	  IAttributeDefinition contentTypeAttribute = embeddedImageType.getAttributeDefinition("ContentType");
+	 newEmbeddedImage.setAttributeValue(assetAttribute, newDefect.getOid());
+	 newEmbeddedImage.setAttributeValue(contentTypeAttribute, mimeType);
+	 newEmbeddedImage.setAttributeValue(contentAttribute, "");
+	 services.save(newEmbeddedImage);
+	
+		String key = newEmbeddedImage.getOid().getKey().toString();
+	     FileInputStream inStream = new FileInputStream(Thread.currentThread().getContextClassLoader().getResource(file).getPath());
+	     OutputStream output =  attachments.getWriter(key, mimeType);
+	     byte[] buffer = new byte[inStream.available() + 1];
+	     while (true){
+	         int read = inStream.read(buffer, 0, buffer.length);
+	         if (read <= 0)
+	             break;
+	    
+	         output.write(buffer, 0, read);
+	         }
+	     
+	     attachments.setWriter(key);
+
+		 newDefect.setAttributeValue(descriptionAttribute, "<img src="+"embedded.img/" + key+ " alt=\"\" data-oid=" +newEmbeddedImage.getOid().getMomentless()+" />");
+		 services.save(newDefect);
+	 }
+	 
+	
 	//@Test
 	public void createRequestTest() throws V1Exception {
 
