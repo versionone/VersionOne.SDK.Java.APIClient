@@ -16,24 +16,18 @@ import com.versionone.apiclient.interfaces.IServices;
 
 public class Connector {
 
-	private static V1Connector _connector;
 	private static String _instanceUrl;
 	private static String _username;
 	private static String _password;
 	private static String _accessToken;
-	private static IServices _services; 
-	private static Oid _projectId;
 
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception {
 		System.out.println("Running connector integration tests...");
-		_connector = APIClientIntegrationTestSuiteIT.get_connector();
 		_instanceUrl = APIClientIntegrationTestSuiteIT.get_instanceUrl();
 		_username = APIClientIntegrationTestSuiteIT.get_username();
 		_password = APIClientIntegrationTestSuiteIT.get_password();
 		_accessToken = APIClientIntegrationTestSuiteIT.get_accessToken();
-		_services = APIClientIntegrationTestSuiteIT.get_services();
-		_projectId = APIClientIntegrationTestSuiteIT.get_projectId();
 	}
 	
 	@Test()
