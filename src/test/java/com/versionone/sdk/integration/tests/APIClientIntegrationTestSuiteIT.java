@@ -25,9 +25,9 @@ import com.versionone.apiclient.interfaces.IServices;
 	Configuration.class,
 	Connector.class,
 //	CreateAssets.class,
-	Localization.class
+	Localization.class,
 //	Operations.class,
-//	QueryAPI.class,	
+	QueryAPI.class,	
 //	QueryAssets.class,
 //	UpdateAssets.class
 	})
