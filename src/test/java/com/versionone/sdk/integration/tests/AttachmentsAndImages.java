@@ -101,59 +101,59 @@ public class AttachmentsAndImages {
 
 		assertEquals(1, story.getAttribute(attachmentsAttribute).getValues().length);
 	 }
-
 	 
-//	 @Test
-//	 public void CreateStoryWithEmbeddedImage() throws V1Exception, IOException {
-//		String file = "com/versionone/apiclient/versionone.png";
-//
-//		assertNotNull("Test file missing", Thread.currentThread().getContextClassLoader().getResource(file));
-//
-//		String mimeType = MimeType.resolve(file);
-//
-//		IAttachments attachments = new Attachments(V1Connector.withInstanceUrl(url)
-//				.withUserAgentHeader(".NET_SDK_Integration_Test", "1.0")
-//				//.withAccessToken(accessToken)
-//				.withUsernameAndPassword("admin", "admin")
-//				.useEndpoint("embedded.img/")
-//				.build());
-//
-//		IAssetType storyType = services.getMeta().getAssetType("Story");
-//		Asset newStory = services.createNew(storyType, _testProjectId);
-//		IAttributeDefinition nameAttribute = storyType.getAttributeDefinition("Name");
-//		IAttributeDefinition descriptionAttribute = storyType.getAttributeDefinition("Description");
-//		String name = "Test Story " + _testProjectId + " Create story with embedded image";
-//		newStory.setAttributeValue(nameAttribute, name);
-//		newStory.setAttributeValue(descriptionAttribute, "Test description");
-//		services.save(newStory);
-//
-//		IAssetType embeddedImageType = services.getMeta().getAssetType("EmbeddedImage");
-//		Asset newEmbeddedImage = services.createNew(embeddedImageType, Oid.Null);
-//		IAttributeDefinition assetAttribute = embeddedImageType.getAttributeDefinition("Asset");
-//		IAttributeDefinition contentAttribute = embeddedImageType.getAttributeDefinition("Content");
-//		IAttributeDefinition contentTypeAttribute = embeddedImageType.getAttributeDefinition("ContentType");
-//		newEmbeddedImage.setAttributeValue(assetAttribute, newStory.getOid());
-//		newEmbeddedImage.setAttributeValue(contentTypeAttribute, mimeType);
-//		newEmbeddedImage.setAttributeValue(contentAttribute, "");
-//		services.save(newEmbeddedImage);
-//
-//		String key = newEmbeddedImage.getOid().getKey().toString();
-//	     FileInputStream inStream = new FileInputStream(Thread.currentThread().getContextClassLoader().getResource(file).getPath());
-//	     OutputStream output =  attachments.getWriter(key, mimeType);
-//	     byte[] buffer = new byte[inStream.available() + 1];
-//	     while (true){
-//	         int read = inStream.read(buffer, 0, buffer.length);
-//	         if (read <= 0)
-//	             break;
-//	    
-//	         output.write(buffer, 0, read);
-//	         }
-//	     
-//	     attachments.setWriter(key);
-//	     inStream.close();
-//
-//		 newStory.setAttributeValue(descriptionAttribute, "<img src="+"embedded.img/" + key+ " alt=\"\" data-oid=" +newEmbeddedImage.getOid().getMomentless()+" />");
-//		 services.save(newStory);
-//	 }
+	 @Test
+	 public void CreateStoryWithEmbeddedImage() throws V1Exception, IOException {
+
+		String file = "com/versionone/apiclient/versionone.png";
+		assertNotNull("Test file missing", Thread.currentThread().getContextClassLoader().getResource(file));
+		String mimeType = MimeType.resolve(file);
+
+		V1Connector connector = V1Connector
+				.withInstanceUrl(_instanceUrl)
+				.withUserAgentHeader("JavaSDKIntegrationTests", "1.0")
+				.withAccessToken(_accessToken)
+				.useEndpoint("embedded.img/")
+				.build();
+		
+		IAttachments attachments = new Attachments(connector);
+		
+		IAssetType storyType = _services.getMeta().getAssetType("Story");
+		Asset newStory = _services.createNew(storyType, _projectId);
+		IAttributeDefinition nameAttribute = storyType.getAttributeDefinition("Name");
+		IAttributeDefinition descriptionAttribute = storyType.getAttributeDefinition("Description");
+		String name = "Test Story " + _projectId + " Create story with embedded image";
+		newStory.setAttributeValue(nameAttribute, name);
+		newStory.setAttributeValue(descriptionAttribute, "Test description");
+		_services.save(newStory);
+
+		IAssetType embeddedImageType = _services.getMeta().getAssetType("EmbeddedImage");
+		Asset newEmbeddedImage = _services.createNew(embeddedImageType, Oid.Null);
+		IAttributeDefinition assetAttribute = embeddedImageType.getAttributeDefinition("Asset");
+		IAttributeDefinition contentAttribute = embeddedImageType.getAttributeDefinition("Content");
+		IAttributeDefinition contentTypeAttribute = embeddedImageType.getAttributeDefinition("ContentType");
+		newEmbeddedImage.setAttributeValue(assetAttribute, newStory.getOid());
+		newEmbeddedImage.setAttributeValue(contentTypeAttribute, mimeType);
+		newEmbeddedImage.setAttributeValue(contentAttribute, "");
+		_services.save(newEmbeddedImage);
+
+		String key = newEmbeddedImage.getOid().getKey().toString();
+	     FileInputStream inStream = new FileInputStream(Thread.currentThread().getContextClassLoader().getResource(file).getPath());
+	     OutputStream output =  attachments.getWriter(key, mimeType);
+	     byte[] buffer = new byte[inStream.available() + 1];
+	     while (true){
+	         int read = inStream.read(buffer, 0, buffer.length);
+	         if (read <= 0)
+	             break;
+	    
+	         output.write(buffer, 0, read);
+	         }
+	     
+	     attachments.setWriter(key);
+	     inStream.close();
+
+		 newStory.setAttributeValue(descriptionAttribute, "<img src="+"embedded.img/" + key+ " alt=\"\" data-oid=" +newEmbeddedImage.getOid().getMomentless()+" />");
+		 _services.save(newStory);
+	 }
 
 }

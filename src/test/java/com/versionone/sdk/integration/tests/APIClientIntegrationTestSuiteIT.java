@@ -1,7 +1,6 @@
 package com.versionone.sdk.integration.tests;
 
 import java.io.FileReader;
-import java.time.LocalDateTime;
 import java.util.Properties;
 
 import org.junit.AfterClass;
@@ -9,6 +8,7 @@ import org.junit.BeforeClass;
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
 
+import com.versionone.DB.DateTime;
 import com.versionone.Oid;
 import com.versionone.apiclient.Asset;
 import com.versionone.apiclient.Services;
@@ -88,7 +88,7 @@ public class APIClientIntegrationTestSuiteIT {
 		IAssetType assetType = _services.getMeta().getAssetType("Scope");
 		Asset newAsset = _services.createNew(assetType, projectId);
 		IAttributeDefinition nameAttribute = assetType.getAttributeDefinition("Name");
-		newAsset.setAttributeValue(nameAttribute, "Java SDK Integration Tests: " + LocalDateTime.now());
+		newAsset.setAttributeValue(nameAttribute, "Java SDK Integration Tests: " + DateTime.now());
 		_services.save(newAsset);
 		_projectId = newAsset.getOid().getMomentless();
 	}
