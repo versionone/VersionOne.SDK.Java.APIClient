@@ -34,7 +34,7 @@ public class Connector {
 	public void ConnectorWithUsernameAndPassword() throws MalformedURLException, V1Exception {
 
 		V1Connector connector = V1Connector.withInstanceUrl(_instanceUrl)
-				.withUserAgentHeader("TestApp", "1.0")
+				.withUserAgentHeader("JavaSDKIntegrationTests", "1.0")
 				.withUsernameAndPassword(_username, _password)
 				.build();
 		
@@ -47,7 +47,7 @@ public class Connector {
 	public void ConnectorWithAccessToken() throws Exception {
 		
 		V1Connector connector = V1Connector.withInstanceUrl(_instanceUrl)
-				.withUserAgentHeader("TestApp", "1.0")
+				.withUserAgentHeader("JavaSDKIntegrationTests", "1.0")
 				.withAccessToken(_accessToken)
 				.build();
 		

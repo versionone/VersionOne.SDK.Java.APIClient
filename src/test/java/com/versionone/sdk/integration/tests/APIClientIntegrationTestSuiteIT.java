@@ -21,10 +21,10 @@ import com.versionone.apiclient.interfaces.IServices;
 
 //NOTE: Add classes here to include in integration test run using Maven "verify" goal.
 @Suite.SuiteClasses({ 
-//	Attachments.class,	
+	AttachmentsAndImages.class,	
 	Configuration.class,
 	Connector.class,
-//	CreateAssets.class,
+	CreateAssets.class,
 	Localization.class,
 //	Operations.class,
 	QueryAPI.class,	
@@ -76,7 +76,8 @@ public class APIClientIntegrationTestSuiteIT {
 		}
 		
 		//Create the V1Connector.
-		_connector = V1Connector.withInstanceUrl(_instanceUrl)
+		_connector = V1Connector
+				.withInstanceUrl(_instanceUrl)
 				.withUserAgentHeader("JavaSDKIntegrationTests", "1.0")
 				.withAccessToken(_accessToken)
 				.build();
