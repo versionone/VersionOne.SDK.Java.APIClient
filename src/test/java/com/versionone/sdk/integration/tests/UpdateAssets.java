@@ -17,6 +17,7 @@ import com.versionone.apiclient.interfaces.IAttributeDefinition;
 import com.versionone.apiclient.interfaces.IServices;
 
 public class UpdateAssets {
+	
 	private static IServices _services;
 	private static Oid _projectId;
 
@@ -98,7 +99,7 @@ public class UpdateAssets {
         query.getSelection().add(dependantsAttribute);
         Asset story = _services.retrieve(query).getAssets()[0];
 
-       assertEquals(1, story.getAttribute(dependantsAttribute).getValues().length);
+        assertEquals(1, story.getAttribute(dependantsAttribute).getValues().length);
 
         parentStory.addAttributeValue(dependantsAttribute, child2Story.getOid());
         _services.save(parentStory);
