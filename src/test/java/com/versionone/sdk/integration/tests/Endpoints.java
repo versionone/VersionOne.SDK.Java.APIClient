@@ -5,14 +5,9 @@ package com.versionone.sdk.integration.tests;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
 
 import java.net.MalformedURLException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Map;
 
-import org.apache.commons.lang.StringUtils;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -26,8 +21,6 @@ import com.versionone.apiclient.V1Connector;
 import com.versionone.apiclient.exceptions.APIException;
 import com.versionone.apiclient.exceptions.ConnectionException;
 import com.versionone.apiclient.exceptions.V1Exception;
-import com.versionone.apiclient.interfaces.IAssetType;
-import com.versionone.apiclient.interfaces.IAttributeDefinition;
 import com.versionone.apiclient.interfaces.IV1Configuration;
 
 public class Endpoints {
@@ -61,69 +54,6 @@ public class Endpoints {
 		 services = new Services(connector);
 	}
 	
-	
-	@Test
-    public void localizationWithSingleAttribute2Test() throws V1Exception {
-
-        String assetName = "Defect";
-        IAssetType assetType = services.getMeta().getAssetType(assetName);
-        IAttributeDefinition nameAttribute = assetType.getAttributeDefinition("Name");
-
-        String locName = null;
-        locName = services.getLocalization(nameAttribute);
-        
-        assertTrue(StringUtils.isNotBlank(locName));
-        assertEquals(assetName, locName);
-    }
-	
-	
-	@Test
-	public void localizationWithKeyTest() {
-
-		String locName = null;
-		try {
-			locName = services.getLocalization("Epic");
-		} catch (V1Exception e) {
-			e.printStackTrace();
-		}
-		assertTrue(StringUtils.isNotBlank(locName));
-	}
-	
-	@Test
-	public void localizationWithSingleAttributeTest() {
-
-		IAssetType epicType = services.getMeta().getAssetType("Epic");
-		IAttributeDefinition nameAttribute = epicType.getAttributeDefinition("Name");
-
-		String locName = null;
-		try {
-			locName = services.getLocalization(nameAttribute);
-		} catch (V1Exception e) {
-			e.printStackTrace();
-		}
-		assertTrue(StringUtils.isNotBlank(locName));
-	}
-
-	@Test
-	public void localizationWithMultipleAttibutesTest() throws ConnectionException, JSONException {
-
-		IAssetType storyType = services.getMeta().getAssetType("Story");
-		IAttributeDefinition nameAttribute = storyType.getAttributeDefinition("Name");
-		IAttributeDefinition estimateAttribute = storyType.getAttributeDefinition("Estimate");
-
-		ArrayList<IAttributeDefinition> attributes = new ArrayList<IAttributeDefinition>(Arrays.asList(nameAttribute, estimateAttribute));
-		
-		Map<String, String> locData = services.getLocalization(attributes);
-
-		assertTrue(locData.size() > 0);
-		
-		String locName = locData.get(nameAttribute.getToken());
-		assertTrue(StringUtils.isNotBlank(locName));
-	
-		String locEstimate = locData.get(estimateAttribute.getToken());
-		assertTrue(StringUtils.isNotBlank(locEstimate));
-	}
-
 	@Test
 	public void getConfigTest() throws ConnectionException, APIException {
 
