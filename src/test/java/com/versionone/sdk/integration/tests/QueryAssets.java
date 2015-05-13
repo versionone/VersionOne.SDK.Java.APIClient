@@ -44,7 +44,7 @@ public class QueryAssets {
 
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception {
-		System.out.println("Running attachments integration tests...");
+		System.out.println("Running query assets integration tests...");
 		_services = APIClientIntegrationTestSuiteIT.get_services();
 		_instanceUrl = APIClientIntegrationTestSuiteIT.get_instanceUrl();
 		_accessToken = APIClientIntegrationTestSuiteIT.get_accessToken();
@@ -53,7 +53,7 @@ public class QueryAssets {
 
 	@Test(expected = OidException.class)
 	public void QueryInvalidOid() throws OidException {
-
+		@SuppressWarnings("unused")
 		Oid invalidOid = _services.getOid("unknown:007");
 	}
 
@@ -77,6 +77,7 @@ public class QueryAssets {
 
 	@Test(expected = MetaException.class)
 	public void queryUnknownSingleAssetTest() {
+		@SuppressWarnings("unused")
 		IAssetType storyType = _services.getMeta().getAssetType("Unknown");
 	}
 
@@ -137,6 +138,7 @@ public class QueryAssets {
 		assertTrue(estimateAttr.getValue().toString().equals("24"));
 	}
 
+	@SuppressWarnings("unused")
 	@Test(expected = MetaException.class)
 	public void queryUnknownAttributeTest() throws V1Exception {
 		IAssetType storyType = _services.getMeta().getAssetType("Story");
@@ -144,6 +146,7 @@ public class QueryAssets {
 		IAttributeDefinition queryUnknowAttribute = storyType.getAttributeDefinition("Unknown");
 	}
 
+	@SuppressWarnings("unused")
 	@Test
 	public void queryRelationsTest() throws V1Exception {
 		IAssetType storyType = _services.getMeta().getAssetType("Story");
@@ -276,6 +279,7 @@ public class QueryAssets {
 
 	}
 
+	@SuppressWarnings("unused")
 	@Test(expected = MetaException.class)
 	public void queryFindUnknownAssetTest() {
 		Query query = new Query(_services.getMeta().getAssetType("Unknown"));
@@ -428,11 +432,10 @@ public class QueryAssets {
 			int read = inStream.read(buffer, 0, buffer.length);
 			if (read <= 0)
 				break;
-
 			output.write(buffer, 0, read);
 		}
-
 		attachments.setWriter(key);
+		inStream.close();
 
 		Query query = new Query(attachmentType);
 		query.getSelection().add(attachmentContent);

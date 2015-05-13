@@ -22,7 +22,7 @@ public class UpdateAssets {
 
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception {
-		System.out.println("Running attachments integration tests...");
+		System.out.println("Running update assets integration tests...");
 		_services = APIClientIntegrationTestSuiteIT.get_services();
 		_projectId = APIClientIntegrationTestSuiteIT.get_projectId();
 	}

@@ -28,8 +28,8 @@ import com.versionone.apiclient.interfaces.IServices;
 	Localization.class,
 	Operations.class,
 	QueryAPI.class,	
-//	QueryAssets.class,
-//	UpdateAssets.class
+	QueryAssets.class,
+	UpdateAssets.class
 	})
 
 public class APIClientIntegrationTestSuiteIT {
