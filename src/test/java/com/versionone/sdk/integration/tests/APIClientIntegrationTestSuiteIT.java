@@ -1,6 +1,7 @@
 package com.versionone.sdk.integration.tests;
 
 import java.io.FileReader;
+import java.time.LocalDateTime;
 import java.util.Properties;
 
 import org.junit.AfterClass;
@@ -21,10 +22,10 @@ import com.versionone.apiclient.interfaces.IServices;
 //NOTE: Add classes here to include in integration test run using Maven "verify" goal.
 @Suite.SuiteClasses({ 
 //	Attachments.class,	
-//	Configuration.class,
-	Connector.class
+	Configuration.class,
+	Connector.class,
 //	CreateAssets.class,
-//	Localization.class,
+	Localization.class
 //	Operations.class,
 //	QueryAPI.class,	
 //	QueryAssets.class,
@@ -67,11 +68,17 @@ public class APIClientIntegrationTestSuiteIT {
 			throw new RuntimeException(message);
 		}
 		
+		//Check that we have an access token.
+		if (null == _accessToken) {
+			String message = "No access token found. Ending integration test run.";
+			System.out.println(message);
+			throw new RuntimeException(message);
+		}
+		
 		//Create the V1Connector.
 		_connector = V1Connector.withInstanceUrl(_instanceUrl)
 				.withUserAgentHeader("JavaSDKIntegrationTests", "1.0")
-				//.withAccessToken(properties.getProperty("V1_ACCESS_TOKEN"))
-				.withUsernameAndPassword(properties.getProperty("V1_USERNAME"), properties.getProperty("V1_PASSWORD"))
+				.withAccessToken(_accessToken)
 				.build();
 
 		//Create a new project for integration test assets.
@@ -80,7 +87,7 @@ public class APIClientIntegrationTestSuiteIT {
 		IAssetType assetType = _services.getMeta().getAssetType("Scope");
 		Asset newAsset = _services.createNew(assetType, projectId);
 		IAttributeDefinition nameAttribute = assetType.getAttributeDefinition("Name");
-		newAsset.setAttributeValue(nameAttribute, "Java SDK Integration Tests");
+		newAsset.setAttributeValue(nameAttribute, "Java SDK Integration Tests: " + LocalDateTime.now());
 		_services.save(newAsset);
 		_projectId = newAsset.getOid().getMomentless();
 	}
