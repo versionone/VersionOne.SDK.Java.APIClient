@@ -326,8 +326,6 @@ public class V1Connector {
 			return this;
 		}
 
-		// set the proxy
-		@SuppressWarnings("unused")
 		@Override
 		public IsetEndPointOrConnector withProxy(ProxyProvider proxyProvider) {
 
@@ -356,13 +354,11 @@ public class V1Connector {
 			return this;
 		}
 
-		// build
 		@Override
 		public V1Connector build() {
 			return v1Connector_instance;
 		}
 	}
-
 	// end builder
 
 	protected Reader getData() throws ConnectionException {
@@ -425,6 +421,65 @@ public class V1Connector {
 			throw new ConnectionException(errorMessage);
 		}
 	}
+	
+	protected InputStream getAttachment(String path) throws ConnectionException {
+		
+		InputStream data = null;
+		String url = V1Util.isNullOrEmpty(path) ? INSTANCE_URL + _endpoint : INSTANCE_URL + _endpoint + path;
+
+		HttpGet request = new HttpGet(url);
+		setDefaultHeaderValue();
+		request.setHeaders(headerArray);
+
+		// Creates a new httpclient if not using NTLM.
+		if (!isWindowsAuth) {
+			httpclient = httpclientBuilder.build();
+		}
+
+		try {
+			httpResponse = httpclient.execute(request);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
+		HttpEntity entity = httpResponse.getEntity();
+		int errorCode = httpResponse.getStatusLine().getStatusCode();
+		String errorMessage = "\n" + httpResponse.getStatusLine() + " error code: " + errorCode;
+
+		switch (errorCode) {
+		case HttpStatus.SC_OK:
+			try {
+				data = entity.getContent();
+			} catch (UnsupportedEncodingException ex) {
+				throw new ConnectionException("Error processing response content unsupported encoding " + ex.getMessage());
+			} catch (IllegalStateException ex) {
+				throw new ConnectionException("Error processing response Illegal state " + ex.getMessage());
+			} catch (IOException ex) {
+				throw new ConnectionException("Error processing response " + ex.getMessage());
+			}
+			return data;
+
+		case HttpStatus.SC_BAD_REQUEST:
+			throw new ConnectionException(errorMessage + " VersionOne could not process the request.");
+
+		case HttpStatus.SC_UNAUTHORIZED:
+			throw new ConnectionException(errorMessage
+					+ " Could not authenticate. The VersionOne credentials may be incorrect or the access tokens may have expired.");
+
+		case HttpStatus.SC_NOT_FOUND:
+			throw new ConnectionException(errorMessage + " The requested item may not exist, or the VersionOne server is unavailable.");
+
+		case HttpStatus.SC_METHOD_NOT_ALLOWED:
+			throw new ConnectionException(errorMessage + " Only GET and POST methods are supported by VersionOne.");
+
+		case HttpStatus.SC_INTERNAL_SERVER_ERROR:
+			throw new ConnectionException(errorMessage + " VersionOne encountered an unexpected error occurred while processing the request.");
+
+		default:
+			throw new ConnectionException(errorMessage);
+		}
+	}
+
 
 	private void setDefaultHeaderValue() {
 		String localeName = Locale.getDefault().toString();

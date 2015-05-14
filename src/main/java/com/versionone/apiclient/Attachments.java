@@ -31,6 +31,7 @@ public class Attachments implements IAttachments {
 	 *             if any connection problems occur
 	 */
 	public InputStream getReader(String key) throws ConnectionException {
+		
 		if (key != null && key.length() > 0) {
 			final String path = key.substring(key.lastIndexOf('/') + 1);
 
@@ -38,8 +39,7 @@ public class Attachments implements IAttachments {
 				_connector.beginRequest(path, null);
 				return _connector.endRequest(path);
 			} else if (this._v1connector != null) {
-				this._v1connector.beginRequest(path, null);
-				return this._v1connector.endRequest(path);
+				return _v1connector.getAttachment(path);
 			}
 		}
 		return null;
@@ -94,11 +94,5 @@ public class Attachments implements IAttachments {
 
 		}
 	}
-
-	// public void write(String key, String mimeType, byte[] byteArray) {
-	// if (key != null && key.length()>0){
-	// this._v1connector.sendData(key.substring(key.lastIndexOf('/') + 1), byteArray, mimeType);
-	// }
-	// }
 
 }
