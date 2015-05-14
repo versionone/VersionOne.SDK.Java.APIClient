@@ -367,6 +367,54 @@ public class V1Connector {
 
 	protected Reader getData(String path) throws ConnectionException {
 		Reader data = null;
+		HttpEntity entity = setGETMethod(path);
+		int errorCode = httpResponse.getStatusLine().getStatusCode();
+		String errorMessage = "\n" + httpResponse.getStatusLine() + " error code: " + errorCode;
+
+		if (errorCode == HttpStatus.SC_OK) {
+			try {
+				data = new InputStreamReader(entity.getContent());
+			} catch (IllegalStateException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		} else {
+			manageErrors( errorCode, errorMessage);
+		}
+		return data;
+	}
+	
+	protected InputStream getAttachment(String path) throws ConnectionException {
+		
+		InputStream data = null;
+		HttpEntity entity = setGETMethod(path);
+		int errorCode = httpResponse.getStatusLine().getStatusCode();
+		String errorMessage = "\n" + httpResponse.getStatusLine() + " error code: " + errorCode;
+
+		if (errorCode == HttpStatus.SC_OK) {
+			try {
+				data = entity.getContent();
+			} catch (IllegalStateException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		} else {
+			manageErrors( errorCode, errorMessage);
+		}
+		return data;
+	}
+
+	/**
+	 * @param path
+	 * @return
+	 */
+	private HttpEntity setGETMethod(String path) {
 		String url = V1Util.isNullOrEmpty(path) ? INSTANCE_URL + _endpoint : INSTANCE_URL + _endpoint + path;
 
 		HttpGet request = new HttpGet(url);
@@ -385,22 +433,21 @@ public class V1Connector {
 		}
 
 		HttpEntity entity = httpResponse.getEntity();
-		int errorCode = httpResponse.getStatusLine().getStatusCode();
-		String errorMessage = "\n" + httpResponse.getStatusLine() + " error code: " + errorCode;
+		return entity;
+	}
 
+
+	/**
+	 * @param data
+	 * @param entity
+	 * @param errorCode
+	 * @param errorMessage
+	 * @return
+	 * @throws ConnectionException
+	 */
+	private void manageErrors(int errorCode, String errorMessage) throws ConnectionException {
+	
 		switch (errorCode) {
-		case HttpStatus.SC_OK:
-			try {
-				data = new InputStreamReader(entity.getContent());
-			} catch (UnsupportedEncodingException ex) {
-				throw new ConnectionException("Error processing response content unsupported encoding " + ex.getMessage());
-			} catch (IllegalStateException ex) {
-				throw new ConnectionException("Error processing response Illegal state " + ex.getMessage());
-			} catch (IOException ex) {
-				throw new ConnectionException("Error processing response " + ex.getMessage());
-			}
-			return data;
-
 		case HttpStatus.SC_BAD_REQUEST:
 			throw new ConnectionException(errorMessage + " VersionOne could not process the request.");
 
@@ -422,64 +469,6 @@ public class V1Connector {
 		}
 	}
 	
-	protected InputStream getAttachment(String path) throws ConnectionException {
-		
-		InputStream data = null;
-		String url = V1Util.isNullOrEmpty(path) ? INSTANCE_URL + _endpoint : INSTANCE_URL + _endpoint + path;
-
-		HttpGet request = new HttpGet(url);
-		setDefaultHeaderValue();
-		request.setHeaders(headerArray);
-
-		// Creates a new httpclient if not using NTLM.
-		if (!isWindowsAuth) {
-			httpclient = httpclientBuilder.build();
-		}
-
-		try {
-			httpResponse = httpclient.execute(request);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-
-		HttpEntity entity = httpResponse.getEntity();
-		int errorCode = httpResponse.getStatusLine().getStatusCode();
-		String errorMessage = "\n" + httpResponse.getStatusLine() + " error code: " + errorCode;
-
-		switch (errorCode) {
-		case HttpStatus.SC_OK:
-			try {
-				data = entity.getContent();
-			} catch (UnsupportedEncodingException ex) {
-				throw new ConnectionException("Error processing response content unsupported encoding " + ex.getMessage());
-			} catch (IllegalStateException ex) {
-				throw new ConnectionException("Error processing response Illegal state " + ex.getMessage());
-			} catch (IOException ex) {
-				throw new ConnectionException("Error processing response " + ex.getMessage());
-			}
-			return data;
-
-		case HttpStatus.SC_BAD_REQUEST:
-			throw new ConnectionException(errorMessage + " VersionOne could not process the request.");
-
-		case HttpStatus.SC_UNAUTHORIZED:
-			throw new ConnectionException(errorMessage
-					+ " Could not authenticate. The VersionOne credentials may be incorrect or the access tokens may have expired.");
-
-		case HttpStatus.SC_NOT_FOUND:
-			throw new ConnectionException(errorMessage + " The requested item may not exist, or the VersionOne server is unavailable.");
-
-		case HttpStatus.SC_METHOD_NOT_ALLOWED:
-			throw new ConnectionException(errorMessage + " Only GET and POST methods are supported by VersionOne.");
-
-		case HttpStatus.SC_INTERNAL_SERVER_ERROR:
-			throw new ConnectionException(errorMessage + " VersionOne encountered an unexpected error occurred while processing the request.");
-
-		default:
-			throw new ConnectionException(errorMessage);
-		}
-	}
-
 
 	private void setDefaultHeaderValue() {
 		String localeName = Locale.getDefault().toString();
