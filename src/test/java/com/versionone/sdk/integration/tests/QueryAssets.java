@@ -1,8 +1,6 @@
 package com.versionone.sdk.integration.tests;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -17,6 +15,7 @@ import com.versionone.Oid;
 import com.versionone.apiclient.Asset;
 import com.versionone.apiclient.Attachments;
 import com.versionone.apiclient.Attribute;
+import com.versionone.apiclient.AttributeSelection;
 import com.versionone.apiclient.MimeType;
 import com.versionone.apiclient.Paging;
 import com.versionone.apiclient.Query;
@@ -52,7 +51,7 @@ public class QueryAssets {
 	}
 
 	@Test(expected = OidException.class)
-	public void QueryInvalidOid() throws OidException {
+	public void queryInvalidOid() throws OidException {
 		@SuppressWarnings("unused")
 		Oid invalidOid = _services.getOid("unknown:007");
 	}
@@ -252,31 +251,25 @@ public class QueryAssets {
 		IAssetType storyType = _services.getMeta().getAssetType("Story");
 		Asset newStory = _services.createNew(storyType, _projectId);
 		IAttributeDefinition nameAttribute = storyType.getAttributeDefinition("Name");
-		IAttributeDefinition descriptionAttribute = storyType.getAttributeDefinition("Description");
-		String name = "Test Story " + _projectId + " Query find";
+		
+		String name = _projectId + " Query find test";
 		newStory.setAttributeValue(nameAttribute, name);
-		newStory.setAttributeValue(descriptionAttribute, "Description for " + name);
 		_services.save(newStory);
+		
 		newStory = _services.createNew(storyType, _projectId);
-		newStory.setAttributeValue(nameAttribute, "Another " + name);
-		newStory.setAttributeValue(descriptionAttribute, "Description for " + name);
+		newStory.setAttributeValue(nameAttribute, name + " plus one");
 		_services.save(newStory);
-
-		Thread.currentThread().sleep(10000);
+		
+		Thread.currentThread().sleep(5000);
 
 		Query query = new Query(storyType);
-		query.getSelection().add(nameAttribute);
-		query.getSelection().add(descriptionAttribute);
-		query.setFind(new QueryFind(name));
+        AttributeSelection selection = new AttributeSelection();
+        selection.add(nameAttribute);
+        query.setFind(new QueryFind(_projectId + " Query find", selection)); 
 		QueryResult result = _services.retrieve(query);
 
 		assertNotNull(result);
 		assertTrue(result.getAssets().length == 2);
-
-		for (Asset asset : result.getAssets()) {
-			assertTrue(asset.getAttribute(descriptionAttribute).getValue().toString().toUpperCase().indexOf(name.toUpperCase()) >= 0);
-		}
-
 	}
 
 	@SuppressWarnings("unused")
@@ -287,24 +280,30 @@ public class QueryAssets {
 
 	@Test
 	public void querySortTest() throws V1Exception, InterruptedException {
+		
 		IAssetType storyType = _services.getMeta().getAssetType("Story");
 		Asset newStory = _services.createNew(storyType, _projectId);
 		IAttributeDefinition nameAttribute = storyType.getAttributeDefinition("Name");
-		String name = "Test Story " + _projectId + " Query sort";
+		
+		String name = "Test Query sort " + _projectId;
 		newStory.setAttributeValue(nameAttribute, name + " 2");
 		_services.save(newStory);
+		
 		newStory = _services.createNew(storyType, _projectId);
 		newStory.setAttributeValue(nameAttribute, name + " 1");
 		_services.save(newStory);
+		
 		newStory = _services.createNew(storyType, _projectId);
 		newStory.setAttributeValue(nameAttribute, name + " 3");
 		_services.save(newStory);
-
-		Thread.currentThread().sleep(10000);
+		
+		Thread.currentThread().sleep(5000);
 
 		Query query = new Query(storyType);
 		query.getSelection().add(nameAttribute);
-		query.setFind(new QueryFind(name));
+        AttributeSelection selection = new AttributeSelection();
+        selection.add(nameAttribute);
+		query.setFind(new QueryFind(name, selection));
 		OrderBy value = new OrderBy();
 		value.minorSort(nameAttribute, Order.Ascending);
 		query.setOrderBy(value);
@@ -318,24 +317,29 @@ public class QueryAssets {
 
 	@Test
 	public void queryPagingTest() throws V1Exception, InterruptedException {
+		
 		IAssetType storyType = _services.getMeta().getAssetType("Story");
 		Asset newStory = _services.createNew(storyType, _projectId);
+		
 		IAttributeDefinition nameAttribute = storyType.getAttributeDefinition("Name");
 		String name = "Test Story " + _projectId + " Query paging";
 		newStory.setAttributeValue(nameAttribute, name + " 1");
 		_services.save(newStory);
+		
 		newStory = _services.createNew(storyType, _projectId);
 		newStory.setAttributeValue(nameAttribute, name + " 2");
 		_services.save(newStory);
+		
 		newStory = _services.createNew(storyType, _projectId);
 		newStory.setAttributeValue(nameAttribute, name + " 3");
 		_services.save(newStory);
 
-		Thread.currentThread().sleep(10000);
+		Thread.currentThread().sleep(5000);
 
 		Query query = new Query(storyType);
-		query.getSelection().add(nameAttribute);
-		query.setFind(new QueryFind(name));
+        AttributeSelection selection = new AttributeSelection();
+        selection.add(nameAttribute);
+		query.setFind(new QueryFind(name, selection));
 		query.setPaging(new Paging(0, 2));
 		QueryResult result = _services.retrieve(query);
 
@@ -356,11 +360,7 @@ public class QueryAssets {
 		newStory.setAttributeValue(nameAttribute, name + " - updated again");
 		_services.save(newStory);
 
-		Query query = new Query(storyType, true);
-		query.getSelection().add(nameAttribute);
-		FilterTerm filterTerm = new FilterTerm(storyType.getAttributeDefinition("ID"));
-		filterTerm.equals(newStory.getOid().getMomentless());
-		query.setFilter(filterTerm);
+		Query query = new Query(newStory.getOid().getMomentless(), true);
 		QueryResult result = _services.retrieve(query);
 
 		assertNotNull(result);
@@ -374,13 +374,13 @@ public class QueryAssets {
 		Asset newStory = _services.createNew(storyType, _projectId);
 		IAttributeDefinition nameAttribute = storyType.getAttributeDefinition("Name");
 		String name = "Test Story " + _projectId + " Query asof";
+		
 		newStory.setAttributeValue(nameAttribute, name);
 		_services.save(newStory);
 
-		Thread.currentThread().sleep(10000);
-
 		newStory.setAttributeValue(nameAttribute, name + " - updated");
 		_services.save(newStory);
+		
 		newStory.setAttributeValue(nameAttribute, name + " - updated again");
 		_services.save(newStory);
 
@@ -390,11 +390,11 @@ public class QueryAssets {
 		QueryResult result = _services.retrieve(query);
 
 		assertNotNull(result);
-//		assertEquals(0, result.getTotalAvaliable());
+		assertTrue(result.getTotalAvaliable() > 0);
 	}
 
 	@Test
-	public void QueryAttachment() throws V1Exception, IOException {
+	public void queryAttachment() throws V1Exception, IOException {
 		String file = "com/versionone/apiclient/versionone.png";
 		assertNotNull("Test file missing", Thread.currentThread().getContextClassLoader().getResource(file));
 		String mimeType = MimeType.resolve(file);
