@@ -79,30 +79,17 @@ public class FindAndQueryTests {
 	@Test
 	public void testQueryMultipleAsset() throws Exception {
 	      
-		IAssetType type = metaModel.getAssetType("Story");
-
-		IAttributeDefinition requestCRIDAttribute = type.getAttributeDefinition("Requests.Custom_SFDCChangeReqID2");
-
-		IAttributeDefinition idNumberAttribute =    type.getAttributeDefinition("ID.Number");
-
-		Query query = new Query(type);
-		query.getSelection().add(requestCRIDAttribute);
-		query.getSelection().add(idNumberAttribute);
-
-		Asset[] results = services.retrieve(query).getAssets();
-		String RequestCRID=    results[0].getAttribute(requestCRIDAttribute).getValue().toString();
-		String IdNumber= results[0].getAttribute(idNumberAttribute).getValue().toString();   
 		
-		//Query query = new Query(storyType);
-	     //   IAttributeDefinition nameAttribute = storyType.getAttributeDefinition("Name");
-	      //  IAttributeDefinition estimateAttribute = storyType.getAttributeDefinition("Estimate");
-	     //   query.getSelection().add(nameAttribute);
-	     //   query.getSelection().add(estimateAttribute);
-	 //       QueryResult result = services.retrieve(query);
+		Query query = new Query(storyType);
+	    IAttributeDefinition nameAttribute = storyType.getAttributeDefinition("Name");
+	    IAttributeDefinition estimateAttribute = storyType.getAttributeDefinition("Estimate");
+	    query.getSelection().add(nameAttribute);
+	    query.getSelection().add(estimateAttribute);
+	    QueryResult result = services.retrieve(query);
 
-	     //   Assert.assertNotNull(result.getAssets());
+	      Assert.assertNotNull(result.getAssets());
 
-	       // Assert.assertTrue(result.getAssets().length > 1);
+	      Assert.assertTrue(result.getAssets().length > 1);
 	}
 	
 	// Filter query // Find query
