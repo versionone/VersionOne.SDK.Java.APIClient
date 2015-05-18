@@ -260,7 +260,7 @@ public class QueryAssets {
 		newStory.setAttributeValue(nameAttribute, name + " plus one");
 		_services.save(newStory);
 		
-		Thread.currentThread().sleep(5000);
+		Thread.currentThread().sleep(8000);
 
 		Query query = new Query(storyType);
         AttributeSelection selection = new AttributeSelection();
