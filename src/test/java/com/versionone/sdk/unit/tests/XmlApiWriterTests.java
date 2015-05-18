@@ -5,17 +5,19 @@ import java.util.Calendar;
 import java.util.Date;
 
 import org.junit.Assert;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import com.versionone.Oid;
 import com.versionone.apiclient.Asset;
-import com.versionone.apiclient.interfaces.IAttributeDefinition.AttributeType;
 import com.versionone.apiclient.XmlApiWriter;
+import com.versionone.apiclient.interfaces.IAttributeDefinition.AttributeType;
 
 
 public class XmlApiWriterTests {
 
 	@Test
+	@Ignore
 	public void testWriteAssetCreate() throws Exception {
 		MockAssetType assetType = new MockAssetType("Scope"); 
 		MockAttributeDefinition nameDefinition = new MockAttributeDefinition("Name", AttributeType.Text);

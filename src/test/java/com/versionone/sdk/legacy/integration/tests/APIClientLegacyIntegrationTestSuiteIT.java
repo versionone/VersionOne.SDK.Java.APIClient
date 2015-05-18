@@ -28,7 +28,7 @@ import com.versionone.apiclient.interfaces.IServices;
 	UrlsTests.class
 	})
 
-public class APIClientIntegrationTestSuiteIT {
+public class APIClientLegacyIntegrationTestSuiteIT {
 
 	private static APIConfiguration _config;
 	private static Oid _projectId; 

@@ -43,7 +43,7 @@ public class AssetTests {
      */
     public Asset createsAnAsset(String assetName) throws V1Exception {
 		//creates the asset
-		Asset newStory = _services.createNew(_assetType, APIClientIntegrationTestSuiteIT.get_projectId());
+		Asset newStory = _services.createNew(_assetType, APIClientLegacyIntegrationTestSuiteIT.get_projectId());
 		IAttributeDefinition nameAttribute = _assetType.getAttributeDefinition("Name");
 		newStory.setAttributeValue(nameAttribute, assetName);
 		_services.save(newStory);
@@ -54,7 +54,7 @@ public class AssetTests {
 	public Asset createsAMember() throws V1Exception {
 		Asset newMember = null;
 		IAssetType assetType = _metaModel.getAssetType("Member");
-		newMember = _services.createNew(assetType, APIClientIntegrationTestSuiteIT.get_projectId());
+		newMember = _services.createNew(assetType, APIClientLegacyIntegrationTestSuiteIT.get_projectId());
 		IAttributeDefinition defaultRoleAttribute = assetType.getAttributeDefinition("DefaultRole");
 		newMember.setAttributeValue(defaultRoleAttribute, "Role:2");
 		IAttributeDefinition isCollaboratorAttribute = assetType.getAttributeDefinition("IsCollaborator");
@@ -91,7 +91,7 @@ public class AssetTests {
 	//	Error: Invalid asset
     @Test(expected = OidException.class)
     public void testSetInvalidOidOnAsset() throws V1Exception{
-        Asset newStory = _services.createNew(_assetType, APIClientIntegrationTestSuiteIT.get_projectId());
+        Asset newStory = _services.createNew(_assetType, APIClientLegacyIntegrationTestSuiteIT.get_projectId());
         newStory.setOid(Oid.fromToken("", _metaModel));
         Assert.assertNull(newStory.getOid());
     }
@@ -99,7 +99,7 @@ public class AssetTests {
     //	Error: Asset doesn't exists
     @Test
     public void testSetValidOidOnAsset() throws V1Exception {
-        Asset newStory = _services.createNew(_assetType, APIClientIntegrationTestSuiteIT.get_projectId());
+        Asset newStory = _services.createNew(_assetType, APIClientLegacyIntegrationTestSuiteIT.get_projectId());
         newStory.setOid(Oid.fromToken("Story:999999", _metaModel));
         Assert.assertNotNull(newStory.getOid());
     }

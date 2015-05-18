@@ -28,11 +28,11 @@ public class ProxyTests {
 	private final static String proxyUserName = "user";
 	private final static String proxyPassword = "password";
 
-	private final static String V1Url = APIClientIntegrationTestSuiteIT.getInstanceUrl().getV1Url();
-	private final static String V1UserName = APIClientIntegrationTestSuiteIT.getInstanceUrl().getV1UserName();
-	private final static String V1Password = APIClientIntegrationTestSuiteIT.getInstanceUrl().getV1Password();
-	private final static String METAV1 = APIClientIntegrationTestSuiteIT.getInstanceUrl().getMetaUrl();
-	private final static String RESTV1 = APIClientIntegrationTestSuiteIT.getInstanceUrl().getDataUrl();
+	private final static String V1Url = APIClientLegacyIntegrationTestSuiteIT.getInstanceUrl().getV1Url();
+	private final static String V1UserName = APIClientLegacyIntegrationTestSuiteIT.getInstanceUrl().getV1UserName();
+	private final static String V1Password = APIClientLegacyIntegrationTestSuiteIT.getInstanceUrl().getV1Password();
+	private final static String METAV1 = APIClientLegacyIntegrationTestSuiteIT.getInstanceUrl().getMetaUrl();
+	private final static String RESTV1 = APIClientLegacyIntegrationTestSuiteIT.getInstanceUrl().getDataUrl();
 
 
 	@Test

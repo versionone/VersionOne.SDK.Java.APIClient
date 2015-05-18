@@ -19,9 +19,9 @@ import com.versionone.apiclient.interfaces.ICookiesManager;
 
 public class ConnectorTests {
 
-	private static final String V1_URL = APIClientIntegrationTestSuiteIT.getInstanceUrl().getV1Url();
-    private static final String V1_USERNAME = APIClientIntegrationTestSuiteIT.getInstanceUrl().getV1UserName();
-    private static final String V1_PASSWORD =APIClientIntegrationTestSuiteIT.getInstanceUrl().getV1Password();
+	private static final String V1_URL = APIClientLegacyIntegrationTestSuiteIT.getInstanceUrl().getV1Url();
+    private static final String V1_USERNAME = APIClientLegacyIntegrationTestSuiteIT.getInstanceUrl().getV1UserName();
+    private static final String V1_PASSWORD =APIClientLegacyIntegrationTestSuiteIT.getInstanceUrl().getV1Password();
 
 	@Before
 	public void clearCookes() {
