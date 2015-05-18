@@ -61,7 +61,7 @@ public class APIClientIntegrationTestSuiteIT {
 			System.out.println("USERNAME: " + _instanceUrl);
 			System.out.println("PASSWORD: " + _instanceUrl);
 			System.out.println("ACCESS TOKEN: " + _instanceUrl + "\n");			
-		} catch (IOException e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		
