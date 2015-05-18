@@ -1,6 +1,7 @@
 package com.versionone.sdk.integration.tests;
 
 import java.io.FileReader;
+import java.io.IOException;
 import java.util.Properties;
 
 import org.junit.AfterClass;
@@ -49,17 +50,20 @@ public class APIClientIntegrationTestSuiteIT {
 		
 		//Read the instance URL from the properties file in current directory.
 		Properties properties = null;
-		FileReader reader = new FileReader("EnvFile.properties");
-		properties = new Properties();
-		properties.load(reader);
-		_instanceUrl = properties.getProperty("V1_INSTANCE_URL");
-		_username = properties.getProperty("V1_USERNAME");
-		_password = properties.getProperty("V1_PASSWORD");
-		_accessToken = properties.getProperty("V1_ACCESS_TOKEN");
-		System.out.println("INSTANCE URL: " + _instanceUrl + "\n");
-		System.out.println("USERNAME: " + _instanceUrl + "\n");
-		System.out.println("PASSWORD: " + _instanceUrl + "\n");
-		System.out.println("ACCESS TOKEN: " + _instanceUrl + "\n");
+		try (FileReader reader = new FileReader("EnvFile.properties")) {
+			properties = new Properties();
+			properties.load(reader);
+			_instanceUrl = properties.getProperty("V1_INSTANCE_URL");
+			_username = properties.getProperty("V1_USERNAME");
+			_password = properties.getProperty("V1_PASSWORD");
+			_accessToken = properties.getProperty("V1_ACCESS_TOKEN");
+			System.out.println("INSTANCE URL: " + _instanceUrl);
+			System.out.println("USERNAME: " + _instanceUrl);
+			System.out.println("PASSWORD: " + _instanceUrl);
+			System.out.println("ACCESS TOKEN: " + _instanceUrl + "\n");			
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 		
 		//Check that we have an instance URL.
 		if (null == _instanceUrl) {
