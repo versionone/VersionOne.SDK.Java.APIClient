@@ -58,10 +58,10 @@ public class APIClientIntegrationTestSuiteIT {
 			_password = properties.getProperty("V1_PASSWORD");
 			_accessToken = properties.getProperty("V1_ACCESS_TOKEN");
 			System.out.println("INSTANCE URL: " + _instanceUrl);
-			System.out.println("USERNAME: " + _instanceUrl);
-			System.out.println("PASSWORD: " + _instanceUrl);
-			System.out.println("ACCESS TOKEN: " + _instanceUrl + "\n");			
-		} catch (Exception e) {
+			System.out.println("USERNAME: " + _username);
+			System.out.println("PASSWORD: " + _password);
+			System.out.println("ACCESS TOKEN: " + _accessToken + "\n");			
+		} catch (IOException e) {
 			e.printStackTrace();
 		}
 		
