@@ -1,7 +1,6 @@
 package com.versionone.sdk.integration.tests;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.*;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -255,7 +254,7 @@ public class QueryAPI {
             "}";
 
          String res = _services.executePassThroughQuery(json);
-         assertEquals("Server Error", res.trim());
+         assertTrue(res.contains("Server Error"));
       }
 
       @Test
@@ -269,7 +268,7 @@ public class QueryAPI {
                   "- Name='StoryName'|Estimate>'0'";
 
           String res = _services.executePassThroughQuery(yaml);
-          assertEquals("Server Error", res.trim());
+          assertTrue(res.contains("Server Error"));
       }
 
 }

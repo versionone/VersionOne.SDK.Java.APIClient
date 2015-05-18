@@ -5,6 +5,7 @@ import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
 
 import com.versionone.Oid;
+import com.versionone.DB.DateTime;
 import com.versionone.apiclient.APIConfiguration;
 import com.versionone.apiclient.Asset;
 import com.versionone.apiclient.EnvironmentContext;
@@ -55,7 +56,7 @@ public class APIClientLegacyIntegrationTestSuiteIT {
 		IAssetType assetType = _metaModel.getAssetType("Scope");
 		Asset newAsset = _services.createNew(assetType, projectId);
 		IAttributeDefinition nameAttribute = assetType.getAttributeDefinition("Name");
-		newAsset.setAttributeValue(nameAttribute, "Java.SDK Integration Tests");
+		newAsset.setAttributeValue(nameAttribute, "Java SDK Legacy Integration Tests: " + DateTime.now());
 		_services.save(newAsset);
 		_projectId = newAsset.getOid().getMomentless();
 		

@@ -297,7 +297,7 @@ public class QueryAssets {
 		newStory.setAttributeValue(nameAttribute, name + " 3");
 		_services.save(newStory);
 		
-		Thread.currentThread().sleep(5000);
+		Thread.currentThread().sleep(8000);
 
 		Query query = new Query(storyType);
 		query.getSelection().add(nameAttribute);
