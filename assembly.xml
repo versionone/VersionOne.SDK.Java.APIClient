@@ -6,7 +6,7 @@
 	<dependencySets>
         <dependencySet>
             <!--Include runtime dependencies-->
-            <outputDirectory>${project.depdir}</outputDirectory>
+            <outputDirectory>dependencies</outputDirectory>
             <scope>runtime</scope>
         </dependencySet>
     </dependencySets>
