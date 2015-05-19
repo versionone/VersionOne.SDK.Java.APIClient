@@ -375,10 +375,8 @@ public class V1Connector {
 			try {
 				data = new InputStreamReader(entity.getContent());
 			} catch (IllegalStateException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		} else {
@@ -398,10 +396,8 @@ public class V1Connector {
 			try {
 				data = entity.getContent();
 			} catch (IllegalStateException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		} else {

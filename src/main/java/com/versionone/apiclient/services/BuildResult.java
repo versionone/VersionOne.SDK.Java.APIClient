@@ -12,8 +12,6 @@ public class BuildResult {
         String querystring = TextBuilder.join(querystringParts, "&");
         String result = path.concat(querystring != null ? "?" + querystring : "");
 
-        //TODO find a to replace following with proper encoding (.Net HttpWebRequest do it by itself,
-        // maybe Java HttpUrlConnection can be forced to do it)
         result = result.replace(" ","%20");
         result = result.replace("[", "%5B");
         result = result.replace("]", "%5D");

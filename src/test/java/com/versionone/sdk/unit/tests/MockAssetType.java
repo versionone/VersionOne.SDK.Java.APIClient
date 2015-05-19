@@ -18,22 +18,18 @@ class MockAssetType implements IAssetType {
 	
 	public IAttributeDefinition getAttributeDefinition(String name)
 			throws MetaException {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
 	public IAssetType getBase() throws MetaException {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
 	public IAttributeDefinition getDefaultOrderBy() throws MetaException {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
 	public String getDisplayName() {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
@@ -42,7 +38,6 @@ class MockAssetType implements IAssetType {
 	}
 
 	public boolean isA(IAssetType targettype) throws MetaException {
-		// TODO Auto-generated method stub
 		return false;
 	}
 

@@ -34,12 +34,10 @@ class MockAttributeDefinition implements IAttributeDefinition {
 	}
 
 	public IAttributeDefinition getBase() throws MetaException {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
 	public String getDisplayName() {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
@@ -48,7 +46,6 @@ class MockAttributeDefinition implements IAttributeDefinition {
 	}
 
 	public IAssetType getRelatedAsset() throws MetaException {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
@@ -57,38 +54,31 @@ class MockAttributeDefinition implements IAttributeDefinition {
 	}
 
 	public boolean isMultiValue() {
-		// TODO Auto-generated method stub
 		return false;
 	}
 
 	public boolean isReadOnly() {
-		// TODO Auto-generated method stub
 		return false;
 	}
 
 	public boolean isRequired() {
-		// TODO Auto-generated method stub
 		return false;
 	}
 
 	public IAttributeDefinition aggregate(
 			com.versionone.apiclient.interfaces.IAttributeDefinition.Aggregate aggregate) {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
 	public IAttributeDefinition downcast(IAssetType assetType) {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
 	public IAttributeDefinition filter(IFilterTerm filter) {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
 	public IAttributeDefinition join(IAttributeDefinition joined) {
-		// TODO Auto-generated method stub
 		return null;
 	}
 }

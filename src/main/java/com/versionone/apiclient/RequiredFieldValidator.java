@@ -19,7 +19,6 @@ import com.versionone.apiclient.interfaces.IMetaModel;
 import com.versionone.apiclient.interfaces.IServices;
 import com.versionone.apiclient.services.QueryResult;
 
-// TODO create AssetValidationResult and AssetCollectionValidationResult so users could operate results with more convenience. At least calculated field IsValid is reasonable. These classes would inherit corresponding collections to contain less redundancy.
 public class RequiredFieldValidator {
     private final Map<IAssetType, List<IAttributeDefinition>> requiredFields;
     private final IMetaModel metaModel;
@@ -31,8 +30,6 @@ public class RequiredFieldValidator {
         this.services = services;
     }
 
-
-    // TODO create separate private method to avoid excessive GetRequiredFields() calls
     /**
      * Validate single Asset attribute. If attribute is not loaded, it is just considered invalid.
      *
