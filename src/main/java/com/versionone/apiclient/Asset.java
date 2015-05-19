@@ -110,7 +110,7 @@ public class Asset {
 	 * 
 	 * @param attributeDefinition attribute definition
 	 * @param value attribute value
-	 * @throws APIException - APIException throws
+	 * @throws APIException Throws APIException
 	 */
 	public void setAttributeValue(IAttributeDefinition attributeDefinition, Object value) throws APIException {
 		ensureAttribute(attributeDefinition).setValue(value);
@@ -118,10 +118,10 @@ public class Asset {
 
 	/**
 	 * Force an attribute to a value
-	 *
-	 * @param attributeDefinition attribute definition
-	 * @param value value
-	 * @throws Exception
+	 * 
+	 * @param attributeDefinition IAttributeDefinition	
+	 * @param value Object
+	 * @throws APIException APIException
 	 */
 	public void forceAttributeValue(IAttributeDefinition attributeDefinition, Object value) throws APIException {
 		ensureAttribute(attributeDefinition).forceValue(value);

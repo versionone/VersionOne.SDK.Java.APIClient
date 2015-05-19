@@ -28,11 +28,9 @@ public interface IAPIConnector {
 	 *
 	 * Note: Caller is responsible for closing the returned stream
 	 *
-	 * @param path - String
-	 * @return the stream for reading data
+	 * @param path String
+	 * @return Reader The stream for reading data
      * @throws ConnectionException if any connection problems occur
-	 * @throws V1ConnectionException 
-	 * @throws V1Exception 
 	 */
 	Reader getData(String path) throws ConnectionException;
 

@@ -117,6 +117,7 @@
 					<target>1.7</target>
 				</configuration>
 			</plugin>
+			
 			<!-- Add javadoc jar -->
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
