@@ -22,7 +22,6 @@ import org.apache.http.HttpHeaders;
 import org.apache.http.HttpHost;
 import org.apache.http.HttpStatus;
 import org.apache.http.auth.AuthScope;
-import org.apache.http.auth.NTCredentials;
 import org.apache.http.auth.UsernamePasswordCredentials;
 import org.apache.http.client.CredentialsProvider;
 import org.apache.http.client.methods.CloseableHttpResponse;
@@ -184,7 +183,7 @@ public class V1Connector {
 		 * @return IProxy
 		 * @throws V1Exception
 		 */
-		IsetProxyOrEndPointOrConnector withWindowsIntegrated(String fullyQualifiedDomainUsername, String password) throws V1Exception;
+		//IsetProxyOrEndPointOrConnector withWindowsIntegrated(String fullyQualifiedDomainUsername, String password) throws V1Exception;
 	}
 
 	public interface IProxy extends IBuild {
@@ -301,21 +300,22 @@ public class V1Connector {
 			return this;
 		}
 
-		@Override
-		public IsetProxyOrEndPointOrConnector withWindowsIntegrated(String fullyQualifiedDomainUsername, String password) throws V1Exception {
-
-			if (V1Util.isNullOrEmpty(fullyQualifiedDomainUsername) || V1Util.isNullOrEmpty(password)) {
-				throw new NullPointerException("NTLM credential values cannot be null or empty.");
-			}
-
-			// Domain/username:password formed string.
-			fullyQualifiedDomainUsername += ":" + password;
-			credsProvider.setCredentials(AuthScope.ANY, new NTCredentials(fullyQualifiedDomainUsername));
-			httpclientBuilder.setDefaultCredentialsProvider(credsProvider);
-			isWindowsAuth = false;
-
-			return this;
-		}
+		//DISABLED: Needs more work and testing.
+//		@Override
+//		public IsetProxyOrEndPointOrConnector withWindowsIntegrated(String fullyQualifiedDomainUsername, String password) throws V1Exception {
+//
+//			if (V1Util.isNullOrEmpty(fullyQualifiedDomainUsername) || V1Util.isNullOrEmpty(password)) {
+//				throw new NullPointerException("NTLM credential values cannot be null or empty.");
+//			}
+//
+//			// Domain/username:password formed string.
+//			fullyQualifiedDomainUsername += ":" + password;
+//			credsProvider.setCredentials(AuthScope.ANY, new NTCredentials(fullyQualifiedDomainUsername));
+//			httpclientBuilder.setDefaultCredentialsProvider(credsProvider);
+//			isWindowsAuth = false;
+//
+//			return this;
+//		}
 
 		@Override
 		public IsetProxyOrEndPointOrConnector withWindowsIntegrated() throws V1Exception {

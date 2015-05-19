@@ -8,8 +8,6 @@ import java.io.Writer;
 import java.lang.reflect.Array;
 import java.util.List;
 
-import com.versionone.apiclient.exceptions.V1Exception;
-
 /**
  * Set of units.
  */
