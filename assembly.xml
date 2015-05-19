@@ -26,6 +26,7 @@
 				<include>**/src/</include>
 				<include>LICENSE*</include>
 				<include>README*</include>
+				<include>JavaSDK*</include>
 			</includes>
 		</fileSet>
 	</fileSets>
