@@ -65,9 +65,8 @@ public class MetaModel implements IMetaModel {
 
 	/**
 	 * Create from a connection and pre-load meta data
-	 * 
-	 * @param v1Connector
-	 * @param hookup
+	 * @param v1Connector v1Connector
+	 * @param hookup hookup
 	 */
 	public MetaModel(V1Connector v1Connector, boolean hookup) {
 		_v1Connector = v1Connector;

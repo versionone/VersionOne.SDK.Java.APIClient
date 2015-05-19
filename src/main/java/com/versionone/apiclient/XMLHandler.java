@@ -20,10 +20,10 @@ import com.versionone.apiclient.exceptions.ConnectionException;
 public class XMLHandler {
 
 	/**
-	 * @param reader
-	 * @param url
-	 * @return Document
-	 * @throws APIException
+	 * @param reader Reader
+	 * @param url String
+	 * @return Document Document
+	 * @throws APIException APIException
 	 * @throws ConnectionException if connection failed
 	 */
 	public static Document buildDocument(Reader reader, String url) throws APIException, ConnectionException {
@@ -52,8 +52,8 @@ public class XMLHandler {
 	/**
 	 * Create the Xerces Document Builder
 	 * 
-	 * @return DocumentBuilder
-	 * @throws ParserConfigurationException
+	 * @return DocumentBuilder DocumentBuilder
+	 * @throws ParserConfigurationException ParserConfigurationException
 	 */
 	public static DocumentBuilder createDocumentBuilder() throws ParserConfigurationException {
 		DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();

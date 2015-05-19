@@ -44,15 +44,4 @@ public interface IAttachments {
 	 */
 	void setWriter(String key) throws ConnectionException, AttachmentLengthException;
 
-	/**
-	 * Setting Writer
-	 *
-	 * @param key
-	 *            path to the data on server
-	 * @throws ConnectionException
-	 *             if any problem appears with connection to server
-	 * @throws AttachmentLengthException
-	 *             attachment too big
-	 */
-	// void write(String key, String mimeType, byte[] byteArray);
 }

@@ -151,28 +151,25 @@ public interface IServices {
     * Returns a localization value based on an attribute definition.
     * 
     * @param attribute An attribute definition
-    * @return String
-    * @throws V1Exception 
+    * @return String String
+    * @throws V1Exception  V1Exception
     */
     String getLocalization(IAttributeDefinition attribute) throws V1Exception;
    
     /**
      * Returns a localization value based on key.
      * 
-     * @param key A string value of the key
-     * @return String
-     * @throws ConnectionException 
-     * @throws JSONException 
+     * @param key  String A string value of the key
+     * @return String String
+     * @throws V1Exception V1Exception 
      */
      String getLocalization(String key) throws V1Exception;
      
      /**
       * Returns a Map of localized values.
-      * 
-      * @param attributes An array of attribute definitions
-      * @return A map of localized values
-      * @throws ConnectionException
-      * @throws JSONException
+      * @param attributes attributes
+      * @return  Map  Map of strings
+      * @throws ConnectionException ConnectionException
       */
      Map<String, String> getLocalization(ArrayList<IAttributeDefinition> attributes)  throws ConnectionException;
 

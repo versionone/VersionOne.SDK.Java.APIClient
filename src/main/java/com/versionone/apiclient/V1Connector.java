@@ -76,9 +76,8 @@ public class V1Connector {
 		/**
 		 * Optional method for specifying an API endpoint to connect to.
 		 * 
-		 * @param endpoint
-		 *            The API endpoint.
-		 * @return IsetProxyOrConnector
+		 * @param endpoint  The API endpoint.
+		 * @return IsetProxyOrConnector IsetProxyOrConnector
 		 */
 		IsetProxyOrConnector useEndpoint(String endpoint);
 	}
@@ -87,20 +86,18 @@ public class V1Connector {
 		/**
 		 * Optional method for setting the proxy credentials.
 		 * 
-		 * @param proxyProvider
-		 *            The ProxyProvider containing the proxy URI, username, and password.
-		 * @return IBuild
+		 * @param proxyProvider The ProxyProvider containing the proxy URI, username, and password.
+		 * @return IBuild IBuild
 		 */
 		IBuild withProxy(ProxyProvider proxyProvider);
 	}
 
 	public interface IsetEndPointOrConnector extends IBuild {
+	
 		/**
 		 * Optional method for specifying an API endpoint to connect to.
-		 * 
-		 * @param endPoint
-		 *            The API endpoint.
-		 * @return IBuild
+		 * @param endpoint String
+		 * @return IBuild IBuild
 		 */
 		IBuild useEndpoint(String endpoint);
 	}
@@ -109,9 +106,8 @@ public class V1Connector {
 		/**
 		 * Optional method for setting the proxy credentials.
 		 * 
-		 * @param proxyProvider
-		 *            The ProxyProvider containing the proxy URI, username, and password.
-		 * @return IsetEndPointOrConnector
+		 * @param proxyProvider  ProxyProvider The ProxyProvider containing the proxy URI, username, and password.
+		 * @return IsetEndPointOrConnector IsetEndPointOrConnector
 		 */
 		IsetEndPointOrConnector withProxy(ProxyProvider proxyProvider);
 	}
@@ -120,55 +116,47 @@ public class V1Connector {
 		/**
 		 * Required method for setting a custom user agent header for all HTTP requests made to the VersionOne API.
 		 * 
-		 * @param name
-		 *            The name of the application.
-		 * @param version
-		 *            The version number of the application
-		 * @return IAuthenticationMethods
-		 * @throws V1Exception
+		 * @param name  String The name of the application.
+		 * @param version String The version number of the application
+		 * @return IAuthenticationMethods IAuthenticationMethods
+		 * @throws V1Exception V1Exception 
 		 */
 		IAuthenticationMethods withUserAgentHeader(String name, String version) throws V1Exception;
 	}
 
 	public interface IAuthenticationMethods {
+		
 		/**
-		 * Optional method for setting the username and password for authentication.
-		 * 
-		 * @param userName
-		 *            The username of a valid VersionOne member account.
-		 * @param password
-		 *            The password of a valid VersionOne member account.
-		 * @return IProxy
-		 * @throws V1Exception
+		 *  Optional method for setting the username and password for authentication.
+		 * @param username String
+		 * @param password String
+		 * @return IsetProxyOrEndPointOrConnector IsetProxyOrEndPointOrConnector
+		 * @throws V1Exception V1Exception
 		 */
 		IsetProxyOrEndPointOrConnector withUsernameAndPassword(String username, String password) throws V1Exception;
 
 		/**
 		 * Optional method for setting the Windows Integrated Authentication credentials for authentication based on the
 		 * currently logged in user.
-		 * 
-		 * @return IProxy
-		 * @throws V1Exception
+		 * @return IsetProxyOrEndPointOrConnector IsetProxyOrEndPointOrConnector
+		 * @throws V1Exception V1Exception
 		 */
 		IsetProxyOrEndPointOrConnector withWindowsIntegrated() throws V1Exception;
 
 		/**
 		 * Optional method for setting the access token for authentication.
 		 * 
-		 * @param accessToken
-		 *            The access token.
-		 * @return IProxy
-		 * @throws V1Exception
+		 * @param accessToken The access token. 
+		 * @return IsetProxyOrEndPointOrConnector IsetProxyOrEndPointOrConnector
+		 * @throws V1Exception V1Exception
 		 */
 		IsetProxyOrEndPointOrConnector withAccessToken(String accessToken) throws V1Exception;
 
 		/**
 		 * Optional method for setting the OAuth2 access token for authentication.
-		 * 
-		 * @param accessToken
-		 *            The OAuth2 access token.
-		 * @return IProxy
-		 * @throws V1Exception
+		 * @param oauth2Token String
+		 * @return IsetProxyOrEndPointOrConnector IsetProxyOrEndPointOrConnector
+		 * @throws V1Exception V1Exception
 		 */
 		IsetProxyOrEndPointOrConnector withOAuth2Token(String oauth2Token) throws V1Exception;
 
@@ -176,12 +164,10 @@ public class V1Connector {
 		 * Optional method for setting the Windows Integrated Authentication credentials for authentication based on
 		 * specified user credentials.
 		 * 
-		 * @param fullyQualifiedDomainUsername
-		 *            The fully qualified domain name in form "DOMAIN\\username".
-		 * @param password
-		 *            The password of a valid VersionOne member account.
-		 * @return IProxy
-		 * @throws V1Exception
+		 * @param fullyQualifiedDomainUsername The fully qualified domain name in form "DOMAIN\\username".
+		 * @param password The password of a valid VersionOne member account.
+		 * @return IsetProxyOrEndPointOrConnector
+		 * @throws V1Exception V1Exception
 		 */
 		//IsetProxyOrEndPointOrConnector withWindowsIntegrated(String fullyQualifiedDomainUsername, String password) throws V1Exception;
 	}
@@ -190,10 +176,9 @@ public class V1Connector {
 		/**
 		 * Optional method for setting the proxy credentials.
 		 * 
-		 * @param proxyProvider
-		 *            The ProxyProvider containing the proxy URI, username, and password.
-		 * @return IBuild
-		 * @throws V1Exception
+		 * @param proxyProvider The ProxyProvider containing the proxy URI, username, and password.
+		 * @return IBuild IBuild
+		 * @throws V1Exception V1Exception
 		 */
 		IBuild withProxy(ProxyProvider proxyProvider) throws V1Exception;
 	}
@@ -406,10 +391,6 @@ public class V1Connector {
 		return data;
 	}
 
-	/**
-	 * @param path
-	 * @return
-	 */
 	private HttpEntity setGETMethod(String path) {
 		String url = V1Util.isNullOrEmpty(path) ? INSTANCE_URL + _endpoint : INSTANCE_URL + _endpoint + path;
 
@@ -432,15 +413,6 @@ public class V1Connector {
 		return entity;
 	}
 
-
-	/**
-	 * @param data
-	 * @param entity
-	 * @param errorCode
-	 * @param errorMessage
-	 * @return
-	 * @throws ConnectionException
-	 */
 	private void manageErrors(int errorCode, String errorMessage) throws ConnectionException {
 	
 		switch (errorCode) {

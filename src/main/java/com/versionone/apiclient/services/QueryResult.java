@@ -38,11 +38,12 @@ public class QueryResult {
         return query;
     }
 
-    /**
-     * @param assets
-     * @param total
-     * @param query
-     */
+   /**
+    * 
+    * @param assets Asset[]
+    * @param total int
+    * @param query Query
+    */
     public QueryResult(Asset[] assets, int total, Query query) {
         this.assets = assets;
         this.total = total;

@@ -34,7 +34,7 @@ public class Localizer implements ILocalizer {
 	 * 
 	 * @param key - String
 	 * @return Localized String value
-	 * @throws V1ConnectionException 
+	 * @throws V1Exception  V1Exception
 	 */
 	public String resolve(String key) throws V1Exception
 	{

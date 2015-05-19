@@ -13,7 +13,7 @@ public interface ILocalizer {
 	 * 
 	 * @param key - String
 	 * @return Localized String value
-	 * @throws V1ConnectionException 
+	 * @throws V1Exception  V1Exception
 	 */
 	String resolve(String key) throws V1Exception;
 
