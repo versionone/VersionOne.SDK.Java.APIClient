@@ -3,6 +3,13 @@
 	<formats>
 		<format>zip</format>
 	</formats>
+	<dependencySets>
+        <dependencySet>
+            <!--Include runtime dependencies-->
+            <outputDirectory>dependencies</outputDirectory>
+            <scope>runtime</scope>
+        </dependencySet>
+    </dependencySets>
 	<fileSets>
 		<fileSet>
 			<directory>${project.build.directory}</directory>
@@ -19,6 +26,7 @@
 				<include>**/src/</include>
 				<include>LICENSE*</include>
 				<include>README*</include>
+				<include>JavaSDK*</include>
 			</includes>
 		</fileSet>
 	</fileSets>

@@ -2,8 +2,6 @@ package com.versionone.apiclient;
 
 /**
  * VersionOne built in states for an Asset
- * @author jerry
- *
  */
 public enum AssetState {
 	/**
@@ -33,12 +31,14 @@ public enum AssetState {
 	
 	/**
 	 * Get the integer value of this state
+	 * 
 	 * @return int
 	 */
 	public int value() {return _value;}
 	
 	/**
 	 * Select AssetState based on an integer value
+	 * 
 	 * @param intValue - int
 	 * @return AssetState
 	 */
@@ -52,7 +52,8 @@ public enum AssetState {
 	}
 	
 	/**
-	 * is an int a valid AssetState
+	 * Is an int a valid AssetState
+	 * 
 	 * @param intValue - int
 	 * @return boolean - boolean
 	 */

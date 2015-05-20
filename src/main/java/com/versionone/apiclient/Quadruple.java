@@ -1,5 +1,7 @@
 package com.versionone.apiclient;
 
+import com.versionone.utils.HashCode;
+
 
 class Quadruple extends Tuple {
 

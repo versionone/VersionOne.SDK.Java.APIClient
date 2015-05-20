@@ -1,18 +1,14 @@
 package com.versionone;
 
-import com.versionone.apiclient.HashCode;
+import com.versionone.utils.HashCode;
 
 /**
  * Class representing some duration of time
- * @author jerry
- *
  */
 public class Duration {
 
 	/**
 	 * Valid units for Duration
-	 * @author jerry
-	 *
 	 */
 	public enum Unit {
 		Days, Weeks, Months
@@ -101,6 +97,7 @@ public class Duration {
 
 	/**
 	 * Compare two Duration instances
+	 * 
 	 * @param a - one instance
 	 * @param b - the other instance
 	 * @return true if they are equal, false otherwise
@@ -132,6 +129,7 @@ public class Duration {
 
 	/**
 	 * Compare this instance to another Duration
+	 * 
 	 * @return true if they are equal, false otherwise
 	 */
 	@Override

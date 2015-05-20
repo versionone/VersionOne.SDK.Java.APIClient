@@ -1,5 +1,7 @@
 package com.versionone.apiclient;
 
+import com.versionone.utils.HashCode;
+
 
 class Triple extends Tuple {
 

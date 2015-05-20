@@ -1,6 +1,11 @@
 package com.versionone.apiclient;
 
 import com.versionone.Oid;
+import com.versionone.apiclient.exceptions.APIException;
+import com.versionone.apiclient.exceptions.MetaException;
+import com.versionone.apiclient.exceptions.OidException;
+import com.versionone.apiclient.interfaces.IAssetType;
+import com.versionone.apiclient.interfaces.IAttributeDefinition;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -10,9 +15,6 @@ import java.util.Map;
 /**
  * Represents one Asset in the VersionOne system.
  * Assets are Projects, Stories, Tasks, etc
- *
- * @author jerry
- *
  */
 public class Asset {
 
@@ -24,6 +26,7 @@ public class Asset {
 
 	/**
 	 * Get type information
+	 * 
 	 * @return IAssetType
 	 */
 	public IAssetType getAssetType(){
@@ -32,6 +35,7 @@ public class Asset {
 
 	/**
 	 * Get Asset Object Identifier
+	 * 
 	 * @return  Oid
 	 */
 	public Oid getOid() {
@@ -54,6 +58,7 @@ public class Asset {
 
 	/**
 	 * Get asset attributes
+	 * 
 	 * @return  Map data
 	 */
 	public Map<String, Attribute> getAttributes(){
@@ -61,9 +66,9 @@ public class Asset {
     }
 
 	/**
-	 * Used to add new relationships
-	 * get new assets
-	 * @return  Map.
+	 * Used to add new relationships and get new assets
+	 * 
+	 * @return  Map
 	 */
 	public Map<String, Asset> getNewAssets() {
         return newAssets;
@@ -71,6 +76,7 @@ public class Asset {
 
 	/**
 	 * Get child assets
+	 * 
 	 * @return List
 	 */
 	public List<Asset> getChildren() {
@@ -79,6 +85,7 @@ public class Asset {
 
 	/**
 	 * Create from Object Id
+	 * 
 	 * @param oid - Oid data
 	 */
 	public Asset(Oid oid) {
@@ -99,28 +106,29 @@ public class Asset {
 	}
 
 	/**
-	 * set an attribute value
+	 * Set an attribute value
+	 * 
 	 * @param attributeDefinition attribute definition
 	 * @param value attribute value
-	 * @throws APIException - APIException throws
+	 * @throws APIException Throws APIException
 	 */
 	public void setAttributeValue(IAttributeDefinition attributeDefinition, Object value) throws APIException {
 		ensureAttribute(attributeDefinition).setValue(value);
 	}
 
 	/**
-	 * force an attribute to a value
-	 *
-	 * @param attributeDefinition attribute definition
-	 * @param value value
-	 * @throws Exception
+	 * Force an attribute to a value
+	 * 
+	 * @param attributeDefinition IAttributeDefinition	
+	 * @param value Object
+	 * @throws APIException APIException
 	 */
-	void forceAttributeValue(IAttributeDefinition attributeDefinition, Object value) throws APIException {
+	public void forceAttributeValue(IAttributeDefinition attributeDefinition, Object value) throws APIException {
 		ensureAttribute(attributeDefinition).forceValue(value);
 	}
 
 	/**
-	 * add an attribute value
+	 * Add an attribute value
 	 *
 	 * @param attributeDefinition - IAttributeDefinition
 	 * @param value - Object
@@ -131,7 +139,8 @@ public class Asset {
 	}
 
 	/**
-	 * remove an attribute value
+	 * Remove an attribute value
+	 * 
 	 * @param attributeDefinition - IAttributeDefinition
 	 * @param value - Object
 	 * @throws APIException - APIException throws
@@ -143,8 +152,7 @@ public class Asset {
     /**
      * Clear an attribute from cache based on definition.
      *
-     * @param attributeDefinition definition of attribute to clear;
-     *                  if null, all attributes will be cleared from cache.
+     * @param attributeDefinition definition of attribute to clear; if null, all attributes will be cleared from cache.
      */
     public void clearAttributeCache(IAttributeDefinition attributeDefinition) {
         if (attributeDefinition == null) {
@@ -155,7 +163,8 @@ public class Asset {
 	}
 
 	/**
-	 * get an attribute based on definition
+	 * Get an attribute based on definition
+	 * 
 	 * @param attributeDefinition - IAttributeDefinition
 	 * @throws MetaException - MetaException
 	 * @return Attribute - Attribute
@@ -172,7 +181,7 @@ public class Asset {
 	}
 
 	/**
-	 * accept changes to asset
+	 * Accept changes to asset
 	 */
 	public void acceptChanges() {
 		for(Attribute attribute : attributes.values()) {
@@ -181,7 +190,7 @@ public class Asset {
 	}
 
 	/**
-	 * reject changes to this asset
+	 * Reject changes to this asset
 	 */
 	public void rejectChanges() {
 		for(Attribute attribute : attributes.values()) {
@@ -190,7 +199,8 @@ public class Asset {
 	}
 
 	/**
-	 * determine if something changed
+	 * Determine if something changed
+	 * 
 	 * @return boolean - return boolean value
 	 */
 	public boolean hasChanged() {

@@ -2,13 +2,12 @@ package com.versionone.apiclient;
 
 import com.versionone.DB;
 import com.versionone.Oid;
-import com.versionone.apiclient.IAttributeDefinition.AttributeType;
+import com.versionone.apiclient.exceptions.APIException;
+import com.versionone.apiclient.interfaces.IAttributeDefinition;
+import com.versionone.apiclient.interfaces.IAttributeDefinition.AttributeType;
 
 /**
- * Base class for Attribute
- * 
- * @author jerry
- *
+ * Base class for an attribute
  */
 public abstract class Attribute {
 
@@ -22,6 +21,7 @@ public abstract class Attribute {
 
 	/**
 	 * Get the Asset that owns the attribute
+	 * 
 	 * @return Asset
 	 */
 	public Asset getAsset() {
@@ -29,7 +29,8 @@ public abstract class Attribute {
 	}
 
 	/**
-	 * Get the definition of the attribiute
+	 * Get the definition of the attribute
+	 * 
 	 * @return IAttributeDefinition
 	 */
 	public IAttributeDefinition getDefinition() {
@@ -38,6 +39,7 @@ public abstract class Attribute {
 
 	/**
 	 * Get the original value of the attribute
+	 * 
 	 * @return Object - Object
 	 * @throws APIException - APIException
 	 */
@@ -45,13 +47,15 @@ public abstract class Attribute {
 
 	/**
 	 * Get the new value of the attribute
+	 * 
 	 * @return Object
 	 * @throws APIException - APIException
 	 */
 	public abstract Object getNewValue() throws APIException;
 
 	/**
-	 * Get the current value of the attrubute
+	 * Get the current value of the attribute
+	 * 
 	 * @return Object
 	 * @throws APIException - APIException
 	 */
@@ -62,31 +66,36 @@ public abstract class Attribute {
 	}
 
 	/**
-	 * Get the original values 
+	 * Get the original values
+	 * 
 	 * @return array of Object
 	 */
 	public abstract Object[] getOriginalValues();
 
 	/**
 	 * Get the new Valued
+	 * 
 	 * @return array of Object
 	 */
 	public abstract Object[] getNewValues();
 
 	/**
 	 * Get values that were added
+	 * 
 	 * @return array of Object
 	 */
 	public abstract Object[] getAddedValues();
 
 	/**
 	 * Get the values that were removed
+	 * 
 	 * @return array of Object
 	 */
 	public abstract Object[] getRemovedValues();
 
 	/**
-	 * Get the current values of the attriute
+	 * Get the current values of the attribute
+	 * 
 	 * @return array of Object
 	 */
 	public Object[] getValues() {
@@ -98,6 +107,7 @@ public abstract class Attribute {
 
 	/**
 	 * Has this attribute changed
+	 * 
 	 * @return boolean
 	 */
 	public abstract boolean hasChanged();

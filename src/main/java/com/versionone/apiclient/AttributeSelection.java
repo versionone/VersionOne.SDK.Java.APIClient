@@ -3,11 +3,11 @@ package com.versionone.apiclient;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.versionone.apiclient.interfaces.IAttributeDefinition;
+import com.versionone.apiclient.services.TextBuilder;
+
 /**
  * Attributes being selected in a Query
- *
- * @author jerry
- *
  */
 public class AttributeSelection extends ArrayList<IAttributeDefinition> {
 	private static final long serialVersionUID = 1L;
@@ -26,6 +26,7 @@ public class AttributeSelection extends ArrayList<IAttributeDefinition> {
 
 	/**
 	 * Get a comma separated string of the names of all the attributes being selected
+	 * 
 	 * @return String
 	 */
 	public String getNames() {
@@ -34,6 +35,7 @@ public class AttributeSelection extends ArrayList<IAttributeDefinition> {
 
 	/**
 	 * Get a comma separated string of the names of all the attributes being selected
+	 * 
 	 * @return String
 	 */
 	public String getToken() {
@@ -42,6 +44,7 @@ public class AttributeSelection extends ArrayList<IAttributeDefinition> {
 
 	/**
 	 * Implementation detail.  Returns the Token of the attribute definition
+	 * 
 	 * @param def - Object
 	 * @return String
 	 */
@@ -52,6 +55,7 @@ public class AttributeSelection extends ArrayList<IAttributeDefinition> {
 
 	/**
 	 * Implementation detail.  Returns the Name of the attribute definition
+	 * 
 	 * @param def - Object
 	 * @return String
 	 */

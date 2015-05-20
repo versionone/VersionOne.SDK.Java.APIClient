@@ -3,6 +3,8 @@ package com.versionone.apiclient;
 import java.io.IOException;
 import java.util.Properties;
 
+import com.versionone.apiclient.interfaces.IAPIConfiguration;
+
 public class APIConfiguration implements IAPIConfiguration {
 
     private Properties _properties;

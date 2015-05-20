@@ -1,7 +1,10 @@
 package com.versionone.apiclient;
 
+import com.versionone.utils.HashCode;
+
 
 class Pair extends Tuple {
+	
 	private Object _first;
 	private Object _second;
 

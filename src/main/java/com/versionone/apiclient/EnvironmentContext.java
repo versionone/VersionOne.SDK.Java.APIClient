@@ -2,6 +2,14 @@ package com.versionone.apiclient;
 
 import java.net.URISyntaxException;
 
+import com.versionone.apiclient.interfaces.IMetaModel;
+import com.versionone.apiclient.interfaces.IModelsAndServices;
+import com.versionone.apiclient.interfaces.IServices;
+
+/**
+ * @deprecated This class has been deprecated. Please use V1Connector instead. 
+ */
+@Deprecated
 public final class EnvironmentContext {
 
     private IModelsAndServices _modelsAndServices;

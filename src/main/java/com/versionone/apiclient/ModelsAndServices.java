@@ -2,6 +2,15 @@ package com.versionone.apiclient;
 
 import java.net.URISyntaxException;
 
+import com.versionone.apiclient.interfaces.IConnectors;
+import com.versionone.apiclient.interfaces.IMetaModel;
+import com.versionone.apiclient.interfaces.IModelsAndServices;
+import com.versionone.apiclient.interfaces.IServices;
+
+/**
+ * @deprecated This class has been deprecated. Please use V1Connector instead. 
+ */
+@Deprecated
 public final class ModelsAndServices implements IModelsAndServices  {
 
     private IConnectors _connectors;
@@ -48,7 +57,6 @@ public final class ModelsAndServices implements IModelsAndServices  {
                 _connectors.getDataConnectorWithProxy());
         return _servicesWithProxy;
     }
-
 
     public V1Configuration getV1Configuration(){
         if (_v1Config != null) return _v1Config;

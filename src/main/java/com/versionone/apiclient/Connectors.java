@@ -3,6 +3,14 @@ package com.versionone.apiclient;
 import java.net.URI;
 import java.net.URISyntaxException;
 
+import com.versionone.apiclient.interfaces.IConnectors;
+import com.versionone.apiclient.interfaces.ICredentials;
+import com.versionone.apiclient.interfaces.IUrls;
+
+/**
+ * @deprecated This class has been deprecated. Please use V1Connector instead. 
+ */
+@Deprecated
 public final class Connectors implements IConnectors {
 
     private V1APIConnector _dataConnector;

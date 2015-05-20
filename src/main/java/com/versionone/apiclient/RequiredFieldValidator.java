@@ -6,8 +6,19 @@ import java.util.List;
 import java.util.Map;
 
 import com.versionone.Oid;
+import com.versionone.apiclient.exceptions.APIException;
+import com.versionone.apiclient.exceptions.ConnectionException;
+import com.versionone.apiclient.exceptions.MetaException;
+import com.versionone.apiclient.exceptions.OidException;
+import com.versionone.apiclient.filters.AndFilterTerm;
+import com.versionone.apiclient.filters.FilterTerm;
+import com.versionone.apiclient.filters.IFilterTerm;
+import com.versionone.apiclient.interfaces.IAssetType;
+import com.versionone.apiclient.interfaces.IAttributeDefinition;
+import com.versionone.apiclient.interfaces.IMetaModel;
+import com.versionone.apiclient.interfaces.IServices;
+import com.versionone.apiclient.services.QueryResult;
 
-// TODO create AssetValidationResult and AssetCollectionValidationResult so users could operate results with more convenience. At least calculated field IsValid is reasonable. These classes would inherit corresponding collections to contain less redundancy.
 public class RequiredFieldValidator {
     private final Map<IAssetType, List<IAttributeDefinition>> requiredFields;
     private final IMetaModel metaModel;
@@ -19,8 +30,6 @@ public class RequiredFieldValidator {
         this.services = services;
     }
 
-
-    // TODO create separate private method to avoid excessive GetRequiredFields() calls
     /**
      * Validate single Asset attribute. If attribute is not loaded, it is just considered invalid.
      *
@@ -138,6 +147,7 @@ public class RequiredFieldValidator {
 
     /**
      * Load required fields attribute definitions for provided Asset type.
+     * 
      * @param assetType - Asset type.
      * @return Collection of attribute definitions for required fields.
      * @throws OidException

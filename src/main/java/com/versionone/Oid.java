@@ -1,9 +1,9 @@
 package com.versionone;
 
-import com.versionone.apiclient.HashCode;
-import com.versionone.apiclient.IAssetType;
-import com.versionone.apiclient.IMetaModel;
-import com.versionone.apiclient.OidException;
+import com.versionone.apiclient.exceptions.OidException;
+import com.versionone.apiclient.interfaces.IAssetType;
+import com.versionone.apiclient.interfaces.IMetaModel;
+import com.versionone.utils.HashCode;
 
 /**
  * VersionOne object identifier
@@ -25,10 +25,11 @@ public class Oid {
 
 	/**
 	 * Create fully qualified object identifier
+	 * 
 	 * @param assetType - IAssetType
 	 * @param id - DB.Int
 	 * @param moment - DB.Int
-     * @deprecated use {@link #Oid(com.versionone.apiclient.IAssetType, int, int)}
+     * @deprecated use {@link #Oid(com.versionone.apiclient.interfaces.IAssetType, int, int)}
 	 */
 	public Oid(IAssetType assetType, DB.Int id, DB.Int moment) {
 		if (assetType == null) {
@@ -45,10 +46,11 @@ public class Oid {
 
 	/**
 	 * Create fully qualified object identifier
+	 * 
 	 * @param assetType - IAssetType
 	 * @param id -  int
 	 * @param moment - DB.Int
-     * @deprecated use {@link #Oid(com.versionone.apiclient.IAssetType, int)}
+     * @deprecated use {@link #Oid(com.versionone.apiclient.interfaces.IAssetType, int)}
 	 */
 	public Oid(IAssetType assetType, int id, DB.Int moment) {
 		this(assetType, new DB.Int(id), moment);
@@ -56,6 +58,7 @@ public class Oid {
 
 	/**
 	 * Create fully qualified object identifier
+	 * 
 	 * @param assetType - IAssetType
 	 * @param id - int
 	 * @param moment - int
@@ -67,6 +70,7 @@ public class Oid {
 	
 	/**
 	 * Create Object Identifier without moment
+	 * 
 	 * @param assetType - IAssetType
 	 * @param id - int
 	 */
@@ -80,6 +84,7 @@ public class Oid {
 
 	/**
 	 * Create Object Identifier with just an AssetType
+	 * 
 	 * @param assetType - IAssetType
 	 */
 	public Oid(IAssetType assetType) {
@@ -88,6 +93,7 @@ public class Oid {
 
 	/**
 	 * Get the AssetType
+	 * 
 	 * @return IAssetType for this OID
 	 */
 	public IAssetType getAssetType() {
@@ -96,6 +102,7 @@ public class Oid {
 
 	/**
 	 * Get the id for this instance
+	 * 
 	 * @return value as Integer
 	 */
 	public Object getKey() {
@@ -104,6 +111,7 @@ public class Oid {
 
 	/**
 	 * get the moment for this oid 
+	 * 
 	 * @return value as Integer or null
 	 */
 	public Object getMoment() {
@@ -112,6 +120,7 @@ public class Oid {
 
 	/**
 	 * Is this OID null
+	 * 
 	 * @return true if it's null, false otherwise
 	 */
 	public boolean isNull() {
@@ -132,6 +141,7 @@ public class Oid {
 
 	/**
 	 * Get the token for this object identifier
+	 * 
 	 * @return string containing token
 	 */
 	public String getToken() {
@@ -151,6 +161,7 @@ public class Oid {
 
 	/**
 	 * Create an OID from a token
+	 * 
 	 * @param oidtoken - token to parse
 	 * @param meta - metamodel 
 	 * @return an Oid
@@ -176,6 +187,7 @@ public class Oid {
 
     /**
 	 * Get this instance as a momentless oid
+	 * 
 	 * @return - momentless OID
 	 */
 	public Oid getMomentless() {
@@ -184,6 +196,7 @@ public class Oid {
 
 	/**
 	 * Does this instance contain a moment?
+	 * 
 	 * @return true if a moment exists, false otherwise
 	 */
 	public boolean hasMoment() {
@@ -232,6 +245,7 @@ public class Oid {
 
 	/**
 	 * Compare two oids
+	 * 
 	 * @param lhs - left hand side
 	 * @param rhs - right hand side
 	 * @return true if these are equal; false otherwise

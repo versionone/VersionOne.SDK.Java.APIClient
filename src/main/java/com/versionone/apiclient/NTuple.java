@@ -1,6 +1,6 @@
 package com.versionone.apiclient;
 
-
+import com.versionone.utils.HashCode;
 
 class NTuple extends Tuple {
 	private Object[] _elements;
@@ -53,7 +53,6 @@ class NTuple extends Tuple {
 		return rc;
 	}
 
-
 	@Override
 	public Object get(int i) {
 		return (_elements[i] == Null)? null: _elements[i];
@@ -64,12 +63,10 @@ class NTuple extends Tuple {
 		return _elements.length;
 	}
 
-
 	@Override
 	public int hashCode() {
 		return HashCode.Hash(_elements);
 	}
-
 
 	@Override
 	public Object[] toArray() {

@@ -18,6 +18,9 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
+import com.versionone.apiclient.exceptions.ConnectionException;
+import com.versionone.apiclient.interfaces.IAPIConnector;
+
 /**
  * IAPIConnector that reads data from a file.
  */
@@ -46,6 +49,7 @@ public class FileAPIConnector implements IAPIConnector {
 
 	/**
 	 * Create Connector
+	 * 
 	 * @param fileName - fully qualified filename
 	 * @param prefix - String
 	 */

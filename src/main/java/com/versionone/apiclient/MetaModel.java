@@ -13,6 +13,17 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 
+import com.versionone.apiclient.exceptions.ConnectionException;
+import com.versionone.apiclient.exceptions.MetaException;
+import com.versionone.apiclient.exceptions.V1Exception;
+import com.versionone.apiclient.interfaces.IAPIConnector;
+import com.versionone.apiclient.interfaces.IAssetType;
+import com.versionone.apiclient.interfaces.IAttributeDefinition;
+import com.versionone.apiclient.interfaces.IMetaModel;
+import com.versionone.apiclient.interfaces.IOperation;
+import com.versionone.apiclient.services.TextBuilder;
+import com.versionone.utils.Version;
+
 /**
  * Concrete class for obtaining metadata from the VersionOne server
  */
@@ -21,10 +32,13 @@ public class MetaModel implements IMetaModel {
 	private IAPIConnector _connector;
 	private Version _version;
 	private String _versionString = null;
+	private V1Connector _v1Connector;
 
 	/**
 	 * Create from a connection and obtain meta-data as needed
-	 * @param connector - IAPIConnector
+	 * 
+	 * @param connector
+	 *            - IAPIConnector
 	 */
 	public MetaModel(IAPIConnector connector) {
 		this(connector, false);
@@ -32,8 +46,11 @@ public class MetaModel implements IMetaModel {
 
 	/**
 	 * Create from a connection and pre-load meta data
-	 * @param connector - IAPIConnector
-	 * @param hookup - boolean
+	 * 
+	 * @param connector
+	 *            - IAPIConnector
+	 * @param hookup
+	 *            - boolean
 	 */
 	public MetaModel(IAPIConnector connector, boolean hookup) {
 		_connector = connector;
@@ -42,22 +59,42 @@ public class MetaModel implements IMetaModel {
 		}
 	}
 
+	public MetaModel(V1Connector v1Connector) {
+		this(v1Connector, false);
+	}
+
+	/**
+	 * Create from a connection and pre-load meta data
+	 * @param v1Connector v1Connector
+	 * @param hookup hookup
+	 */
+	public MetaModel(V1Connector v1Connector, boolean hookup) {
+		_v1Connector = v1Connector;
+		if (hookup) {
+			hookup();
+		}
+	}
+
 	/**
 	 * Get an asset type based on a token
+	 * 
 	 * @see IMetaModel#getAssetType(String)
 	 */
 	public IAssetType getAssetType(String token) throws MetaException {
 		try {
 			return findAssetType(token);
 		} catch (Exception ex) {
+			ex.printStackTrace();
 			throw new MetaException("Unknown AssetType", token, ex);
 		}
 	}
 
 	/**
 	 * Get MetaMode version
+	 * 
 	 * @return Version of MetaModel
-	 * @throws MetaException - MetaException
+	 * @throws MetaException
+	 *             - MetaException
 	 */
 	public Version getVersion() throws MetaException {
 		if (_version == null) {
@@ -72,6 +109,7 @@ public class MetaModel implements IMetaModel {
 
 	/**
 	 * Get an attribute definition from a token
+	 * 
 	 * @see IMetaModel#getAttributeDefinition(String)
 	 */
 	public IAttributeDefinition getAttributeDefinition(String token) throws MetaException {
@@ -84,6 +122,7 @@ public class MetaModel implements IMetaModel {
 
 	/**
 	 * Get an operation based on a token
+	 * 
 	 * @see IMetaModel#getOperation(String)
 	 */
 	public IOperation getOperation(String token) throws MetaException {
@@ -109,7 +148,7 @@ public class MetaModel implements IMetaModel {
 		StringBuffer prefix = new StringBuffer();
 		StringBuffer suffix = new StringBuffer();
 		TextBuilder.splitPrefix(token, '.', prefix, suffix);
-		
+
 		findAssetType(prefix.toString());
 
 		if (_map.containsKey(token)) {
@@ -144,16 +183,18 @@ public class MetaModel implements IMetaModel {
 		Document doc = null;
 
 		doc = createDocument(token);
+		
+		String dc = doc.toString();
 
 		AssetType assetType = new AssetType(this, doc.getDocumentElement(), _map);
 		saveAssetType(assetType);
 
 		XPath xpath = XPathFactory.newInstance().newXPath();
-		NodeList attribnodes = (NodeList)xpath.evaluate("AttributeDefinition", doc.getDocumentElement(), XPathConstants.NODESET);	
+		NodeList attribnodes = (NodeList) xpath.evaluate("AttributeDefinition", doc.getDocumentElement(), XPathConstants.NODESET);
 		for (int attrIndex = 0; attrIndex < attribnodes.getLength(); ++attrIndex)
 			saveAttributeDefinition(new AttributeDefinition(this, (Element) attribnodes.item(attrIndex)));
 
-		NodeList opnodes = (NodeList)xpath.evaluate("Operation", doc.getDocumentElement(), XPathConstants.NODESET);
+		NodeList opnodes = (NodeList) xpath.evaluate("Operation", doc.getDocumentElement(), XPathConstants.NODESET);
 		for (int opIndex = 0; opIndex < opnodes.getLength(); ++opIndex)
 			saveOperation(new Operation(this, assetType.getToken(), (Element) opnodes.item(opIndex)));
 
@@ -179,7 +220,7 @@ public class MetaModel implements IMetaModel {
 			Document doc = this.createDocument("");
 
 			XPath xpath = XPathFactory.newInstance().newXPath();
-			NodeList assetnodes = (NodeList)xpath.evaluate("//AssetType", doc.getDocumentElement(), XPathConstants.NODESET);
+			NodeList assetnodes = (NodeList) xpath.evaluate("//AssetType", doc.getDocumentElement(), XPathConstants.NODESET);
 			for (int assetIndex = 0; assetIndex < assetnodes.getLength(); ++assetIndex) {
 				Element element = (Element) assetnodes.item(assetIndex);
 				saveAssetType(new AssetType(this, element, _map));
@@ -199,20 +240,33 @@ public class MetaModel implements IMetaModel {
 		} catch (Exception e) {
 		}
 	}
-	
+
 	private Document createDocument(String token) throws V1Exception {
 		Reader reader = null;
 		Document rc = null;
 		try {
+			if (_connector != null) {
 			reader = _connector.getData(token);
+			}else {
+				 _v1Connector.useMetaAPI();
+	                reader = _v1Connector.getData(token);
+			}
+
 			rc = XMLHandler.buildDocument(reader, token);
 			_versionString = rc.getDocumentElement().getAttribute("version").toString();
 		} catch (ConnectionException e) {
+			e.printStackTrace();
 			throw new MetaException("Error creating Document", token, e);
+			
+		} finally {
+			if (null != reader) {
+				try {
+					reader.close();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
 		}
-		finally {
-			if(null != reader){try {reader.close();} catch (IOException e) {}}
-		}
-		return rc;		
+		return rc;
 	}
 }

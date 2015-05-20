@@ -32,3 +32,4 @@ pom.xml.asc
 ## Subversion files ##
 .svn
 
+.eclipse-pmd

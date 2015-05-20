@@ -2,6 +2,13 @@ package com.versionone.apiclient;
 
 import java.io.IOException;
 
+import com.versionone.apiclient.interfaces.IAPIConfiguration;
+import com.versionone.apiclient.interfaces.ICredentials;
+
+/**
+ * @deprecated This class has been deprecated. Please use V1Connector instead. 
+ */
+@Deprecated
 public final class Credentials implements ICredentials {
 
     private IAPIConfiguration _config;

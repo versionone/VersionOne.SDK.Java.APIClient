@@ -5,12 +5,16 @@ import java.util.Date;
 import java.util.List;
 
 import com.versionone.Oid;
-import com.versionone.apiclient.IAttributeDefinition.AttributeType;
+import com.versionone.apiclient.filters.IFilterTerm;
+import com.versionone.apiclient.interfaces.IAssetType;
+import com.versionone.apiclient.interfaces.IAttributeDefinition;
+import com.versionone.apiclient.interfaces.IAttributeDefinition.AttributeType;
+import com.versionone.apiclient.services.OrderBy;
+import com.versionone.apiclient.services.QueryFind;
+import com.versionone.apiclient.services.QueryVariable;
 
 /**
  * Represents a VersionOne API Query
- *
- * @author Jerry D. Odenwelder Jr.
  */
 public class Query {
     public static final Date MIN_DATE = new Date(0);
@@ -40,7 +44,7 @@ public class Query {
      * Create a query on attribute in an Asset
      *
      * @param assettype      - type of asset to query
-     * @param parentrelation - attribtue to query
+     * @param parentrelation - attribute to query
      */
     public Query(IAssetType assettype, IAttributeDefinition parentrelation) {
         this(assettype, false, parentrelation);
@@ -61,7 +65,7 @@ public class Query {
      *
      * @param assettype      - type of asset to query
      * @param historical     - indicate if you want a history query
-     * @param parentrelation - attribtue to query
+     * @param parentrelation - attribute to query
      */
     public Query(IAssetType assettype, boolean historical, IAttributeDefinition parentrelation) {
         assetType = assettype;
@@ -134,7 +138,7 @@ public class Query {
      *
      * @return IAttributedefinition used in query
      */
-    IAttributeDefinition getParentRelation() {
+    protected IAttributeDefinition getParentRelation() {
         return parentRelation;
     }
 

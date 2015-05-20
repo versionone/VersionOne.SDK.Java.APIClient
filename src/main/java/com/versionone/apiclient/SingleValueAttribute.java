@@ -1,10 +1,11 @@
 package com.versionone.apiclient;
 
+import com.versionone.apiclient.exceptions.APIException;
+import com.versionone.apiclient.exceptions.V1Exception;
+import com.versionone.apiclient.interfaces.IAttributeDefinition;
+
 /**
  * A the value for a scalar attribute
- *
- * @author jerry
- *
  */
 class SingleValueAttribute extends Attribute
 {
@@ -24,6 +25,7 @@ class SingleValueAttribute extends Attribute
 
     /**
 	 * Create from definition and asset
+	 * 
 	 * @param def - attribute definition
 	 * @param asset - asset
 	 */
@@ -47,8 +49,7 @@ class SingleValueAttribute extends Attribute
     }
 
     /**
-	 * Return an array of 1 containing the value before any modification
-     * or null if it's not been set.
+	 * Return an array of 1 containing the value before any modification or null if it's not been set.
 	 */
 	@Override
 	public Object[] getOriginalValues()	{
@@ -56,8 +57,7 @@ class SingleValueAttribute extends Attribute
 	}
 
     /**
-	 * Return an array of 1 containing the modified value
-     * or null if it's not been set.
+	 * Return an array of 1 containing the modified value or null if it's not been set.
 	 */
     @Override
 	public Object[] getNewValues() {

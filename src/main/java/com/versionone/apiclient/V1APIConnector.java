@@ -15,15 +15,19 @@ import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 
-import com.versionone.util.V1Util;
-
 import sun.net.www.protocol.http.AuthCacheImpl;
 import sun.net.www.protocol.http.AuthCacheValue;
 
+import com.versionone.apiclient.exceptions.ConnectionException;
+import com.versionone.apiclient.exceptions.SecurityException;
+import com.versionone.apiclient.interfaces.IAPIConnector;
+import com.versionone.apiclient.interfaces.ICookiesManager;
+import com.versionone.utils.V1Util;
+
 /**
- * This class represents a connection to the VersionOne server.
+ * @deprecated This class has been deprecated. Please use V1Connector instead. 
  */
-@SuppressWarnings("restriction")
+@Deprecated
 public class V1APIConnector implements IAPIConnector {
 
 	private static final String UTF8 = "UTF-8";
@@ -32,47 +36,56 @@ public class V1APIConnector implements IAPIConnector {
 	private String _url = null;
 	private ProxyProvider proxy = null;
 	private final Map<String, HttpURLConnection> _requests = new HashMap<String, HttpURLConnection>();
-
-	/**
-	 * Additional headers for request to the VersionOne server.
-	 */
 	public final Map<String, String> customHttpHeaders = new HashMap<String, String>();
-
-	/**
-	 * Additional User-Agent header for request to the VersionOne server.
-	 */
 	private String _user_agent_header = "";
-
 	private static String _app_name;
-
 	private static String _app_version;
 
 	/**
-	 * Create Connection.
+	 * Create a connection with only the URL to the VersionOne server.
 	 * 
-	 * @param url
-	 *            - URL to VersionOne system.
-	 * @param userName
-	 *            - Name of the user wishing to connect.
-	 * @param password
-	 *            - Password of the user wishing to connect.
+	 * Use this constructor to access the VersionOne Meta API, which does not require the use of credentials.
+	 *
+	 * @param url URL of the VersionOne server
+	 */
+	public V1APIConnector(String url) {
+		this(url, null, null, null);
+	}
+	
+	/**
+	 * Create a connection with only the URL to the VersionOne server through a proxy.
+	 * 
+	 * Use this constructor to access the VersionOne Meta API, which does not require the use of credentials.
+	 *
+	 * @param url URL to the VersionOne server
+	 * @param proxy Proxy for the connection
+	 */
+	public V1APIConnector(String url, ProxyProvider proxy) {
+		this(url, null, null, proxy);
+	}
+	
+	/**
+	 * Create a connection using a username and password. 
+	 * 
+	 * When using for Windows Integrated Authentication, pass null for the username and password. The SDK will use the currently logged in user's credentials.
+	 * 
+	 * @param url URL of the VersionOne server
+	 * @param userName VersionOne username
+	 * @param password VersionOne password
 	 */
 	public V1APIConnector(String url, String userName, String password) {
 		this(url, userName, password, null);
 	}
 
 	/**
-	 * Create Connection.
+	 * Create a connection using username and password through a proxy.
 	 * 
-	 * @param url
-	 *            - URL to VersionOne system.
-	 * @param userName
-	 *            - Name of the user wishing to connect.
-	 * @param password
-	 *            - Password of the user wishing to connect.
-	 * @param proxy
-	 *            - Proxy for connection. it is not used ??
+	 * When using for Windows Integrated Authentication, pass null for the password. The SDK will use the currently logged in user's credentials.
 	 * 
+	 * @param url URL of the VersionOne server
+	 * @param userName VersionOne username
+	 * @param password VersionOne password
+	 * @param proxy Proxy for the connection
 	 */
 	public V1APIConnector(String url, String userName, String password, ProxyProvider proxy) {
 
@@ -85,16 +98,19 @@ public class V1APIConnector implements IAPIConnector {
 			AuthCacheValue.setAuthCache(new AuthCacheImpl());
 			Authenticator.setDefault(new Credentials(userName, password));
 		}
+		
+		//Set a default user-agent header
 		setUserAgentHeader(null, null);
 	}
-
+	
 	/**
-	 * Set the value to use for the custom user-agent header.
-	 * @param name - String
-	 * @param version - String
+	 * Set a value for custom the user-agent header.
 	 * 
+	 * @param name String
+	 * @param version String
 	 */
 	public void setUserAgentHeader(String name, String version) {
+		
 		_app_name = name;
 		_app_version = version;
 		String header = "";
@@ -109,47 +125,21 @@ public class V1APIConnector implements IAPIConnector {
 	}
 
 	/**
-	 * Get the value to use for the custom user-agent header.
+	 * Get the value for the user-agent header.
 	 * 
 	 * @return String
 	 */
 	public String getUserAgentHeader() {
-
 		return _user_agent_header;
 	}
 
 	/**
 	 * Returns a cookies jar.
+	 * 
 	 * @return ICookiesManager
 	 */
 	public ICookiesManager getCookiesJar() {
 		return cookiesManager;
-	}
-
-	/**
-	 * Create a connection with only the URL.
-	 * 
-	 * Use this constructor to access MetaData, which does not require or if you want to use have Windows Integrated
-	 * Authentication or MetaData does not require the use of credentials
-	 *
-	 * @param url
-	 *            - Complete URL to VersionOne system
-	 */
-	public V1APIConnector(String url) {
-		this(url, null, null);
-	}
-
-	/**
-	 * Create a connection with only the URL and proxy. Use this constructor to access MetaData, which does not require
-	 * or if you want to use have Windows Integrated Authentication or MetaData does not require the use of credentials.
-	 *
-	 * @param url
-	 *            - Complete URL to VersionOne system
-	 * @param proxy
-	 *            - Proxy for connection.
-	 */
-	public V1APIConnector(String url, ProxyProvider proxy) {
-		this(url, null, null, proxy);
 	}
 
 	/**
@@ -205,10 +195,10 @@ public class V1APIConnector implements IAPIConnector {
 	 *
 	 * Note: Caller is responsible for closing the returned stream.
 	 *
-	 * @param path - String
-	 * @param data - String
+	 * @param path String
+	 * @param data String
 	 * @return the response in a stream
-	 * @throws ConnectionException - ConnectionException
+	 * @throws ConnectionException  - ConnectionException
 	 */
 	public Reader sendData(String path, String data) throws ConnectionException {
 
@@ -252,10 +242,8 @@ public class V1APIConnector implements IAPIConnector {
 	 * It's obligatory to complete request and get response by {@link #endRequest(String)} method with the same path
 	 * parameter.
 	 *
-	 * @param path
-	 *            path to the data on server.
-	 * @param contentType
-	 *            Content-type of output content. If null - GET request used.
+	 * @param path Path to the data on server.
+	 * @param contentType Content-type of output content. If null - GET request used.
 	 * @return the stream for writing POST data.
 	 * @see #endRequest(String)
 	 */
@@ -281,7 +269,7 @@ public class V1APIConnector implements IAPIConnector {
 	}
 
 	/**
-	 * Completing HTTP request and getting response.
+	 * Complete the HTTP request and get a response.
 	 *
 	 * @param path Path to the data on server.
 	 * @return The response stream for reading data.
@@ -310,23 +298,35 @@ public class V1APIConnector implements IAPIConnector {
 		return resultStream;
 	}
 
+	/**
+	 * Creates the HTTP request to the VersionOne server.
+	 * 
+	 * @param path
+	 * @return HttpURLConnection
+	 * @throws ConnectionException
+	 */
 	private HttpURLConnection createConnection(String path) throws ConnectionException {
 
 		HttpURLConnection request;
+		
 		try {
 			URL url = new URL(path);
+			
 			if (proxy == null) {
 				request = (HttpURLConnection) url.openConnection();
 			} else {
 				request = (HttpURLConnection) url.openConnection(proxy.getProxyObject());
 				proxy.addAuthorizationToHeader(request);
 			}
+			
 			String localeName = Locale.getDefault().toString();
 			localeName = localeName.replace("_", "-");
 			request.setRequestProperty("Accept-Language", localeName);
 			request.setRequestProperty("User-Agent", _user_agent_header);
+			
 			cookiesManager.addCookiesToRequest(request);
 			addHeaders(request);
+			
 		} catch (MalformedURLException e) {
 			throw new ConnectionException("Invalid URL", e);
 		} catch (IOException e) {
