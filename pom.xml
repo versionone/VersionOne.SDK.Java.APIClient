@@ -5,6 +5,7 @@
 	<groupId>com.versionone</groupId>
 	<artifactId>VersionOne.SDK.Java.APIClient</artifactId>
 	<version>15.0.0-SNAPSHOT</version>
+	<version>15.0.0</version>
 	<packaging>jar</packaging>
 
 	<name>VersionOne.SDK.Java.APIClient</name>
