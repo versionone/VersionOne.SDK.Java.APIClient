@@ -1,3 +1,7 @@
 com.versionone
 com.versionone.apiclient
-com.versionone.util
+com.versionone.apiclient.exceptions
+com.versionone.apiclient.filters
+com.versionone.apiclient.interfaces
+com.versionone.apiclient.services
+com.versionone.utils
