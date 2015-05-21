@@ -4,7 +4,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.versionone</groupId>
 	<artifactId>VersionOne.SDK.Java.APIClient</artifactId>
-	<version>15.0.0</version>
+	<version>15.0.0-SNAPSHOT</version>
 	<packaging>jar</packaging>
 
 	<name>VersionOne.SDK.Java.APIClient</name>
@@ -90,7 +90,7 @@
 					</archive>
 				</configuration>
 			</plugin>
-			<!-- generate javadoc -->
+			<!-- generate javadoc 
 			<plugin>
 			    <artifactId>maven-javadoc-plugin</artifactId>
 			    <executions>
@@ -103,6 +103,7 @@
 			      </execution>
 			    </executions>
 			</plugin>
+			-->
 			<!-- create zip file using assembly.xml -->			
 			<plugin>
 				<artifactId>maven-assembly-plugin</artifactId>
