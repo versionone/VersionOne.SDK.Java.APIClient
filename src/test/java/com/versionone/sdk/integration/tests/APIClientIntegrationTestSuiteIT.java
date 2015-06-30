@@ -22,14 +22,14 @@ import com.versionone.apiclient.interfaces.IServices;
 
 //NOTE: Add classes here to include in integration test run using Maven "verify" goal.
 @Suite.SuiteClasses({ 
-	AttachmentsAndImages.class,	
+	//AttachmentsAndImages.class,	
 	Configuration.class,
 	Connector.class,
-	CreateAssets.class,
-	Localization.class,
-	Operations.class,
-	QueryAPI.class,	
-	QueryAssets.class,
+	//CreateAssets.class,
+	//Localization.class,
+	//Operations.class,
+	//QueryAPI.class,	
+	//QueryAssets.class,
 	UpdateAssets.class
 	})
 
@@ -42,6 +42,7 @@ public class APIClientIntegrationTestSuiteIT {
 	private static String _accessToken;
 	private static IServices _services;
 	private static Oid _projectId; 
+	private static String _instanceUrlNTLM;
 	
 	@BeforeClass
 	public static void beforeRun() throws Exception {
@@ -57,6 +58,7 @@ public class APIClientIntegrationTestSuiteIT {
 			_username = properties.getProperty("V1_USERNAME");
 			_password = properties.getProperty("V1_PASSWORD");
 			_accessToken = properties.getProperty("V1_ACCESS_TOKEN");
+			_instanceUrlNTLM =  properties.getProperty("V1_INSTANCE_URL_NTLM");
 			System.out.println("INSTANCE URL: " + _instanceUrl);
 			System.out.println("USERNAME: " + _username);
 			System.out.println("PASSWORD: " + _password);
@@ -72,6 +74,11 @@ public class APIClientIntegrationTestSuiteIT {
 			throw new RuntimeException(message);
 		}
 		
+		if (null == _instanceUrlNTLM) {
+			String message = "No instance URL for NTLM found. Ending integration test run.";
+			System.out.println(message);
+			throw new RuntimeException(message);
+		}
 		//Check that we have an access token.
 		if (null == _accessToken) {
 			String message = "No access token found. Ending integration test run.";
@@ -130,4 +137,7 @@ public class APIClientIntegrationTestSuiteIT {
 		return _projectId;
 	}
 	
+	public static String get_instanceUrlNTLM() {
+		return _instanceUrlNTLM;
+	}
 }

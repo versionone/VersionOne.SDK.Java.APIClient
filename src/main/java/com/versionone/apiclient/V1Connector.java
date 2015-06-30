@@ -35,6 +35,7 @@ import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.impl.client.WinHttpClients;
 import org.apache.http.message.BasicHeader;
 
+import com.versionone.apiclient.V1Connector.IsetProxyOrConnector;
 import com.versionone.apiclient.exceptions.ConnectionException;
 import com.versionone.apiclient.exceptions.V1Exception;
 import com.versionone.utils.V1Util;
@@ -58,6 +59,7 @@ public class V1Connector {
 	String _endpoint = "";
 	String _user_agent_header = "";
 	String _upstreamUserAgent = "";
+	boolean use_oauth_endpoint = false;
 
 	// VERSIONONE ENDPOINTS
 	private final static String META_API_ENDPOINT = "meta.v1/";
@@ -72,6 +74,8 @@ public class V1Connector {
 	private final static String OAUTH_HISTORY_API_ENDPOINT = "rest-1.oauth.v1/Hist/";
 	private final static String OAUTH_NEW_API_ENDPOINT = "rest-1.oauth.v1/New/";
 	private final static String ACTIVITY_STREAM_API_ENDPOINT = "api/ActivityStream/";
+	
+
 
 	// INTERFACES
 	public interface IsetEndpoint {
@@ -82,6 +86,13 @@ public class V1Connector {
 		 * @return IsetProxyOrConnector IsetProxyOrConnector
 		 */
 		IsetProxyOrConnector useEndpoint(String endpoint);
+		
+		/**
+		 * Optional method for specifying an Oauth endpoint to connect to.
+		 * 
+		 * @return IsetProxyOrConnector IsetProxyOrConnector
+		 */
+		IsetProxyOrConnector useOAuthEndpoints();
 	}
 
 	public interface IsetProxyOrConnector extends IBuild {
@@ -92,6 +103,8 @@ public class V1Connector {
 		 * @return IBuild IBuild
 		 */
 		IBuild withProxy(ProxyProvider proxyProvider);
+
+		
 	}
 
 	public interface IsetEndPointOrConnector extends IBuild {
@@ -217,6 +230,7 @@ public class V1Connector {
 	private static class Builder implements ISetUserAgentMakeRequest, IAuthenticationMethods, IsetProxyOrEndPointOrConnector, IsetProxyOrConnector, IsetEndPointOrConnector {
 
 		private V1Connector v1Connector_instance;
+		private boolean use_oauth_endpoint;
 
 		// builder constructor
 		public Builder(String url) throws V1Exception, MalformedURLException {
@@ -319,6 +333,12 @@ public class V1Connector {
 			}
 
 			v1Connector_instance._endpoint = endpoint;
+			return this;
+		}
+		
+		@Override
+		public IsetProxyOrConnector useOAuthEndpoints() {
+			v1Connector_instance.use_oauth_endpoint = true;
 			return this;
 		}
 
@@ -550,15 +570,15 @@ public class V1Connector {
 	}
 
 	public void useDataAPI() {
-		_endpoint = DATA_API_ENDPOINT;
+		_endpoint = use_oauth_endpoint ? OAUTH_DATA_API_ENDPOINT :DATA_API_ENDPOINT;
 	}
 
 	public void useNewAPI() {
-		_endpoint = NEW_API_ENDPOINT;
+		_endpoint = use_oauth_endpoint ? OAUTH_NEW_API_ENDPOINT : NEW_API_ENDPOINT;
 	}
 
 	public void useHistoryAPI() {
-		_endpoint = HISTORY_API_ENDPOINT;
+		_endpoint = use_oauth_endpoint ? OAUTH_HISTORY_API_ENDPOINT : HISTORY_API_ENDPOINT;
 	}
 
 	public void useQueryAPI() {
