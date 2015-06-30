@@ -35,7 +35,6 @@ import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.impl.client.WinHttpClients;
 import org.apache.http.message.BasicHeader;
 
-import com.versionone.apiclient.V1Connector.IsetProxyOrConnector;
 import com.versionone.apiclient.exceptions.ConnectionException;
 import com.versionone.apiclient.exceptions.V1Exception;
 import com.versionone.utils.V1Util;
@@ -73,7 +72,7 @@ public class V1Connector {
 	private final static String OAUTH_DATA_API_ENDPOINT = "rest-1.oauth.v1/Data/";
 	private final static String OAUTH_HISTORY_API_ENDPOINT = "rest-1.oauth.v1/Hist/";
 	private final static String OAUTH_NEW_API_ENDPOINT = "rest-1.oauth.v1/New/";
-	private final static String ACTIVITY_STREAM_API_ENDPOINT = "api/ActivityStream/";
+	//private final static String ACTIVITY_STREAM_API_ENDPOINT = "api/ActivityStream/";
 	
 
 
@@ -230,7 +229,6 @@ public class V1Connector {
 	private static class Builder implements ISetUserAgentMakeRequest, IAuthenticationMethods, IsetProxyOrEndPointOrConnector, IsetProxyOrConnector, IsetEndPointOrConnector {
 
 		private V1Connector v1Connector_instance;
-		private boolean use_oauth_endpoint;
 
 		// builder constructor
 		public Builder(String url) throws V1Exception, MalformedURLException {
