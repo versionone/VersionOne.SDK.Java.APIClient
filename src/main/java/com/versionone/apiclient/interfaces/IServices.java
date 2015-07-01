@@ -1,9 +1,10 @@
 package com.versionone.apiclient.interfaces;
 
+import java.io.IOException;
+import java.io.Reader;
 import java.util.ArrayList;
 import java.util.Map;
-
-import org.json.JSONException;
+import java.util.stream.Stream;
 
 import com.versionone.Oid;
 import com.versionone.apiclient.Asset;
@@ -172,5 +173,16 @@ public interface IServices {
       * @throws ConnectionException ConnectionException
       */
      Map<String, String> getLocalization(ArrayList<IAttributeDefinition> attributes)  throws ConnectionException;
+
+	Oid saveAttachment(String filePath, Asset asset, String attachmentName) throws V1Exception, IOException;
+	
+	Reader getAttachment(Oid attachmentOid) throws V1Exception;
+
+	Oid saveEmbeddedImage(String filePath, Asset asset) throws V1Exception, IOException;
+
+	Reader getEmbeddedImage(Oid embeddedImageOid) throws V1Exception;
+
+     
+
 
 }

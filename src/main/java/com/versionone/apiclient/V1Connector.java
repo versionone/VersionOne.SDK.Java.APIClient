@@ -74,6 +74,12 @@ public class V1Connector {
 	private final static String OAUTH_NEW_API_ENDPOINT = "rest-1.oauth.v1/New/";
 	//private final static String ACTIVITY_STREAM_API_ENDPOINT = "api/ActivityStream/";
 	
+    private final static String ATTACHMENT_API_ENDPOINT = "attachment.img/";
+    private final static String ATTACHMENT_API_OAUTH_ENDPOINT = "attachment.oauth.img/";
+    private final static String EMBEDDED_API_ENDPOINT = "embedded.img/";
+    private final static String EMBEDDED_API_OAUTH_ENDPOINT = "embedded.oauth.img/";
+
+	
 
 
 	// INTERFACES
@@ -594,5 +600,15 @@ public class V1Connector {
 	public void useConfigAPI() {
 		_endpoint = CONFIG_API_ENDPOINT;
 	}
+	
+	public void useAttachmentApi()
+    {
+        _endpoint = use_oauth_endpoint ? ATTACHMENT_API_OAUTH_ENDPOINT : ATTACHMENT_API_ENDPOINT;
+    }
+
+	public void useEmbeddedApi()
+    {
+        _endpoint = use_oauth_endpoint ? EMBEDDED_API_OAUTH_ENDPOINT : EMBEDDED_API_ENDPOINT;
+    }
 
 }
