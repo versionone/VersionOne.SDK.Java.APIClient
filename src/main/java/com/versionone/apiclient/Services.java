@@ -604,9 +604,9 @@ public class Services implements IServices {
 	@Override
 	 public Oid saveAttachment(String filePath, Asset asset, String attachmentName) throws V1Exception, IOException{
       
-		if (StringUtils.isNotEmpty(filePath))
+		if (StringUtils.isEmpty(filePath))
              throw new NullArgumentException("filePath");
-         File f = new File(filePath);
+         File f = new File(Thread.currentThread().getContextClassLoader().getResource(filePath).toString());
        
          if(!f.exists() || f.isDirectory()){ 
              throw new APIException("File " + filePath + " does not exist or is a Diretory.");
@@ -667,13 +667,13 @@ public class Services implements IServices {
      
 	@Override
      public Oid saveEmbeddedImage(String filePath, Asset asset) throws V1Exception, IOException {
-    	 if (StringUtils.isNotEmpty(filePath))
-             throw new NullArgumentException("filePath");
-         File f = new File(filePath);
+    	 if (StringUtils.isEmpty(filePath))
+             throw new NullArgumentException("Null value "+ filePath);
+         File f = new File(Thread.currentThread().getContextClassLoader().getResource(filePath).toString());
        
-         if(!f.exists() || f.isDirectory()){ 
-             throw new APIException("File " + filePath + " does not exist or is a Diretory.");
-         }
+//         if(!f.exists() || f.isDirectory()){ 
+//             throw new APIException("File " + filePath + " does not exist or is a Diretory.");
+//         }
 
          String mimeType = MimeType.resolve(filePath);
          IAssetType embeddedImageType = _meta.getAssetType("EmbeddedImage");

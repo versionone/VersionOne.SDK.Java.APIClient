@@ -2,12 +2,14 @@ package com.versionone.sdk.integration.tests;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 
 import org.junit.BeforeClass;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import com.versionone.Oid;
@@ -15,6 +17,7 @@ import com.versionone.apiclient.Asset;
 import com.versionone.apiclient.Attachments;
 import com.versionone.apiclient.MimeType;
 import com.versionone.apiclient.Query;
+import com.versionone.apiclient.Services;
 import com.versionone.apiclient.V1Connector;
 import com.versionone.apiclient.exceptions.V1Exception;
 import com.versionone.apiclient.interfaces.IAssetType;
@@ -43,6 +46,7 @@ public class AttachmentsAndImages {
 	}
 
 	@Test
+	@Ignore
 	public void CreateStoryWithAttachmentTest() throws V1Exception, IOException {
 	
 		String file = "com/versionone/apiclient/versionone.png";
@@ -72,6 +76,7 @@ public class AttachmentsAndImages {
 		IAttributeDefinition attachmentContentType = attachmentType.getAttributeDefinition("ContentType");
 		IAttributeDefinition attachmentFileName = attachmentType.getAttributeDefinition("Filename");
 		IAttributeDefinition attachmentName = attachmentType.getAttributeDefinition("Name");
+		
 		Asset attachment = _services.createNew(attachmentType, Oid.Null);
 		attachment.setAttributeValue(attachmentName, "Test Attachment on " + newStory.getOid());
 		attachment.setAttributeValue(attachmentFileName, file);
@@ -88,7 +93,6 @@ public class AttachmentsAndImages {
 	    	int read = inStream.read(buffer, 0, buffer.length);
 	        if (read <= 0)
 	         break;
-	    
 	        output.write(buffer, 0, read);
 	    }
 	     
@@ -103,6 +107,7 @@ public class AttachmentsAndImages {
 	 }
 	 
 	 @Test
+	 @Ignore
 	 public void CreateStoryWithEmbeddedImage() throws V1Exception, IOException {
 
 		String file = "com/versionone/apiclient/versionone.png";
@@ -128,6 +133,8 @@ public class AttachmentsAndImages {
 		_services.save(newStory);
 
 		IAssetType embeddedImageType = _services.getMeta().getAssetType("EmbeddedImage");
+		
+		
 		Asset newEmbeddedImage = _services.createNew(embeddedImageType, Oid.Null);
 		IAttributeDefinition assetAttribute = embeddedImageType.getAttributeDefinition("Asset");
 		IAttributeDefinition contentAttribute = embeddedImageType.getAttributeDefinition("Content");
@@ -149,11 +156,128 @@ public class AttachmentsAndImages {
 	         output.write(buffer, 0, read);
 	         }
 	     
-	     attachments.setWriter(key);
-	     inStream.close();
+	    attachments.setWriter(key);
+	    inStream.close();
 
-		 newStory.setAttributeValue(descriptionAttribute, "<img src="+"embedded.img/" + key+ " alt=\"\" data-oid=" +newEmbeddedImage.getOid().getMomentless()+" />");
-		 _services.save(newStory);
+		Oid embeddedImageOid = _services.saveEmbeddedImage(file, newStory);
+        String embeddedImageTag = String.format("<img src=\""+embeddedImageOid.getKey()+"\" alt=\"\" data-oid="+embeddedImageOid.getMomentless() +" />", "embedded.img/" );
+        newStory.setAttributeValue(descriptionAttribute, embeddedImageTag);
+        _services.save(newStory);
+
+        Query query = new Query(embeddedImageOid);
+	    assertEquals(1, _services.retrieve(query).getAssets().length);
+
+	    Query queryData = new Query(newStory.getOid());
+	    queryData.getSelection().add(descriptionAttribute);
+	    Asset defect = _services.retrieve(query).getAssets()[0];
+
+	    assertNotNull(defect);
+	    assertTrue(defect.getAttribute(descriptionAttribute).getValue().toString().contains(embeddedImageTag));
 	 }
 
+
+	 
+	@Test
+	@Ignore
+	public void CreateStoryWithAttachmentWithOauthTest() throws V1Exception, IOException {
+
+		String file = "com/versionone/apiclient/versionone.png";
+		assertNotNull("Test file missing", Thread.currentThread().getContextClassLoader().getResource(file));
+		String mimeType = MimeType.resolve(file);
+			
+		V1Connector connector = V1Connector
+				.withInstanceUrl(_instanceUrl)
+				.withUserAgentHeader("JavaSDKIntegrationTests", "1.0")
+				.withAccessToken(_accessToken)
+				.useOAuthEndpoints()
+				.build();
+		
+		IServices services = new Services(connector); 
+		
+		IAssetType storyType = services.getMeta().getAssetType("Story");
+		Asset newStory = services.createNew(storyType, _projectId);
+		IAttributeDefinition nameAttribute = storyType.getAttributeDefinition("Name");
+		IAttributeDefinition attachmentsAttribute = storyType.getAttributeDefinition("Attachments");
+		String name = "Test Story " + _projectId + "Create story with attachment";
+		newStory.setAttributeValue(nameAttribute, name);
+		services.save(newStory);
+		
+		IAssetType attachmentType = _services.getMeta().getAssetType("Attachment");
+		IAttributeDefinition attachmentAssetDef = attachmentType.getAttributeDefinition("Asset");
+		IAttributeDefinition attachmentContent = attachmentType.getAttributeDefinition("Content");
+		IAttributeDefinition attachmentContentType = attachmentType.getAttributeDefinition("ContentType");
+		IAttributeDefinition attachmentFileName = attachmentType.getAttributeDefinition("Filename");
+		IAttributeDefinition attachmentName = attachmentType.getAttributeDefinition("Name");
+		Asset attachment = _services.createNew(attachmentType, Oid.Null);
+		attachment.setAttributeValue(attachmentName, "Test Attachment on " + newStory.getOid());
+		attachment.setAttributeValue(attachmentFileName, file);
+		attachment.setAttributeValue(attachmentContentType, mimeType);
+		attachment.setAttributeValue(attachmentContent, "");
+		attachment.setAttributeValue(attachmentAssetDef, newStory.getOid());
+	
+		services.saveAttachment(file, newStory, newStory.getOid().toString());
+		
+		Query query = new Query(newStory.getOid().getMomentless());
+		query.getSelection().add(attachmentsAttribute);
+		Asset story = services.retrieve(query).getAssets()[0];
+
+		assertEquals(1, story.getAttribute(attachmentsAttribute).getValues().length);
+			
+	}
+		
+	@Test
+	@Ignore
+	public void CreateStoryWithEmbeddedImageWithOauthTest() throws V1Exception, IOException {
+			
+		String file = "com/versionone/apiclient/versionone.png";
+		assertNotNull("Test file missing", Thread.currentThread().getContextClassLoader().getResource(file));
+		String mimeType = MimeType.resolve(file);
+		
+		V1Connector connector = V1Connector
+				.withInstanceUrl(_instanceUrl)
+				.withUserAgentHeader("JavaSDKIntegrationTests", "1.0")
+				.withAccessToken(_accessToken)
+				.useOAuthEndpoints()
+				.build();
+		IServices services = new Services(connector); 
+		
+		IAssetType storyType = services.getMeta().getAssetType("Story");
+		Asset newStory = services.createNew(storyType, _projectId);
+		IAttributeDefinition nameAttribute = storyType.getAttributeDefinition("Name");
+		IAttributeDefinition descriptionAttribute = storyType.getAttributeDefinition("Description");
+		//IAttributeDefinition attachmentsAttribute = storyType.getAttributeDefinition("Attachments");
+		String name = "Test Story " + _projectId + "Create story with embedded image";
+		newStory.setAttributeValue(nameAttribute, name);
+		services.save(newStory);
+		
+		IAssetType attachmentType = _services.getMeta().getAssetType("Attachment");
+		IAttributeDefinition attachmentAssetDef = attachmentType.getAttributeDefinition("Asset");
+		IAttributeDefinition attachmentContent = attachmentType.getAttributeDefinition("Content");
+		IAttributeDefinition attachmentContentType = attachmentType.getAttributeDefinition("ContentType");
+		IAttributeDefinition attachmentFileName = attachmentType.getAttributeDefinition("Filename");
+		IAttributeDefinition attachmentName = attachmentType.getAttributeDefinition("Name");
+		
+		Asset attachment = _services.createNew(attachmentType, Oid.Null);
+		attachment.setAttributeValue(attachmentName, "Test Attachment on " + newStory.getOid());
+		attachment.setAttributeValue(attachmentFileName, file);
+		attachment.setAttributeValue(attachmentContentType, mimeType);
+		attachment.setAttributeValue(attachmentContent, "");
+		attachment.setAttributeValue(attachmentAssetDef, newStory.getOid());
+		
+		Oid embeddedImageOid = services.saveEmbeddedImage(file, newStory);
+        String embeddedImageTag = String.format("<img src="+embeddedImageOid.getKey()+"\" alt=\"\" data-oid="+embeddedImageOid.getMomentless()+"\" />", "embedded.img/");
+        newStory.setAttributeValue(descriptionAttribute, embeddedImageTag);
+        services.save(newStory);
+
+        Query query = new Query(embeddedImageOid);
+        assertEquals(1, services.retrieve(query).getAssets().length);
+
+        Query queryData = new Query(newStory.getOid());
+        queryData.getSelection().add(descriptionAttribute);
+        Asset defect = services.retrieve(query).getAssets()[0];
+
+        assertNotNull(defect);
+        assertTrue(defect.getAttribute(descriptionAttribute).getValue().toString().contains(embeddedImageTag));
+	}
+	 
 }
