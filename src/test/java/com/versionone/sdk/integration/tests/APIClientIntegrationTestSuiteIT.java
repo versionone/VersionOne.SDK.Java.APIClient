@@ -41,7 +41,9 @@ public class APIClientIntegrationTestSuiteIT {
 	private static String _password;
 	private static String _accessToken;
 	private static IServices _services;
-	private static Oid _projectId; 
+	private static Oid _projectId;
+	private static String _use_oauth;
+	
 	
 	@BeforeClass
 	public static void beforeRun() throws Exception {
@@ -57,6 +59,8 @@ public class APIClientIntegrationTestSuiteIT {
 			_username = properties.getProperty("V1_USERNAME");
 			_password = properties.getProperty("V1_PASSWORD");
 			_accessToken = properties.getProperty("V1_ACCESS_TOKEN");
+			_use_oauth = properties.getProperty("USE_OAUTH");
+			
 			System.out.println("INSTANCE URL: " + _instanceUrl);
 			System.out.println("USERNAME: " + _username);
 			System.out.println("PASSWORD: " + _password);
@@ -80,11 +84,19 @@ public class APIClientIntegrationTestSuiteIT {
 		}
 		
 		//Create the V1Connector.
-		_connector = V1Connector
-				.withInstanceUrl(_instanceUrl)
-				.withUserAgentHeader("JavaSDKIntegrationTests", "1.0")
-				.withAccessToken(_accessToken)
-				.build();
+		if (_use_oauth.equals("true")){
+					_connector = V1Connector.withInstanceUrl(_instanceUrl)
+							.withUserAgentHeader("JavaSDKIntegrationTests", "1.0")
+							.withAccessToken(_accessToken)
+							.useOAuthEndpoints()
+							.build();
+		}else{
+				_connector = V1Connector
+						.withInstanceUrl(_instanceUrl)
+						.withUserAgentHeader("JavaSDKIntegrationTests", "1.0")
+						.withAccessToken(_accessToken)
+						.build();
+		}
 
 		//Create a new project for integration test assets.
 		_services = new Services(_connector);
@@ -128,5 +140,9 @@ public class APIClientIntegrationTestSuiteIT {
 
 	public static Oid get_projectId() {
 		return _projectId;
+	}
+
+	public static String get_oauth() {
+		return  _use_oauth;
 	}
 }

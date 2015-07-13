@@ -27,6 +27,7 @@ public class Connector {
 	private static String _accessToken;
 	private static String _instanceUrlNTLM;
 	private static Oid _projectId;
+	private static String _use_oauth;
 
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception {
@@ -36,58 +37,36 @@ public class Connector {
 		_password = APIClientIntegrationTestSuiteIT.get_password();
 		_accessToken = APIClientIntegrationTestSuiteIT.get_accessToken();
 		_projectId = APIClientIntegrationTestSuiteIT.get_projectId();
+		_use_oauth = APIClientIntegrationTestSuiteIT.get_oauth();
 	}
 	
 	@Test()
 	public void ConnectorWithUsernameAndPassword() throws MalformedURLException, V1Exception {
 
-		V1Connector connector = V1Connector.withInstanceUrl(_instanceUrl)
-				.withUserAgentHeader("JavaSDKIntegrationTests", "1.0")
-				.withUsernameAndPassword(_username, _password)
-				.build();
-		
-		IServices services = new Services(connector);
-		Oid oid = services.getLoggedIn();
-		assertNotNull(oid);
+		if (!_use_oauth.equals("true")){
+			V1Connector connector = V1Connector.withInstanceUrl(_instanceUrl)
+					.withUserAgentHeader("JavaSDKIntegrationTests", "1.0")
+					.withUsernameAndPassword(_username, _password)
+					.build();
+			
+			IServices services = new Services(connector);
+			Oid oid = services.getLoggedIn();
+			assertNotNull(oid);
+		}
 	}
 
 	@Test
 	public void ConnectorWithAccessToken() throws Exception {
 		
-		V1Connector connector = V1Connector.withInstanceUrl(_instanceUrl)
-				.withUserAgentHeader("JavaSDKIntegrationTests", "1.0")
-				.withAccessToken(_accessToken)
-				.build();
-		
-		IServices services = new Services(connector);
-		Oid oid = services.getLoggedIn();
-		assertNotNull(oid);
+		if (!_use_oauth.equals("true")){
+			V1Connector connector = V1Connector.withInstanceUrl(_instanceUrl)
+					.withUserAgentHeader("JavaSDKIntegrationTests", "1.0")
+					.withAccessToken(_accessToken)
+					.build();
+			
+			IServices services = new Services(connector);
+			Oid oid = services.getLoggedIn();
+			assertNotNull(oid);
+		}
 	}
-	
-	@Test
-	public void ConnectorWithOauthEndpoints() throws Exception {
-		
-//		V1Connector connector = V1Connector.withInstanceUrl(_instanceUrlNTLM)
-//				.withUserAgentHeader("JavaSDKIntegrationTests", "1.0")
-//				.withAccessToken(_accessToken)
-//				.useOAuthEndpoints()
-//				.build();
-//		
-//		IServices _services = new Services(connector);
-//		IAssetType storyType = _services.getMeta().getAssetType("Story");
-//		Asset newStory = _services.createNew(storyType, _projectId);
-//		IAttributeDefinition nameAttribute = storyType.getAttributeDefinition("Name");
-//		String name = "Test Story " + _projectId + " Query single asset";
-//		newStory.setAttributeValue(nameAttribute, name);
-//		_services.save(newStory);
-//
-//		Query query = new Query(newStory.getOid());
-//		query.getSelection().add(nameAttribute);
-//		Asset story = _services.retrieve(query).getAssets()[0];
-//
-//		assertNotNull(story);
-//		assertTrue(story.getAttribute(nameAttribute).getValue().toString().equals(name));
-
-	}
-
 }

@@ -2,7 +2,6 @@ package com.versionone.apiclient;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.Reader;
@@ -14,7 +13,6 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Stream;
 
 import javax.xml.xpath.XPath;
 import javax.xml.xpath.XPathConstants;
@@ -608,10 +606,6 @@ public class Services implements IServices {
              throw new NullArgumentException("filePath");
          File f = new File(Thread.currentThread().getContextClassLoader().getResource(filePath).toString());
        
-         if(!f.exists() || f.isDirectory()){ 
-             throw new APIException("File " + filePath + " does not exist or is a Diretory.");
-         }
-
          String mimeType = MimeType.resolve(filePath);
         
          IAssetType attachmentType = _meta.getAssetType("Attachment");
@@ -671,10 +665,6 @@ public class Services implements IServices {
              throw new NullArgumentException("Null value "+ filePath);
          File f = new File(Thread.currentThread().getContextClassLoader().getResource(filePath).toString());
        
-//         if(!f.exists() || f.isDirectory()){ 
-//             throw new APIException("File " + filePath + " does not exist or is a Diretory.");
-//         }
-
          String mimeType = MimeType.resolve(filePath);
          IAssetType embeddedImageType = _meta.getAssetType("EmbeddedImage");
          Asset newEmbeddedImage = createNew(embeddedImageType, Oid.Null);
