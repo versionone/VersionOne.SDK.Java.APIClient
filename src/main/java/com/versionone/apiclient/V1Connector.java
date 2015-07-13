@@ -41,9 +41,7 @@ import com.versionone.utils.V1Util;
 
 public class V1Connector {
 
-	// private static final String UTF8 = "UTF-8";
 	private static final String contentType = "text/xml";
-	// private static Logger log = Logger.getLogger(V1Connector.class);
 	private static CredentialsProvider credsProvider = new BasicCredentialsProvider();
 	private static CloseableHttpResponse httpResponse = null;
 	private static HttpClientBuilder httpclientBuilder = HttpClientBuilder.create();
@@ -60,6 +58,7 @@ public class V1Connector {
 	String _endpoint = "";
 	String _user_agent_header = "";
 	String _upstreamUserAgent = "";
+	boolean use_oauth_endpoint = false;
 
 	// VERSIONONE ENDPOINTS
 	private final static String META_API_ENDPOINT = "meta.v1/";
@@ -70,6 +69,18 @@ public class V1Connector {
 	private final static String LOC_API_ENDPOINT = "loc.v1/";
 	private final static String LOC2_API_ENDPOINT = "loc-2.v1/";
 	private final static String CONFIG_API_ENDPOINT = "config.v1/";
+	private final static String OAUTH_DATA_API_ENDPOINT = "rest-1.oauth.v1/Data/";
+	private final static String OAUTH_HISTORY_API_ENDPOINT = "rest-1.oauth.v1/Hist/";
+	private final static String OAUTH_NEW_API_ENDPOINT = "rest-1.oauth.v1/New/";
+	//private final static String ACTIVITY_STREAM_API_ENDPOINT = "api/ActivityStream/";
+	
+    private final static String ATTACHMENT_API_ENDPOINT = "attachment.img/";
+    private final static String ATTACHMENT_API_OAUTH_ENDPOINT = "attachment.oauth.img/";
+    private final static String EMBEDDED_API_ENDPOINT = "embedded.img/";
+    private final static String EMBEDDED_API_OAUTH_ENDPOINT = "embedded.oauth.img/";
+
+	
+
 
 	// INTERFACES
 	public interface IsetEndpoint {
@@ -80,6 +91,13 @@ public class V1Connector {
 		 * @return IsetProxyOrConnector IsetProxyOrConnector
 		 */
 		IsetProxyOrConnector useEndpoint(String endpoint);
+		
+		/**
+		 * Optional method for specifying an Oauth endpoint to connect to.
+		 * 
+		 * @return IsetProxyOrConnector IsetProxyOrConnector
+		 */
+		IsetProxyOrConnector useOAuthEndpoints();
 	}
 
 	public interface IsetProxyOrConnector extends IBuild {
@@ -90,6 +108,8 @@ public class V1Connector {
 		 * @return IBuild IBuild
 		 */
 		IBuild withProxy(ProxyProvider proxyProvider);
+
+		
 	}
 
 	public interface IsetEndPointOrConnector extends IBuild {
@@ -169,7 +189,6 @@ public class V1Connector {
 		 * @return IsetProxyOrEndPointOrConnector
 		 * @throws V1Exception V1Exception
 		 */
-		//IsetProxyOrEndPointOrConnector withWindowsIntegrated(String fullyQualifiedDomainUsername, String password) throws V1Exception;
 	}
 
 	public interface IProxy extends IBuild {
@@ -213,8 +232,7 @@ public class V1Connector {
 	}
 
 	// // Fluent BUILDER ///
-	private static class Builder implements ISetUserAgentMakeRequest, IAuthenticationMethods, IsetProxyOrEndPointOrConnector, IsetProxyOrConnector,
-			IsetEndPointOrConnector {
+	private static class Builder implements ISetUserAgentMakeRequest, IAuthenticationMethods, IsetProxyOrEndPointOrConnector, IsetProxyOrConnector, IsetEndPointOrConnector {
 
 		private V1Connector v1Connector_instance;
 
@@ -285,23 +303,6 @@ public class V1Connector {
 			return this;
 		}
 
-		//DISABLED: Needs more work and testing.
-//		@Override
-//		public IsetProxyOrEndPointOrConnector withWindowsIntegrated(String fullyQualifiedDomainUsername, String password) throws V1Exception {
-//
-//			if (V1Util.isNullOrEmpty(fullyQualifiedDomainUsername) || V1Util.isNullOrEmpty(password)) {
-//				throw new NullPointerException("NTLM credential values cannot be null or empty.");
-//			}
-//
-//			// Domain/username:password formed string.
-//			fullyQualifiedDomainUsername += ":" + password;
-//			credsProvider.setCredentials(AuthScope.ANY, new NTCredentials(fullyQualifiedDomainUsername));
-//			httpclientBuilder.setDefaultCredentialsProvider(credsProvider);
-//			isWindowsAuth = false;
-//
-//			return this;
-//		}
-
 		@Override
 		public IsetProxyOrEndPointOrConnector withWindowsIntegrated() throws V1Exception {
 
@@ -338,6 +339,12 @@ public class V1Connector {
 			v1Connector_instance._endpoint = endpoint;
 			return this;
 		}
+		
+		@Override
+		public IsetProxyOrConnector useOAuthEndpoints() {
+			v1Connector_instance.use_oauth_endpoint = true;
+			return this;
+		}
 
 		@Override
 		public V1Connector build() {
@@ -351,6 +358,7 @@ public class V1Connector {
 	}
 
 	protected Reader getData(String path) throws ConnectionException {
+		
 		Reader data = null;
 		HttpEntity entity = setGETMethod(path);
 		int errorCode = httpResponse.getStatusLine().getStatusCode();
@@ -392,6 +400,7 @@ public class V1Connector {
 	}
 
 	private HttpEntity setGETMethod(String path) {
+		
 		String url = V1Util.isNullOrEmpty(path) ? INSTANCE_URL + _endpoint : INSTANCE_URL + _endpoint + path;
 
 		HttpGet request = new HttpGet(url);
@@ -436,7 +445,6 @@ public class V1Connector {
 			throw new ConnectionException(errorMessage);
 		}
 	}
-	
 
 	private void setDefaultHeaderValue() {
 		String localeName = Locale.getDefault().toString();
@@ -498,6 +506,7 @@ public class V1Connector {
 	}
 
 	public Reader sendData(String key, Object data, String contentType) {
+		
 		Reader resultStream = null;
 		Object newData = null;
 		Object xmlPayload = null;
@@ -521,6 +530,7 @@ public class V1Connector {
 		if (!isWindowsAuth) {
 			httpclient = httpclientBuilder.build();
 		}
+		
 		try {
 			httpResponse = httpclient.execute(httpPost);
 			resultStream = new InputStreamReader(httpResponse.getEntity().getContent());
@@ -541,14 +551,13 @@ public class V1Connector {
 	}
 
 	protected OutputStream beginRequest(String path, String contentType) throws ConnectionException {
-
 		OutputStream outputStream = new ByteArrayOutputStream();
 		_pendingStreams.put(path, outputStream);
 		return outputStream;
-
 	}
 
 	protected InputStream endRequest(String path) throws ConnectionException {
+		
 		OutputStream os = _pendingStreams.get(path);
 		_pendingStreams.remove(path);
 		String ct = _pendingContentTypes.get(path);
@@ -565,15 +574,15 @@ public class V1Connector {
 	}
 
 	public void useDataAPI() {
-		_endpoint = DATA_API_ENDPOINT;
+		_endpoint = use_oauth_endpoint ? OAUTH_DATA_API_ENDPOINT :DATA_API_ENDPOINT;
 	}
 
 	public void useNewAPI() {
-		_endpoint = NEW_API_ENDPOINT;
+		_endpoint = use_oauth_endpoint ? OAUTH_NEW_API_ENDPOINT : NEW_API_ENDPOINT;
 	}
 
 	public void useHistoryAPI() {
-		_endpoint = HISTORY_API_ENDPOINT;
+		_endpoint = use_oauth_endpoint ? OAUTH_HISTORY_API_ENDPOINT : HISTORY_API_ENDPOINT;
 	}
 
 	public void useQueryAPI() {
@@ -591,5 +600,15 @@ public class V1Connector {
 	public void useConfigAPI() {
 		_endpoint = CONFIG_API_ENDPOINT;
 	}
+	
+	public void useAttachmentApi()
+    {
+        _endpoint = use_oauth_endpoint ? ATTACHMENT_API_OAUTH_ENDPOINT : ATTACHMENT_API_ENDPOINT;
+    }
+
+	public void useEmbeddedApi()
+    {
+        _endpoint = use_oauth_endpoint ? EMBEDDED_API_OAUTH_ENDPOINT : EMBEDDED_API_ENDPOINT;
+    }
 
 }

@@ -14,7 +14,7 @@ The Java SDK is open source and is licensed under a modified BSD license, which 
 
 * Eclipse or IntelliJ IDEA
 
-## Adding the Java SDK to your project
+## Adding the Java SDK to your Project
 
 The compiled version of the Java SDK is available as a downloadable ZIP file from the [VersionOne Application Catalog](http://appcatalog.versionone.com/VersionOne.SDK.Java.APIClient). When you extract the ZIP file, you will find a jar file named VersionOne.SDK.Java.APIClient-XXX.jar that you can reference in your Java project. In addition, you will also find a folder named "dependencies" that contains all of the libraries that the SDK depends on.
 
