@@ -1,9 +1,10 @@
 package com.versionone.sdk.unit.tests;
 
-import com.versionone.DB;
-
 import static org.junit.Assert.assertEquals;
+
 import org.junit.Test;
+
+import com.versionone.DB;
 
 public class DBTests {
 

@@ -1,15 +1,15 @@
 package com.versionone.sdk.unit.tests;
 
 
-import com.versionone.apiclient.Credentials;
-import com.versionone.apiclient.interfaces.ICredentials;
+import java.io.IOException;
 
 import junit.framework.Assert;
 
 import org.junit.Before;
 import org.junit.Test;
 
-import java.io.IOException;
+import com.versionone.apiclient.Credentials;
+import com.versionone.apiclient.interfaces.ICredentials;
 
 public class CredentialsTests {
 

@@ -1,17 +1,18 @@
 package com.versionone.sdk.unit.tests;
 
-import com.versionone.DB;
-import com.versionone.Duration;
-
-import org.junit.Assert;
 import static org.junit.Assert.fail;
-import org.junit.Before;
-import org.junit.Test;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
+
+import org.junit.Assert;
+import org.junit.Before;
+import org.junit.Test;
+
+import com.versionone.DB;
+import com.versionone.Duration;
 
 public class DateTimeTests {
 	private Date _now;
