@@ -2,8 +2,8 @@ package com.versionone.apiclient.filters;
 
 import com.versionone.apiclient.exceptions.APIException;
 import com.versionone.apiclient.interfaces.IAttributeDefinition;
-import com.versionone.apiclient.interfaces.IValueProvider;
 import com.versionone.apiclient.interfaces.IAttributeDefinition.AttributeType;
+import com.versionone.apiclient.interfaces.IValueProvider;
 import com.versionone.apiclient.services.ValueProvider;
 
 public class FilterTerm implements IFilterTerm {

@@ -4,6 +4,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.versionone</groupId>
 	<artifactId>VersionOne.SDK.Java.APIClient</artifactId>
+	<version>15.1.0-SNAPSHOT</version>
 	<version>15.1.0</version>
 	<packaging>jar</packaging>
 
@@ -139,7 +140,7 @@
 				<executions>
 					<execution>
 						<id>attach-javadocs</id>
-						<phase>deploy</phase>
+						<phase>package</phase>
 						<goals>
 							<goal>jar</goal>
 						</goals>

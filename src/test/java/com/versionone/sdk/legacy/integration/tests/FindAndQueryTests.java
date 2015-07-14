@@ -23,9 +23,9 @@ import com.versionone.apiclient.interfaces.IAssetType;
 import com.versionone.apiclient.interfaces.IAttributeDefinition;
 import com.versionone.apiclient.interfaces.IMetaModel;
 import com.versionone.apiclient.interfaces.IServices;
+import com.versionone.apiclient.services.OrderBy.Order;
 import com.versionone.apiclient.services.QueryFind;
 import com.versionone.apiclient.services.QueryResult;
-import com.versionone.apiclient.services.OrderBy.Order;
 
 
 public class FindAndQueryTests {

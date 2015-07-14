@@ -9,6 +9,10 @@ import com.versionone.apiclient.exceptions.ConnectionException;
 import com.versionone.apiclient.interfaces.IAPIConnector;
 import com.versionone.apiclient.interfaces.IAttachments;
 
+/**
+ * @deprecated This class has been deprecated. Please use methods of the Services class instead. 
+ */
+@Deprecated
 public class Attachments implements IAttachments {
 	private IAPIConnector _connector;
 	private V1Connector _v1connector;

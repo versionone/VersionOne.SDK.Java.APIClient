@@ -1,17 +1,16 @@
 package com.versionone.sdk.unit.tests;
 
-import com.versionone.apiclient.*;
+import org.junit.Assert;
+import org.junit.Test;
+
+import com.versionone.Oid;
+import com.versionone.apiclient.NoOpTerm;
 import com.versionone.apiclient.exceptions.APIException;
 import com.versionone.apiclient.exceptions.V1Exception;
 import com.versionone.apiclient.filters.AndFilterTerm;
 import com.versionone.apiclient.filters.FilterTerm;
 import com.versionone.apiclient.filters.IFilterTerm;
 import com.versionone.apiclient.filters.OrFilterTerm;
-
-import org.junit.Assert;
-import org.junit.Test;
-
-import com.versionone.Oid;
 
 public class QueryFilterTests extends MetaTestBase {
 	

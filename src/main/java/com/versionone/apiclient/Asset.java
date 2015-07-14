@@ -1,16 +1,16 @@
 package com.versionone.apiclient;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import com.versionone.Oid;
 import com.versionone.apiclient.exceptions.APIException;
 import com.versionone.apiclient.exceptions.MetaException;
 import com.versionone.apiclient.exceptions.OidException;
 import com.versionone.apiclient.interfaces.IAssetType;
 import com.versionone.apiclient.interfaces.IAttributeDefinition;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 /**
  * Represents one Asset in the VersionOne system.

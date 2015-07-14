@@ -1,5 +1,13 @@
 package com.versionone.apiclient;
 
+import java.io.Reader;
+
+import javax.xml.xpath.XPath;
+import javax.xml.xpath.XPathConstants;
+import javax.xml.xpath.XPathExpression;
+import javax.xml.xpath.XPathExpressionException;
+import javax.xml.xpath.XPathFactory;
+
 import org.apache.commons.lang.NullArgumentException;
 import org.w3c.dom.Document;
 
@@ -7,10 +15,6 @@ import com.versionone.apiclient.exceptions.APIException;
 import com.versionone.apiclient.exceptions.ConnectionException;
 import com.versionone.apiclient.interfaces.IAPIConnector;
 import com.versionone.apiclient.interfaces.IV1Configuration;
-
-import javax.xml.xpath.*;
-
-import java.io.Reader;
 
 /**
  * Class to access to VersionOne server configuration

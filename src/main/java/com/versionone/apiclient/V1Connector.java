@@ -79,21 +79,17 @@ public class V1Connector {
     private final static String EMBEDDED_API_ENDPOINT = "embedded.img/";
     private final static String EMBEDDED_API_OAUTH_ENDPOINT = "embedded.oauth.img/";
 
-	
-
 
 	// INTERFACES
 	public interface IsetEndpoint {
 		/**
-		 * Optional method for specifying an API endpoint to connect to.
-		 * 
-		 * @param endpoint  The API endpoint.
-		 * @return IsetProxyOrConnector IsetProxyOrConnector
+		 * @deprecated This method has been deprecated. 
 		 */
+		@Deprecated
 		IsetProxyOrConnector useEndpoint(String endpoint);
 		
 		/**
-		 * Optional method for specifying an Oauth endpoint to connect to.
+		 * Optional method for specifying that the connection should be made using the OAuth endpoints.
 		 * 
 		 * @return IsetProxyOrConnector IsetProxyOrConnector
 		 */
@@ -108,8 +104,6 @@ public class V1Connector {
 		 * @return IBuild IBuild
 		 */
 		IBuild withProxy(ProxyProvider proxyProvider);
-
-		
 	}
 
 	public interface IsetEndPointOrConnector extends IBuild {

@@ -2,16 +2,20 @@ package com.versionone.sdk.documentation.tests;
 
 import java.util.Date;
 
-import com.versionone.apiclient.*;
+import org.junit.Assert;
+import org.junit.Before;
+import org.junit.Ignore;
+import org.junit.Test;
+
+import com.versionone.Oid;
+import com.versionone.apiclient.Asset;
+import com.versionone.apiclient.AssetState;
+import com.versionone.apiclient.Query;
 import com.versionone.apiclient.filters.AndFilterTerm;
 import com.versionone.apiclient.filters.FilterTerm;
 import com.versionone.apiclient.interfaces.IAssetType;
 import com.versionone.apiclient.interfaces.IAttributeDefinition;
 import com.versionone.apiclient.services.QueryResult;
-
-import org.junit.*;
-
-import com.versionone.Oid;
 
 public class JavaSDKCodeSampleTests {
 

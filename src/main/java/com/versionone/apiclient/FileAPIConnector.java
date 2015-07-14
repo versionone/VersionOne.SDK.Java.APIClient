@@ -2,10 +2,10 @@ package com.versionone.apiclient;
 
 import java.io.File;
 import java.io.IOException;
-import java.io.Reader;
-import java.io.StringReader;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.io.Reader;
+import java.io.StringReader;
 import java.util.HashMap;
 
 import javax.xml.parsers.DocumentBuilder;
