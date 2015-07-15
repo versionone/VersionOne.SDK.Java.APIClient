@@ -2,6 +2,7 @@ package com.versionone.apiclient;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.Reader;
@@ -600,15 +601,15 @@ public class Services implements IServices {
 
 	@SuppressWarnings("deprecation")
 	@Override
-	 public Oid saveAttachment(String filePath, Asset asset, String attachmentName) throws V1Exception, IOException{
-      
+	public Oid saveAttachment(String filePath, Asset asset, String attachmentName) throws V1Exception, IOException {
 		if (StringUtils.isEmpty(filePath))
              throw new NullArgumentException("filePath");
 		
-        File f = new File(Thread.currentThread().getContextClassLoader().getResource(filePath).toString());
+		File file = new File(filePath);
+        if (!file.exists())
+       	 	throw new FileNotFoundException(String.format("File \"%s\" does not exist.", filePath));
        
-        String mimeType = MimeType.resolve(filePath);
-        
+        String mimeType = MimeType.resolve(filePath);        
         IAssetType attachmentType = _meta.getAssetType("Attachment");
         IAttributeDefinition attachmentAssetDef = attachmentType.getAttributeDefinition("Asset");
         IAttributeDefinition attachmentContent = attachmentType.getAttributeDefinition("Content");
@@ -624,7 +625,7 @@ public class Services implements IServices {
         save(attachment);
 
         String key = attachment.getOid().getKey().toString();
- 	    FileInputStream inStream = new FileInputStream(Thread.currentThread().getContextClassLoader().getResource(filePath).getPath());
+ 	    FileInputStream inStream = new FileInputStream(filePath);
  	    OutputStream output =  _connector != null ? _connector.beginRequest(key.substring(key.lastIndexOf('/') + 1), null) : _v1Connector.beginRequest(key.substring(key.lastIndexOf('/') + 1), null);
  	    byte[] buffer = new byte[inStream.available() + 1];
  	    while (true) {
@@ -648,70 +649,76 @@ public class Services implements IServices {
 	
 	
 	@Override
-     public Reader getAttachment(Oid attachmentOid) throws V1Exception{
-         Reader result = null;
-         if (_connector != null){
-             result = _connector.getData(attachmentOid.getKey().toString());
-         }else if (_v1Connector != null)         {
-             _v1Connector.useAttachmentApi();
-             result = _v1Connector.getData(attachmentOid.getKey().toString());
-         }
+	public Reader getAttachment(Oid attachmentOid) throws V1Exception{
+		Reader result = null;
+		if (_connector != null) {
+			result = _connector.getData(attachmentOid.getKey().toString());
+		} else if (_v1Connector != null) {
+			_v1Connector.useAttachmentApi();
+			result = _v1Connector.getData(attachmentOid.getKey().toString());
+		}
 
-         return result;
-     }
+		return result;
+	}
      
 	@Override
-     public Oid saveEmbeddedImage(String filePath, Asset asset) throws V1Exception, IOException {
-    	 if (StringUtils.isEmpty(filePath))
-             throw new NullArgumentException("Null value "+ filePath);
-         File f = new File(Thread.currentThread().getContextClassLoader().getResource(filePath).toString());
-       
-         String mimeType = MimeType.resolve(filePath);
-         IAssetType embeddedImageType = _meta.getAssetType("EmbeddedImage");
-         Asset newEmbeddedImage = createNew(embeddedImageType, Oid.Null);
-         IAttributeDefinition assetAttribute = embeddedImageType.getAttributeDefinition("Asset");
-         IAttributeDefinition contentAttribute = embeddedImageType.getAttributeDefinition("Content");
-         IAttributeDefinition contentTypeAttribute = embeddedImageType.getAttributeDefinition("ContentType");
-         newEmbeddedImage.setAttributeValue(assetAttribute, asset.getOid());
-         newEmbeddedImage.setAttributeValue(contentTypeAttribute, mimeType);
-         newEmbeddedImage.setAttributeValue(contentAttribute, "");
-         save(newEmbeddedImage);
+	public Oid saveEmbeddedImage(String filePath, Asset asset) throws V1Exception, IOException {
+		if (StringUtils.isEmpty(filePath))
+			throw new NullArgumentException("Null value " + filePath);
+		
+		File file = new File(filePath);
+        if (!file.exists())
+       	 	throw new FileNotFoundException(String.format("File \"%s\" does not exist.", filePath));
+		
+        String mimeType = MimeType.resolve(filePath);
+		IAssetType embeddedImageType = _meta.getAssetType("EmbeddedImage");
+		Asset newEmbeddedImage = createNew(embeddedImageType, Oid.Null);
+		IAttributeDefinition assetAttribute = embeddedImageType
+				.getAttributeDefinition("Asset");
+		IAttributeDefinition contentAttribute = embeddedImageType
+				.getAttributeDefinition("Content");
+		IAttributeDefinition contentTypeAttribute = embeddedImageType
+				.getAttributeDefinition("ContentType");
+		newEmbeddedImage.setAttributeValue(assetAttribute, asset.getOid());
+		newEmbeddedImage.setAttributeValue(contentTypeAttribute, mimeType);
+		newEmbeddedImage.setAttributeValue(contentAttribute, "");
+		save(newEmbeddedImage);
 
-         String key = newEmbeddedImage.getOid().getKey().toString();
-         FileInputStream inStream = new FileInputStream(Thread.currentThread().getContextClassLoader().getResource(filePath).getPath());
-	     OutputStream output =  _connector != null ? _connector.beginRequest(key.substring(key.lastIndexOf('/') + 1), null) : _v1Connector.beginRequest(key.substring(key.lastIndexOf('/') + 1),null);
-	     byte[] buffer = new byte[inStream.available() + 1];
-	     while (true){
-	         int read = inStream.read(buffer, 0, buffer.length);
-	         if (read <= 0)
-	             break;
-	    
-	         output.write(buffer, 0, read);
-	         }
-	     
-         if (_connector != null){
-             _connector.endRequest(key.substring(key.lastIndexOf('/') + 1));
-         }
-         else {
-             _v1Connector.useEmbeddedApi();
-             _v1Connector.endRequest(key.substring(key.lastIndexOf('/') + 1));
-         }
+		String key = newEmbeddedImage.getOid().getKey().toString();
+		FileInputStream inStream = new FileInputStream(filePath);
+		OutputStream output = _connector != null ? _connector.beginRequest(
+				key.substring(key.lastIndexOf('/') + 1), null) : _v1Connector
+				.beginRequest(key.substring(key.lastIndexOf('/') + 1), null);
+		byte[] buffer = new byte[inStream.available() + 1];
+		while (true) {
+			int read = inStream.read(buffer, 0, buffer.length);
+			if (read <= 0)
+				break;
 
-         return newEmbeddedImage.getOid();
-     }
- 
+			output.write(buffer, 0, read);
+		}
+
+		if (_connector != null) {
+			_connector.endRequest(key.substring(key.lastIndexOf('/') + 1));
+		} else {
+			_v1Connector.useEmbeddedApi();
+			_v1Connector.endRequest(key.substring(key.lastIndexOf('/') + 1));
+		}
+
+		return newEmbeddedImage.getOid();
+	}
+
 	@Override
-     public Reader getEmbeddedImage(Oid embeddedImageOid)  throws V1Exception {
-         Reader result = null;
-         if (_connector != null){
-             result = _connector.getData(embeddedImageOid.getKey().toString());
-         }
-         else if (_v1Connector != null){
-             _v1Connector.useEmbeddedApi();
-             result = _v1Connector.getData(embeddedImageOid.getKey().toString());
-         }
+	public Reader getEmbeddedImage(Oid embeddedImageOid) throws V1Exception {
+		Reader result = null;
+		if (_connector != null) {
+			result = _connector.getData(embeddedImageOid.getKey().toString());
+		} else if (_v1Connector != null) {
+			_v1Connector.useEmbeddedApi();
+			result = _v1Connector.getData(embeddedImageOid.getKey().toString());
+		}
 
-         return result;
-     }
+		return result;
+	}
 
 }
