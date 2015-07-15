@@ -604,32 +604,33 @@ public class Services implements IServices {
       
 		if (StringUtils.isEmpty(filePath))
              throw new NullArgumentException("filePath");
-         File f = new File(Thread.currentThread().getContextClassLoader().getResource(filePath).toString());
+		
+        File f = new File(Thread.currentThread().getContextClassLoader().getResource(filePath).toString());
        
-         String mimeType = MimeType.resolve(filePath);
+        String mimeType = MimeType.resolve(filePath);
         
-         IAssetType attachmentType = _meta.getAssetType("Attachment");
-         IAttributeDefinition attachmentAssetDef = attachmentType.getAttributeDefinition("Asset");
-         IAttributeDefinition attachmentContent = attachmentType.getAttributeDefinition("Content");
-         IAttributeDefinition attachmentContentType = attachmentType.getAttributeDefinition("ContentType");
-         IAttributeDefinition attachmentFileName = attachmentType.getAttributeDefinition("Filename");
-         IAttributeDefinition attachmentNameAttr = attachmentType.getAttributeDefinition("Name");
-         Asset attachment = createNew(attachmentType, Oid.Null);
-         attachment.setAttributeValue(attachmentNameAttr, attachmentName);
-         attachment.setAttributeValue(attachmentFileName, filePath);
-         attachment.setAttributeValue(attachmentContentType, mimeType);
-         attachment.setAttributeValue(attachmentContent, "");
-         attachment.setAttributeValue(attachmentAssetDef, asset.getOid());
-         save(attachment);
+        IAssetType attachmentType = _meta.getAssetType("Attachment");
+        IAttributeDefinition attachmentAssetDef = attachmentType.getAttributeDefinition("Asset");
+        IAttributeDefinition attachmentContent = attachmentType.getAttributeDefinition("Content");
+        IAttributeDefinition attachmentContentType = attachmentType.getAttributeDefinition("ContentType");
+        IAttributeDefinition attachmentFileName = attachmentType.getAttributeDefinition("Filename");
+        IAttributeDefinition attachmentNameAttr = attachmentType.getAttributeDefinition("Name");
+        Asset attachment = createNew(attachmentType, Oid.Null);
+        attachment.setAttributeValue(attachmentNameAttr, attachmentName);
+        attachment.setAttributeValue(attachmentFileName, filePath);
+        attachment.setAttributeValue(attachmentContentType, mimeType);
+        attachment.setAttributeValue(attachmentContent, "");
+        attachment.setAttributeValue(attachmentAssetDef, asset.getOid());
+        save(attachment);
 
         String key = attachment.getOid().getKey().toString();
  	    FileInputStream inStream = new FileInputStream(Thread.currentThread().getContextClassLoader().getResource(filePath).getPath());
  	    OutputStream output =  _connector != null ? _connector.beginRequest(key.substring(key.lastIndexOf('/') + 1), null) : _v1Connector.beginRequest(key.substring(key.lastIndexOf('/') + 1), null);
  	    byte[] buffer = new byte[inStream.available() + 1];
- 	    while (true){
+ 	    while (true) {
  	    	int read = inStream.read(buffer, 0, buffer.length);
  	        if (read <= 0)
- 	         break;
+ 	        	break;
  	        output.write(buffer, 0, read);
  	    }
          

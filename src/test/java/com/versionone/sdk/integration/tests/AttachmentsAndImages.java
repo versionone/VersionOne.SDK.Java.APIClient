@@ -175,7 +175,7 @@ public class AttachmentsAndImages {
 
 		String file = "com/versionone/apiclient/versionone.png";
 		assertNotNull("Test file missing", Thread.currentThread().getContextClassLoader().getResource(file));
-		String mimeType = MimeType.resolve(file);
+		//String mimeType = MimeType.resolve(file);
 		
 		Oid projectId = Oid.fromToken("Scope:0", _services.getMeta());
 		IAssetType assetType = _services.getMeta().getAssetType("Scope");
@@ -193,18 +193,18 @@ public class AttachmentsAndImages {
 		newStory.setAttributeValue(storyNameAttr, name);
 		_services.save(newStory);
 		
-		IAssetType attachmentType = _services.getMeta().getAssetType("Attachment");
-		IAttributeDefinition attachmentAssetDef = attachmentType.getAttributeDefinition("Asset");
-		IAttributeDefinition attachmentContent = attachmentType.getAttributeDefinition("Content");
-		IAttributeDefinition attachmentContentType = attachmentType.getAttributeDefinition("ContentType");
-		IAttributeDefinition attachmentFileName = attachmentType.getAttributeDefinition("Filename");
-		IAttributeDefinition attachmentName = attachmentType.getAttributeDefinition("Name");
-		Asset attachment = _services.createNew(attachmentType, Oid.Null);
-		attachment.setAttributeValue(attachmentName, "Test Attachment on " + newStory.getOid());
-		attachment.setAttributeValue(attachmentFileName, file);
-		attachment.setAttributeValue(attachmentContentType, mimeType);
-		attachment.setAttributeValue(attachmentContent, "");
-		attachment.setAttributeValue(attachmentAssetDef, newStory.getOid());
+//		IAssetType attachmentType = _services.getMeta().getAssetType("Attachment");
+//		IAttributeDefinition attachmentAssetDef = attachmentType.getAttributeDefinition("Asset");
+//		IAttributeDefinition attachmentContent = attachmentType.getAttributeDefinition("Content");
+//		IAttributeDefinition attachmentContentType = attachmentType.getAttributeDefinition("ContentType");
+//		IAttributeDefinition attachmentFileName = attachmentType.getAttributeDefinition("Filename");
+//		IAttributeDefinition attachmentName = attachmentType.getAttributeDefinition("Name");
+//		Asset attachment = _services.createNew(attachmentType, Oid.Null);
+//		attachment.setAttributeValue(attachmentName, "Test Attachment on " + newStory.getOid());
+//		attachment.setAttributeValue(attachmentFileName, file);
+//		attachment.setAttributeValue(attachmentContentType, mimeType);
+//		attachment.setAttributeValue(attachmentContent, "");
+//		attachment.setAttributeValue(attachmentAssetDef, newStory.getOid());
 	
 		_services.saveAttachment(file, newStory, newStory.getOid().toString());
 		
