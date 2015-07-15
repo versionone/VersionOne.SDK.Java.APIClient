@@ -4,24 +4,17 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
-import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.OutputStream;
 
 import org.junit.BeforeClass;
 import org.junit.Ignore;
 import org.junit.Test;
 
-import com.versionone.DB.DateTime;
 import com.versionone.Oid;
 import com.versionone.apiclient.Asset;
-import com.versionone.apiclient.Attachments;
-import com.versionone.apiclient.MimeType;
 import com.versionone.apiclient.Query;
-import com.versionone.apiclient.V1Connector;
 import com.versionone.apiclient.exceptions.V1Exception;
 import com.versionone.apiclient.interfaces.IAssetType;
-import com.versionone.apiclient.interfaces.IAttachments;
 import com.versionone.apiclient.interfaces.IAttributeDefinition;
 import com.versionone.apiclient.interfaces.IServices;
 
