@@ -15,9 +15,6 @@ public class BuildResult {
         result = result.replace(" ","%20");
         result = result.replace("[", "%5B");
         result = result.replace("]", "%5D");
-        result = result.replace(">", "%3E");
-        result = result.replace("<", "%3C");
-        result = result.replace("=", "%3D");
 
         return result;
     }
