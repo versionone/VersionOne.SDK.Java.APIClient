@@ -6,6 +6,8 @@ import static org.junit.Assert.assertTrue;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.util.Calendar;
+import java.util.Date;
 
 import org.apache.commons.lang.time.DateUtils;
 import org.junit.BeforeClass;
@@ -21,11 +23,14 @@ import com.versionone.apiclient.MimeType;
 import com.versionone.apiclient.Paging;
 import com.versionone.apiclient.Query;
 import com.versionone.apiclient.V1Connector;
+import com.versionone.apiclient.exceptions.APIException;
+import com.versionone.apiclient.exceptions.ConnectionException;
 import com.versionone.apiclient.exceptions.MetaException;
 import com.versionone.apiclient.exceptions.OidException;
 import com.versionone.apiclient.exceptions.V1Exception;
 import com.versionone.apiclient.filters.AndFilterTerm;
 import com.versionone.apiclient.filters.FilterTerm;
+import com.versionone.apiclient.filters.GroupFilterTerm;
 import com.versionone.apiclient.interfaces.IAssetType;
 import com.versionone.apiclient.interfaces.IAttachments;
 import com.versionone.apiclient.interfaces.IAttributeDefinition;
@@ -445,5 +450,98 @@ public class QueryAssets {
 		assertNotNull(attachment);
 		assertNotNull(attachment.getAttribute(attachmentContent).getValue());
 	}
+	
+	
+	@Test
+	public void queryBetweenDates() throws V1Exception, IOException {
 
+		IAssetType storyType = _services.getMeta().getAssetType("Story");
+		Asset newStory = _services.createNew(storyType, _projectId);
+		IAttributeDefinition nameAttribute = storyType.getAttributeDefinition("Name");
+		String name = "Test Story " + _projectId + " Query history";
+		newStory.setAttributeValue(nameAttribute, name);
+		_services.save(newStory);
+
+	    storyType = _services.getMeta().getAssetType("Story");
+	    
+	    Query query = new Query(storyType);
+	    IAttributeDefinition estimateAttribute = storyType.getAttributeDefinition("Scope.Name");
+	    IAttributeDefinition numberAttribute = storyType.getAttributeDefinition("Number");
+	    IAttributeDefinition changeDateAttribute = storyType.getAttributeDefinition("ChangeDate");
+	    IAttributeDefinition OwnersAttribute = storyType.getAttributeDefinition("Owners.Name");
+	    IAttributeDefinition statusNameAttribute = storyType.getAttributeDefinition("Status.Name");
+	    IAttributeDefinition teamNameAttribute = storyType.getAttributeDefinition("Team.Name");
+	    IAttributeDefinition priorityNameAttribute = storyType.getAttributeDefinition("Priority.Name");
+
+	    Calendar calendar = Calendar.getInstance();
+        calendar.setTime(new Date()); 
+        calendar.add(Calendar.DAY_OF_YEAR, -180);
+	    
+	    FilterTerm startDateTerm = new FilterTerm(changeDateAttribute);
+		startDateTerm.greaterOrEqual(calendar.getTime());
+	    FilterTerm endDateTerm = new FilterTerm(changeDateAttribute);
+	    endDateTerm.lessOrEqual(new Date());
+
+	    GroupFilterTerm groupFilter = new AndFilterTerm(startDateTerm,endDateTerm);
+	    query.setFilter(groupFilter);
+	   
+	    QueryResult result = null;
+	    result = _services.retrieve(query);
+	    
+	    assertTrue(result.getAssets().length > 0);
+	    Asset member = result.getAssets()[0];
+	    assertTrue(!member.getOid().isNull());
+	}
+
+
+	@Test
+	public void queryDates() throws V1Exception, IOException {
+
+		IAssetType storyType = _services.getMeta().getAssetType("Story");
+		Asset newStory = _services.createNew(storyType, _projectId);
+		IAttributeDefinition nameAttribute = storyType.getAttributeDefinition("Name");
+		String name = "Test Story " + _projectId + " Query history";
+		newStory.setAttributeValue(nameAttribute, name);
+		_services.save(newStory);
+
+	    storyType = _services.getMeta().getAssetType("Story");
+	    
+	    Query query = new Query(storyType);
+	    IAttributeDefinition estimateAttribute = storyType.getAttributeDefinition("Scope.Name");
+	    IAttributeDefinition numberAttribute = storyType.getAttributeDefinition("Number");
+	    IAttributeDefinition changeDateAttribute = storyType.getAttributeDefinition("ChangeDate");
+	    IAttributeDefinition OwnersAttribute = storyType.getAttributeDefinition("Owners.Name");
+	    IAttributeDefinition statusNameAttribute = storyType.getAttributeDefinition("Status.Name");
+	    IAttributeDefinition teamNameAttribute = storyType.getAttributeDefinition("Team.Name");
+	    IAttributeDefinition priorityNameAttribute = storyType.getAttributeDefinition("Priority.Name");
+
+	    Calendar calendar = Calendar.getInstance();
+        calendar.setTime(new Date()); 
+        calendar.add(Calendar.DAY_OF_YEAR, -180);
+	    
+	    FilterTerm startDateTerm = new FilterTerm(changeDateAttribute);
+		startDateTerm.greater(calendar.getTime());
+
+	    GroupFilterTerm groupFilter = new AndFilterTerm(startDateTerm);
+	    query.setFilter(groupFilter);
+	   
+	    QueryResult result = null;
+	    result = _services.retrieve(query);
+	    
+	    assertTrue(result.getAssets().length > 0);
+		
+		FilterTerm endDateTerm = new FilterTerm(changeDateAttribute);
+	    endDateTerm.less(new Date());
+
+	    groupFilter = new AndFilterTerm(endDateTerm);
+	    query.setFilter(groupFilter);
+	   
+	    result = null;
+	    result = _services.retrieve(query);
+	    
+	    assertTrue(result.getAssets().length > 0);
+	    Asset member = result.getAssets()[0];
+	    assertTrue(!member.getOid().isNull());
+	}
+	
 }

@@ -203,7 +203,7 @@ public class QueryURLBuilderTests {
         query.setFilter(filter);
 
         String queryString = builder.toString();
-        Assert.assertEquals("Data/Mock?sel=Mock.Name&where=Mock.ChangeDate>'2012-06-21T15%3A17%3A53.504'", queryString);
+        Assert.assertEquals("Data/Mock?sel=Mock.Name&where=Mock.ChangeDate%3E'2012-06-21T15%3A17%3A53.504'", queryString);
     }
 
     @Test
