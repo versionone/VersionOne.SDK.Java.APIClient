@@ -1,27 +1,14 @@
 package com.versionone.apiclient;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.io.Reader;
-import java.io.StringWriter;
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-
-import javax.xml.xpath.XPath;
-import javax.xml.xpath.XPathConstants;
-import javax.xml.xpath.XPathExpression;
-import javax.xml.xpath.XPathExpressionException;
-import javax.xml.xpath.XPathFactory;
-
+import com.versionone.DB;
+import com.versionone.Oid;
+import com.versionone.apiclient.exceptions.*;
+import com.versionone.apiclient.filters.FilterTerm;
+import com.versionone.apiclient.interfaces.*;
+import com.versionone.apiclient.services.QueryResult;
+import com.versionone.apiclient.services.QueryURLBuilder;
+import com.versionone.util.XPathFactoryInstanceHolder;
+import com.versionone.utils.V1Util;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.NullArgumentException;
 import org.apache.commons.lang.StringUtils;
@@ -31,24 +18,10 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
-import com.versionone.DB;
-import com.versionone.Oid;
-import com.versionone.apiclient.exceptions.APIException;
-import com.versionone.apiclient.exceptions.ConnectionException;
-import com.versionone.apiclient.exceptions.MetaException;
-import com.versionone.apiclient.exceptions.NotImplementedException;
-import com.versionone.apiclient.exceptions.OidException;
-import com.versionone.apiclient.exceptions.V1Exception;
-import com.versionone.apiclient.filters.FilterTerm;
-import com.versionone.apiclient.interfaces.IAPIConnector;
-import com.versionone.apiclient.interfaces.IAssetType;
-import com.versionone.apiclient.interfaces.IAttributeDefinition;
-import com.versionone.apiclient.interfaces.IMetaModel;
-import com.versionone.apiclient.interfaces.IOperation;
-import com.versionone.apiclient.interfaces.IServices;
-import com.versionone.apiclient.services.QueryResult;
-import com.versionone.apiclient.services.QueryURLBuilder;
-import com.versionone.utils.V1Util;
+import javax.xml.xpath.*;
+import java.io.*;
+import java.net.URLEncoder;
+import java.util.*;
 
 /**
  * Wraps the services available in the VersionOne API
@@ -483,7 +456,7 @@ public class Services implements IServices {
 
 		int total = Integer.parseInt(element.getAttribute("total"));
 
-		XPath xpath = XPathFactory.newInstance().newXPath();
+		XPath xpath = XPathFactoryInstanceHolder.get().newXPath();
 		NodeList nodes;
 		try {
 			removeEmptyTextNodes(element);					
