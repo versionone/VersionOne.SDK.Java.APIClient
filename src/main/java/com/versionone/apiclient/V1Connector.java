@@ -444,7 +444,8 @@ public class V1Connector {
 		String localeName = Locale.getDefault().toString();
 		localeName = localeName.replace("_", "-");
 		boolean uniqueValue = true;
-
+		Header header = new BasicHeader(HttpHeaders.ACCEPT_LANGUAGE, localeName);
+		
 		for ( int i = 0; i < headerArray.length && uniqueValue; ++i ) {
 			Header h = headerArray[i];
 			if (h.getValue().equals(header.getValue()) && h.getName().equals(header.getName())) {
