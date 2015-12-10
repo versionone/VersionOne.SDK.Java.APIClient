@@ -443,9 +443,17 @@ public class V1Connector {
 	private void setDefaultHeaderValue() {
 		String localeName = Locale.getDefault().toString();
 		localeName = localeName.replace("_", "-");
+		boolean uniqueValue = true;
 		Header header = new BasicHeader(HttpHeaders.ACCEPT_LANGUAGE, localeName);
-		headerArray = (Header[]) ArrayUtils.removeElement(headerArray, header);
-		headerArray = (Header[]) ArrayUtils.add(headerArray, header);
+		
+		for ( int i = 0; i < headerArray.length && uniqueValue; ++i ) {
+			Header h = headerArray[i];
+			if (h.getValue().equals(header.getValue()) && h.getName().equals(header.getName())) {
+				uniqueValue = false;
+			}
+		}
+		if(uniqueValue)
+			headerArray = (Header[]) ArrayUtils.add(headerArray, header);
 	}
 
 	protected Reader sendData(String path, Object data) throws ConnectionException {
