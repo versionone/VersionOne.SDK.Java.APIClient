@@ -8,7 +8,11 @@ import java.io.Reader;
 import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.LinkedHashSet;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
@@ -444,10 +448,17 @@ public class V1Connector {
 		String localeName = Locale.getDefault().toString();
 		localeName = localeName.replace("_", "-");
 		Header header = new BasicHeader(HttpHeaders.ACCEPT_LANGUAGE, localeName);
-		headerArray = (Header[]) ArrayUtils.removeElement(headerArray, header);
-		headerArray = (Header[]) ArrayUtils.add(headerArray, header);
+		boolean uniqueValue = true;
+		for (Header header2 : headerArray) {
+			if (header2.getValue().equals(header.getValue()) && header2.getName().equals(header.getName())) {
+					uniqueValue = false;
+					break;
+			}
+		}
+		if(uniqueValue)
+			headerArray = (Header[]) ArrayUtils.add(headerArray, header);
 	}
-
+	
 	protected Reader sendData(String path, Object data) throws ConnectionException {
 		return sendData(path, data, contentType);
 	}

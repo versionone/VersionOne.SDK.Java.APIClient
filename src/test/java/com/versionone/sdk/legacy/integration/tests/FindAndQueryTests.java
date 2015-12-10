@@ -19,6 +19,7 @@ import com.versionone.apiclient.filters.AndFilterTerm;
 import com.versionone.apiclient.filters.FilterTerm;
 import com.versionone.apiclient.filters.GroupFilterTerm;
 import com.versionone.apiclient.filters.IFilterTerm;
+import com.versionone.apiclient.filters.OrFilterTerm;
 import com.versionone.apiclient.interfaces.IAssetType;
 import com.versionone.apiclient.interfaces.IAttributeDefinition;
 import com.versionone.apiclient.interfaces.IMetaModel;
@@ -85,6 +86,22 @@ public class FindAndQueryTests {
 	    IAttributeDefinition estimateAttribute = storyType.getAttributeDefinition("Estimate");
 	    query.getSelection().add(nameAttribute);
 	    query.getSelection().add(estimateAttribute);
+	    
+		FilterTerm assetFilter1 = new FilterTerm(nameAttribute); 
+		assetFilter1.equal("Test"); 
+		FilterTerm assetFilter2 = new FilterTerm(nameAttribute); 
+		assetFilter1.equal("Test2");  
+		FilterTerm openFilter = new FilterTerm(estimateAttribute); 
+		openFilter.greater("64"); 
+
+		OrFilterTerm orFilter = new OrFilterTerm(assetFilter1,assetFilter2); 
+
+		GroupFilterTerm curFilter = new AndFilterTerm(orFilter, openFilter);
+				
+		query.setFilter(curFilter);
+
+	    
+	    
 	    QueryResult result = services.retrieve(query);
 
 	      Assert.assertNotNull(result.getAssets());
