@@ -447,8 +447,8 @@ public class V1Connector {
 	private void setDefaultHeaderValue() {
 		String localeName = Locale.getDefault().toString();
 		localeName = localeName.replace("_", "-");
-		Header header = new BasicHeader(HttpHeaders.ACCEPT_LANGUAGE, localeName);
 		boolean uniqueValue = true;
+		Header header = new BasicHeader(HttpHeaders.ACCEPT_LANGUAGE, localeName);
 		for (Header header2 : headerArray) {
 			if (header2.getValue().equals(header.getValue()) && header2.getName().equals(header.getName())) {
 					uniqueValue = false;
