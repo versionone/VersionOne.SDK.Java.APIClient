@@ -67,7 +67,7 @@ public class QueryFilterTests extends MetaTestBase {
 
         OrFilterTerm o = new OrFilterTerm(and1, and2);
 
-        Assert.assertEquals("((Workitem.Parent='Theme%3A5','Theme%3A6';Workitem.Scope='Scope%3A0')|(Workitem.Parent!='Theme%3A7','Theme%3A8';Workitem.Scope!='Scope%3A1'))",
+        Assert.assertEquals("((Workitem.Parent='Theme%3A5','Theme%3A6';Workitem.Scope='Scope%3A0')%7C(Workitem.Parent!='Theme%3A7','Theme%3A8';Workitem.Scope!='Scope%3A1'))",
                 o.getToken());
     }
 
@@ -90,7 +90,7 @@ public class QueryFilterTests extends MetaTestBase {
 
         OrFilterTerm o = new OrFilterTerm(and1, and2);
 
-        Assert.assertEquals("((Workitem.ToDo>'5';Workitem.ToDo<'10')|(Workitem.ToDo>='20';Workitem.ToDo<='30'))", o.getToken());
+        Assert.assertEquals("((Workitem.ToDo>'5';Workitem.ToDo<'10')%7C(Workitem.ToDo>='20';Workitem.ToDo<='30'))", o.getToken());
     }
 
     @Test
