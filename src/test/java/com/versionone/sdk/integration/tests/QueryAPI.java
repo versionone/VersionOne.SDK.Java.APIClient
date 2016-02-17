@@ -7,6 +7,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.junit.BeforeClass;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import com.versionone.apiclient.interfaces.IServices;
@@ -128,6 +129,7 @@ public class QueryAPI {
 		}
       }
 
+      @Ignore
       @Test
       public void executeSubSelectJsonQueryTest() throws Exception{
 
