@@ -39,7 +39,8 @@ public class Connector {
 	public void ConnectorWithUsernameAndPassword() throws MalformedURLException, V1Exception {
 
 		if (!_use_oauth.equals("true")){
-			V1Connector connector = V1Connector.withInstanceUrl(_instanceUrl)
+			V1Connector conn = new V1Connector();
+			V1Connector connector = conn.withInstanceUrl(_instanceUrl)
 					.withUserAgentHeader("JavaSDKIntegrationTests", "1.0")
 					.withUsernameAndPassword(_username, _password)
 					.build();
@@ -54,7 +55,8 @@ public class Connector {
 	public void ConnectorWithAccessToken() throws Exception {
 		
 		if (!_use_oauth.equals("true")){
-			V1Connector connector = V1Connector.withInstanceUrl(_instanceUrl)
+			V1Connector conn = new V1Connector();
+			V1Connector connector = conn.withInstanceUrl(_instanceUrl)
 					.withUserAgentHeader("JavaSDKIntegrationTests", "1.0")
 					.withAccessToken(_accessToken)
 					.build();
