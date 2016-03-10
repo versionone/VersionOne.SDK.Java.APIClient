@@ -27,6 +27,7 @@ import org.w3c.dom.Text;
 import org.xml.sax.SAXException;
 
 import com.versionone.apiclient.exceptions.ConnectionException;
+import com.versionone.apiclient.exceptions.NotImplementedException;
 import com.versionone.apiclient.interfaces.IAPIConnector;
 
 public class ResponseConnector implements IAPIConnector {
@@ -95,6 +96,11 @@ public class ResponseConnector implements IAPIConnector {
 			return new StringReader(_lastData);
 		}
 		throw new ConnectionException("Cannot get data for " + path, 401);
+	}
+	
+	@Override
+	public InputStream getAttachment(String attachmentKey) throws ConnectionException {
+		throw new NotImplementedException();
 	}
 
 	public Reader sendData(String path, String data) throws ConnectionException {

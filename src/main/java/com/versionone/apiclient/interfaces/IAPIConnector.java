@@ -35,6 +35,17 @@ public interface IAPIConnector {
 	Reader getData(String path) throws ConnectionException;
 
 	/**
+ 	 * Read data from the path provided
+	 *
+	 * Note: Caller is responsible for closing the returned stream 
+	 * 
+	 * @param attachmentKey
+	 * @return InputStream The stream for reading data
+	 * @throws ConnectionException
+	 */
+	InputStream getAttachment(String attachmentKey) throws ConnectionException;
+	
+	/**
 	 * Send data to the path
 	 *
 	 * Note: Caller is responsible for closing the returned stream

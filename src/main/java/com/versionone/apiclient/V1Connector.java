@@ -377,7 +377,6 @@ public class V1Connector {
 	}
 	
 	protected InputStream getAttachment(String path) throws ConnectionException {
-		
 		InputStream data = null;
 		HttpEntity entity = setGETMethod(path);
 		int errorCode = httpResponse.getStatusLine().getStatusCode();
