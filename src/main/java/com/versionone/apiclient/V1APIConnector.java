@@ -189,6 +189,31 @@ public class V1APIConnector implements IAPIConnector {
 			throw new ConnectionException("Error processing result from URL " + _url + path, e);
 		}
 	}
+	
+	@Override
+	public InputStream getAttachment(String attachmentKey) throws ConnectionException {
+		HttpURLConnection connection = createConnection(_url + attachmentKey);
+		try {
+			switch (connection.getResponseCode()) {
+				case 200:
+					cookiesManager.addCookie(connection.getHeaderFields());
+					return connection.getInputStream();
+	
+				case 401:
+					throw new SecurityException();
+	
+				default: {
+					StringBuffer message = new StringBuffer("Received Error ");
+					message.append(connection.getResponseCode());
+					message.append(" from URL ");
+					message.append(connection.getURL().toString());
+					throw new ConnectionException(message.toString(), connection.getResponseCode());
+				}
+			}
+		} catch (IOException e) {
+			throw new ConnectionException("Error processing result from URL " + _url + attachmentKey, e);
+		}
+	}
 
 	/**
 	 * Send data to the path.
