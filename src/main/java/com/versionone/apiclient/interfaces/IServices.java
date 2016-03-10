@@ -1,7 +1,6 @@
 package com.versionone.apiclient.interfaces;
 
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.Reader;
 import java.util.ArrayList;
 import java.util.Map;
@@ -194,7 +193,7 @@ public interface IServices {
 	 * @return Reader
 	 * @throws V1Exception V1Exception
 	 */
-	InputStream getAttachment(Oid attachmentOid) throws V1Exception;
+	Reader getAttachment(Oid attachmentOid) throws V1Exception;
 
 	/**
 	 * Saves an embedded image to the specified asset.
