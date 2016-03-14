@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.Reader;
 import java.io.StringWriter;
@@ -649,13 +650,13 @@ public class Services implements IServices {
 	
 	
 	@Override
-	public Reader getAttachment(Oid attachmentOid) throws V1Exception{
-		Reader result = null;
+	public InputStream getAttachment(Oid attachmentOid) throws V1Exception{
+		InputStream result = null;
 		if (_connector != null) {
-			result = _connector.getData(attachmentOid.getKey().toString());
+			result = _connector.getAttachment(attachmentOid.getKey().toString());
 		} else if (_v1Connector != null) {
 			_v1Connector.useAttachmentApi();
-			result = _v1Connector.getData(attachmentOid.getKey().toString());
+			result = _v1Connector.getAttachment(attachmentOid.getKey().toString());
 		}
 
 		return result;
