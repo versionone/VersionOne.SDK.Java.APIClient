@@ -18,6 +18,7 @@ import java.util.Map;
 
 import javax.xml.xpath.XPath;
 import javax.xml.xpath.XPathConstants;
+import javax.xml.xpath.XPathExpression;
 import javax.xml.xpath.XPathExpressionException;
 import javax.xml.xpath.XPathFactory;
 
@@ -27,6 +28,7 @@ import org.apache.commons.lang.StringUtils;
 import org.json.JSONObject;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
+import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 import com.versionone.DB;
@@ -459,6 +461,22 @@ public class Services implements IServices {
 		}
 		return asset;
 	}
+	
+	private void removeEmptyTextNodes(Element element) throws APIException{
+		try {
+			XPath xpath = XPathFactory.newInstance().newXPath();
+			// XPath to find empty text nodes.
+			XPathExpression xpathExp = xpath.compile("//text()[normalize-space(.) = '']");
+			NodeList emptyTextNodes = (NodeList) xpathExp.evaluate(element, XPathConstants.NODESET);
+			// Remove each empty text node from document.
+			for (int i = 0; i < emptyTextNodes.getLength(); i++) {
+				Node emptyTextNode = emptyTextNodes.item(i);
+				emptyTextNode.getParentNode().removeChild(emptyTextNode);
+			}
+		} catch (XPathExpressionException e) {
+			throw new APIException("Error trying to remove empty text from nodes", e);
+		}		
+	}
 
 	private QueryResult parseAssetListQueryResult(Element element, Query query) throws APIException, OidException {
 		List<Asset> list = new ArrayList<Asset>();
@@ -468,7 +486,9 @@ public class Services implements IServices {
 		XPath xpath = XPathFactory.newInstance().newXPath();
 		NodeList nodes;
 		try {
-			nodes = (NodeList) xpath.evaluate("Asset", element, XPathConstants.NODESET);
+			removeEmptyTextNodes(element);					
+			nodes = (NodeList) xpath.compile("/Assets/Asset").evaluate(element, XPathConstants.NODESET);
+			
 		} catch (XPathExpressionException e) {
 			throw new APIException("Error reading nodes", "Asset", e);
 		}
