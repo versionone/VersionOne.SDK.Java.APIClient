@@ -15,14 +15,14 @@ import javax.xml.xpath.XPath;
 import javax.xml.xpath.XPathConstants;
 import java.io.IOException;
 import java.io.Reader;
-import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * Concrete class for obtaining metadata from the VersionOne server
  */
 public class MetaModel implements IMetaModel {
-	private Map<String, Object> _map = new HashMap<String, Object>();
+	private Map<String, Object> _map = new ConcurrentHashMap<>();
 	private IAPIConnector _connector;
 	private Version _version;
 	private String _versionString = null;
