@@ -1,9 +1,12 @@
 package com.versionone.sdk.integration.tests;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 
 import java.net.MalformedURLException;
 
+import com.versionone.apiclient.exceptions.ConnectionException;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
@@ -39,8 +42,7 @@ public class Connector {
 	public void ConnectorWithUsernameAndPassword() throws MalformedURLException, V1Exception {
 
 		if (!_use_oauth.equals("true")){
-			V1Connector conn = new V1Connector();
-			V1Connector connector = conn.withInstanceUrl(_instanceUrl)
+			V1Connector connector = V1Connector.withInstanceUrl(_instanceUrl)
 					.withUserAgentHeader("JavaSDKIntegrationTests", "1.0")
 					.withUsernameAndPassword(_username, _password)
 					.build();
@@ -55,8 +57,7 @@ public class Connector {
 	public void ConnectorWithAccessToken() throws Exception {
 		
 		if (!_use_oauth.equals("true")){
-			V1Connector conn = new V1Connector();
-			V1Connector connector = conn.withInstanceUrl(_instanceUrl)
+			V1Connector connector = V1Connector.withInstanceUrl(_instanceUrl)
 					.withUserAgentHeader("JavaSDKIntegrationTests", "1.0")
 					.withAccessToken(_accessToken)
 					.build();
@@ -64,6 +65,30 @@ public class Connector {
 			IServices services = new Services(connector);
 			Oid oid = services.getLoggedIn();
 			assertNotNull(oid);
+		}
+	}
+
+	@Test
+	public void MultipleConnectorsWithAccesToken() throws V1Exception, MalformedURLException {
+		V1Connector connector = V1Connector.withInstanceUrl(_instanceUrl)
+				.withUserAgentHeader("JavaSDKIntegrationTests", "1.0")
+				.withAccessToken(_accessToken)
+				.build();
+
+		V1Connector badCredentialsConnector = V1Connector.withInstanceUrl(_instanceUrl)
+				.withUserAgentHeader("JavaSDKIntegrationTests", "1.0")
+				.withAccessToken("invalidAccessToken")
+				.build();
+
+		IServices services = new Services(connector);
+		Oid oid = services.getLoggedIn();
+		assertNotNull(oid);
+
+		try {
+			services = new Services(badCredentialsConnector);
+			oid = services.getLoggedIn();
+		} catch (Exception e) {
+			assertEquals(e.getClass(), ConnectionException.class);
 		}
 	}
 }
