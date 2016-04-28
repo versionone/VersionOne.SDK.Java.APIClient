@@ -486,8 +486,9 @@ public class Services implements IServices {
 		XPath xpath = XPathFactory.newInstance().newXPath();
 		NodeList nodes;
 		try {
-			removeEmptyTextNodes(element);					
-			nodes = (NodeList) xpath.compile("/Assets/Asset").evaluate(element, XPathConstants.NODESET);
+			removeEmptyTextNodes(element);
+			String nodeName = query.isHistorical() ? "History" : "Assets";
+			nodes = (NodeList) xpath.compile(String.format("/%s/Asset", nodeName)).evaluate(element, XPathConstants.NODESET);
 			
 		} catch (XPathExpressionException e) {
 			throw new APIException("Error reading nodes", "Asset", e);
