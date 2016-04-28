@@ -85,13 +85,15 @@ public class APIClientIntegrationTestSuiteIT {
 		
 		//Create the V1Connector.
 		if (_use_oauth.equals("true")){
-					_connector = V1Connector.withInstanceUrl(_instanceUrl)
+					V1Connector conn = new V1Connector();
+					_connector = conn.withInstanceUrl(_instanceUrl)
 							.withUserAgentHeader("JavaSDKIntegrationTests", "1.0")
 							.withAccessToken(_accessToken)
 							.useOAuthEndpoints()
 							.build();
 		}else{
-				_connector = V1Connector
+			V1Connector conn = new V1Connector();
+				_connector = conn
 						.withInstanceUrl(_instanceUrl)
 						.withUserAgentHeader("JavaSDKIntegrationTests", "1.0")
 						.withAccessToken(_accessToken)

@@ -45,14 +45,14 @@ import com.versionone.utils.V1Util;
 
 public class V1Connector {
 
-	private static final String contentType = "text/xml";
-	private static CredentialsProvider credsProvider = new BasicCredentialsProvider();
-	private static CloseableHttpResponse httpResponse = null;
-	private static HttpClientBuilder httpclientBuilder = HttpClientBuilder.create();
-	private static CloseableHttpClient httpclient;
-	private static Header[] headerArray = {};
-	private static HttpPost httpPost;
-	private static boolean isWindowsAuth = false;
+	private final String contentType = "text/xml";
+	private CredentialsProvider credsProvider = new BasicCredentialsProvider();
+	private CloseableHttpResponse httpResponse = null;
+	private HttpClientBuilder httpclientBuilder = HttpClientBuilder.create();
+	private CloseableHttpClient httpclient;
+	private Header[] headerArray = {};
+	private HttpPost httpPost;
+	private boolean isWindowsAuth = false;
 
 	private final Map<String, OutputStream> _pendingStreams = new HashMap<String, OutputStream>();
 	private final Map<String, String> _pendingContentTypes = new HashMap<String, String>();
@@ -210,6 +210,10 @@ public class V1Connector {
 		V1Connector build();
 	}
 
+	public V1Connector() {
+		super();
+	}
+
 	protected V1Connector(String instanceUrl) throws V1Exception, MalformedURLException {
 
 		if (V1Util.isNullOrEmpty(instanceUrl)) {
@@ -225,12 +229,12 @@ public class V1Connector {
 		INSTANCE_URL = urlData;
 	}
 
-	public static ISetUserAgentMakeRequest withInstanceUrl(String instanceUrl) throws V1Exception, MalformedURLException {
+	public ISetUserAgentMakeRequest withInstanceUrl(String instanceUrl) throws V1Exception, MalformedURLException {
 		return new Builder(instanceUrl);
 	}
 
 	// // Fluent BUILDER ///
-	private static class Builder implements ISetUserAgentMakeRequest, IAuthenticationMethods, IsetProxyOrEndPointOrConnector, IsetProxyOrConnector, IsetEndPointOrConnector {
+	private class Builder implements ISetUserAgentMakeRequest, IAuthenticationMethods, IsetProxyOrEndPointOrConnector, IsetProxyOrConnector, IsetEndPointOrConnector {
 
 		private V1Connector v1Connector_instance;
 
@@ -252,8 +256,8 @@ public class V1Connector {
 					+ p.getImplementationVersion();
 
 			Header header = new BasicHeader(HttpHeaders.USER_AGENT, headerString);
-			headerArray = (Header[]) ArrayUtils.add(headerArray, header);
-			isWindowsAuth = false;
+			v1Connector_instance.headerArray = (Header[]) ArrayUtils.add(v1Connector_instance.headerArray, header);
+			v1Connector_instance.isWindowsAuth = false;
 
 			return this;
 		}
@@ -265,10 +269,10 @@ public class V1Connector {
 			if (V1Util.isNullOrEmpty(username) || V1Util.isNullOrEmpty(username))
 				throw new NullPointerException("Username and password values cannot be null or empty.");
 
-			credsProvider.setCredentials(new AuthScope(v1Connector_instance.INSTANCE_URL.getHost(), v1Connector_instance.INSTANCE_URL.getPort()),
+			v1Connector_instance.credsProvider.setCredentials(new AuthScope(v1Connector_instance.INSTANCE_URL.getHost(), v1Connector_instance.INSTANCE_URL.getPort()),
 					new UsernamePasswordCredentials(username, password));
-			httpclientBuilder.setDefaultCredentialsProvider(credsProvider);
-			isWindowsAuth = false;
+			v1Connector_instance.httpclientBuilder.setDefaultCredentialsProvider(v1Connector_instance.credsProvider);
+			v1Connector_instance.isWindowsAuth = false;
 
 			return this;
 		}
@@ -281,8 +285,8 @@ public class V1Connector {
 				throw new NullPointerException("Access token value cannot be null or empty.");
 
 			Header header = new BasicHeader(HttpHeaders.AUTHORIZATION, "Bearer " + accessToken);
-			headerArray = (Header[]) ArrayUtils.add(headerArray, header);
-			isWindowsAuth = false;
+			v1Connector_instance.headerArray = (Header[]) ArrayUtils.add(v1Connector_instance.headerArray, header);
+			v1Connector_instance.isWindowsAuth = false;
 
 			return this;
 		}
@@ -294,9 +298,9 @@ public class V1Connector {
 				throw new NullPointerException("Access token value cannot be null or empty.");
 
 			Header header = new BasicHeader(HttpHeaders.AUTHORIZATION, "Bearer " + accessToken);
-			headerArray = (Header[]) ArrayUtils.add(headerArray, header);
+			v1Connector_instance.headerArray = (Header[]) ArrayUtils.add(v1Connector_instance.headerArray, header);
 
-			isWindowsAuth = false;
+			v1Connector_instance.isWindowsAuth = false;
 
 			return this;
 		}
@@ -304,8 +308,8 @@ public class V1Connector {
 		@Override
 		public IsetProxyOrEndPointOrConnector withWindowsIntegrated() throws V1Exception {
 
-			httpclient = WinHttpClients.createDefault();
-			isWindowsAuth = true;
+			v1Connector_instance.httpclient = WinHttpClients.createDefault();
+			v1Connector_instance.isWindowsAuth = true;
 
 			return this;
 		}
@@ -317,12 +321,12 @@ public class V1Connector {
 				throw new NullPointerException("ProxyProvider value cannot be null or empty.");
 			}
 
-			credsProvider.setCredentials(new AuthScope(proxyProvider.getAddress().getHost(), proxyProvider.getAddress().getPort()),
+			v1Connector_instance.credsProvider.setCredentials(new AuthScope(proxyProvider.getAddress().getHost(), proxyProvider.getAddress().getPort()),
 					new UsernamePasswordCredentials(proxyProvider.getUserName(), proxyProvider.getPassword()));
 
 			HttpHost proxy = new HttpHost(proxyProvider.getAddress().getHost(), proxyProvider.getAddress().getPort());
-			httpclientBuilder.setDefaultCredentialsProvider(credsProvider).setProxy(proxy);
-			isWindowsAuth = false;
+			v1Connector_instance.httpclientBuilder.setDefaultCredentialsProvider(v1Connector_instance.credsProvider).setProxy(proxy);
+			v1Connector_instance.isWindowsAuth = false;
 
 			return this;
 		}
