@@ -210,10 +210,6 @@ public class V1Connector {
 		V1Connector build();
 	}
 
-	public V1Connector() {
-		super();
-	}
-
 	protected V1Connector(String instanceUrl) throws V1Exception, MalformedURLException {
 
 		if (V1Util.isNullOrEmpty(instanceUrl)) {
@@ -229,12 +225,12 @@ public class V1Connector {
 		INSTANCE_URL = urlData;
 	}
 
-	public ISetUserAgentMakeRequest withInstanceUrl(String instanceUrl) throws V1Exception, MalformedURLException {
+	public static ISetUserAgentMakeRequest withInstanceUrl(String instanceUrl) throws V1Exception, MalformedURLException {
 		return new Builder(instanceUrl);
 	}
 
 	// // Fluent BUILDER ///
-	private class Builder implements ISetUserAgentMakeRequest, IAuthenticationMethods, IsetProxyOrEndPointOrConnector, IsetProxyOrConnector, IsetEndPointOrConnector {
+	private static class Builder implements ISetUserAgentMakeRequest, IAuthenticationMethods, IsetProxyOrEndPointOrConnector, IsetProxyOrConnector, IsetEndPointOrConnector {
 
 		private V1Connector v1Connector_instance;
 

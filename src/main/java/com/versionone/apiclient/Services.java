@@ -87,16 +87,30 @@ public class Services implements IServices {
 		_connector = connector;
 	}
 
-	public Services(V1Connector v1Connector) {
+	public Services(V1Connector v1Connector) throws NullArgumentException {
 		if (v1Connector == null)
-			try {
-				throw new V1Exception("null value v1Connector");
-			} catch (V1Exception e) {
-				e.printStackTrace();
-			}
+			throw new NullArgumentException("v1Connector");
 
 		_v1Connector = v1Connector;
 		_meta = new MetaModel(_v1Connector);
+	}
+
+	public Services(V1Connector connector, IMetaModel metaModel) throws NullArgumentException {
+		if (connector == null)
+			throw new NullArgumentException("connector");
+		if (metaModel == null)
+			throw new NullArgumentException("metaModel");
+
+		_v1Connector = connector;
+		_meta = metaModel;
+	}
+
+	public Services(V1Connector connector, boolean preLoadMeta) throws NullArgumentException {
+		if (connector == null)
+			throw new NullArgumentException("connector");
+
+		_v1Connector = connector;
+		_meta = new MetaModel(connector, preLoadMeta);
 	}
 
 	/**
@@ -486,8 +500,9 @@ public class Services implements IServices {
 		XPath xpath = XPathFactory.newInstance().newXPath();
 		NodeList nodes;
 		try {
-			removeEmptyTextNodes(element);					
-			nodes = (NodeList) xpath.compile("/Assets/Asset").evaluate(element, XPathConstants.NODESET);
+			removeEmptyTextNodes(element);
+			String nodeName = query.isHistorical() ? "History" : "Assets";
+			nodes = (NodeList) xpath.compile(String.format("/%s/Asset", nodeName)).evaluate(element, XPathConstants.NODESET);
 			
 		} catch (XPathExpressionException e) {
 			throw new APIException("Error reading nodes", "Asset", e);

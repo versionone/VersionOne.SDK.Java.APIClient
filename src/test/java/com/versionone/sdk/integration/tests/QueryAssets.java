@@ -405,8 +405,7 @@ public class QueryAssets {
 		assertNotNull("Test file missing", Thread.currentThread().getContextClassLoader().getResource(file));
 		String mimeType = MimeType.resolve(file);
 
-		V1Connector conn = new V1Connector();
-		IAttachments attachments = new Attachments(conn.withInstanceUrl(_instanceUrl).withUserAgentHeader(".NET_SDK_Integration_Test", "1.0")
+		IAttachments attachments = new Attachments(V1Connector.withInstanceUrl(_instanceUrl).withUserAgentHeader(".NET_SDK_Integration_Test", "1.0")
 				.withAccessToken(_accessToken).useEndpoint("attachment.img/").build());
 
 		IAssetType storyType = _services.getMeta().getAssetType("Story");
