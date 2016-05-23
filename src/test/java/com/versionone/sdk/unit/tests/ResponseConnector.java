@@ -1,13 +1,11 @@
 package com.versionone.sdk.unit.tests;
 
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.io.Reader;
-import java.io.StringReader;
-import java.util.HashMap;
-import java.util.Map;
+import com.versionone.apiclient.exceptions.ConnectionException;
+import com.versionone.apiclient.exceptions.NotImplementedException;
+import com.versionone.apiclient.interfaces.IAPIConnector;
+import com.versionone.util.XPathFactoryInstanceHolder;
+import org.w3c.dom.*;
+import org.xml.sax.SAXException;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -15,20 +13,9 @@ import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.xpath.XPath;
 import javax.xml.xpath.XPathConstants;
 import javax.xml.xpath.XPathExpressionException;
-import javax.xml.xpath.XPathFactory;
-
-import org.w3c.dom.Attr;
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-import org.w3c.dom.NamedNodeMap;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
-import org.w3c.dom.Text;
-import org.xml.sax.SAXException;
-
-import com.versionone.apiclient.exceptions.ConnectionException;
-import com.versionone.apiclient.exceptions.NotImplementedException;
-import com.versionone.apiclient.interfaces.IAPIConnector;
+import java.io.*;
+import java.util.HashMap;
+import java.util.Map;
 
 public class ResponseConnector implements IAPIConnector {
 
@@ -58,7 +45,7 @@ public class ResponseConnector implements IAPIConnector {
 
 			String[] parts = keys.split(";");
 
-			XPath xpath = XPathFactory.newInstance().newXPath();
+			XPath xpath = XPathFactoryInstanceHolder.get().newXPath();
 			for(String part : parts)
 			{
 				NodeList nodes = (NodeList)xpath.evaluate("Test[@name='" + part + "']", doc.getDocumentElement(), XPathConstants.NODESET);

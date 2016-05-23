@@ -1,11 +1,5 @@
 package com.versionone.apiclient;
 
-import javax.xml.xpath.XPath;
-import javax.xml.xpath.XPathConstants;
-import javax.xml.xpath.XPathFactory;
-
-import org.w3c.dom.Element;
-
 import com.versionone.DB;
 import com.versionone.Duration;
 import com.versionone.Oid;
@@ -18,6 +12,11 @@ import com.versionone.apiclient.interfaces.IAssetType;
 import com.versionone.apiclient.interfaces.IAttributeDefinition;
 import com.versionone.apiclient.interfaces.IMetaModel;
 import com.versionone.apiclient.services.TextBuilder;
+import com.versionone.util.XPathFactoryInstanceHolder;
+import org.w3c.dom.Element;
+
+import javax.xml.xpath.XPath;
+import javax.xml.xpath.XPathConstants;
 
 /**
  * Represents the definition of an Attribute
@@ -61,7 +60,7 @@ class AttributeDefinition implements IAttributeDefinition {
 		_isrequired = new DB.Bit(element.getAttribute("isrequired")).booleanValue();
 		_ismultivalue = new DB.Bit(element.getAttribute("ismultivalue")).booleanValue();
 
-		XPath xpath = XPathFactory.newInstance().newXPath();
+		XPath xpath = XPathFactoryInstanceHolder.get().newXPath();
 		Element baseelement = (Element)xpath.evaluate("Base", element, XPathConstants.NODE);
 		if (baseelement != null)
 			_basetoken = baseelement.getAttribute("tokenref");

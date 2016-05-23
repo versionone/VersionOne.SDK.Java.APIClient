@@ -1,34 +1,28 @@
 package com.versionone.apiclient;
 
-import java.io.IOException;
-import java.io.Reader;
-import java.util.HashMap;
-import java.util.Map;
-
-import javax.xml.xpath.XPath;
-import javax.xml.xpath.XPathConstants;
-import javax.xml.xpath.XPathFactory;
-
+import com.versionone.apiclient.exceptions.ConnectionException;
+import com.versionone.apiclient.exceptions.MetaException;
+import com.versionone.apiclient.exceptions.V1Exception;
+import com.versionone.apiclient.interfaces.*;
+import com.versionone.apiclient.services.TextBuilder;
+import com.versionone.util.XPathFactoryInstanceHolder;
+import com.versionone.utils.Version;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 
-import com.versionone.apiclient.exceptions.ConnectionException;
-import com.versionone.apiclient.exceptions.MetaException;
-import com.versionone.apiclient.exceptions.V1Exception;
-import com.versionone.apiclient.interfaces.IAPIConnector;
-import com.versionone.apiclient.interfaces.IAssetType;
-import com.versionone.apiclient.interfaces.IAttributeDefinition;
-import com.versionone.apiclient.interfaces.IMetaModel;
-import com.versionone.apiclient.interfaces.IOperation;
-import com.versionone.apiclient.services.TextBuilder;
-import com.versionone.utils.Version;
+import javax.xml.xpath.XPath;
+import javax.xml.xpath.XPathConstants;
+import java.io.IOException;
+import java.io.Reader;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * Concrete class for obtaining metadata from the VersionOne server
  */
 public class MetaModel implements IMetaModel {
-	private Map<String, Object> _map = new HashMap<String, Object>();
+	private Map<String, Object> _map = new ConcurrentHashMap<>();
 	private IAPIConnector _connector;
 	private Version _version;
 	private String _versionString = null;
@@ -189,7 +183,7 @@ public class MetaModel implements IMetaModel {
 		AssetType assetType = new AssetType(this, doc.getDocumentElement(), _map);
 		saveAssetType(assetType);
 
-		XPath xpath = XPathFactory.newInstance().newXPath();
+		XPath xpath = XPathFactoryInstanceHolder.get().newXPath();
 		NodeList attribnodes = (NodeList) xpath.evaluate("AttributeDefinition", doc.getDocumentElement(), XPathConstants.NODESET);
 		for (int attrIndex = 0; attrIndex < attribnodes.getLength(); ++attrIndex)
 			saveAttributeDefinition(new AttributeDefinition(this, (Element) attribnodes.item(attrIndex)));
@@ -219,7 +213,7 @@ public class MetaModel implements IMetaModel {
 		try {
 			Document doc = this.createDocument("");
 
-			XPath xpath = XPathFactory.newInstance().newXPath();
+			XPath xpath = XPathFactoryInstanceHolder.get().newXPath();
 			NodeList assetnodes = (NodeList) xpath.evaluate("//AssetType", doc.getDocumentElement(), XPathConstants.NODESET);
 			for (int assetIndex = 0; assetIndex < assetnodes.getLength(); ++assetIndex) {
 				Element element = (Element) assetnodes.item(assetIndex);

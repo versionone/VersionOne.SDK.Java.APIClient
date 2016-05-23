@@ -1,18 +1,16 @@
 package com.versionone.apiclient;
 
-import java.util.Map;
-
-import javax.xml.xpath.XPath;
-import javax.xml.xpath.XPathConstants;
-import javax.xml.xpath.XPathFactory;
-
-import org.w3c.dom.Element;
-
 import com.versionone.apiclient.exceptions.MetaException;
 import com.versionone.apiclient.interfaces.IAssetType;
 import com.versionone.apiclient.interfaces.IAttributeDefinition;
 import com.versionone.apiclient.interfaces.IMetaModel;
 import com.versionone.apiclient.interfaces.IOperation;
+import com.versionone.util.XPathFactoryInstanceHolder;
+import org.w3c.dom.Element;
+
+import javax.xml.xpath.XPath;
+import javax.xml.xpath.XPathConstants;
+import java.util.Map;
 
 /**
  * Represents information about an asset type
@@ -51,7 +49,7 @@ class AssetType implements IAssetType {
 		_displayname = element.getAttribute("displayname");
 		_token = element.getAttribute("token");
 
-		XPath xpath = XPathFactory.newInstance().newXPath();
+		XPath xpath = XPathFactoryInstanceHolder.get().newXPath();
 		Element baseelement = (Element)xpath.evaluate("Base", element, XPathConstants.NODE);
 		if (baseelement != null)
 			_basetoken = baseelement.getAttribute("nameref");
