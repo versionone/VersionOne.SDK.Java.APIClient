@@ -25,6 +25,9 @@ import org.junit.runners.Suite.SuiteClasses;
         MultiValueAttributeTests.class,
         RequiredFieldValidatorTests.class,
         CredentialsTests.class,
-        StringUtilityTests.class})
+        StringUtilityTests.class,
+		ServicesConstructorWhenPreLoadMetaIsTrue.class,
+		ServicesConstructorWhenPreLoadMetaIsFalse.class
+})
 
 public class APIClientUnitTestSuite { }

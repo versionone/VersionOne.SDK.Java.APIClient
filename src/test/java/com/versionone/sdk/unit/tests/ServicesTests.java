@@ -1,16 +1,22 @@
 package com.versionone.sdk.unit.tests;
 
+import com.github.tomakehurst.wiremock.WireMockServer;
+import com.github.tomakehurst.wiremock.junit.WireMockRule;
+import com.versionone.apiclient.*;
+import com.versionone.apiclient.exceptions.V1Exception;
 import org.junit.Assert;
+import org.junit.Rule;
 import org.junit.Test;
 
 import com.versionone.Oid;
-import com.versionone.apiclient.Asset;
-import com.versionone.apiclient.Attribute;
-import com.versionone.apiclient.Query;
-import com.versionone.apiclient.Services;
 import com.versionone.apiclient.interfaces.IAssetType;
 import com.versionone.apiclient.interfaces.IAttributeDefinition;
 import com.versionone.apiclient.services.QueryResult;
+
+import java.net.MalformedURLException;
+
+import static com.github.tomakehurst.wiremock.client.WireMock.*;
+
 
 public class ServicesTests extends ServicesTesterBase {
 
@@ -149,5 +155,4 @@ public class ServicesTests extends ServicesTesterBase {
 		asset.setAttributeValue(nameAttributeDefinition, "Fred");
 		Assert.assertTrue(asset.hasChanged());
 	}
-
 }
