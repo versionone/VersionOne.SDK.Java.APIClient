@@ -37,6 +37,18 @@ public class AttributeDefinitionTests extends MetaTestBase {
 	}
 	
 	@Test
+	public void GuidAttribute() throws V1Exception {
+		IAttributeDefinition def = getMeta().getAttributeDefinition("Publication.Payload");
+		Assert.assertEquals("Publication", def.getAssetType().getToken());
+		Assert.assertEquals("Payload", def.getName());
+		Assert.assertEquals(IAttributeDefinition.AttributeType.Guid, def.getAttributeType());
+		Assert.assertEquals("AttributeDefinition'Payload'Publication", def.getDisplayName());
+		Assert.assertFalse(def.isMultiValue());
+		Assert.assertFalse(def.isReadOnly());
+		Assert.assertTrue(def.isRequired());
+	}
+	
+	@Test
 	public void TestBooleanCoerce() throws V1Exception
 	{
 		// get a Boolean Attribute
