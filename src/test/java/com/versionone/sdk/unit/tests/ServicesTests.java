@@ -184,7 +184,6 @@ public class ServicesTests extends ServicesTesterBase {
 
 		Assert.assertEquals(payloadGuid, payloadFromResult);
 		
-		result.getAssets()[0].setAttributeValue(payloadAttribute, payloadGuid);
 	}
 
 	@Test
