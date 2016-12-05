@@ -6,6 +6,7 @@ import org.junit.Test;
 import com.versionone.apiclient.exceptions.MetaException;
 import com.versionone.apiclient.exceptions.V1Exception;
 import com.versionone.apiclient.interfaces.IAttributeDefinition;
+import com.versionone.apiclient.interfaces.IAttributeDefinition.AttributeType;
 
 public class AttributeDefinitionTests extends MetaTestBase {
 
@@ -73,6 +74,13 @@ public class AttributeDefinitionTests extends MetaTestBase {
 		result = attributeDef.coerce("True");
 		validateBitTrue(result);
 	}
+	
+	@Test 
+	public void CanParseGuidAttributeDefinitionType() {
+		IAttributeDefinition def = getMeta().getAttributeDefinition("Publication.Payload");
+		Assert.assertEquals(AttributeType.Guid, def.getAttributeType());
+	}
+	
 	
 	private void validateBitTrue(Object testMe) {
 		Assert.assertNotNull(testMe);
