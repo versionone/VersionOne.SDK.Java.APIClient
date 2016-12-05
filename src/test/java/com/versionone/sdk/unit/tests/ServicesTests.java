@@ -183,6 +183,8 @@ public class ServicesTests extends ServicesTesterBase {
 		UUID payloadFromResult = (UUID) result.getAssets()[0].getAttribute(payloadAttribute).getValue();
 
 		Assert.assertEquals(payloadGuid, payloadFromResult);
+		
+		result.getAssets()[0].setAttributeValue(payloadAttribute, payloadGuid);
 	}
 
 	@Test
@@ -203,7 +205,7 @@ public class ServicesTests extends ServicesTesterBase {
 					ex.getMessage());
 			return;
 		} catch (Exception ex) {
-			Assert.fail("Expected to raise ApiException, but did not.");
+			Assert.fail("Expected to raise NullArgumentException, but did not.");
 		}
 	}
 	 
