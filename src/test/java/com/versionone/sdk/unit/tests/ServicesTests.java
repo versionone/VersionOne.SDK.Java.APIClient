@@ -187,7 +187,7 @@ public class ServicesTests extends ServicesTesterBase {
 	}
 
 	@Test
-	public void Asset_with_null_Guid_Attribute() throws OidException {
+	public void Asset_with_null_Guid_Attribute() throws OidException, ConnectionException, APIException {
 		Services subject = new Services(getMeta(), getDataConnector());
 		Query query = new Query(Oid.fromToken("Publication:12346", getMeta()));
 
@@ -203,9 +203,9 @@ public class ServicesTests extends ServicesTesterBase {
 					"value must not be null.",
 					ex.getMessage());
 			return;
-		} catch (Exception ex) {
-			Assert.fail("Expected to raise NullArgumentException, but did not.");
 		}
+
+		Assert.fail("Expected to raise NullArgumentException, but did not.");
 	}
 	 
 }
