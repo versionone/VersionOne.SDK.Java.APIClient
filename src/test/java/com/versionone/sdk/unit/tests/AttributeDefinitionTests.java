@@ -6,6 +6,7 @@ import org.junit.Test;
 import com.versionone.apiclient.exceptions.MetaException;
 import com.versionone.apiclient.exceptions.V1Exception;
 import com.versionone.apiclient.interfaces.IAttributeDefinition;
+import com.versionone.apiclient.interfaces.IAttributeDefinition.AttributeType;
 
 public class AttributeDefinitionTests extends MetaTestBase {
 
@@ -37,6 +38,18 @@ public class AttributeDefinitionTests extends MetaTestBase {
 	}
 	
 	@Test
+	public void GuidAttribute() throws V1Exception {
+		IAttributeDefinition def = getMeta().getAttributeDefinition("Publication.Payload");
+		Assert.assertEquals("Publication", def.getAssetType().getToken());
+		Assert.assertEquals("Payload", def.getName());
+		Assert.assertEquals(IAttributeDefinition.AttributeType.Guid, def.getAttributeType());
+		Assert.assertEquals("AttributeDefinition'Payload'Publication", def.getDisplayName());
+		Assert.assertFalse(def.isMultiValue());
+		Assert.assertFalse(def.isReadOnly());
+		Assert.assertTrue(def.isRequired());
+	}
+	
+	@Test
 	public void TestBooleanCoerce() throws V1Exception
 	{
 		// get a Boolean Attribute
@@ -61,6 +74,13 @@ public class AttributeDefinitionTests extends MetaTestBase {
 		result = attributeDef.coerce("True");
 		validateBitTrue(result);
 	}
+	
+	@Test 
+	public void CanParseGuidAttributeDefinitionType() {
+		IAttributeDefinition def = getMeta().getAttributeDefinition("Publication.Payload");
+		Assert.assertEquals(AttributeType.Guid, def.getAttributeType());
+	}
+	
 	
 	private void validateBitTrue(Object testMe) {
 		Assert.assertNotNull(testMe);

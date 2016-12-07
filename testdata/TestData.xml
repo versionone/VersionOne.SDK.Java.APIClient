@@ -7,6 +7,8 @@
 				<OrderByAttribute href="/v1.six/meta.v1/Story/Name" tokenref="Story.Name" />
 			</AttributeDefinition>
 		</Response>
+
+
 		<Response path="meta.v1/Story">
 			<AssetType href="/v1.six/meta.v1/Story" version="6.5.55555.30353" name="Story" token="Story" displayname="AssetType'Story" abstract="False">
 				<Base nameref="PrimaryWorkitem" href="/v1.six/meta.v1/PrimaryWorkitem" />
@@ -59,6 +61,19 @@
 	</Test>
 
 	<Test name="AttributeDefinitionTester">
+		<Response path="meta.v1/Publication">
+			<AssetType href="/v1.six/meta.v1/Publication" version="6.5.55555.30353" name="Publication" token="Publication" displayname="AssetType'Publication" abstract="False">
+				<DefaultOrderBy href="/v1.six/meta.v1/Publication/Name" tokenref="Publication.Name" />
+				<AttributeDefinition name="Name" token="Publication.Name" displayname="AttributeDefinition'Name'Publication" attributetype="Text" isreadonly="False" isrequired="False" ismultivalue="False">
+					<OrderByAttribute href="/v1.six/meta.v1/Publication/Name" tokenref="Publication.Name" />
+				</AttributeDefinition>
+			</AssetType>
+		</Response>
+ 		<Response path="meta.v1/Publication/Payload">
+			<AttributeDefinition href="/v1.six/meta.v1/Publication/Payload" of="/v1.six/meta.v1/Publication" version="6.5.55555.30353" name="Payload" token="Publication.Payload" displayname="AttributeDefinition'Payload'Publication" attributetype="Guid" isreadonly="False" isrequired="True" ismultivalue="False">
+				<OrderByAttribute href="/v1.six/meta.v1/Publication/Payload" tokenref="Publication.Payload" />
+			</AttributeDefinition>
+		</Response>
 		<Response path="meta.v1/Story/Name">
 			<AttributeDefinition href="/v1.six/meta.v1/Story/Name" of="/v1.six/meta.v1/Story" version="6.5.55555.30353" name="Name" token="Story.Name" displayname="AttributeDefinition'Name'Story" attributetype="Text" isreadonly="False" isrequired="True" ismultivalue="False">
 				<Base href="/v1.six/meta.v1/BaseAsset/Name" tokenref="BaseAsset.Name" />
@@ -403,6 +418,32 @@
 			  <Asset href="/VersionOne/rest-1.v1/Data/Member/1001" idref="Member:1001" />
 			</Relation>
 		</Response>
+		<Response path="meta.v1/Publication">
+			<AssetType href="/v1.six/meta.v1/Publication" version="16.3.2.207" name="Publication" token="Publication" displayname="AssetType'Publication" abstract="False">
+				<DefaultOrderBy href="/v1.six/meta.v1/Publication/Name" tokenref="Publication.Name"/>
+				<DefaultDisplayBy href="/v1.six/meta.v1/Publication/Name" tokenref="Publication.Name"/>
+				<Name href="/v1.six/meta.v1/Publication/Name" tokenref="Publication.Name"/>
+				<AttributeDefinition name="ID" token="Publication.ID" displayname="AttributeDefinition'ID'Publication" attributetype="Relation" isreadonly="True" isrequired="False" ismultivalue="False" iscanned="True" iscustom="False">
+					<ReciprocalRelation href="/v1.six/meta.v1/Publication/ID" tokenref="Publication.ID"/>
+					<OrderByAttribute href="/v1.six/meta.v1/Publication/ID" tokenref="Publication.ID"/>
+					<DisplayByAttribute href="/v1.six/meta.v1/Publication/Name" tokenref="Publication.Name"/>
+					<RelatedAsset nameref="Publication" href="/v1.six/meta.v1/Publication"/>
+				</AttributeDefinition>
+				<AttributeDefinition href="/v1.six/meta.v1/Publication/Payload" of="/v1.six/meta.v1/Publication" version="16.3.2.207" name="Payload" token="Publication.Payload" displayname="AttributeDefinition'Payload'Publication" attributetype="Guid" isreadonly="False" isrequired="True" ismultivalue="False" iscanned="True" iscustom="False">
+					<OrderByAttribute href="/v1.six/meta.v1/Publication/Payload" tokenref="Publication.Payload"/>
+				</AttributeDefinition>
+			</AssetType>
+		</Response>
+		<Response path="rest-1.v1/Data/Publication?sel=Publication.Payload&amp;where=Publication.Payload='98771fb4-71b8-42ec-be8b-69414daa020e'">
+			<Asset href="/V1Production/rest-1.v1/Publication/12345" id="Publication:12345">
+				<Attribute name="Payload">98771fb4-71b8-42ec-be8b-69414daa020e</Attribute>
+			</Asset>
+		</Response>
+		<Response path="rest-1.v1/Data/Publication/12346/Payload?">
+     		<Asset href="/V1Production/rest-1.v1/Publication/12346" id="Publication:12346">
+       			<Attribute name="Payload"></Attribute>
+     		</Asset>
+   		</Response>
 	</Test>
 	<Test name="V1ConfigurationTester">
 		<Response path="config.v1/TrueOffOff">

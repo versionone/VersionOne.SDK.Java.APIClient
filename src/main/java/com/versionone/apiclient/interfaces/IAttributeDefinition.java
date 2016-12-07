@@ -29,6 +29,7 @@ public interface IAttributeDefinition {
 		Rank,
 		Blob,
 		LongInt,
+		Guid,
 	}
 
 	/**
