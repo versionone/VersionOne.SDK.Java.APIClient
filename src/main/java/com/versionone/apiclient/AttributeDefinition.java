@@ -1,9 +1,13 @@
 package com.versionone.apiclient;
 
+import java.util.UUID;
+
 import javax.xml.xpath.XPath;
 import javax.xml.xpath.XPathConstants;
 import javax.xml.xpath.XPathFactory;
 
+import org.apache.commons.lang.NullArgumentException;
+import org.apache.commons.lang.StringUtils;
 import org.w3c.dom.Element;
 
 import com.versionone.DB;
@@ -113,6 +117,10 @@ class AttributeDefinition implements IAttributeDefinition {
 				return new DB.BigInt(value).getValue();
             case Blob:
                 return value;
+            case Guid:
+                if (value == null || StringUtils.isEmpty(value.toString()))
+                    throw new NullArgumentException("value");
+                return UUID.fromString(new DB.Str(value).getValue());    
 			default:
 				throw new MetaException("Unsupported AttributeType ", getAttributeType().toString());
 		}

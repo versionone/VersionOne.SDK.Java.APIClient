@@ -1,16 +1,30 @@
 package com.versionone.sdk.unit.tests;
 
+import com.github.tomakehurst.wiremock.WireMockServer;
+import com.github.tomakehurst.wiremock.junit.WireMockRule;
+import com.sun.jna.platform.win32.Guid.GUID;
+import com.versionone.apiclient.*;
+import com.versionone.apiclient.exceptions.APIException;
+import com.versionone.apiclient.exceptions.ConnectionException;
+import com.versionone.apiclient.exceptions.OidException;
+import com.versionone.apiclient.exceptions.V1Exception;
+import com.versionone.apiclient.filters.FilterTerm;
+
+import org.apache.commons.lang.NullArgumentException;
 import org.junit.Assert;
+import org.junit.Rule;
 import org.junit.Test;
 
 import com.versionone.Oid;
-import com.versionone.apiclient.Asset;
-import com.versionone.apiclient.Attribute;
-import com.versionone.apiclient.Query;
-import com.versionone.apiclient.Services;
 import com.versionone.apiclient.interfaces.IAssetType;
 import com.versionone.apiclient.interfaces.IAttributeDefinition;
 import com.versionone.apiclient.services.QueryResult;
+
+import java.net.MalformedURLException;
+import java.util.UUID;
+
+import static com.github.tomakehurst.wiremock.client.WireMock.*;
+
 
 public class ServicesTests extends ServicesTesterBase {
 
@@ -149,5 +163,49 @@ public class ServicesTests extends ServicesTesterBase {
 		asset.setAttributeValue(nameAttributeDefinition, "Fred");
 		Assert.assertTrue(asset.hasChanged());
 	}
+	
+	@Test
+	public void Asset_with_valid_Guid_Attribute() throws ConnectionException, APIException, OidException {
+		UUID payloadGuid = UUID.fromString("98771fb4-71b8-42ec-be8b-69414daa020e");
 
+		Services subject = new Services(getMeta(), getDataConnector());
+		IAssetType publicationType = getMeta().getAssetType("Publication");
+		IAttributeDefinition payloadAttribute = publicationType.getAttributeDefinition("Payload");
+
+		Query query = new Query(publicationType);
+		query.getSelection().add(payloadAttribute);
+		FilterTerm filter = new FilterTerm(payloadAttribute);
+		filter.equal(payloadGuid);
+		query.setFilter(filter);
+
+		QueryResult result = subject.retrieve(query);
+
+		UUID payloadFromResult = (UUID) result.getAssets()[0].getAttribute(payloadAttribute).getValue();
+
+		Assert.assertEquals(payloadGuid, payloadFromResult);
+		
+	}
+
+	@Test
+	public void Asset_with_null_Guid_Attribute() throws OidException, ConnectionException, APIException {
+		Services subject = new Services(getMeta(), getDataConnector());
+		Query query = new Query(Oid.fromToken("Publication:12346", getMeta()));
+
+		IAssetType publicationType = getMeta().getAssetType("Publication");
+		IAttributeDefinition payloadAttribute = publicationType
+				.getAttributeDefinition("Payload");
+		query.getSelection().add(payloadAttribute);
+
+		try {
+			subject.retrieve(query);
+		} catch (NullArgumentException ex) {
+			Assert.assertEquals(
+					"value must not be null.",
+					ex.getMessage());
+			return;
+		}
+
+		Assert.fail("Expected to raise NullArgumentException, but did not.");
+	}
+	 
 }
