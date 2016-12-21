@@ -25,7 +25,6 @@ public class Connector {
 	private static String _accessToken;
 	private static String _instanceUrlNTLM;
 	private static Oid _projectId;
-	private static String _use_oauth;
 
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception {
@@ -35,13 +34,11 @@ public class Connector {
 		_password = APIClientIntegrationTestSuiteIT.get_password();
 		_accessToken = APIClientIntegrationTestSuiteIT.get_accessToken();
 		_projectId = APIClientIntegrationTestSuiteIT.get_projectId();
-		_use_oauth = APIClientIntegrationTestSuiteIT.get_oauth();
 	}
 	
 	@Test()
 	public void ConnectorWithUsernameAndPassword() throws MalformedURLException, V1Exception {
 
-		if (!_use_oauth.equals("true")){
 			V1Connector connector = V1Connector.withInstanceUrl(_instanceUrl)
 					.withUserAgentHeader("JavaSDKIntegrationTests", "1.0")
 					.withUsernameAndPassword(_username, _password)
@@ -50,13 +47,11 @@ public class Connector {
 			IServices services = new Services(connector);
 			Oid oid = services.getLoggedIn();
 			assertNotNull(oid);
-		}
 	}
 
 	@Test
 	public void ConnectorWithAccessToken() throws Exception {
 		
-		if (!_use_oauth.equals("true")){
 			V1Connector connector = V1Connector.withInstanceUrl(_instanceUrl)
 					.withUserAgentHeader("JavaSDKIntegrationTests", "1.0")
 					.withAccessToken(_accessToken)
@@ -65,7 +60,6 @@ public class Connector {
 			IServices services = new Services(connector);
 			Oid oid = services.getLoggedIn();
 			assertNotNull(oid);
-		}
 	}
 
 	@Test
