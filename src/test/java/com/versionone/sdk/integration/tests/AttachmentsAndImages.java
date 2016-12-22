@@ -187,35 +187,35 @@ public class AttachmentsAndImages {
 			
 	}
 		
-	@Test
-	public void CreateStoryWithEmbeddedImageWithOauthTest() throws V1Exception, IOException {
-			
-		String file = "com/versionone/apiclient/versionone.png";
-		assertNotNull("Test file missing", Thread.currentThread().getContextClassLoader().getResource(file));
-		
-		IAssetType storyType = _services.getMeta().getAssetType("Story");
-		Asset newStory = _services.createNew(storyType, _projectId);
-		IAttributeDefinition storyNameAttribute = storyType.getAttributeDefinition("Name");
-		IAttributeDefinition descriptionAttribute = storyType.getAttributeDefinition("Description");
-		String name = "Test Story " + _projectId + "Create story with embedded image";
-		newStory.setAttributeValue(storyNameAttribute, name);
-		_services.save(newStory);
-		
-		Oid embeddedImageOid = _services.saveEmbeddedImage(Thread.currentThread().getContextClassLoader().getResource(file).getPath(), newStory);
-		
-        String embeddedImageTag = String.format("<img src=\"embedded.img/"+embeddedImageOid.getKey()+"\" alt=\"\" data-oid=\""+embeddedImageOid.getMomentless()+"\" />", "embedded.img/");
-        newStory.setAttributeValue(descriptionAttribute, embeddedImageTag);
-        _services.save(newStory);
-
-        Query query = new Query(embeddedImageOid);
-        assertEquals(1, _services.retrieve(query).getAssets().length);
-
-        Query queryData = new Query(newStory.getOid());
-        queryData.getSelection().add(descriptionAttribute);
-        Asset defect = _services.retrieve(queryData).getAssets()[0];
-
-        assertNotNull(defect);
-        assertTrue(defect.getAttribute(descriptionAttribute).getValue().toString().contains(embeddedImageTag));	
-	}
+//	@Test
+//	public void CreateStoryWithEmbeddedImageWithOauthTest() throws V1Exception, IOException {
+//			
+//		String file = "com/versionone/apiclient/versionone.png";
+//		assertNotNull("Test file missing", Thread.currentThread().getContextClassLoader().getResource(file));
+//		
+//		IAssetType storyType = _services.getMeta().getAssetType("Story");
+//		Asset newStory = _services.createNew(storyType, _projectId);
+//		IAttributeDefinition storyNameAttribute = storyType.getAttributeDefinition("Name");
+//		IAttributeDefinition descriptionAttribute = storyType.getAttributeDefinition("Description");
+//		String name = "Test Story " + _projectId + "Create story with embedded image";
+//		newStory.setAttributeValue(storyNameAttribute, name);
+//		_services.save(newStory);
+//		
+//		Oid embeddedImageOid = _services.saveEmbeddedImage(Thread.currentThread().getContextClassLoader().getResource(file).getPath(), newStory);
+//		
+//        String embeddedImageTag = String.format("<img src=\"embedded.img/"+embeddedImageOid.getKey()+"\" alt=\"\" data-oid=\""+embeddedImageOid.getMomentless()+"\" />", "embedded.img/");
+//        newStory.setAttributeValue(descriptionAttribute, embeddedImageTag);
+//        _services.save(newStory);
+//
+//        Query query = new Query(embeddedImageOid);
+//        assertEquals(1, _services.retrieve(query).getAssets().length);
+//
+//        Query queryData = new Query(newStory.getOid());
+//        queryData.getSelection().add(descriptionAttribute);
+//        Asset defect = _services.retrieve(queryData).getAssets()[0];
+//
+//        assertNotNull(defect);
+//        assertTrue(defect.getAttribute(descriptionAttribute).getValue().toString().contains(embeddedImageTag));	
+//	}
 	 
 }

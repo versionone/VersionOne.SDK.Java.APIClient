@@ -62,7 +62,6 @@ public class V1Connector {
 	String _endpoint = "";
 	String _user_agent_header = "";
 	String _upstreamUserAgent = "";
-	boolean use_oauth_endpoint = false;
 
 	// VERSIONONE ENDPOINTS
 	private final static String META_API_ENDPOINT = "meta.v1/";
@@ -73,15 +72,16 @@ public class V1Connector {
 	private final static String LOC_API_ENDPOINT = "loc.v1/";
 	private final static String LOC2_API_ENDPOINT = "loc-2.v1/";
 	private final static String CONFIG_API_ENDPOINT = "config.v1/";
-	private final static String OAUTH_DATA_API_ENDPOINT = "rest-1.oauth.v1/Data/";
-	private final static String OAUTH_HISTORY_API_ENDPOINT = "rest-1.oauth.v1/Hist/";
-	private final static String OAUTH_NEW_API_ENDPOINT = "rest-1.oauth.v1/New/";
-	//private final static String ACTIVITY_STREAM_API_ENDPOINT = "api/ActivityStream/";
-	
-    private final static String ATTACHMENT_API_ENDPOINT = "attachment.img/";
-    private final static String ATTACHMENT_API_OAUTH_ENDPOINT = "attachment.oauth.img/";
+	private final static String ATTACHMENT_API_ENDPOINT = "attachment.img/";
     private final static String EMBEDDED_API_ENDPOINT = "embedded.img/";
     private final static String EMBEDDED_API_OAUTH_ENDPOINT = "embedded.oauth.img/";
+
+    //not supported by V1 since version 17
+	//private final static String OAUTH_DATA_API_ENDPOINT = "rest-1.oauth.v1/Data/";
+	//private final static String OAUTH_HISTORY_API_ENDPOINT = "rest-1.oauth.v1/Hist/";
+	//private final static String OAUTH_NEW_API_ENDPOINT = "rest-1.oauth.v1/New/";
+	//private final static String ACTIVITY_STREAM_API_ENDPOINT = "api/ActivityStream/";
+    //private final static String ATTACHMENT_API_OAUTH_ENDPOINT = "attachment.oauth.img/";
 
 
 	// INTERFACES
@@ -92,12 +92,6 @@ public class V1Connector {
 		@Deprecated
 		IsetProxyOrConnector useEndpoint(String endpoint);
 		
-		/**
-		 * Optional method for specifying that the connection should be made using the OAuth endpoints.
-		 * 
-		 * @return IsetProxyOrConnector IsetProxyOrConnector
-		 */
-		IsetProxyOrConnector useOAuthEndpoints();
 	}
 
 	public interface IsetProxyOrConnector extends IBuild {
@@ -162,7 +156,8 @@ public class V1Connector {
 		IsetProxyOrEndPointOrConnector withWindowsIntegrated() throws V1Exception;
 
 		/**
-		 * Optional method for setting the access token for authentication.
+		 * Optional method for setting the Windows Integrated Authentication credentials for authentication based on
+		 * specified user credentials.
 		 * 
 		 * @param accessToken The access token. 
 		 * @return IsetProxyOrEndPointOrConnector IsetProxyOrEndPointOrConnector
@@ -170,23 +165,6 @@ public class V1Connector {
 		 */
 		IsetProxyOrEndPointOrConnector withAccessToken(String accessToken) throws V1Exception;
 
-		/**
-		 * Optional method for setting the OAuth2 access token for authentication.
-		 * @param oauth2Token String
-		 * @return IsetProxyOrEndPointOrConnector IsetProxyOrEndPointOrConnector
-		 * @throws V1Exception V1Exception
-		 */
-		IsetProxyOrEndPointOrConnector withOAuth2Token(String oauth2Token) throws V1Exception;
-
-		/**
-		 * Optional method for setting the Windows Integrated Authentication credentials for authentication based on
-		 * specified user credentials.
-		 * 
-		 * @param fullyQualifiedDomainUsername The fully qualified domain name in form "DOMAIN\\username".
-		 * @param password The password of a valid VersionOne member account.
-		 * @return IsetProxyOrEndPointOrConnector
-		 * @throws V1Exception V1Exception
-		 */
 	}
 
 	public interface IProxy extends IBuild {
@@ -288,20 +266,6 @@ public class V1Connector {
 		}
 
 		@Override
-		public IsetProxyOrEndPointOrConnector withOAuth2Token(String accessToken) throws V1Exception {
-
-			if (V1Util.isNullOrEmpty(accessToken))
-				throw new NullPointerException("Access token value cannot be null or empty.");
-
-			Header header = new BasicHeader(HttpHeaders.AUTHORIZATION, "Bearer " + accessToken);
-			v1Connector_instance.headerArray = (Header[]) ArrayUtils.add(v1Connector_instance.headerArray, header);
-
-			v1Connector_instance.isWindowsAuth = false;
-
-			return this;
-		}
-
-		@Override
 		public IsetProxyOrEndPointOrConnector withWindowsIntegrated() throws V1Exception {
 
 			v1Connector_instance.httpclient = WinHttpClients.createDefault();
@@ -338,12 +302,6 @@ public class V1Connector {
 			return this;
 		}
 		
-		@Override
-		public IsetProxyOrConnector useOAuthEndpoints() {
-			v1Connector_instance.use_oauth_endpoint = true;
-			return this;
-		}
-
 		@Override
 		public V1Connector build() {
 			return v1Connector_instance;
@@ -578,15 +536,15 @@ public class V1Connector {
 	}
 
 	public void useDataAPI() {
-		_endpoint = use_oauth_endpoint ? OAUTH_DATA_API_ENDPOINT :DATA_API_ENDPOINT;
+		_endpoint = DATA_API_ENDPOINT;
 	}
 
 	public void useNewAPI() {
-		_endpoint = use_oauth_endpoint ? OAUTH_NEW_API_ENDPOINT : NEW_API_ENDPOINT;
+		_endpoint = NEW_API_ENDPOINT;
 	}
 
 	public void useHistoryAPI() {
-		_endpoint = use_oauth_endpoint ? OAUTH_HISTORY_API_ENDPOINT : HISTORY_API_ENDPOINT;
+		_endpoint = HISTORY_API_ENDPOINT;
 	}
 
 	public void useQueryAPI() {
@@ -607,12 +565,12 @@ public class V1Connector {
 	
 	public void useAttachmentApi()
     {
-        _endpoint = use_oauth_endpoint ? ATTACHMENT_API_OAUTH_ENDPOINT : ATTACHMENT_API_ENDPOINT;
+        _endpoint = ATTACHMENT_API_ENDPOINT;
     }
 
 	public void useEmbeddedApi()
     {
-        _endpoint = use_oauth_endpoint ? EMBEDDED_API_OAUTH_ENDPOINT : EMBEDDED_API_ENDPOINT;
+        _endpoint =  EMBEDDED_API_ENDPOINT;
     }
 
 }
