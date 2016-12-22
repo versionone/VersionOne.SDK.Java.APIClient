@@ -153,7 +153,7 @@ public class FindAndQueryTests {
 		
 		Asset first_story = result.getAssets()[0];
 		
-		Assert.assertEquals("AA-Story", first_story.getAttribute(nameAttribute).getValue().toString());
+		Assert.assertEquals("1AA-Story", first_story.getAttribute(nameAttribute).getValue().toString());
 		
 	}	
 
