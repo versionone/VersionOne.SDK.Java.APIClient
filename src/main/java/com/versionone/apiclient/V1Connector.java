@@ -74,7 +74,7 @@ public class V1Connector {
 	private final static String CONFIG_API_ENDPOINT = "config.v1/";
 	private final static String ATTACHMENT_API_ENDPOINT = "attachment.img/";
     private final static String EMBEDDED_API_ENDPOINT = "embedded.img/";
-    private final static String EMBEDDED_API_OAUTH_ENDPOINT = "embedded.oauth.img/";
+
 
     //not supported by V1 since version 17
 	//private final static String OAUTH_DATA_API_ENDPOINT = "rest-1.oauth.v1/Data/";
@@ -82,7 +82,7 @@ public class V1Connector {
 	//private final static String OAUTH_NEW_API_ENDPOINT = "rest-1.oauth.v1/New/";
 	//private final static String ACTIVITY_STREAM_API_ENDPOINT = "api/ActivityStream/";
     //private final static String ATTACHMENT_API_OAUTH_ENDPOINT = "attachment.oauth.img/";
-
+    //private final static String EMBEDDED_API_OAUTH_ENDPOINT = "embedded.oauth.img/";
 
 	// INTERFACES
 	public interface IsetEndpoint {
