@@ -2,17 +2,16 @@ package com.versionone.sdk.integration.tests;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
 
 import java.net.MalformedURLException;
 
-import com.versionone.apiclient.exceptions.ConnectionException;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
 import com.versionone.Oid;
 import com.versionone.apiclient.Services;
 import com.versionone.apiclient.V1Connector;
+import com.versionone.apiclient.exceptions.ConnectionException;
 import com.versionone.apiclient.exceptions.V1Exception;
 import com.versionone.apiclient.interfaces.IServices;
 

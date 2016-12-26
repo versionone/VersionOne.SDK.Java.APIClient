@@ -23,8 +23,6 @@ import com.versionone.apiclient.MimeType;
 import com.versionone.apiclient.Paging;
 import com.versionone.apiclient.Query;
 import com.versionone.apiclient.V1Connector;
-import com.versionone.apiclient.exceptions.APIException;
-import com.versionone.apiclient.exceptions.ConnectionException;
 import com.versionone.apiclient.exceptions.MetaException;
 import com.versionone.apiclient.exceptions.OidException;
 import com.versionone.apiclient.exceptions.V1Exception;
