@@ -131,15 +131,15 @@ public class FindAndQueryTests {
 
 		//add 3 stories
 		Asset storyAsset = createDisposableStory();
-		storyAsset.setAttributeValue(nameDef, "MM-Story");
+		storyAsset.setAttributeValue(nameDef, "1MM-Story");
 		storyAsset.setAttributeValue(scopeDef, APIClientLegacyIntegrationTestSuiteIT.get_projectId());
 		services.save(storyAsset);
 		storyAsset = createDisposableStory();
-		storyAsset.setAttributeValue(nameDef, "AA-Story");
+		storyAsset.setAttributeValue(nameDef, "1AA-Story");
 		storyAsset.setAttributeValue(scopeDef, APIClientLegacyIntegrationTestSuiteIT.get_projectId());
 		services.save(storyAsset);
 		storyAsset = createDisposableStory();
-		storyAsset.setAttributeValue(nameDef, "HH-Story");
+		storyAsset.setAttributeValue(nameDef, "1HH-Story");
 		storyAsset.setAttributeValue(scopeDef, APIClientLegacyIntegrationTestSuiteIT.get_projectId());
 		services.save(storyAsset);
 		
@@ -153,7 +153,7 @@ public class FindAndQueryTests {
 		
 		Asset first_story = result.getAssets()[0];
 		
-		Assert.assertEquals("AA-Story", first_story.getAttribute(nameAttribute).getValue().toString());
+		Assert.assertEquals("1AA-Story", first_story.getAttribute(nameAttribute).getValue().toString());
 		
 	}	
 
