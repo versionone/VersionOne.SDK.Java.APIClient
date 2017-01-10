@@ -760,7 +760,10 @@ public class Services implements IServices {
 		return result;
 	}
 	
-	public IFluentQueryBuilder query(String assetTypeName)->{createAssetClient().query(assetTypeName)};
+	
+	public IFluentQueryBuilder query(String assetTypeName){
+		return createAssetClient().query(assetTypeName);
+	}
 
 //	public IAssetBase Create(string assetTypeName, object attributes) =>
 //		CreateAssetClient().Create(assetTypeName, attributes);

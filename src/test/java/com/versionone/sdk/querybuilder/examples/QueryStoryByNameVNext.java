@@ -27,9 +27,11 @@ public class QueryStoryByNameVNext {
 		// Set up a connection to VersionOne using simple authentication
 		List<IAssetBase> assets = V1Connector.withInstanceUrl(instanceUrl)
 				.withUserAgentHeader("Examples", "0.1")
-				.withAccessToken(accessToken).query("Story")
+				.withAccessToken(accessToken)
+				.query("Story")
 				.where("Name", "Hello, Lifecycle!")
-				.select("Name", "Number", "another").retrieve();
+				.select("Name", "Number", "another")
+				.retrieve();
 
 		(assets).forEach(story -> out.println(story.get("OidToken") + "%n"
 											+ story.get("Name") + "%n" 
