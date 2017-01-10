@@ -37,6 +37,7 @@ import org.apache.http.message.BasicHeader;
 
 import com.versionone.apiclient.exceptions.ConnectionException;
 import com.versionone.apiclient.exceptions.V1Exception;
+import com.versionone.apiclient.querybuilder.interfaces.IFluentQueryBuilder;
 import com.versionone.utils.V1Util;
 
 public class V1Connector {
@@ -71,6 +72,40 @@ public class V1Connector {
 	private final static String ATTACHMENT_API_ENDPOINT = "attachment.img/";
     private final static String EMBEDDED_API_ENDPOINT = "embedded.img/";
 
+	private String restApiUrl;
+	public  String getRestApiUrl() { return INSTANCE_URL.getPath() + _endpoint; } 
+	private String username;
+	
+	public String getUsername() {
+		return username;
+	}
+
+	public void setUsername(String username) {
+		this.username = username;
+	}
+
+	private String password;
+	
+
+	public String getPassword() {
+		return password;
+	}
+
+	public void setPassword(String password) {
+		this.password = password;
+	}
+
+	private String accessToken; 
+
+    
+
+	public String getAccessToken() {
+		return accessToken;
+	}
+
+	public void setAccessToken(String accessToken) {
+		this.accessToken = accessToken;
+	}
 
 	// INTERFACES
 	public interface IsetEndpoint {
@@ -110,6 +145,19 @@ public class V1Connector {
 		 * @return IsetEndPointOrConnector IsetEndPointOrConnector
 		 */
 		IsetEndPointOrConnector withProxy(ProxyProvider proxyProvider);
+		
+		/**
+		 * Fluent Query Builder Definition 
+		 * 
+		 * 
+		 */
+		IFluentQueryBuilder query(String assetTypeName);
+
+//		IAssetBase create(String assetTypeName, Object attributes );
+//
+//		IAssetBase update(String oidToken, Object attributes);
+//
+//		IAssetBase update(IAssetBase asset);
 	}
 
 	public interface ISetUserAgentMakeRequest {
@@ -187,8 +235,8 @@ public class V1Connector {
 			instanceUrl += "/";
 
 		// Validates the V1 instance URL, throws MalformedURLException exception when invalid.
-		URL urlData = new URL(instanceUrl);
-		INSTANCE_URL = urlData;
+		//URL urlData = 
+		INSTANCE_URL = new URL(instanceUrl);
 	}
 
 	public static ISetUserAgentMakeRequest withInstanceUrl(String instanceUrl) throws V1Exception, MalformedURLException {
@@ -293,6 +341,12 @@ public class V1Connector {
 		@Override
 		public V1Connector build() {
 			return v1Connector_instance;
+		}
+
+		@Override
+		public IFluentQueryBuilder query(String assetTypeName) {
+			v1Connector_instance.useDataAPI();
+			return new Services(this.build()).query(assetTypeName);
 		}
 	}
 	// end builder
@@ -497,6 +551,8 @@ public class V1Connector {
 				e.printStackTrace();
 			}
 		}
+		
+		
 		return resultStream;
 	}
 
@@ -517,6 +573,25 @@ public class V1Connector {
 		sendData(path, data, ct);
 		return null;
 	}
+	
+	
+//	public String getUserAgent
+//	{
+//			var assembly = Assembly.GetAssembly(typeof(V1Connector));
+//
+//			return FormatAssemblyUserAgent(assembly, _upstreamUserAgent);
+//		}
+//	}
+//
+//	private string FormatAssemblyUserAgent(Assembly a, string upstream = null)
+//	{
+//		if (a == null) return null;
+//		var n = a.GetName();
+//		var s = String.Format("{0}/{1} ({2})", n.Name, n.Version, n.FullName);
+//		if (!String.IsNullOrEmpty(upstream))
+//			s = s + " " + upstream;
+//		return s;
+//	}
 
 	// endpoint definition
 	public void useMetaAPI() {
@@ -560,5 +635,10 @@ public class V1Connector {
     {
         _endpoint =  EMBEDDED_API_ENDPOINT;
     }
+
+	public Object getUserAgent() {
+		// TODO Auto-generated method stub
+		return null;
+	}
 
 }

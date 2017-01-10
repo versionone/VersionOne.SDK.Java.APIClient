@@ -16,6 +16,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import javax.management.OperationsException;
 import javax.xml.xpath.XPath;
 import javax.xml.xpath.XPathConstants;
 import javax.xml.xpath.XPathExpression;
@@ -46,6 +47,8 @@ import com.versionone.apiclient.interfaces.IAttributeDefinition;
 import com.versionone.apiclient.interfaces.IMetaModel;
 import com.versionone.apiclient.interfaces.IOperation;
 import com.versionone.apiclient.interfaces.IServices;
+import com.versionone.apiclient.querybuilder.AssetClient;
+import com.versionone.apiclient.querybuilder.interfaces.IFluentQueryBuilder;
 import com.versionone.apiclient.services.QueryResult;
 import com.versionone.apiclient.services.QueryURLBuilder;
 import com.versionone.utils.V1Util;
@@ -756,5 +759,38 @@ public class Services implements IServices {
 
 		return result;
 	}
+	
+	public IFluentQueryBuilder query(String assetTypeName)->createAssetClient().query(assetTypeName);
+
+//	public IAssetBase Create(string assetTypeName, object attributes) =>
+//		CreateAssetClient().Create(assetTypeName, attributes);
+//	
+//	public IAssetBase Update(string oidToken, object attributes) => 
+//		CreateAssetClient().Update(oidToken, attributes);
+//	
+//	public IAssetBase Update(IAssetBase asset) =>
+//		CreateAssetClient().Update(asset);
+	
+	private AssetClient createAssetClient()
+	{
+		AssetClient client;
+		if (!StringUtils.isNotEmpty(_v1Connector.getUsername()))
+		{
+			client = new AssetClient(_v1Connector.getRestApiUrl(),
+				_v1Connector.getUsername(), _v1Connector.getPassword());
+		}
+		else if (!StringUtils.isEmpty(_v1Connector.getAccessToken()))
+		{
+			client = new AssetClient(_v1Connector.getRestApiUrl(), _v1Connector.getAccessToken());
+		}
+		else
+		{
+			throw new OperationsException("Could not find any credentials to use. Please call either WithUsernameAndPassword or WithAccessToken before attempting to call Query.");
+		}
+		
+		//client.UserAgent = _v1Connector.getUserAgent();
+		return client;
+	}
+
 
 }
