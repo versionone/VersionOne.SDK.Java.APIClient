@@ -12,9 +12,13 @@ import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 
+import javax.management.OperationsException;
+import javax.xml.xpath.XPathExpressionException;
+
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.io.output.ByteArrayOutputStream;
 import org.apache.commons.lang.ArrayUtils;
+import org.apache.commons.lang.NullArgumentException;
 import org.apache.commons.lang.StringUtils;
 import org.apache.http.Header;
 import org.apache.http.HttpEntity;
@@ -23,6 +27,7 @@ import org.apache.http.HttpHost;
 import org.apache.http.HttpStatus;
 import org.apache.http.auth.AuthScope;
 import org.apache.http.auth.UsernamePasswordCredentials;
+import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.CredentialsProvider;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
@@ -35,6 +40,7 @@ import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.impl.client.WinHttpClients;
 import org.apache.http.message.BasicHeader;
 
+import com.versionone.apiclient.exceptions.APIException;
 import com.versionone.apiclient.exceptions.ConnectionException;
 import com.versionone.apiclient.exceptions.V1Exception;
 import com.versionone.apiclient.querybuilder.interfaces.IFluentQueryBuilder;
@@ -73,7 +79,7 @@ public class V1Connector {
     private final static String EMBEDDED_API_ENDPOINT = "embedded.img/";
 
 	private String restApiUrl;
-	public  String getRestApiUrl() { return INSTANCE_URL.getPath() + _endpoint; } 
+	public  String getRestApiUrl() { return INSTANCE_URL + _endpoint; } 
 	private String username;
 	
 	public String getUsername() {
@@ -148,10 +154,15 @@ public class V1Connector {
 		
 		/**
 		 * Fluent Query Builder Definition 
+		 * @throws IOException 
+		 * @throws UnsupportedOperationException 
+		 * @throws ClientProtocolException 
+		 * @throws NullArgumentException 
+		 * @throws OperationsException 
 		 * 
 		 * 
 		 */
-		IFluentQueryBuilder query(String assetTypeName);
+		IFluentQueryBuilder query(String assetTypeName) throws NullArgumentException, ClientProtocolException, UnsupportedOperationException, IOException, OperationsException;
 
 //		IAssetBase create(String assetTypeName, Object attributes );
 //
@@ -297,7 +308,9 @@ public class V1Connector {
 			Header header = new BasicHeader(HttpHeaders.AUTHORIZATION, "Bearer " + accessToken);
 			v1Connector_instance.headerArray = (Header[]) ArrayUtils.add(v1Connector_instance.headerArray, header);
 			v1Connector_instance.isWindowsAuth = false;
-
+			
+			v1Connector_instance.setAccessToken(accessToken);
+			
 			return this;
 		}
 
@@ -344,7 +357,7 @@ public class V1Connector {
 		}
 
 		@Override
-		public IFluentQueryBuilder query(String assetTypeName) {
+		public IFluentQueryBuilder query(String assetTypeName) throws NullArgumentException, OperationsException  {
 			v1Connector_instance.useDataAPI();
 			return new Services(this.build()).query(assetTypeName);
 		}

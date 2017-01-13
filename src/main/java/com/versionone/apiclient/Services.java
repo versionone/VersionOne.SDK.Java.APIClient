@@ -26,6 +26,7 @@ import javax.xml.xpath.XPathFactory;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.NullArgumentException;
 import org.apache.commons.lang.StringUtils;
+import org.apache.http.client.ClientProtocolException;
 import org.json.JSONObject;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -761,7 +762,7 @@ public class Services implements IServices {
 	}
 	
 	
-	public IFluentQueryBuilder query(String assetTypeName){
+	public IFluentQueryBuilder query(String assetTypeName) throws OperationsException{
 		return createAssetClient().query(assetTypeName);
 	}
 
@@ -774,10 +775,10 @@ public class Services implements IServices {
 //	public IAssetBase Update(IAssetBase asset) =>
 //		CreateAssetClient().Update(asset);
 	
-	private AssetClient createAssetClient()
+	private AssetClient createAssetClient() throws OperationsException
 	{
 		AssetClient client;
-		if (!StringUtils.isNotEmpty(_v1Connector.getUsername()))
+		if (StringUtils.isNotEmpty(_v1Connector.getUsername()))
 		{
 			client = new AssetClient(_v1Connector.getRestApiUrl(),
 				_v1Connector.getUsername(), _v1Connector.getPassword());
