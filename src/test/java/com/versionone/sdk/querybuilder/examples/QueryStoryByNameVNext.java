@@ -42,6 +42,7 @@ public class QueryStoryByNameVNext {
 				// .select("Name", "Number", "another")
 				.retrieve();
 
-		(assets).forEach(story -> out.println(story.get("Name") + "%n" + story.get("Number")));
+		(assets).forEach(story -> out.println(	"Name:  " + story.get("Name") + "\n" + 
+												"Deescription: " + story.get("Description")));
 	}
 }

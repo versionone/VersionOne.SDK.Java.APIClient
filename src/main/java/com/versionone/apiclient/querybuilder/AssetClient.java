@@ -38,9 +38,6 @@ public class AssetClient {
 			throw new IllegalArgumentException("password");
 		}
 
-		// Authenticator = new HttpBasicAuthenticator(userName, password);
-		// ClearHandlers();
-		// AddHandler("text/xml", new AssetDeserializer());
 	}
 
 	public AssetClient(String baseUrl, String accessToken) {
@@ -51,21 +48,16 @@ public class AssetClient {
 			throw new IllegalArgumentException("accessToken");
 		}
 
-		// AccessTokenAuthenticator authenticator = new
-		// AccessTokenAuthenticator(accessToken);
-		// ClearHandlers();
-		// AddHandler("text/xml", new AssetDeserializer());
-
 	}
 
 	public IFluentQueryBuilder query(String assetSource) {
 		@SuppressWarnings("unchecked")
 		Function<String, List<IAssetBase>> execute = (String query) -> {
+			
 			Reader dataReader = null;
+
 			CloseableHttpClient httpclient = HttpClients.createDefault();
 
-			ArrayList<String> results = null;
-			
 			HttpGet request = new HttpGet(this._baseUrl + query);
 
 			request.addHeader("Authorization", "Bearer " + _accessToken);
@@ -73,39 +65,24 @@ public class AssetClient {
 			List<IAssetBase> assets = new ArrayList<IAssetBase>();
 			try {
 				response = httpclient.execute(request);
+			
+				dataReader = new InputStreamReader(response.getEntity().getContent(),"UTF-8" );
 
-				dataReader = new InputStreamReader(response.getEntity()
-						.getContent());
-
-				// results = (ArrayList<String>)
-				// IOUtils.readLines(response.getEntity().getContent(),
-				// "UTF-8");
-
-				// var results = response.Data as IList<dynamic>;
 				Document doc = XMLHandler.buildDocument(dataReader, "");
+				
+				XPath xPath =  XPathFactory.newInstance().newXPath();
 
-				XPath xpath = XPathFactory.newInstance().newXPath();
-				NodeList assetnodes;
-
-				assetnodes = (NodeList) xpath.evaluate("//AssetType",
-						doc.getDocumentElement(), XPathConstants.NODESET);
+				NodeList assetnodes = (NodeList) xPath.evaluate("Asset", doc.getDocumentElement(), XPathConstants.NODESET);
+						
 				for (int assetIndex = 0; assetIndex < assetnodes.getLength(); ++assetIndex) {
+					
 					Element element = (Element) assetnodes.item(assetIndex);
-
+				
 					assets.add(new AssetBase(element));
 				}
 			} catch (Exception e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-
-			// List<IAssetBase> assets = new
-			// ArrayList<IAssetBase>(results.size());
-
-			// (results).forEach(item->assets.add(new AssetBase(dataReader)));
-
-			// (results).forEach(item->assets.add(new AssetBase(item)));
-
 			return assets;
 		};
 		return new FluentQueryBuilder(assetSource, execute);
