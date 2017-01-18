@@ -19,6 +19,7 @@ public class QueryStoryByNameVNext {
 
 	String instanceUrl = "https://www16.v1host.com/api-examples";
 	String accessToken = "1.bndNO51GiliELZu1bbQdq3omgRI=";
+	private int i;
 
 	public static void main(String[] args) throws V1Exception, IOException,
 			NullArgumentException, UnsupportedOperationException,
@@ -27,7 +28,7 @@ public class QueryStoryByNameVNext {
 		QueryStoryByNameVNext example = new QueryStoryByNameVNext();
 		example.execute();
 		out.println("Press any key to exit...");
-		in.read();
+		//in.read();
 	}
 
 	public void execute() throws V1Exception, NullArgumentException,
@@ -41,8 +42,11 @@ public class QueryStoryByNameVNext {
 				// .where("Name", "Hello, Lifecycle!")
 				// .select("Name", "Number", "another")
 				.retrieve();
-
-		(assets).forEach(story -> out.println(	"Name:  " + story.get("Name") + "\n" + 
-												"Deescription: " + story.get("Description")));
+		
+		(assets).forEach(story -> out.println(	"Asset number: " + ++i + "\n" +
+												"Name:  " + story.get("Name") + "\n" + 
+												"Deescription: " + story.get("Description")+ "\n"
+												) 
+						);
 	}
 }
