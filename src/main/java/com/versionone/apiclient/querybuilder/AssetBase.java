@@ -19,16 +19,13 @@ public class AssetBase extends HashMap<String, Object> implements IAssetBase  {
 
 		Element descriptionElement = (Element)xpath.evaluate("Attribute[@name='Description']", element, XPathConstants.NODE);
 		if (descriptionElement != null)
-			put("Description", descriptionElement.getTextContent());
+			super.put("Description", descriptionElement.getTextContent());
 
 		Element nameElement = (Element)xpath.evaluate("Attribute[@name='Name']", element, XPathConstants.NODE);
 		if (nameElement != null)
-			put("Name", nameElement.getTextContent());
+			super.put("Name", nameElement.getTextContent());
 	}
 
-	private void put(String string, String textContent) {
-		super.put(string, textContent);
-	}
 
 	private Object get(String key) {
 		return super.get(key);
