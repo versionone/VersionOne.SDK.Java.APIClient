@@ -785,7 +785,8 @@ public class Services implements IServices {
 		}
 		else if (!StringUtils.isEmpty(_v1Connector.getAccessToken()))
 		{
-			client = new AssetClient(_v1Connector.getRestApiUrl(), _v1Connector.getAccessToken());
+//			client = new AssetClient(_v1Connector.getRestApiUrl(), _v1Connector.getAccessToken());
+			client = new AssetClient(this);
 		}
 		else
 		{
@@ -796,5 +797,17 @@ public class Services implements IServices {
 		return client;
 	}
 
+	/**
+	 * Query VersionOne
+	 * @return 
+	 *
+	 * @see IServices#retrieve(Query)
+	 */
+	public Reader retrieve(String query) throws ConnectionException, APIException, OidException {
+		
+		return  _v1Connector.getData(query);
+	}
 
+	
+	
 }

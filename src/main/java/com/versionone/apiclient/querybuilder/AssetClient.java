@@ -19,6 +19,8 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 
+import com.versionone.apiclient.Services;
+import com.versionone.apiclient.V1Connector;
 import com.versionone.apiclient.XMLHandler;
 import com.versionone.apiclient.querybuilder.interfaces.IAssetBase;
 import com.versionone.apiclient.querybuilder.interfaces.IFluentQueryBuilder;
@@ -28,6 +30,7 @@ public class AssetClient {
 	private CloseableHttpResponse response = null;
 	private String _baseUrl = null;
 	private String _accessToken = null;
+	private Services _services;
 
 	public AssetClient(String baseUrl, String userName, String password) {
 
@@ -47,7 +50,10 @@ public class AssetClient {
 		if (StringUtils.isEmpty(accessToken)) {
 			throw new IllegalArgumentException("accessToken");
 		}
+	}
 
+	public AssetClient(Services services) {
+		_services = services;
 	}
 
 	public IFluentQueryBuilder query(String assetSource) {
@@ -56,7 +62,7 @@ public class AssetClient {
 			
 			Reader dataReader = null;
 
-			CloseableHttpClient httpclient = HttpClients.createDefault();
+			//CloseableHttpClient httpclient = HttpClients.createDefault();
 
 			HttpGet request = new HttpGet(this._baseUrl + query);
 
@@ -64,9 +70,12 @@ public class AssetClient {
 
 			List<IAssetBase> assets = new ArrayList<IAssetBase>();
 			try {
-				response = httpclient.execute(request);
+				
+				dataReader = (InputStreamReader)_services.retrieve(query);
+				
+				//response = httpclient.execute(request);
 			
-				dataReader = new InputStreamReader(response.getEntity().getContent(),"UTF-8" );
+				//dataReader = new InputStreamReader(response.getEntity().getContent(),"UTF-8" );
 
 				Document doc = XMLHandler.buildDocument(dataReader, "");
 				
