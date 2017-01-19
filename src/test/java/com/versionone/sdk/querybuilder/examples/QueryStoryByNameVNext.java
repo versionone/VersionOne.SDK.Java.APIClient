@@ -31,17 +31,21 @@ public class QueryStoryByNameVNext {
 		//in.read();
 	}
 
-	public void execute() throws V1Exception, NullArgumentException,
-			ClientProtocolException, UnsupportedOperationException,
-			IOException, OperationsException {
+	public void execute()   {
 		// Set up a connection to VersionOne using simple authentication
-		List<IAssetBase> assets = V1Connector.withInstanceUrl(instanceUrl)
-				.withUserAgentHeader("Examples", "0.1")
-				.withAccessToken(accessToken)
-				.query("Story")
-				// .where("Name", "Hello, Lifecycle!")
-				// .select("Name", "Number", "another")
-				.retrieve();
+	
+		List<IAssetBase> assets = null;
+		try {
+			 assets = V1Connector.withInstanceUrl(instanceUrl)
+					.withUserAgentHeader("Examples", "0.1")
+					.withAccessToken(accessToken)
+					.query("Story")
+					// .where("Name", "Hello, Lifecycle!")
+					// .select("Name", "Number", "another")
+					.retrieve();
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
 		
 		(assets).forEach(story -> out.println(	"Asset number: " + ++i + "\n" +
 												"Name:  " + story.get("Name") + "\n" + 
