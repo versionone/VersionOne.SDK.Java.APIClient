@@ -7,11 +7,13 @@ import java.io.OutputStream;
 import java.io.Reader;
 import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
+import java.net.URI;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 
+import com.versionone.apiclient.exceptions.APIException;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.io.output.ByteArrayOutputStream;
 import org.apache.commons.lang.ArrayUtils;
@@ -75,17 +77,17 @@ public class V1Connector {
 	// INTERFACES
 	public interface IsetEndpoint {
 		/**
-		 * @deprecated This method has been deprecated. 
+		 * @deprecated This method has been deprecated.
 		 */
 		@Deprecated
 		IsetProxyOrConnector useEndpoint(String endpoint);
-		
+
 	}
 
 	public interface IsetProxyOrConnector extends IBuild {
 		/**
 		 * Optional method for setting the proxy credentials.
-		 * 
+		 *
 		 * @param proxyProvider The ProxyProvider containing the proxy URI, username, and password.
 		 * @return IBuild IBuild
 		 */
@@ -93,7 +95,7 @@ public class V1Connector {
 	}
 
 	public interface IsetEndPointOrConnector extends IBuild {
-	
+
 		/**
 		 * Optional method for specifying an API endpoint to connect to.
 		 * @param endpoint String
@@ -105,7 +107,7 @@ public class V1Connector {
 	public interface IsetProxyOrEndPointOrConnector extends IsetEndpoint, IBuild {
 		/**
 		 * Optional method for setting the proxy credentials.
-		 * 
+		 *
 		 * @param proxyProvider  ProxyProvider The ProxyProvider containing the proxy URI, username, and password.
 		 * @return IsetEndPointOrConnector IsetEndPointOrConnector
 		 */
@@ -115,17 +117,17 @@ public class V1Connector {
 	public interface ISetUserAgentMakeRequest {
 		/**
 		 * Required method for setting a custom user agent header for all HTTP requests made to the VersionOne API.
-		 * 
+		 *
 		 * @param name  String The name of the application.
 		 * @param version String The version number of the application
 		 * @return IAuthenticationMethods IAuthenticationMethods
-		 * @throws V1Exception V1Exception 
+		 * @throws V1Exception V1Exception
 		 */
 		IAuthenticationMethods withUserAgentHeader(String name, String version) throws V1Exception;
 	}
 
 	public interface IAuthenticationMethods {
-		
+
 		/**
 		 *  Optional method for setting the username and password for authentication.
 		 * @param username String
@@ -146,8 +148,8 @@ public class V1Connector {
 		/**
 		 * Optional method for setting the Windows Integrated Authentication credentials for authentication based on
 		 * specified user credentials.
-		 * 
-		 * @param accessToken The access token. 
+		 *
+		 * @param accessToken The access token.
 		 * @return IsetProxyOrEndPointOrConnector IsetProxyOrEndPointOrConnector
 		 * @throws V1Exception V1Exception
 		 */
@@ -158,7 +160,7 @@ public class V1Connector {
 	public interface IProxy extends IBuild {
 		/**
 		 * Optional method for setting the proxy credentials.
-		 * 
+		 *
 		 * @param proxyProvider The ProxyProvider containing the proxy URI, username, and password.
 		 * @return IBuild IBuild
 		 * @throws V1Exception V1Exception
@@ -170,7 +172,7 @@ public class V1Connector {
 	public interface IBuild {
 		/**
 		 * Required terminating method that returns the V1Connector object.
-		 * 
+		 *
 		 * @return V1Connector
 		 */
 		V1Connector build();
@@ -275,7 +277,9 @@ public class V1Connector {
 			HttpHost proxy = new HttpHost(proxyProvider.getAddress().getHost(), proxyProvider.getAddress().getPort());
 			v1Connector_instance.httpclientBuilder.setDefaultCredentialsProvider(v1Connector_instance.credsProvider).setProxy(proxy);
 			v1Connector_instance.isWindowsAuth = false;
-
+            IAttributeDefinition attribute6 = assetType
+                    //.getAttributeDefinition("SubsMeAndDown:Story%5BStatus.Name='Cancelled'%7CStatus.Name='Open'%5D.Estimate.@Sum");
+                    .getAttributeDefinition("SubsMeAndDown:Story[(Status.Name='Cancelled'|Status.Name='In Progress');Estimate>'1'].Estimate.@Sum");
 			return this;
 		}
 
@@ -289,7 +293,7 @@ public class V1Connector {
 			v1Connector_instance._endpoint = endpoint;
 			return this;
 		}
-		
+
 		@Override
 		public V1Connector build() {
 			return v1Connector_instance;
@@ -302,7 +306,7 @@ public class V1Connector {
 	}
 
 	protected Reader getData(String path) throws ConnectionException {
-		
+
 		Reader data = null;
 		HttpEntity entity = setGETMethod(path);
 		int errorCode = httpResponse.getStatusLine().getStatusCode();
@@ -321,7 +325,7 @@ public class V1Connector {
 		}
 		return data;
 	}
-	
+
 	protected InputStream getAttachment(String path) throws ConnectionException {
 		InputStream data = null;
 		HttpEntity entity = setGETMethod(path);
@@ -342,31 +346,70 @@ public class V1Connector {
 		return data;
 	}
 
-	private HttpEntity setGETMethod(String path) {
-		
-		String url = V1Util.isNullOrEmpty(path) ? INSTANCE_URL + _endpoint : INSTANCE_URL + _endpoint + path;
-
-		HttpGet request = new HttpGet(url);
-		setDefaultHeaderValue();
-		request.setHeaders(headerArray);
-
-		// Creates a new httpclient if not using NTLM.
-		if (!isWindowsAuth) {
-			httpclient = httpclientBuilder.build();
-		}
-
+	private URI parseUrl(String s) throws APIException {
 		try {
-			httpResponse = httpclient.execute(request);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+//			System.out.println("parseUrl: raw String arg: " + s);
+			URL u = new URL(s);
 
-		HttpEntity entity = httpResponse.getEntity();
+//			System.out.println("parseUrl: URL object: " + u.toString());
+			URI parsedUri;
+
+//			System.out.println("\turl.Protocol: " + u.getProtocol());
+//			System.out.println("\turl.Authority: " + u.getAuthority());
+//			System.out.println("\turl.Path: " + u.getPath());
+//			System.out.println("\turl.Query: " + u.getQuery());
+//			System.out.println("\turl.Ref: " + u.getRef());
+
+			parsedUri = new URI(
+					u.getProtocol(),
+					u.getAuthority(),
+					u.getPath(),
+					u.getQuery(),
+					u.getRef()
+			);
+
+//			System.out.println("parseUrl: URI object: " + parsedUri.toString());
+
+			return parsedUri;
+
+		} catch (MalformedURLException malEx) {
+			throw new APIException("Could not parse URL " + s, malEx);
+		}
+		catch (Exception ex) {
+			throw new APIException("Could not parse URL " + s, ex);
+		}
+	}
+
+	private HttpEntity setGETMethod(String path) {
+		String url = V1Util.isNullOrEmpty(path) ? INSTANCE_URL + _endpoint : INSTANCE_URL + _endpoint + path;
+		HttpEntity entity = null; // TODO not sure if this is good...
+		try {
+			URI uri = parseUrl(url);
+			HttpGet request = new HttpGet(uri);
+			setDefaultHeaderValue();
+			request.setHeaders(headerArray);
+
+			// Creates a new httpclient if not using NTLM.
+			if (!isWindowsAuth) {
+				httpclient = httpclientBuilder.build();
+			}
+
+			try {
+				httpResponse = httpclient.execute(request);
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+
+			entity = httpResponse.getEntity();
+		}
+		catch (APIException apiEx) {
+			apiEx.printStackTrace();
+		}
 		return entity;
 	}
 
 	private void manageErrors(int errorCode, String errorMessage) throws ConnectionException {
-	
+
 		switch (errorCode) {
 		case HttpStatus.SC_BAD_REQUEST:
 			throw new ConnectionException(errorMessage + " VersionOne could not process the request.");
@@ -403,7 +446,7 @@ public class V1Connector {
 		if(uniqueValue)
 			headerArray = (Header[]) ArrayUtils.add(headerArray, header);
 	}
-	
+
 	protected Reader sendData(String path, Object data) throws ConnectionException {
 		return sendData(path, data, contentType);
 	}
@@ -456,7 +499,7 @@ public class V1Connector {
 	}
 
 	public Reader sendData(String key, Object data, String contentType) {
-		
+
 		Reader resultStream = null;
 		Object newData = null;
 		Object xmlPayload = null;
@@ -480,7 +523,7 @@ public class V1Connector {
 		if (!isWindowsAuth) {
 			httpclient = httpclientBuilder.build();
 		}
-		
+
 		try {
 			httpResponse = httpclient.execute(httpPost);
 			resultStream = new InputStreamReader(httpResponse.getEntity().getContent());
@@ -507,7 +550,7 @@ public class V1Connector {
 	}
 
 	protected InputStream endRequest(String path) throws ConnectionException {
-		
+
 		OutputStream os = _pendingStreams.get(path);
 		_pendingStreams.remove(path);
 		String ct = _pendingContentTypes.get(path);
@@ -550,7 +593,7 @@ public class V1Connector {
 	public void useConfigAPI() {
 		_endpoint = CONFIG_API_ENDPOINT;
 	}
-	
+
 	public void useAttachmentApi()
     {
         _endpoint = ATTACHMENT_API_ENDPOINT;
