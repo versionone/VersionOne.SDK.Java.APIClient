@@ -17,8 +17,10 @@ public class BuildResult {
         String path = TextBuilder.join(pathParts, "/");
         String querystring = TextBuilder.join(querystringParts, "&");
         String result = path.concat(querystring != null ? "?" + querystring : "");
-        result = result.replace(">", "%3E");
-        result = result.replace("<", "%3C");
+
+        // TODO System.out.println("Raw result: " + result);
+        //result = result.replace(">", "%3E");
+        //result = result.replace("<", "%3C");
 
         /*
         result = result.replace(" ","%20");

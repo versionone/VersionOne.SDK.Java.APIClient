@@ -9,6 +9,7 @@ import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URL;
+import java.net.URLDecoder;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
@@ -277,9 +278,7 @@ public class V1Connector {
 			HttpHost proxy = new HttpHost(proxyProvider.getAddress().getHost(), proxyProvider.getAddress().getPort());
 			v1Connector_instance.httpclientBuilder.setDefaultCredentialsProvider(v1Connector_instance.credsProvider).setProxy(proxy);
 			v1Connector_instance.isWindowsAuth = false;
-            IAttributeDefinition attribute6 = assetType
-                    //.getAttributeDefinition("SubsMeAndDown:Story%5BStatus.Name='Cancelled'%7CStatus.Name='Open'%5D.Estimate.@Sum");
-                    .getAttributeDefinition("SubsMeAndDown:Story[(Status.Name='Cancelled'|Status.Name='In Progress');Estimate>'1'].Estimate.@Sum");
+
 			return this;
 		}
 
@@ -349,7 +348,11 @@ public class V1Connector {
 	private URI parseUrl(String s) throws APIException {
 		try {
 //			System.out.println("parseUrl: raw String arg: " + s);
-			URL u = new URL(s);
+
+			String decodedS = URLDecoder.decode(s, "UTF-8");
+
+//			System.out.println("parseUrl: MANUALLY DECODED! -->" + decodedS);
+			URL u = new URL(decodedS);
 
 //			System.out.println("parseUrl: URL object: " + u.toString());
 			URI parsedUri;
@@ -407,6 +410,29 @@ public class V1Connector {
 		}
 		return entity;
 	}
+
+//	private HttpEntity setGETMethod(String path) {
+//		String url = V1Util.isNullOrEmpty(path) ? INSTANCE_URL + _endpoint : INSTANCE_URL + _endpoint + path;
+//		HttpEntity entity = null; // TODO not sure if this is good...
+//
+//		HttpGet request = new HttpGet(url);
+//		setDefaultHeaderValue();
+//		request.setHeaders(headerArray);
+//
+//		// Creates a new httpclient if not using NTLM.
+//		if (!isWindowsAuth) {
+//			httpclient = httpclientBuilder.build();
+//		}
+//
+//		try {
+//			httpResponse = httpclient.execute(request);
+//		} catch (IOException e) {
+//			e.printStackTrace();
+//		}
+//
+//		entity = httpResponse.getEntity();
+//		return entity;
+//	}
 
 	private void manageErrors(int errorCode, String errorMessage) throws ConnectionException {
 
