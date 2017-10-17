@@ -43,7 +43,7 @@ import com.versionone.apiclient.exceptions.V1Exception;
 import com.versionone.utils.V1Util;
 
 public class V1Connector {
-
+	private static final String UTF8 = "UTF-8";
 	private final String contentType = "text/xml";
 	private CredentialsProvider credsProvider = new BasicCredentialsProvider();
 	private CloseableHttpResponse httpResponse = null;
@@ -313,7 +313,7 @@ public class V1Connector {
 
 		if (errorCode == HttpStatus.SC_OK) {
 			try {
-				data = new InputStreamReader(entity.getContent());
+				data = new InputStreamReader(entity.getContent(), UTF8);
 			} catch (IllegalStateException e) {
 				e.printStackTrace();
 			} catch (IOException e) {
@@ -349,7 +349,7 @@ public class V1Connector {
 		try {
 //			System.out.println("parseUrl: raw String arg: " + s);
 
-			String decodedS = URLDecoder.decode(s, "UTF-8");
+			String decodedS = URLDecoder.decode(s, UTF8);
 
 //			System.out.println("parseUrl: MANUALLY DECODED! -->" + decodedS);
 			URL u = new URL(decodedS);
@@ -552,7 +552,7 @@ public class V1Connector {
 
 		try {
 			httpResponse = httpclient.execute(httpPost);
-			resultStream = new InputStreamReader(httpResponse.getEntity().getContent());
+			resultStream = new InputStreamReader(httpResponse.getEntity().getContent(), UTF8);
 		} catch (IOException ex) {
 			int code;
 			try {

@@ -29,7 +29,10 @@ public class XMLHandler {
 	public static Document buildDocument(Reader reader, String url) throws APIException, ConnectionException {
 		try {
 			DocumentBuilder builder = createDocumentBuilder();
-			 Document doc = builder.parse(new InputSource(reader));
+			InputSource is = new InputSource(reader);
+			is.setEncoding("UTF-8");
+			Document doc = builder.parse(is);
+
 			return doc;
 		} catch (ParserConfigurationException e) {
 			throw new APIException("Parser Configuration Error ", url, e);
@@ -58,6 +61,8 @@ public class XMLHandler {
 	public static DocumentBuilder createDocumentBuilder() throws ParserConfigurationException {
 		DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
 		factory.setIgnoringElementContentWhitespace(true);
+		factory.setExpandEntityReferences(false);
+		factory.setValidating(false);
 		DocumentBuilder builder = factory.newDocumentBuilder();
 		return builder;
 	}
