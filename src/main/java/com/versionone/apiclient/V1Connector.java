@@ -1,11 +1,6 @@
 package com.versionone.apiclient;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.OutputStream;
-import java.io.Reader;
-import java.io.UnsupportedEncodingException;
+import java.io.*;
 import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URL;
@@ -313,7 +308,13 @@ public class V1Connector {
 
 		if (errorCode == HttpStatus.SC_OK) {
 			try {
-				data = new InputStreamReader(entity.getContent(), UTF8);
+				String charRefPattern = "&#(?=x?[^;]{1,4})(0*[12]?\\d|0*3[01]|x0*1?[0-9A-Fa-f]);";
+				StringWriter writer = new StringWriter();
+				IOUtils.copy(entity.getContent(), writer, UTF8);
+				String withInvalidCharRefs = writer.toString();
+				String cleanedString = withInvalidCharRefs.replaceAll(charRefPattern, "");
+				InputStream in = IOUtils.toInputStream(cleanedString, "UTF-8");
+				data = new InputStreamReader(in, UTF8);
 			} catch (IllegalStateException e) {
 				e.printStackTrace();
 			} catch (IOException e) {
