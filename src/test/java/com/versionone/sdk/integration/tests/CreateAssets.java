@@ -246,6 +246,32 @@ public class CreateAssets {
 		assertEquals(1, story.getAttributes().size());
 	}
 
+    @Test
+    public void createStoryWithTaggedWithMultiValueAttributeTest() throws V1Exception {
+        IAssetType storyType = _services.getMeta().getAssetType("Story");
+        Asset newStory = _services.createNew(storyType, _projectId);
+        IAttributeDefinition nameAttribute = storyType.getAttributeDefinition("Name");
+        IAttributeDefinition taggedWithAttribute = storyType.getAttributeDefinition("TaggedWith");
+        String name = "Test Story " + _projectId + " Create story with TaggedWith values";
+        String tags[] = new String[] {"Tag 1", "Tag 2", "Tag 3"};
+        newStory.setAttributeValue(nameAttribute, name);
+        newStory.addAttributeValue(taggedWithAttribute, tags[0]);
+        newStory.addAttributeValue(taggedWithAttribute, tags[1]);
+        newStory.addAttributeValue(taggedWithAttribute, tags[2]);
+        _services.save(newStory);
+        newStory.acceptChanges();
+
+        Query query = new Query(newStory.getOid().getMomentless());
+        query.getSelection().add(taggedWithAttribute);
+        Asset results[] = _services.retrieve(query).getAssets();
+        assertEquals(1, results.length);
+        Asset story = results[0];
+        assertNotNull(story);
+        Object actuals[] = story.getAttribute(taggedWithAttribute).getValues();
+        assertEquals(3, actuals.length);
+        assertEquals(tags, actuals);
+    }
+
 	@Test
 	public void createDefectTest() throws V1Exception {
 
