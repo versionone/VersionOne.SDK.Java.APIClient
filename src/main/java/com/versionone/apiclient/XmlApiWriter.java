@@ -41,6 +41,7 @@ public class XmlApiWriter {
     private static final String ELEMENT_NAME_RELATION = "Relation";
     private static final String ELEMENT_NAME_VALUE = "Value";
 
+    private static final String ATTRIBUTE_NAME_ID = "id";
     private static final String ATTRIBUTE_NAME_ACTION = "act";
     private static final String ATTRIBUTE_NAME_IDREF = "idref";
     private static final String ATTRIBUTE_NAME_NAME = "name";
@@ -99,7 +100,7 @@ public class XmlApiWriter {
         doc = builder.newDocument();
         Element root = doc.createElement(ELEMENT_NAME_ASSET);
         if (!asset.getOid().isNull())
-            root.setAttribute("id", asset.getOid().getToken());
+            root.setAttribute(ATTRIBUTE_NAME_ID, asset.getOid().getToken());
         Collection<Attribute> attributes = asset.getAttributes().values();
         Iterator<Attribute> iter = attributes.iterator();
         while (iter.hasNext()) {
@@ -122,6 +123,8 @@ public class XmlApiWriter {
         element.setAttribute(ATTRIBUTE_NAME_NAME, attribute.getDefinition().getName());
         if (AttributeType.Relation == attribute.getDefinition().getAttributeType()) {
             populateRelationElement(element, attribute);
+        } else if (attribute.getDefinition().isMultiValue()) {
+            populateMultiValueAttributeElement(element, attribute);
         } else {
             populateAttributeElement(element, attribute);
         }
@@ -142,6 +145,14 @@ public class XmlApiWriter {
                 element.setAttribute(ATTRIBUTE_NAME_ACTION, ACTION_NAME_SET);
             writeAttributeValues(attribute.getValues(), null, element);
         }
+    }
+
+    private void populateMultiValueAttributeElement(Element element, Attribute attribute) {
+        if (!attribute.hasChanged() || !attribute.getDefinition().isMultiValue()) {
+            return;
+        }
+        writeMultiValueAttributeValues(attribute.getAddedValues(), ACTION_NAME_ADD, element);
+        writeMultiValueAttributeValues(attribute.getRemovedValues(), ACTION_NAME_REMOVE, element);
     }
 
     private void populateAttributeElement(Element element, Attribute attribute) throws APIException {
@@ -187,6 +198,22 @@ public class XmlApiWriter {
             if (action != null)
                 element.setAttribute(ATTRIBUTE_NAME_ACTION, action);
             parent.appendChild(element);
+        }
+    }
+
+    private void writeMultiValueAttributeValues(Object[] list, String action, Element parent) {
+        if (list == null) {
+            return;
+        }
+
+        for (Object obj: list) {
+            String value = (String) obj;
+            if (!V1Util.isNullOrEmpty(value)) {
+                Element element = doc.createElement(ELEMENT_NAME_VALUE);
+                element.setAttribute(ATTRIBUTE_NAME_ACTION, action);
+                element.setTextContent(V1Util.convertSystemCrToXmlCr(value));
+                parent.appendChild(element);
+            }
         }
     }
 
