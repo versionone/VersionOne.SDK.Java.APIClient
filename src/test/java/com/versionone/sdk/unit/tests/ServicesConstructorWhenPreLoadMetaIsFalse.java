@@ -26,11 +26,11 @@ public class ServicesConstructorWhenPreLoadMetaIsFalse {
     @Before
     public void setUp() throws Exception {
         WireMock.configureFor(8282);
-        wireMockRule.stubFor(get(urlEqualTo("/meta.v1/AssetType"))
+        wireMockRule.stubFor(get(urlEqualTo("/meta.v1/AssetType?xml"))
                 .willReturn(aResponse()
                         .withStatus(200)
                         .withBody(MetaSamplePayload.AssetTypeType)));
-        wireMockRule.stubFor(get(urlEqualTo("/meta.v1/PrimaryRelation"))
+        wireMockRule.stubFor(get(urlEqualTo("/meta.v1/PrimaryRelation?xml"))
                 .willReturn(aResponse()
                         .withStatus(200)
                         .withBody(MetaSamplePayload.PrimaryRelationType)));
@@ -61,7 +61,7 @@ public class ServicesConstructorWhenPreLoadMetaIsFalse {
 
     @Test
     public void itShouldAccessTheAssetTypeRoute() {
-        wireMockRule.verify(1, getRequestedFor(urlEqualTo("/meta.v1/AssetType")));
+        wireMockRule.verify(1, getRequestedFor(urlEqualTo("/meta.v1/AssetType?xml")));
     }
 
     @Test
@@ -71,6 +71,6 @@ public class ServicesConstructorWhenPreLoadMetaIsFalse {
 
     @Test
     public void itShouldAccessThePrimaryRelationRoute() {
-        wireMockRule.verify(1, getRequestedFor(urlEqualTo("/meta.v1/PrimaryRelation")));
+        wireMockRule.verify(1, getRequestedFor(urlEqualTo("/meta.v1/PrimaryRelation?xml")));
     }
 }

@@ -343,8 +343,13 @@ public class V1Connector {
 	}
 
 	private HttpEntity setGETMethod(String path) {
-		
-		String url = V1Util.isNullOrEmpty(path) ? INSTANCE_URL + _endpoint : INSTANCE_URL + _endpoint + path;
+
+		String url = "";
+		if(_endpoint.equalsIgnoreCase(META_API_ENDPOINT)) {
+			url = V1Util.isNullOrEmpty(path) ? INSTANCE_URL + _endpoint : INSTANCE_URL + _endpoint + path + "?xml";
+		} else {
+			url = V1Util.isNullOrEmpty(path) ? INSTANCE_URL + _endpoint : INSTANCE_URL + _endpoint + path;
+		}
 
 		HttpGet request = new HttpGet(url);
 		setDefaultHeaderValue();
