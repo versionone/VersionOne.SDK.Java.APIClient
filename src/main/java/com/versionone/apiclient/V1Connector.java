@@ -49,7 +49,7 @@ public class V1Connector {
 	private Header[] headerArray = {};
 	private HttpPost httpPost;
 	private boolean isWindowsAuth = false;
-
+	private boolean _useOAuthEndPoints = false;
 	private final Map<String, OutputStream> _pendingStreams = new HashMap<String, OutputStream>();
 	private final Map<String, String> _pendingContentTypes = new HashMap<String, String>();
 
@@ -62,24 +62,30 @@ public class V1Connector {
 	// VERSIONONE ENDPOINTS
 	private final static String META_API_ENDPOINT = "meta.v1/";
 	private final static String DATA_API_ENDPOINT = "rest-1.v1/Data/";
+	private final static String DATA_API_OAUTH_ENDPOINT = "rest-1.oauth.v1/Data/";
 	private final static String NEW_API_ENDPOINT = "rest-1.v1/New/";
+	private final static String NEW_API_OAUTH_ENDPOINT = "rest-1.oauth.v1/New/";
 	private final static String HISTORY_API_ENDPOINT = "rest-1.v1/Hist/";
+	private final static String HISTORY_API_OAUTH_ENDPOINT = "rest-1.oauth.v1/Hist/";
 	private final static String QUERY_API_ENDPOINT = "query.v1/";
 	private final static String LOC_API_ENDPOINT = "loc.v1/";
 	private final static String LOC2_API_ENDPOINT = "loc-2.v1/";
 	private final static String CONFIG_API_ENDPOINT = "config.v1/";
 	private final static String ATTACHMENT_API_ENDPOINT = "attachment.img/";
+	private final static String ATTACHMENT_API_OAUTH_ENDPOINT = "attachment.oauth.img/";
     private final static String EMBEDDED_API_ENDPOINT = "embedded.img/";
+    private final static String EMBEDDED_API_OAUTH_ENDPOINT = "embedded.oauth.img/";
 
 
 	// INTERFACES
 	public interface IsetEndpoint {
-		/**
-		 * @deprecated This method has been deprecated. 
-		 */
-		@Deprecated
-		IsetProxyOrConnector useEndpoint(String endpoint);
 		
+		/**
+		 *  When using AccessTokens and Windows Integrated Auth some special end-points must be used.
+		 *  This method ensures those end points are used.  
+		 * @return IsetProxyOrConnector
+		 */
+		IsetProxyOrConnector andWindowsIntegratedAuth();
 	}
 
 	public interface IsetProxyOrConnector extends IBuild {
@@ -92,15 +98,6 @@ public class V1Connector {
 		IBuild withProxy(ProxyProvider proxyProvider);
 	}
 
-	public interface IsetEndPointOrConnector extends IBuild {
-	
-		/**
-		 * Optional method for specifying an API endpoint to connect to.
-		 * @param endpoint String
-		 * @return IBuild IBuild
-		 */
-		IBuild useEndpoint(String endpoint);
-	}
 
 	public interface IsetProxyOrEndPointOrConnector extends IsetEndpoint, IBuild {
 		/**
@@ -109,7 +106,7 @@ public class V1Connector {
 		 * @param proxyProvider  ProxyProvider The ProxyProvider containing the proxy URI, username, and password.
 		 * @return IsetEndPointOrConnector IsetEndPointOrConnector
 		 */
-		IsetEndPointOrConnector withProxy(ProxyProvider proxyProvider);
+		IBuild withProxy(ProxyProvider proxyProvider);
 	}
 
 	public interface ISetUserAgentMakeRequest {
@@ -133,7 +130,7 @@ public class V1Connector {
 		 * @return IsetProxyOrEndPointOrConnector IsetProxyOrEndPointOrConnector
 		 * @throws V1Exception V1Exception
 		 */
-		IsetProxyOrEndPointOrConnector withUsernameAndPassword(String username, String password) throws V1Exception;
+		IsetProxyOrConnector withUsernameAndPassword(String username, String password) throws V1Exception;
 
 		/**
 		 * Optional method for setting the Windows Integrated Authentication credentials for authentication based on the
@@ -141,7 +138,7 @@ public class V1Connector {
 		 * @return IsetProxyOrEndPointOrConnector IsetProxyOrEndPointOrConnector
 		 * @throws V1Exception V1Exception
 		 */
-		IsetProxyOrEndPointOrConnector withWindowsIntegrated() throws V1Exception;
+		IsetProxyOrConnector withWindowsIntegrated() throws V1Exception;
 
 		/**
 		 * Optional method for setting the Windows Integrated Authentication credentials for authentication based on
@@ -196,7 +193,7 @@ public class V1Connector {
 	}
 
 	// // Fluent BUILDER ///
-	private static class Builder implements ISetUserAgentMakeRequest, IAuthenticationMethods, IsetProxyOrEndPointOrConnector, IsetProxyOrConnector, IsetEndPointOrConnector {
+	private static class Builder implements ISetUserAgentMakeRequest, IAuthenticationMethods, IsetProxyOrEndPointOrConnector, IsetProxyOrConnector  {
 
 		private V1Connector v1Connector_instance;
 
@@ -226,7 +223,7 @@ public class V1Connector {
 
 		// set the authentication type (if required by the endpoint)
 		@Override
-		public IsetProxyOrEndPointOrConnector withUsernameAndPassword(String username, String password) throws V1Exception {
+		public IsetProxyOrConnector withUsernameAndPassword(String username, String password) throws V1Exception {
 
 			if (V1Util.isNullOrEmpty(username) || V1Util.isNullOrEmpty(username))
 				throw new NullPointerException("Username and password values cannot be null or empty.");
@@ -254,7 +251,7 @@ public class V1Connector {
 		}
 
 		@Override
-		public IsetProxyOrEndPointOrConnector withWindowsIntegrated() throws V1Exception {
+		public IsetProxyOrConnector withWindowsIntegrated() throws V1Exception {
 
 			v1Connector_instance.httpclient = WinHttpClients.createDefault();
 			v1Connector_instance.isWindowsAuth = true;
@@ -263,7 +260,7 @@ public class V1Connector {
 		}
 
 		@Override
-		public IsetEndPointOrConnector withProxy(ProxyProvider proxyProvider) {
+		public IBuild withProxy(ProxyProvider proxyProvider) {
 
 			if (null == proxyProvider) {
 				throw new NullPointerException("ProxyProvider value cannot be null or empty.");
@@ -278,21 +275,16 @@ public class V1Connector {
 
 			return this;
 		}
-
-		@Override
-		public IsetProxyOrConnector useEndpoint(String endpoint) {
-
-			if (V1Util.isNullOrEmpty(endpoint)) {
-				throw new NullPointerException("Endpoint value cannot be null or empty.");
-			}
-
-			v1Connector_instance._endpoint = endpoint;
-			return this;
-		}
 		
 		@Override
 		public V1Connector build() {
 			return v1Connector_instance;
+		}
+
+		@Override
+		public IsetProxyOrConnector andWindowsIntegratedAuth() {
+			v1Connector_instance._useOAuthEndPoints = true;
+			return this;
 		}
 	}
 	// end builder
@@ -524,15 +516,15 @@ public class V1Connector {
 	}
 
 	public void useDataAPI() {
-		_endpoint = DATA_API_ENDPOINT;
+		_endpoint = _useOAuthEndPoints ? DATA_API_OAUTH_ENDPOINT : DATA_API_ENDPOINT;
 	}
 
 	public void useNewAPI() {
-		_endpoint = NEW_API_ENDPOINT;
+		_endpoint = _useOAuthEndPoints ? NEW_API_OAUTH_ENDPOINT : NEW_API_ENDPOINT;
 	}
 
 	public void useHistoryAPI() {
-		_endpoint = HISTORY_API_ENDPOINT;
+		_endpoint = _useOAuthEndPoints ? HISTORY_API_OAUTH_ENDPOINT : HISTORY_API_ENDPOINT;
 	}
 
 	public void useQueryAPI() {
@@ -553,12 +545,12 @@ public class V1Connector {
 	
 	public void useAttachmentApi()
     {
-        _endpoint = ATTACHMENT_API_ENDPOINT;
+		_endpoint = _useOAuthEndPoints ? ATTACHMENT_API_OAUTH_ENDPOINT : ATTACHMENT_API_ENDPOINT;
     }
 
 	public void useEmbeddedApi()
     {
-        _endpoint =  EMBEDDED_API_ENDPOINT;
+		_endpoint = _useOAuthEndPoints ? EMBEDDED_API_OAUTH_ENDPOINT : EMBEDDED_API_ENDPOINT;
     }
 
 }

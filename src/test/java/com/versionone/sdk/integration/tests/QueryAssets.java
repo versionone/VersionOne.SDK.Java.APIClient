@@ -401,46 +401,19 @@ public class QueryAssets {
 	public void queryAttachment() throws V1Exception, IOException {
 		String file = "com/versionone/apiclient/versionone.png";
 		assertNotNull("Test file missing", Thread.currentThread().getContextClassLoader().getResource(file));
-		String mimeType = MimeType.resolve(file);
-
-		IAttachments attachments = new Attachments(V1Connector.withInstanceUrl(_instanceUrl).withUserAgentHeader(".NET_SDK_Integration_Test", "1.0")
-				.withAccessToken(_accessToken).useEndpoint("attachment.img/").build());
 
 		IAssetType storyType = _services.getMeta().getAssetType("Story");
 		Asset newStory = _services.createNew(storyType, _projectId);
 		IAttributeDefinition nameAttribute = storyType.getAttributeDefinition("Name");
-		IAttributeDefinition attachmentsAttribute = storyType.getAttributeDefinition("Attachments");
 		String name = "Test Story " + _projectId + " Query attachment";
 		newStory.setAttributeValue(nameAttribute, name);
 		_services.save(newStory);
 
+		_services.saveAttachment(Thread.currentThread().getContextClassLoader().getResource(file).getPath(), newStory, "Test Attachment on " + newStory.getOid());
+		
 		IAssetType attachmentType = _services.getMeta().getAssetType("Attachment");
-		IAttributeDefinition attachmentAssetDef = attachmentType.getAttributeDefinition("Asset");
 		IAttributeDefinition attachmentContent = attachmentType.getAttributeDefinition("Content");
-		IAttributeDefinition attachmentContentType = attachmentType.getAttributeDefinition("ContentType");
-		IAttributeDefinition attachmentFileName = attachmentType.getAttributeDefinition("Filename");
-		IAttributeDefinition attachmentName = attachmentType.getAttributeDefinition("Name");
-		Asset newAttachment = _services.createNew(attachmentType, Oid.Null);
-		newAttachment.setAttributeValue(attachmentName, "Test Attachment on " + newStory.getOid());
-		newAttachment.setAttributeValue(attachmentFileName, file);
-		newAttachment.setAttributeValue(attachmentContentType, mimeType);
-		newAttachment.setAttributeValue(attachmentContent, "");
-		newAttachment.setAttributeValue(attachmentAssetDef, newStory.getOid());
-		_services.save(newAttachment);
-		String key = newAttachment.getOid().getKey().toString();
-
-		FileInputStream inStream = new FileInputStream(Thread.currentThread().getContextClassLoader().getResource(file).getPath());
-		OutputStream output = attachments.getWriter(key, mimeType);
-		byte[] buffer = new byte[inStream.available() + 1];
-		while (true) {
-			int read = inStream.read(buffer, 0, buffer.length);
-			if (read <= 0)
-				break;
-			output.write(buffer, 0, read);
-		}
-		attachments.setWriter(key);
-		inStream.close();
-
+				
 		Query query = new Query(attachmentType);
 		query.getSelection().add(attachmentContent);
 		Asset attachment = _services.retrieve(query).getAssets()[0];
