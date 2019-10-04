@@ -188,7 +188,7 @@ public class QueryURLBuilderTests {
         Assert.assertEquals("Data/Mock?sel=&asof=2007-10-01T03:00:00", testMe.toString());
     }
 
-    @Test
+    @Test //@Ignore // TODO fix
     public void datePrecision() {
         Calendar cal = Calendar.getInstance();
         cal.set(2012, Calendar.JUNE, 21, 15, 17, 53);
@@ -206,7 +206,7 @@ public class QueryURLBuilderTests {
         Assert.assertEquals("Data/Mock?sel=Mock.Name&where=Mock.ChangeDate%3E'2012-06-21T15%3A17%3A53.504'", queryString);
     }
 
-    @Test
+    @Test //@Ignore // TODO fix
     public void datePrecisionInVariable() {
         Calendar cal = Calendar.getInstance();
         cal.set(2012, Calendar.JUNE, 21, 15, 17, 53);
