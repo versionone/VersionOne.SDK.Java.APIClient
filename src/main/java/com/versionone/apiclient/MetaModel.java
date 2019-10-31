@@ -2,6 +2,7 @@ package com.versionone.apiclient;
 
 import java.io.IOException;
 import java.io.Reader;
+import java.net.URLEncoder;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -249,7 +250,7 @@ public class MetaModel implements IMetaModel {
 			reader = _connector.getData(token);
 			}else {
 				 _v1Connector.useMetaAPI();
-	                reader = _v1Connector.getData(token);
+	                reader = _v1Connector.getData(URLEncoder.encode(token));
 			}
 
 			rc = XMLHandler.buildDocument(reader, token);
