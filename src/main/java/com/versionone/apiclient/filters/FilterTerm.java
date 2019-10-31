@@ -1,5 +1,8 @@
 package com.versionone.apiclient.filters;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
+
 import com.versionone.apiclient.exceptions.APIException;
 import com.versionone.apiclient.interfaces.IAttributeDefinition;
 import com.versionone.apiclient.interfaces.IAttributeDefinition.AttributeType;
@@ -57,7 +60,15 @@ public class FilterTerm implements IFilterTerm {
         }
 
         String prefix = full ? def.getToken() : def.getName();
-        return prefix + operatorToken(operator) + valueProvider.stringize();
+        String encodedOperatorToken;
+        String operatorToken = operatorToken(operator);
+		try {
+			encodedOperatorToken = URLEncoder.encode(operatorToken(operator), "UTF-8");
+		} catch (UnsupportedEncodingException e) {
+			encodedOperatorToken = operatorToken.replace(">", "%3E");
+	        encodedOperatorToken = operatorToken.replace("<", "%3C");
+		}
+        return prefix + encodedOperatorToken + valueProvider.stringize();
     }
 
     public void equal(Object... value) {

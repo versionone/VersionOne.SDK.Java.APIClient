@@ -5,9 +5,12 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.Reader;
+import java.io.StringReader;
 import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
+import java.net.URI;
 import java.net.URL;
+import java.net.URLEncoder;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
@@ -37,7 +40,10 @@ import org.apache.http.message.BasicHeader;
 
 import com.versionone.apiclient.exceptions.ConnectionException;
 import com.versionone.apiclient.exceptions.V1Exception;
+import com.versionone.apiclient.interfaces.IAttributeDefinition;
 import com.versionone.utils.V1Util;
+
+import wiremock.com.google.common.io.CharStreams;
 
 public class V1Connector {
 
@@ -310,7 +316,7 @@ public class V1Connector {
 
 		if (errorCode == HttpStatus.SC_OK) {
 			try {
-				data = new InputStreamReader(entity.getContent());
+				 data = new InputStreamReader(entity.getContent());
 			} catch (IllegalStateException e) {
 				e.printStackTrace();
 			} catch (IOException e) {
@@ -343,25 +349,34 @@ public class V1Connector {
 	}
 
 	private HttpEntity setGETMethod(String path) {
-		
-		String url = V1Util.isNullOrEmpty(path) ? INSTANCE_URL + _endpoint : INSTANCE_URL + _endpoint + path;
 
-		HttpGet request = new HttpGet(url);
-		setDefaultHeaderValue();
-		request.setHeaders(headerArray);
-
-		// Creates a new httpclient if not using NTLM.
-		if (!isWindowsAuth) {
-			httpclient = httpclientBuilder.build();
-		}
-
+		HttpEntity entity = null; // TODO not sure if this is good...
 		try {
-			httpResponse = httpclient.execute(request);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+			String url = V1Util.isNullOrEmpty(path) ? 
+					INSTANCE_URL + _endpoint : INSTANCE_URL + _endpoint + path;
+			URI uri = URI.create(url);
+			System.out.printf("queryUrl: %s %n", url);
+//			System.out.printf("queryUrl: %s %n", uri);
 
-		HttpEntity entity = httpResponse.getEntity();
+			HttpGet request = new HttpGet(uri);
+			setDefaultHeaderValue();
+			request.setHeaders(headerArray);
+
+			// Creates a new httpclient if not using NTLM.
+			if (!isWindowsAuth) {
+				httpclient = httpclientBuilder.build();
+			}
+
+			try {
+				httpResponse = httpclient.execute(request);
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+
+			entity = httpResponse.getEntity();
+		} catch (Exception apiEx) {
+			apiEx.printStackTrace();
+		}
 		return entity;
 	}
 

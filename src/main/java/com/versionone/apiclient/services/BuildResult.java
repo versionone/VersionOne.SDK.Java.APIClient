@@ -18,12 +18,11 @@ public class BuildResult {
         String querystring = TextBuilder.join(querystringParts, "&");
         String result = path.concat(querystring != null ? "?" + querystring : "");
 
-        result = result.replace(" ","%20");
-        result = result.replace("[", "%5B");
-        result = result.replace("]", "%5D");
-        result = result.replace(">", "%3E");
-        result = result.replace("<", "%3C");
-
+//        result = result.replace(" ","%20");
+//        result = result.replace("[", "%5B");
+//        result = result.replace("]", "%5D");
+//        result = result.replace(">", "%3E");
+//        result = result.replace("<", "%3C");
         return result;
     }
 }

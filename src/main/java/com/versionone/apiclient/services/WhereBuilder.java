@@ -1,5 +1,7 @@
 package com.versionone.apiclient.services;
 
+import java.net.URLEncoder;
+
 import com.versionone.apiclient.Query;
 import com.versionone.apiclient.exceptions.APIException;
 import com.versionone.apiclient.filters.IFilterTerm;
