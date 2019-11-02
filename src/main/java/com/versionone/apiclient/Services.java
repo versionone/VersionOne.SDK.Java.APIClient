@@ -135,7 +135,9 @@ public class Services implements IServices {
 				reader = _v1Connector.getData(queryUrl);
 			}
 			Document doc = XMLHandler.buildDocument(reader, queryUrl);
-			return parseQueryResult(doc.getDocumentElement(), query);
+			Element root = doc.getDocumentElement();
+			removeEmptyTextNodes(root);
+			return parseQueryResult(root, query);
 
 		} catch (ConnectionException ex) {
 			if (ex.getServerResponseCode() == 404) {
@@ -179,6 +181,8 @@ public class Services implements IServices {
 			}
 
 			Document doc = XMLHandler.buildDocument(reader, path);
+			Element root = doc.getDocumentElement();
+			removeEmptyTextNodes(root);
 			return parseNewAssetNode(doc.getDocumentElement(), assetType);
 		} catch (Exception ex) {
 			throw new APIException("Failed to create new asset!", assetType.getToken(), ex);
@@ -211,7 +215,9 @@ public class Services implements IServices {
 				reader = _v1Connector.sendData(path, "");
 			}
 			Document doc = XMLHandler.buildDocument(reader, path);
-			Asset asset = parseAssetNode(doc.getDocumentElement());
+			Element root = doc.getDocumentElement();
+			removeEmptyTextNodes(root);
+			Asset asset = parseAssetNode(root);
 			return asset.getOid();
 		} catch (Exception ex) {
 			throw new APIException("Error executing Operation!", op.getName(), ex);
@@ -332,7 +338,9 @@ public class Services implements IServices {
 					reader = _v1Connector.sendData(path, data);
 				}
 				Document doc = XMLHandler.buildDocument(reader, path);
-				parseSaveAssetNode(doc.getDocumentElement(), asset);
+				Element root = doc.getDocumentElement();
+				removeEmptyTextNodes(root);
+				parseSaveAssetNode(root, asset);
 			} catch (OidException e) {
 				throw new APIException("Error processing response", e);
 			} finally {
