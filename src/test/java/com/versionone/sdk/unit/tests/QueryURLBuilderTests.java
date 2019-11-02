@@ -42,7 +42,7 @@ public class QueryURLBuilderTests {
         query.getSelection().add(new MockAttributeDefinition("Nickname"));
 
         QueryURLBuilder testMe = new QueryURLBuilder(query, false);
-        Assert.assertEquals("Data/Mock?sel=Mock.DefaultRole,Mock.Name,Mock.Nickname", testMe.toString());
+        Assert.assertEquals("Data/Mock?sel=Mock.DefaultRole%2CMock.Name%2CMock.Nickname", testMe.toString());
     }
 
     @Test
@@ -74,7 +74,7 @@ public class QueryURLBuilderTests {
         query.setFilter(term);
 
         QueryURLBuilder testMe = new QueryURLBuilder(query,false);
-        Assert.assertEquals("Data/Mock?sel=&where=Mock.Name='Jerry%27%27s+Story'", testMe.toString());
+        Assert.assertEquals("Data/Mock?sel=&where=Mock.Name%3D'Jerry%27%27s+Story'", testMe.toString());
     }
 
     @Test
@@ -85,7 +85,7 @@ public class QueryURLBuilderTests {
         query.setFilter(term);
 
         QueryURLBuilder testMe = new QueryURLBuilder(query, false);
-        Assert.assertEquals("Data/Mock?sel=&where=Mock.Name='test+%26+%23'", testMe.toString());
+        Assert.assertEquals("Data/Mock?sel=&where=Mock.Name%3D'test+%26+%23'", testMe.toString());
     }
 
     @Test
@@ -110,7 +110,7 @@ public class QueryURLBuilderTests {
         query.setFilter(term);
 
         QueryURLBuilder testMe = new QueryURLBuilder(query, false);
-        Assert.assertEquals("Data/Mock?sel=Mock.DefaultRole,Mock.Name,Mock.Nickname&where=Mock.Name='Jerry'",
+        Assert.assertEquals("Data/Mock?sel=Mock.DefaultRole%2CMock.Name%2CMock.Nickname&where=Mock.Name%3D'Jerry'",
                 testMe.toString());
     }
 
@@ -124,7 +124,7 @@ public class QueryURLBuilderTests {
         query.getOrderBy().minorSort(estimateAttribute, OrderBy.Order.Ascending);
 
         QueryURLBuilder testMe = new QueryURLBuilder(query, false);
-        Assert.assertEquals("Data/Mock?sel=Mock.Name,Mock.Estimate&sort=Mock.Estimate", testMe.toString());
+        Assert.assertEquals("Data/Mock?sel=Mock.Name%2CMock.Estimate&sort=Mock.Estimate", testMe.toString());
     }
 
     @Test
@@ -223,7 +223,7 @@ public class QueryURLBuilderTests {
         query.setFilter(filter);
 
         String queryString = builder.toString();
-        Assert.assertEquals("Data/Mock?sel=Mock.Name&where=Mock.ChangeDate=$requestedDate&with=$requestedDate=2012-06-21T15%3A17%3A53.504", queryString);
+        Assert.assertEquals("Data/Mock?sel=Mock.Name&where=Mock.ChangeDate%3D$requestedDate&with=$requestedDate=2012-06-21T15%3A17%3A53.504", queryString);
     }
 
     @Test
@@ -239,7 +239,7 @@ public class QueryURLBuilderTests {
         query.getSelection().add(new MockAttributeDefinition("Reference"));
 
         QueryURLBuilder builder = new QueryURLBuilder(query, false);
-        Assert.assertEquals("Data/Mock?sel=Mock.Reference&where=Mock.Name=$Name&with=$Name=Name1,Name2,Name3", builder.toString());
+        Assert.assertEquals("Data/Mock?sel=Mock.Reference&where=Mock.Name%3D$Name&with=$Name=Name1,Name2,Name3", builder.toString());
     }
 
     @Test
