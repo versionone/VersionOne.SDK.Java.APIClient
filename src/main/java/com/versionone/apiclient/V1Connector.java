@@ -355,8 +355,7 @@ public class V1Connector {
 			String url = V1Util.isNullOrEmpty(path) ? 
 					INSTANCE_URL + _endpoint : INSTANCE_URL + _endpoint + path;
 			URI uri = URI.create(url);
-			System.out.printf("queryUrl: %s %n", url);
-//			System.out.printf("queryUrl: %s %n", uri);
+//			System.out.printf("queryURI: %s %n", uri);
 
 			HttpGet request = new HttpGet(uri);
 			setDefaultHeaderValue();

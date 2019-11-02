@@ -434,7 +434,7 @@
 				</AttributeDefinition>
 			</AssetType>
 		</Response>
-		<Response path="rest-1.v1/Data/Publication?sel=Publication.Payload&amp;where=Publication.Payload='98771fb4-71b8-42ec-be8b-69414daa020e'">
+		<Response path="rest-1.v1/Data/Publication?sel=Publication.Payload&amp;where=Publication.Payload%3D'98771fb4-71b8-42ec-be8b-69414daa020e'">
 			<Asset href="/V1Production/rest-1.v1/Publication/12345" id="Publication:12345">
 				<Attribute name="Payload">98771fb4-71b8-42ec-be8b-69414daa020e</Attribute>
 			</Asset>
@@ -596,7 +596,7 @@
         <RelatedAttribute href="/VersionOne//meta.v1/AssetType/Name" tokenref="AssetType.Name"/>
       </AttributeDefinition>
     </Response>
-    <Response path="rest-1.v1/Data/AttributeDefinition?sel=AttributeDefinition.Name&amp;where=AttributeDefinition.Asset.AssetTypesMeAndDown.Name='Defect'">
+    <Response path="rest-1.v1/Data/AttributeDefinition?sel=AttributeDefinition.Name&amp;where=AttributeDefinition.Asset.AssetTypesMeAndDown.Name%3D'Defect'">
       <Assets total="3" pageSize="2147483647" pageStart="0">
         <Asset href="/VersionOne/rest-1.v1/Data/HierarchyRelationDefinition/-5718" id="HierarchyRelationDefinition:-5718">
           <Attribute name="Name">Super</Attribute>
