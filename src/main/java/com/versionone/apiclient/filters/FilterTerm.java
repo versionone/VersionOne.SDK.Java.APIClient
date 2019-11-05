@@ -44,7 +44,7 @@ public class FilterTerm implements IFilterTerm {
                 throw new APIException("Exists operator may not take values");
             }
 
-            return "%2B" + def.getToken();
+            return "+" + def.getToken();
         }
 
         if (operator == Operator.NotExists) {
@@ -60,15 +60,8 @@ public class FilterTerm implements IFilterTerm {
         }
 
         String prefix = full ? def.getToken() : def.getName();
-        String encodedOperatorToken;
         String operatorToken = operatorToken(operator);
-		try {
-			encodedOperatorToken = URLEncoder.encode(operatorToken(operator), "UTF-8");
-		} catch (UnsupportedEncodingException e) {
-			encodedOperatorToken = operatorToken.replace(">", "%3E");
-	        encodedOperatorToken = operatorToken.replace("<", "%3C");
-		}
-        return prefix + encodedOperatorToken + valueProvider.stringize();
+        return prefix + operatorToken + valueProvider.stringize();
     }
 
     public void equal(Object... value) {

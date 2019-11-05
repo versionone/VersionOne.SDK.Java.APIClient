@@ -17,9 +17,9 @@ public class SelectionBuilder extends QueryBuilder {
         if (query.getSelection().size() == 1 && !query.getOid().isNull()) {
             result.pathParts.add(query.getSelection().get(0).getName());
         } else if (query.getSelection().size() > 0) {
-            result.querystringParts.add("sel=" + URLEncoder.encode(query.getSelection().getToken()));
+        	result.addQueryParameter("sel", query.getSelection().getToken());
         } else {
-            result.querystringParts.add("sel=");
+        	result.addQueryParameter("sel", "");
         }
     }
 }

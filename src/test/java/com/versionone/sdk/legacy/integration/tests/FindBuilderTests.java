@@ -40,7 +40,7 @@ public class FindBuilderTests {
         _target.build(new Query(assetType), new BuildResult());
         BuildResult result = new BuildResult();
         _target.build(new Query(assetType), result);
-        Assert.assertEquals(0, result.querystringParts.size());
+        Assert.assertEquals(0, result.getQueryParameterCount());
     }
 
     @Test
@@ -55,7 +55,7 @@ public class FindBuilderTests {
         query.setFind(new QueryFind("admin", selection));
         BuildResult result = new BuildResult();
         _target.build(query, result);
-        Assert.assertEquals(2, result.querystringParts.size()); //one part for find, one part for findin
+        Assert.assertEquals(2, result.getQueryParameterCount()); //one part for find, one part for findin
         Assert.assertEquals("?find=admin&findin=Member.Username", result.toUrl());
     }
 
@@ -71,7 +71,7 @@ public class FindBuilderTests {
         query.setFind(new QueryFind("admin@mydomain.com", selection));  //make sure ampersand get url encoded
         BuildResult result = new BuildResult();
         _target.build(query, result);
-        Assert.assertEquals(2, result.querystringParts.size()); //one part for find, one part for findin
+        Assert.assertEquals(2, result.getQueryParameterCount()); //one part for find, one part for findin
         Assert.assertEquals("?find=admin%40mydomain.com&findin=Member.Username", result.toUrl());
     }
 

@@ -14,7 +14,7 @@ public class WhereBuilder extends QueryBuilder {
 
         if (filter2token != null) {
             try {
-                result.querystringParts.add("where=" + filter2token.getToken());
+            	result.addQueryParameter("where", filter2token.getToken());
             } catch (APIException e) {
                 throw new RuntimeException(e);
             }
