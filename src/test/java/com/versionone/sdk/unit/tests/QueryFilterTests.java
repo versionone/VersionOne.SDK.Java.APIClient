@@ -31,7 +31,7 @@ public class QueryFilterTests extends MetaTestBase {
     public void toToken() throws Exception {
         FilterTerm term = new FilterTerm(getWorkitemScope());
         term.equal(new Object[]{getScopeOid(2)});
-        Assert.assertEquals("Workitem.Scope%3D'Scope%3A2'", term.getToken());
+        Assert.assertEquals("Workitem.Scope='Scope:2'", term.getToken());
     }
 
     @Test
@@ -42,7 +42,7 @@ public class QueryFilterTests extends MetaTestBase {
         FilterTerm term2 = new FilterTerm(getWorkitemScope());
         term2.equal(new Object[]{getScopeOid(2)});
 
-        Assert.assertEquals("(Workitem.Parent%3D'Theme%3A48';Workitem.Scope%3D'Scope%3A2')",
+        Assert.assertEquals("(Workitem.Parent='Theme:48';Workitem.Scope='Scope:2')",
                 new AndFilterTerm(new IFilterTerm[]{term1, term2}).getToken());
     }
 
@@ -67,7 +67,7 @@ public class QueryFilterTests extends MetaTestBase {
 
         OrFilterTerm o = new OrFilterTerm(and1, and2);
 
-        Assert.assertEquals("((Workitem.Parent%3D'Theme%3A5','Theme%3A6';Workitem.Scope%3D'Scope%3A0')%7C(Workitem.Parent%21%3D'Theme%3A7','Theme%3A8';Workitem.Scope%21%3D'Scope%3A1'))",
+        Assert.assertEquals("((Workitem.Parent='Theme:5','Theme:6';Workitem.Scope='Scope:0')|(Workitem.Parent!='Theme:7','Theme:8';Workitem.Scope!='Scope:1'))",
                 o.getToken());
     }
 
@@ -90,7 +90,7 @@ public class QueryFilterTests extends MetaTestBase {
 
         OrFilterTerm o = new OrFilterTerm(and1, and2);
 
-        Assert.assertEquals("((Workitem.ToDo%3E'5';Workitem.ToDo%3C'10')%7C(Workitem.ToDo%3E%3D'20';Workitem.ToDo%3C%3D'30'))", o.getToken());
+        Assert.assertEquals("((Workitem.ToDo>'5';Workitem.ToDo<'10')|(Workitem.ToDo>='20';Workitem.ToDo<='30'))", o.getToken());
     }
 
     @Test
@@ -112,6 +112,6 @@ public class QueryFilterTests extends MetaTestBase {
         AndFilterTerm a1 = new AndFilterTerm(o1, o2);
         AndFilterTerm a2 = new AndFilterTerm(a1);
 
-        Assert.assertEquals("Workitem.ToDo%3E'5'", a2.getToken());
+        Assert.assertEquals("Workitem.ToDo>'5'", a2.getToken());
     }
 }

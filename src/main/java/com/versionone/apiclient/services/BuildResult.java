@@ -1,28 +1,49 @@
 package com.versionone.apiclient.services;
 
 import java.io.UnsupportedEncodingException;
-import java.net.URLDecoder;
 import java.net.URLEncoder;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map.Entry;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 
 public class BuildResult {
-    public final List<String> querystringParts = new ArrayList<String>();
+    private final HashMap<String, String> queryParameters = new LinkedHashMap<String, String>();
     public final List<String> pathParts = new ArrayList<String>();
 
+    public void addQueryParameter(String name, String value) {
+    	queryParameters.put(name, value);
+    }
+    
+    public int getQueryParameterCount() {
+    	return queryParameters.size();
+    }
+    
+    public String urlEncode(String valueString) {
+    	try {
+            valueString = URLEncoder.encode(valueString, "UTF-8");
+        } catch (UnsupportedEncodingException e) {
+            valueString = valueString.replace("+", "%2B");
+            valueString = valueString.replace(" ", "+");
+            valueString = valueString.replace("&", "%26");
+            valueString = valueString.replace("#", "%23");
+        }
+    	return valueString;
+    }
+    
     public String toUrl() {
         String path = TextBuilder.join(pathParts, "/");
-        String querystring = TextBuilder.join(querystringParts, "&");
+        List<String> queryParts = new ArrayList<String>();
+        for (Iterator<Entry<String, String>> iterator = queryParameters.entrySet().iterator(); iterator.hasNext();) {
+			Entry<String, String> queryParameter = iterator.next();
+			queryParts.add(String.format("%s=%s", queryParameter.getKey(), 
+        								urlEncode(queryParameter.getValue())));
+		}
+        String querystring =  TextBuilder.join(queryParts, "&");
         String result = path.concat(querystring != null ? "?" + querystring : "");
-
-//        result = result.replace(" ","%20");
-//        result = result.replace("[", "%5B");
-//        result = result.replace("]", "%5D");
-//        result = result.replace(">", "%3E");
-//        result = result.replace("<", "%3C");
         return result;
     }
 }
