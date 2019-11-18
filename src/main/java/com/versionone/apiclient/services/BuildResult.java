@@ -35,7 +35,12 @@ public class BuildResult {
     }
     
     public String toUrl() {
-        String path = TextBuilder.join(pathParts, "/");
+        List<String> encodedPathParts = new ArrayList<String>();
+        for (Iterator<String> iterator = pathParts.iterator(); iterator.hasNext();) {
+                String pathPart = iterator.next();
+                encodedPathParts.add(urlEncode(pathPart));
+        }
+        String path = TextBuilder.join(encodedPathParts, "/");
         List<String> queryParts = new ArrayList<String>();
         for (Iterator<Entry<String, String>> iterator = queryParameters.entrySet().iterator(); iterator.hasNext();) {
 			Entry<String, String> queryParameter = iterator.next();
