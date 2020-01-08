@@ -1,6 +1,6 @@
 # VersionOne Java SDK License #
 Copyright (c) 2008-2015 VersionOne, Inc.
-All rights reserved.
+All rights reserved. 
 
 Redistribution and use in source and binary forms, with or without 
 modification, are permitted provided that the following conditions are 
