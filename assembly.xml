@@ -15,7 +15,7 @@
 			<directory>${project.build.directory}</directory>
 			<outputDirectory />
 			<includes>
-				<include>**/apidocs/</include>
+				<include>./apidocs/</include>
 				<include>${project.artifactId}-${project.version}.jar</include>
 			</includes>
 		</fileSet>
@@ -27,6 +27,7 @@
 				<include>README*</include>
 				<include>ACKNOWLEDGEMENTS*</include>
 				<include>JavaSDK*</include>
+				<include>JavaSDK_Documentation.pdf</include>
 			</includes>
 		</fileSet>
 	</fileSets>
