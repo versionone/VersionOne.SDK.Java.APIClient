@@ -1,5 +1,5 @@
 # VersionOne Java SDK
-Copyright (c) 2008-2015 [VersionOne](http://versionone.com/).
+Copyright (c) 2008-2019 [VersionOne](http://versionone.com/).
 All rights reserved.
 
 The VersionOne Java SDK is a free and open-source library that accelerates software development of applications that integrate with VersionOne. The SDK serves as a wrapper to the VersionOne REST API, eliminating the need to code the infrastructure necessary for direct handling of HTTP requests and responses.
