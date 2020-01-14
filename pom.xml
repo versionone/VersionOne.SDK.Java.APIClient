@@ -104,25 +104,6 @@
 			    </executions>
 			</plugin>
 			-->
-			<!-- create zip file using assembly.xml -->			
-			<plugin>
-				<artifactId>maven-assembly-plugin</artifactId>
-				<configuration>
-					<finalName>VersionOne.JavaSDK-${project.version}</finalName>
-					<descriptors>
-						<descriptor>${basedir}/assembly.xml</descriptor>
-					</descriptors>
-				</configuration>
-				<executions>
-					<execution>
-						<id>make-assembly</id>
-						<phase>package</phase>
-						<goals>
-							<goal>single</goal>
-						</goals>
-					</execution>
-				</executions>
-			</plugin>
 			<plugin>
 				<artifactId>maven-compiler-plugin</artifactId>
 				<version>3.1</version>
@@ -146,7 +127,25 @@
 					</execution>
 				</executions>
 			</plugin>
-
+			<!-- create zip file using assembly.xml -->			
+			<plugin>
+				<artifactId>maven-assembly-plugin</artifactId>
+				<configuration>
+					<finalName>VersionOne.JavaSDK-${project.version}</finalName>
+					<descriptors>
+						<descriptor>${basedir}/assembly.xml</descriptor>
+					</descriptors>
+				</configuration>
+				<executions>
+					<execution>
+						<id>make-assembly</id>
+						<phase>package</phase>
+						<goals>
+							<goal>single</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
 			<!-- Add sources jar -->
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
