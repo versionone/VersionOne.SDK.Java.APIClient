@@ -34,7 +34,7 @@ Documentation for the Java SDK comes in two forms:
 1. [Conceptual with Code Examples](https://community.versionone.com/Developers/Developer-Library/Documentation/Java_SDK): Describes how to create a connection to a VersionOne instance and then use the SDK to query, create, update, and perform operations against VersionOne assets.
 2. [JavaDocs API Reference](http://versionone.github.io/VersionOne.SDK.Java.APIClient/): Full JavaDocs for all classes and methods contained in the SDK.
 
-## Getting Help
+## Getting Help:
 
 While we strive to make the SDK as easy to use as possible, you may still occasionally need some help, and there are a few different ways you can get it:  
 
