@@ -76,6 +76,7 @@
 	</properties>
 
 	<build>
+	<finalName>${project.artifactId}-${project.version}-${buildNumber}</finalName>
 		<plugins>
 			<!-- Write manifest properties -->
 			<plugin>
