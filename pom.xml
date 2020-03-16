@@ -76,7 +76,7 @@
 	</properties>
 
 	<build>
-	<finalName>${project.artifactId}-${project.version}-${buildNumber}</finalName>
+	<finalName>${project.artifactId}-${project.version}.${buildNumber}</finalName>
 		<plugins>
 			<!-- Write manifest properties -->
 			<plugin>
@@ -135,7 +135,7 @@
 			<plugin>
 				<artifactId>maven-assembly-plugin</artifactId>
 				<configuration>
-					<finalName>VersionOne.JavaSDK-${project.version}-${buildNumber}</finalName>
+					<finalName>VersionOne.SDK.APIClient-${project.version}.${buildNumber}</finalName>
 					<descriptors>
 						<descriptor>${basedir}/assembly.xml</descriptor>
 					</descriptors>
