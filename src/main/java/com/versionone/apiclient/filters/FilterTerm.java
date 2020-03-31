@@ -1,5 +1,8 @@
 package com.versionone.apiclient.filters;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
+
 import com.versionone.apiclient.exceptions.APIException;
 import com.versionone.apiclient.interfaces.IAttributeDefinition;
 import com.versionone.apiclient.interfaces.IAttributeDefinition.AttributeType;
@@ -41,7 +44,7 @@ public class FilterTerm implements IFilterTerm {
                 throw new APIException("Exists operator may not take values");
             }
 
-            return "%2B" + def.getToken();
+            return "+" + def.getToken();
         }
 
         if (operator == Operator.NotExists) {
@@ -57,7 +60,8 @@ public class FilterTerm implements IFilterTerm {
         }
 
         String prefix = full ? def.getToken() : def.getName();
-        return prefix + operatorToken(operator) + valueProvider.stringize();
+        String operatorToken = operatorToken(operator);
+        return prefix + operatorToken + valueProvider.stringize();
     }
 
     public void equal(Object... value) {

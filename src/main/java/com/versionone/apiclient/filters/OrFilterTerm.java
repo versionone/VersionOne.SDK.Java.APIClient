@@ -17,6 +17,6 @@ public class OrFilterTerm extends GroupFilterTerm {
 
     @Override
     String getTokenSeperator() {
-        return "%7C";
+        return "|";
     }
 }

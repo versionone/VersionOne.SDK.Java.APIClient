@@ -15,15 +15,12 @@ public class FindBuilder extends QueryBuilder {
         if (query == null || query.getFind() == null ||
                 V1Util.isNullOrEmpty(query.getFind().text) == true) return;
 
-        String part = String.format("find=%s", URLEncoder.encode(query.getFind().text), _encoding); //temporary encoding solution until apache httpclient is brought in from beta.
-        result.querystringParts.add(part);
+        result.addQueryParameter("find", query.getFind().text);
 
         if (query.getFind().attributes == null ||
                 query.getFind().attributes.size() == 0 ||
                 V1Util.isNullOrEmpty(query.getFind().attributes.getToken())) return;
 
-        part = String.format("findin=%s", URLEncoder.encode(query.getFind().attributes.getToken()), _encoding); //temporary encoding solution until apache httpclient is brought in from beta.
-        result.querystringParts.add(part);
-
+        result.addQueryParameter("findin", query.getFind().attributes.getToken());
     }
 }

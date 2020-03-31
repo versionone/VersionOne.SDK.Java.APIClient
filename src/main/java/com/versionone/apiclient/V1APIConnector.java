@@ -6,6 +6,8 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.Reader;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.net.Authenticator;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
@@ -14,9 +16,6 @@ import java.net.URL;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
-
-import sun.net.www.protocol.http.AuthCacheImpl;
-import sun.net.www.protocol.http.AuthCacheValue;
 
 import com.versionone.apiclient.exceptions.ConnectionException;
 import com.versionone.apiclient.exceptions.SecurityException;
@@ -93,14 +92,44 @@ public class V1APIConnector implements IAPIConnector {
 		_url = url;
 		cookiesManager = CookiesManager.getCookiesManager(url, userName, password);
 
-		// WORKAROUND: http://bugs.sun.com/bugdatabase/view_bug.do?bug_id=6626700
 		if (userName != null) {
-			AuthCacheValue.setAuthCache(new AuthCacheImpl());
+			// WORKAROUND: http://bugs.sun.com/bugdatabase/view_bug.do?bug_id=6626700
+			cacheClearWorkaround();
 			Authenticator.setDefault(new Credentials(userName, password));
 		}
 		
 		//Set a default user-agent header
 		setUserAgentHeader(null, null);
+	}
+
+	private static int getVersion() {
+	    String version = System.getProperty("java.version");
+	    if(version.startsWith("1.")) {
+	        version = version.substring(2, 3);
+	    } else {
+	        int dot = version.indexOf(".");
+	        if(dot != -1) { version = version.substring(0, dot); }
+	    } return Integer.parseInt(version);
+	}
+	
+	private void cacheClearWorkaround() {
+		if (V1APIConnector.getVersion() >= 9) {
+			return;
+		}
+		try {
+			Class<?> authCacheValueClazz = Class.forName("sun.net.www.protocol.http.AuthCacheValue");
+			Class<?> authCacheImplClazz = Class.forName("sun.net.www.protocol.http.AuthCacheImpl");
+			Object authCacheImpl = authCacheImplClazz.newInstance();
+			Method setAuthCacheMethod = authCacheValueClazz.getMethod("setAuthCache", authCacheImplClazz);
+			setAuthCacheMethod.invoke(authCacheValueClazz, authCacheImpl);
+		} catch (ClassNotFoundException cnfe) {
+		} catch (InstantiationException e) {
+		} catch (IllegalAccessException e) {
+		} catch (NoSuchMethodException e) {
+		} catch (java.lang.SecurityException e) {
+		} catch (IllegalArgumentException e) {
+		} catch (InvocationTargetException e) {
+		}
 	}
 	
 	/**

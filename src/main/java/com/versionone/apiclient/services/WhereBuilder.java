@@ -1,5 +1,7 @@
 package com.versionone.apiclient.services;
 
+import java.net.URLEncoder;
+
 import com.versionone.apiclient.Query;
 import com.versionone.apiclient.exceptions.APIException;
 import com.versionone.apiclient.filters.IFilterTerm;
@@ -12,7 +14,7 @@ public class WhereBuilder extends QueryBuilder {
 
         if (filter2token != null) {
             try {
-                result.querystringParts.add("where=" + filter2token.getToken());
+            	result.addQueryParameter("where", filter2token.getToken());
             } catch (APIException e) {
                 throw new RuntimeException(e);
             }
