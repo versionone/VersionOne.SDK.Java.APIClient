@@ -6,6 +6,7 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.Reader;
+import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.net.Authenticator;
@@ -119,8 +120,9 @@ public class V1APIConnector implements IAPIConnector {
 		try {
 			Class<?> authCacheValueClazz = Class.forName("sun.net.www.protocol.http.AuthCacheValue");
 			Class<?> authCacheImplClazz = Class.forName("sun.net.www.protocol.http.AuthCacheImpl");
-			Object authCacheImpl = authCacheImplClazz.newInstance();
-			Method setAuthCacheMethod = authCacheValueClazz.getMethod("setAuthCache", authCacheImplClazz);
+			Class<?> authCacheClazz = Class.forName("sun.net.www.protocol.http.AuthCache");
+			Object authCacheImpl = authCacheImplClazz.getConstructor().newInstance();
+			Method setAuthCacheMethod = authCacheValueClazz.getMethod("setAuthCache", authCacheClazz);
 			setAuthCacheMethod.invoke(authCacheValueClazz, authCacheImpl);
 		} catch (ClassNotFoundException cnfe) {
 		} catch (InstantiationException e) {
