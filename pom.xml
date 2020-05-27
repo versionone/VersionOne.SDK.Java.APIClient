@@ -4,7 +4,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.versionone</groupId>
 	<artifactId>VersionOne.SDK.Java.APIClient</artifactId>
-	<version>16.1.0</version>
+	<version>16.1.1</version>
 	<packaging>jar</packaging>
 
 	<name>VersionOne.SDK.Java.APIClient</name>
@@ -76,6 +76,7 @@
 	</properties>
 
 	<build>
+	<finalName>${project.artifactId}-${project.version}.${buildNumber}</finalName>
 		<plugins>
 			<!-- Write manifest properties -->
 			<plugin>
@@ -87,6 +88,9 @@
 						<manifest>
 							<addDefaultImplementationEntries>true</addDefaultImplementationEntries>
 						</manifest>
+						<manifestEntries>
+              				<Implementation-Build>${buildNumber}</Implementation-Build>
+            			</manifestEntries>
 					</archive>
 				</configuration>
 			</plugin>
@@ -131,7 +135,7 @@
 			<plugin>
 				<artifactId>maven-assembly-plugin</artifactId>
 				<configuration>
-					<finalName>VersionOne.JavaSDK-${project.version}</finalName>
+					<finalName>VersionOne.SDK.APIClient-${project.version}.${buildNumber}</finalName>
 					<descriptors>
 						<descriptor>${basedir}/assembly.xml</descriptor>
 					</descriptors>

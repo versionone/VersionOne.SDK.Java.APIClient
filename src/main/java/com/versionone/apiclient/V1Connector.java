@@ -55,6 +55,7 @@ public class V1Connector {
 	private Header[] headerArray = {};
 	private HttpPost httpPost;
 	private boolean isWindowsAuth = false;
+	boolean use_oauth_endpoint = false;
 
 	private final Map<String, OutputStream> _pendingStreams = new HashMap<String, OutputStream>();
 	private final Map<String, String> _pendingContentTypes = new HashMap<String, String>();
@@ -76,7 +77,11 @@ public class V1Connector {
 	private final static String CONFIG_API_ENDPOINT = "config.v1/";
 	private final static String ATTACHMENT_API_ENDPOINT = "attachment.img/";
     private final static String EMBEDDED_API_ENDPOINT = "embedded.img/";
-
+	private static String EMBEDDED_API_OAUTH_ENDPOINT = "embedded.oauth.img/";
+    private final static String OAUTH_DATA_API_ENDPOINT = "rest-1.oath.v1/Data/";
+	private final static String OAUTH_HISTORY_API_ENDPOINT = "rest-1.oath.v1/Hist/";
+	private final static String OAUTH_NEW_API_ENDPOINT = "rest-1.oath.v1/New/";
+	private final static String ATTACHMENT_API_OAUTH_ENDPOINT = "attachment.oath.img/";
 
 	// INTERFACES
 	public interface IsetEndpoint {
@@ -85,6 +90,13 @@ public class V1Connector {
 		 */
 		@Deprecated
 		IsetProxyOrConnector useEndpoint(String endpoint);
+		@Deprecated
+		/**
+		 * Optional method for specifying that the connection should be made using the OAuth endpoints.
+		 *
+		 * @return IsetProxyOrConnector IsetProxyOrConnector
+		 */
+		IsetProxyOrConnector useOAuthEndpoints();
 		
 	}
 
@@ -158,7 +170,13 @@ public class V1Connector {
 		 * @throws V1Exception V1Exception
 		 */
 		IsetProxyOrEndPointOrConnector withAccessToken(String accessToken) throws V1Exception;
-
+		/**
+		 * Optional method for setting the OAuth2 access token for authentication.
+		 * @param oauth2Token String
+		 * @return IsetProxyOrEndPointOrConnector IsetProxyOrEndPointOrConnector
+		 * @throws V1Exception V1Exception
+		 */
+		IsetProxyOrEndPointOrConnector withOAuth2Token(String oauth2Token) throws V1Exception;
 	}
 
 	public interface IProxy extends IBuild {
@@ -181,6 +199,7 @@ public class V1Connector {
 		 */
 		V1Connector build();
 	}
+
 
 	protected V1Connector(String instanceUrl) throws V1Exception, MalformedURLException {
 
@@ -258,7 +277,19 @@ public class V1Connector {
 
 			return this;
 		}
+		@Override
+		public IsetProxyOrEndPointOrConnector withOAuth2Token(String accessToken) throws V1Exception {
 
+			if (V1Util.isNullOrEmpty(accessToken))
+				throw new NullPointerException("Access token value cannot be null or empty.");
+
+			Header header = new BasicHeader(HttpHeaders.AUTHORIZATION, "Bearer " + accessToken);
+			v1Connector_instance.headerArray = (Header[]) ArrayUtils.add(v1Connector_instance.headerArray, header);
+
+			v1Connector_instance.isWindowsAuth = false;
+
+			return this;
+		}
 		@Override
 		public IsetProxyOrEndPointOrConnector withWindowsIntegrated() throws V1Exception {
 
@@ -295,7 +326,13 @@ public class V1Connector {
 			v1Connector_instance._endpoint = endpoint;
 			return this;
 		}
-		
+
+		@Override
+		public IsetProxyOrConnector useOAuthEndpoints() {
+			v1Connector_instance.use_oauth_endpoint = true;
+			return this;
+		}
+
 		@Override
 		public V1Connector build() {
 			return v1Connector_instance;
@@ -538,15 +575,15 @@ public class V1Connector {
 	}
 
 	public void useDataAPI() {
-		_endpoint = DATA_API_ENDPOINT;
+		_endpoint = use_oauth_endpoint ? OAUTH_DATA_API_ENDPOINT :DATA_API_ENDPOINT;
 	}
 
 	public void useNewAPI() {
-		_endpoint = NEW_API_ENDPOINT;
+		_endpoint = _endpoint = use_oauth_endpoint ? OAUTH_NEW_API_ENDPOINT : NEW_API_ENDPOINT;
 	}
 
 	public void useHistoryAPI() {
-		_endpoint = HISTORY_API_ENDPOINT;
+		_endpoint = use_oauth_endpoint ? OAUTH_HISTORY_API_ENDPOINT : HISTORY_API_ENDPOINT;
 	}
 
 	public void useQueryAPI() {
@@ -567,12 +604,12 @@ public class V1Connector {
 	
 	public void useAttachmentApi()
     {
-        _endpoint = ATTACHMENT_API_ENDPOINT;
+        _endpoint = use_oauth_endpoint ? ATTACHMENT_API_OAUTH_ENDPOINT : ATTACHMENT_API_ENDPOINT;
     }
 
 	public void useEmbeddedApi()
     {
-        _endpoint =  EMBEDDED_API_ENDPOINT;
+        _endpoint =  use_oauth_endpoint ? EMBEDDED_API_OAUTH_ENDPOINT : EMBEDDED_API_ENDPOINT;;
     }
 
 }
