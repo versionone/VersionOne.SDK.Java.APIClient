@@ -20,7 +20,7 @@ import com.versionone.apiclient.interfaces.IServices;
 import com.versionone.apiclient.services.QueryResult;
 
 public class CreateAssets {
-	
+
 	private static IServices _services;
 	private static Oid _projectId;
 
@@ -73,6 +73,18 @@ public class CreateAssets {
 		Asset newStory = _services.createNew(storyType, _projectId);
 		IAttributeDefinition nameAttribute = storyType.getAttributeDefinition("Name");
 		String name = "Story ";
+		newStory.setAttributeValue(nameAttribute, name);
+		_services.save(newStory);
+		assertNotNull(newStory);
+	}
+
+  @Test
+	public void createStoryCyrillicTest() throws V1Exception {
+
+		IAssetType storyType = _services.getMeta().getAssetType("Story");
+		Asset newStory = _services.createNew(storyType, _projectId);
+		IAttributeDefinition nameAttribute = storyType.getAttributeDefinition("Name");
+		String name = "версия 1";
 		newStory.setAttributeValue(nameAttribute, name);
 		_services.save(newStory);
 		assertNotNull(newStory);
@@ -337,7 +349,7 @@ public class CreateAssets {
 
 		assertEquals(1, story.getAttribute(childrenAttribute).getValues().length);
 	}
-	
+
 	@Test
 	public void createRequestTest() throws V1Exception {
 
@@ -353,7 +365,7 @@ public class CreateAssets {
 
 	@Test
 	public void createIssueTest() throws V1Exception {
-	
+
 		IAssetType issueType = _services.getMeta().getAssetType("Issue");
 		Asset newIssue = _services.createNew(issueType, _projectId);
 		IAttributeDefinition nameAttribute = issueType.getAttributeDefinition("Name");
