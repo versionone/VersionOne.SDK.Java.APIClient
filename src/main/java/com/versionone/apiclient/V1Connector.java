@@ -11,6 +11,7 @@ import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URL;
 import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
@@ -482,10 +483,9 @@ public class V1Connector {
 			xmlPayload = new ByteArrayEntity((byte[]) newData);
 			httpPost.setEntity((HttpEntity) xmlPayload);
 		} else if (data instanceof String) {
-			newData = (String) data;
 			try {
-				xmlPayload = new StringEntity((String) newData);
-			} catch (UnsupportedEncodingException e) {
+				xmlPayload = new StringEntity((String) data,  StandardCharsets.UTF_8);
+			} catch (IllegalArgumentException e) {
 				e.printStackTrace();
 			}
 			httpPost.setEntity((HttpEntity) xmlPayload);
