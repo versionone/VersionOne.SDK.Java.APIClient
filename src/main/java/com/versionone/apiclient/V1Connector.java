@@ -317,7 +317,7 @@ public class V1Connector {
 
 		if (errorCode == HttpStatus.SC_OK) {
 			try {
-				 data = new InputStreamReader(entity.getContent());
+				 data = new InputStreamReader(entity.getContent(), StandardCharsets.UTF_8);
 			} catch (IllegalStateException e) {
 				e.printStackTrace();
 			} catch (IOException e) {
@@ -497,7 +497,7 @@ public class V1Connector {
 		
 		try {
 			httpResponse = httpclient.execute(httpPost);
-			resultStream = new InputStreamReader(httpResponse.getEntity().getContent());
+			resultStream = new InputStreamReader(httpResponse.getEntity().getContent(), StandardCharsets.UTF_8);
 		} catch (IOException ex) {
 			int code;
 			try {
