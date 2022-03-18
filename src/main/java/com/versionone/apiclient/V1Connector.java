@@ -1,16 +1,15 @@
 package com.versionone.apiclient;
 
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.Reader;
-import java.io.StringReader;
 import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URL;
-import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Locale;
@@ -24,13 +23,14 @@ import org.apache.http.Header;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpHeaders;
 import org.apache.http.HttpHost;
+import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
 import org.apache.http.auth.AuthScope;
 import org.apache.http.auth.UsernamePasswordCredentials;
 import org.apache.http.client.CredentialsProvider;
-import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.BasicHttpEntity;
 import org.apache.http.entity.ByteArrayEntity;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.BasicCredentialsProvider;
@@ -41,16 +41,13 @@ import org.apache.http.message.BasicHeader;
 
 import com.versionone.apiclient.exceptions.ConnectionException;
 import com.versionone.apiclient.exceptions.V1Exception;
-import com.versionone.apiclient.interfaces.IAttributeDefinition;
 import com.versionone.utils.V1Util;
-
-import wiremock.com.google.common.io.CharStreams;
 
 public class V1Connector {
 
 	private final String contentType = "text/xml";
 	private CredentialsProvider credsProvider = new BasicCredentialsProvider();
-	private CloseableHttpResponse httpResponse = null;
+	private HttpResponse httpResponse = null;
 	private HttpClientBuilder httpclientBuilder = HttpClientBuilder.create();
 	private CloseableHttpClient httpclient;
 	private Header[] headerArray = {};
@@ -86,7 +83,13 @@ public class V1Connector {
 		 */
 		@Deprecated
 		IsetProxyOrConnector useEndpoint(String endpoint);
-		
+
+		/**
+		 * Method for specifying client for testing purposes.
+		 * @param httpClient  client to use
+		 * @return  next builder stage
+		 */
+		IBuild withHttpClient(HttpClientBuilder httpClient);
 	}
 
 	public interface IsetProxyOrConnector extends IBuild {
@@ -287,6 +290,12 @@ public class V1Connector {
 		}
 
 		@Override
+		public IBuild withHttpClient(HttpClientBuilder httpClient) {
+			v1Connector_instance.httpclientBuilder = httpClient;
+			return this;
+		}
+
+		@Override
 		public IsetProxyOrConnector useEndpoint(String endpoint) {
 
 			if (V1Util.isNullOrEmpty(endpoint)) {
@@ -313,7 +322,6 @@ public class V1Connector {
 		Reader data = null;
 		HttpEntity entity = setGETMethod(path);
 		int errorCode = httpResponse.getStatusLine().getStatusCode();
-		String errorMessage = "\n" + httpResponse.getStatusLine() + " error code: " + errorCode;
 
 		if (errorCode == HttpStatus.SC_OK) {
 			try {
@@ -324,7 +332,7 @@ public class V1Connector {
 				e.printStackTrace();
 			}
 		} else {
-			manageErrors( errorCode, errorMessage);
+			manageErrors(httpResponse);
 		}
 		return data;
 	}
@@ -333,7 +341,6 @@ public class V1Connector {
 		InputStream data = null;
 		HttpEntity entity = setGETMethod(path);
 		int errorCode = httpResponse.getStatusLine().getStatusCode();
-		String errorMessage = "\n" + httpResponse.getStatusLine() + " error code: " + errorCode;
 
 		if (errorCode == HttpStatus.SC_OK) {
 			try {
@@ -344,7 +351,7 @@ public class V1Connector {
 				e.printStackTrace();
 			}
 		} else {
-			manageErrors( errorCode, errorMessage);
+			manageErrors(httpResponse);
 		}
 		return data;
 	}
@@ -380,27 +387,33 @@ public class V1Connector {
 		return entity;
 	}
 
-	private void manageErrors(int errorCode, String errorMessage) throws ConnectionException {
-	
-		switch (errorCode) {
+	private void manageErrors(HttpResponse httpResponse) throws ConnectionException {
+        String errorMessage = httpResponse.getStatusLine().toString() + ":";
+        String responseString = readResponseStringPushback(httpResponse);
+        String suffixString = responseString == null ? "" : " Response: " + responseString;
+
+		switch (httpResponse.getStatusLine().getStatusCode()) {
 		case HttpStatus.SC_BAD_REQUEST:
-			throw new ConnectionException(errorMessage + " VersionOne could not process the request.");
+			throw new ConnectionException(errorMessage + " VersionOne could not process the request." + suffixString);
 
 		case HttpStatus.SC_UNAUTHORIZED:
-			throw new ConnectionException(errorMessage
-					+ " Could not authenticate. The VersionOne credentials may be incorrect or the access tokens may have expired.");
+			throw new ConnectionException(errorMessage + " Could not authenticate. The VersionOne credentials may be " +
+				"incorrect or the access tokens may have expired." + suffixString);
 
 		case HttpStatus.SC_NOT_FOUND:
-			throw new ConnectionException(errorMessage + " The requested item may not exist, or the VersionOne server is unavailable.");
+			throw new ConnectionException(errorMessage + " The requested item may not exist, or the VersionOne " +
+				"server is unavailable." + suffixString);
 
 		case HttpStatus.SC_METHOD_NOT_ALLOWED:
-			throw new ConnectionException(errorMessage + " Only GET and POST methods are supported by VersionOne.");
+			throw new ConnectionException(errorMessage + " Only GET and POST methods are supported by VersionOne." +
+				suffixString);
 
 		case HttpStatus.SC_INTERNAL_SERVER_ERROR:
-			throw new ConnectionException(errorMessage + " VersionOne encountered an unexpected error occurred while processing the request.");
+			throw new ConnectionException(errorMessage + " VersionOne encountered an unexpected error occurred while " +
+				"processing the request." + suffixString);
 
 		default:
-			throw new ConnectionException(errorMessage);
+			throw new ConnectionException(errorMessage + suffixString);
 		}
 	}
 
@@ -530,6 +543,41 @@ public class V1Connector {
 
 		sendData(path, data, ct);
 		return null;
+	}
+
+	private static String readResponseStringPushback(HttpResponse httpResponse) {
+		HttpEntity responseEntity = httpResponse.getEntity();
+		if (responseEntity == null) {
+			return null;
+		}
+		byte[] contentBytes;
+		try {
+			contentBytes = IOUtils.toByteArray(responseEntity.getContent());
+		} catch (Exception contentException) {
+			return null;
+		}
+		// put back response so it can be re-read again
+		httpResponse.setEntity(copyEntity(responseEntity, contentBytes));
+		try {
+			return new String(contentBytes, StandardCharsets.UTF_8);
+		} catch (Exception ignored) {
+			// ignore encoding exception
+		}
+		try {
+			return new String(contentBytes, StandardCharsets.ISO_8859_1);
+		} catch (Exception ignored) {
+			// ignore encoding exception
+		}
+		return null;
+	}
+
+	private static BasicHttpEntity copyEntity(HttpEntity responseEntity, byte[] contentBytes) {
+		BasicHttpEntity entityCopy = new BasicHttpEntity();
+		entityCopy.setContent(new ByteArrayInputStream(contentBytes));
+		entityCopy.setContentLength(responseEntity.getContentLength());
+		entityCopy.setContentEncoding(responseEntity.getContentEncoding());
+		entityCopy.setContentType(responseEntity.getContentType());
+		return entityCopy;
 	}
 
 	// endpoint definition
