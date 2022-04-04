@@ -177,6 +177,16 @@ public class QueryURLBuilderTests {
     }
 
     @Test
+    public void needTotal() throws APIException {
+        Query query = new Query(new MockAssetType());
+        query.getSelection().add(new MockAttributeDefinition("Name"));
+        query.setNeedTotal(true);
+
+        QueryURLBuilder testMe = new QueryURLBuilder(query, false);
+        Assert.assertEquals("Data/Mock?sel=Mock.Name&needTotal=true", testMe.toString());
+    }
+
+    @Test
     public void date() throws APIException {
         Calendar testDate = Calendar.getInstance();
         // date we want is 10/1/2007 at 3:00pm
