@@ -21,6 +21,7 @@ public class QueryURLBuilder extends CompositeBuilder {
         builders.add(new AsOfBuilder());
         builders.add(new FindBuilder());
         builders.add(new WithVariablesBuilder());
+        builders.add(new NeedTotalBuilder());
     }
 
     

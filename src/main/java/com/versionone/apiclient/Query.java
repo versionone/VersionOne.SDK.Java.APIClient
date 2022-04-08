@@ -30,6 +30,7 @@ public class Query {
     private Date asOf = MIN_DATE;
     private QueryFind find = null;
     private List<QueryVariable> variables = new ArrayList<QueryVariable>();
+    private boolean needTotal;
 
     /**
      * Create a query on an Asset Type
@@ -253,5 +254,23 @@ public class Query {
 
     public List<QueryVariable> getVariables() {
         return variables;
+    }
+
+    /**
+     * Set needTotal
+     *
+     * @param value - true if total count is required in this query
+     */
+    public void setNeedTotal(boolean value) {
+        needTotal = value;
+    }
+
+    /**
+     * Get needTotal
+     *
+     * @return true if this query returns total count
+     */
+    public boolean getNeedTotal() {
+        return needTotal;
     }
 }

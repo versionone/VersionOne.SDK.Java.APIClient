@@ -345,9 +345,11 @@ public class QueryAssets {
         selection.add(nameAttribute);
 		query.setFind(new QueryFind(name, selection));
 		query.setPaging(new Paging(0, 2));
+		query.setNeedTotal(true);
 		QueryResult result = _services.retrieve(query);
 
 		assertTrue(result.getAssets().length == 2);
+		assertTrue(result.getTotalAvaliable() == 3);
 	}
 
 	@Test
