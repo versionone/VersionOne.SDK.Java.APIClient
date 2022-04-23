@@ -1,5 +1,6 @@
 package com.versionone.sdk.integration.tests;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
@@ -23,6 +24,8 @@ import com.versionone.apiclient.MimeType;
 import com.versionone.apiclient.Paging;
 import com.versionone.apiclient.Query;
 import com.versionone.apiclient.V1Connector;
+import com.versionone.apiclient.exceptions.APIException;
+import com.versionone.apiclient.exceptions.ConnectionException;
 import com.versionone.apiclient.exceptions.MetaException;
 import com.versionone.apiclient.exceptions.OidException;
 import com.versionone.apiclient.exceptions.V1Exception;
@@ -201,7 +204,7 @@ public class QueryAssets {
 		QueryResult result = _services.retrieve(query);
 
 		assertNotNull(result);
-		assertTrue(result.getAssets().length == 2);
+		assertEquals(2l, (long)result.getAssets().length);
 
 		for (Asset asset : result.getAssets()) {
 			assertTrue(asset.getAttribute(nameAttribute).getValue().toString().equals(name));
@@ -227,18 +230,17 @@ public class QueryAssets {
 		newStory.setAttributeValue(estimateAttribute, "2");
 		_services.save(newStory);
 
-		Query query = new Query(storyType);
-		query.getSelection().add(nameAttribute);
-		query.getSelection().add(estimateAttribute);
-		FilterTerm nameFilterTerm = new FilterTerm(nameAttribute);
-		nameFilterTerm.equal(name);
-		FilterTerm estimateFilterTerm = new FilterTerm(estimateAttribute);
-		estimateFilterTerm.equal("24");
-		query.setFilter(new AndFilterTerm(nameFilterTerm, estimateFilterTerm));
-		QueryResult result = _services.retrieve(query);
-
+		QueryResult result = queryForCreatedAssets(storyType, nameAttribute, estimateAttribute, name);
 		assertNotNull(result);
-		assertTrue(result.getAssets().length == 1);
+		if (result.getAssets().length == 0) {
+			try {
+				Thread.sleep(2000);
+			} catch (InterruptedException e) {
+				throw new V1Exception("Interrupted while waiting for search index update", e);
+			}
+			result = queryForCreatedAssets(storyType, nameAttribute, estimateAttribute, name);
+		}
+		assertEquals(1l, (long)result.getAssets().length);
 
 		for (Asset asset : result.getAssets()) {
 			assertTrue(asset.getAttribute(nameAttribute).getValue().toString().equals(name));
@@ -249,31 +251,46 @@ public class QueryAssets {
 
 	}
 
+	private QueryResult queryForCreatedAssets(IAssetType storyType, IAttributeDefinition nameAttribute,
+			IAttributeDefinition estimateAttribute, String name)
+			throws ConnectionException, APIException, OidException {
+		Query query = new Query(storyType);
+		query.getSelection().add(nameAttribute);
+		query.getSelection().add(estimateAttribute);
+		FilterTerm nameFilterTerm = new FilterTerm(nameAttribute);
+		nameFilterTerm.equal(name);
+		FilterTerm estimateFilterTerm = new FilterTerm(estimateAttribute);
+		estimateFilterTerm.equal("24");
+		query.setFilter(new AndFilterTerm(nameFilterTerm, estimateFilterTerm));
+		QueryResult result = _services.retrieve(query);
+		return result;
+	}
+
 	@Test
 	public void queryFindTest() throws V1Exception, InterruptedException {
 
 		IAssetType storyType = _services.getMeta().getAssetType("Story");
 		Asset newStory = _services.createNew(storyType, _projectId);
 		IAttributeDefinition nameAttribute = storyType.getAttributeDefinition("Name");
-		
+
 		String name = _projectId + " Query find test";
 		newStory.setAttributeValue(nameAttribute, name);
 		_services.save(newStory);
-		
+
 		newStory = _services.createNew(storyType, _projectId);
 		newStory.setAttributeValue(nameAttribute, name + " plus one");
 		_services.save(newStory);
-		
+
 		Thread.currentThread().sleep(8000);
 
 		Query query = new Query(storyType);
         AttributeSelection selection = new AttributeSelection();
         selection.add(nameAttribute);
-        query.setFind(new QueryFind(_projectId + " Query find", selection)); 
+        query.setFind(new QueryFind(_projectId + " Query find", selection));
 		QueryResult result = _services.retrieve(query);
 
 		assertNotNull(result);
-		assertTrue(result.getAssets().length == 2);
+		assertEquals(2l, (long)result.getAssets().length);
 	}
 
 	@SuppressWarnings("unused")
@@ -284,23 +301,23 @@ public class QueryAssets {
 
 	@Test
 	public void querySortTest() throws V1Exception, InterruptedException {
-		
+
 		IAssetType storyType = _services.getMeta().getAssetType("Story");
 		Asset newStory = _services.createNew(storyType, _projectId);
 		IAttributeDefinition nameAttribute = storyType.getAttributeDefinition("Name");
-		
+
 		String name = "Test Query sort " + _projectId;
 		newStory.setAttributeValue(nameAttribute, name + " 2");
 		_services.save(newStory);
-		
+
 		newStory = _services.createNew(storyType, _projectId);
 		newStory.setAttributeValue(nameAttribute, name + " 1");
 		_services.save(newStory);
-		
+
 		newStory = _services.createNew(storyType, _projectId);
 		newStory.setAttributeValue(nameAttribute, name + " 3");
 		_services.save(newStory);
-		
+
 		Thread.currentThread().sleep(8000);
 
 		Query query = new Query(storyType);
@@ -313,7 +330,7 @@ public class QueryAssets {
 		query.setOrderBy(value);
 		QueryResult result = _services.retrieve(query);
 
-		assertTrue(result.getAssets().length == 3);
+		assertEquals(3l, result.getAssets().length);
 		assertTrue(result.getAssets()[0].getAttribute(nameAttribute).getValue().toString().endsWith("1"));
 		assertTrue(result.getAssets()[1].getAttribute(nameAttribute).getValue().toString().endsWith("2"));
 		assertTrue(result.getAssets()[2].getAttribute(nameAttribute).getValue().toString().endsWith("3"));
@@ -321,23 +338,24 @@ public class QueryAssets {
 
 	@Test
 	public void queryPagingTest() throws V1Exception, InterruptedException {
-		
+
 		IAssetType storyType = _services.getMeta().getAssetType("Story");
 		Asset newStory = _services.createNew(storyType, _projectId);
-		
+
 		IAttributeDefinition nameAttribute = storyType.getAttributeDefinition("Name");
 		String name = "Test Story " + _projectId + " Query paging";
 		newStory.setAttributeValue(nameAttribute, name + " 1");
 		_services.save(newStory);
-		
+
 		newStory = _services.createNew(storyType, _projectId);
 		newStory.setAttributeValue(nameAttribute, name + " 2");
 		_services.save(newStory);
-		
+
 		newStory = _services.createNew(storyType, _projectId);
 		newStory.setAttributeValue(nameAttribute, name + " 3");
 		_services.save(newStory);
 
+		// waits for search index
 		Thread.currentThread().sleep(12000);
 
 		Query query = new Query(storyType);
@@ -378,13 +396,13 @@ public class QueryAssets {
 		Asset newStory = _services.createNew(storyType, _projectId);
 		IAttributeDefinition nameAttribute = storyType.getAttributeDefinition("Name");
 		String name = "Test Story " + _projectId + " Query asof";
-		
+
 		newStory.setAttributeValue(nameAttribute, name);
 		_services.save(newStory);
 
 		newStory.setAttributeValue(nameAttribute, name + " - updated");
 		_services.save(newStory);
-		
+
 		newStory.setAttributeValue(nameAttribute, name + " - updated again");
 		_services.save(newStory);
 
@@ -448,8 +466,8 @@ public class QueryAssets {
 		assertNotNull(attachment);
 		assertNotNull(attachment.getAttribute(attachmentContent).getValue());
 	}
-	
-	
+
+
 	@Test
 	public void queryBetweenDates() throws V1Exception, IOException {
 
@@ -461,7 +479,7 @@ public class QueryAssets {
 		_services.save(newStory);
 
 	    storyType = _services.getMeta().getAssetType("Story");
-	    
+
 	    Query query = new Query(storyType);
 	    IAttributeDefinition estimateAttribute = storyType.getAttributeDefinition("Scope.Name");
 	    IAttributeDefinition numberAttribute = storyType.getAttributeDefinition("Number");
@@ -472,9 +490,9 @@ public class QueryAssets {
 	    IAttributeDefinition priorityNameAttribute = storyType.getAttributeDefinition("Priority.Name");
 
 	    Calendar calendar = Calendar.getInstance();
-        calendar.setTime(new Date()); 
+        calendar.setTime(new Date());
         calendar.add(Calendar.DAY_OF_YEAR, -180);
-	    
+
 	    FilterTerm startDateTerm = new FilterTerm(changeDateAttribute);
 		startDateTerm.greaterOrEqual(calendar.getTime());
 	    FilterTerm endDateTerm = new FilterTerm(changeDateAttribute);
@@ -482,10 +500,10 @@ public class QueryAssets {
 
 	    GroupFilterTerm groupFilter = new AndFilterTerm(startDateTerm,endDateTerm);
 	    query.setFilter(groupFilter);
-	   
+
 	    QueryResult result = null;
 	    result = _services.retrieve(query);
-	    
+
 	    assertTrue(result.getAssets().length > 0);
 	    Asset member = result.getAssets()[0];
 	    assertTrue(!member.getOid().isNull());
@@ -503,7 +521,7 @@ public class QueryAssets {
 		_services.save(newStory);
 
 	    storyType = _services.getMeta().getAssetType("Story");
-	    
+
 	    Query query = new Query(storyType);
 	    IAttributeDefinition estimateAttribute = storyType.getAttributeDefinition("Scope.Name");
 	    IAttributeDefinition numberAttribute = storyType.getAttributeDefinition("Number");
@@ -514,32 +532,32 @@ public class QueryAssets {
 	    IAttributeDefinition priorityNameAttribute = storyType.getAttributeDefinition("Priority.Name");
 
 	    Calendar calendar = Calendar.getInstance();
-        calendar.setTime(new Date()); 
+        calendar.setTime(new Date());
         calendar.add(Calendar.DAY_OF_YEAR, -180);
-	    
+
 	    FilterTerm startDateTerm = new FilterTerm(changeDateAttribute);
 		startDateTerm.greater(calendar.getTime());
 
 	    GroupFilterTerm groupFilter = new AndFilterTerm(startDateTerm);
 	    query.setFilter(groupFilter);
-	   
+
 	    QueryResult result = null;
 	    result = _services.retrieve(query);
-	    
+
 	    assertTrue(result.getAssets().length > 0);
-		
+
 		FilterTerm endDateTerm = new FilterTerm(changeDateAttribute);
 	    endDateTerm.less(new Date());
 
 	    groupFilter = new AndFilterTerm(endDateTerm);
 	    query.setFilter(groupFilter);
-	   
+
 	    result = null;
 	    result = _services.retrieve(query);
-	    
+
 	    assertTrue(result.getAssets().length > 0);
 	    Asset member = result.getAssets()[0];
 	    assertTrue(!member.getOid().isNull());
 	}
-	
+
 }
