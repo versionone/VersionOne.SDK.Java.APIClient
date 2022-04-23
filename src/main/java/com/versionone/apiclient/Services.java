@@ -503,7 +503,11 @@ public class Services implements IServices {
 	private QueryResult parseAssetListQueryResult(Element element, Query query) throws APIException, OidException {
 		List<Asset> list = new ArrayList<Asset>();
 
-		int total = Integer.parseInt(element.getAttribute("total"));
+		int total = -1;
+		String totalStr = element.getAttribute("total");
+		if (totalStr != null && !totalStr.isBlank()) {
+			total = Integer.parseInt(element.getAttribute("total"));
+		}
 
 		XPath xpath = XPathFactory.newInstance().newXPath();
 		NodeList nodes;
