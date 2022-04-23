@@ -4,6 +4,9 @@ import org.junit.Before;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNotSame;
+import static org.junit.Assert.assertNull;
 
 import com.versionone.Oid;
 import com.versionone.apiclient.Asset;
@@ -93,7 +96,7 @@ public class AssetTests {
     public void testSetInvalidOidOnAsset() throws V1Exception{
         Asset newStory = _services.createNew(_assetType, APIClientLegacyIntegrationTestSuiteIT.get_projectId());
         newStory.setOid(Oid.fromToken("", _metaModel));
-        Assert.assertNull(newStory.getOid());
+        assertNull(newStory.getOid());
     }
 
     //	Error: Asset doesn't exists
@@ -101,7 +104,7 @@ public class AssetTests {
     public void testSetValidOidOnAsset() throws V1Exception {
         Asset newStory = _services.createNew(_assetType, APIClientLegacyIntegrationTestSuiteIT.get_projectId());
         newStory.setOid(Oid.fromToken("Story:999999", _metaModel));
-        Assert.assertNotNull(newStory.getOid());
+        assertNotNull(newStory.getOid());
     }
 
     //	Create  asset
@@ -112,7 +115,7 @@ public class AssetTests {
 		Oid memberId = newStory.getOid();
 		Asset member = query(memberId, null).getAssets()[0];
 
-		Assert.assertEquals(newStory.getOid(), member.getOid());
+		assertEquals(newStory.getOid(), member.getOid());
 	}
 
 	//	delete  asset
@@ -123,7 +126,7 @@ public class AssetTests {
         IOperation deleteOperation = _metaModel.getOperation("Story.Delete");
         Oid deletedID = _services.executeOperation(deleteOperation, newStory.getOid());
 
-        Assert.assertEquals(0,query(deletedID, null).getTotalAvaliable());
+        assertEquals(0,query(deletedID, null).getTotalAvaliable());
     }
 
 	//	Close an asset
@@ -138,7 +141,7 @@ public class AssetTests {
 		Asset closeStory = query(closeID.getMomentless(), assetState).getAssets()[0];
 		AssetState state = AssetState.valueOf(((Integer) closeStory.getAttribute(assetState).getValue()).intValue());
 
-		Assert.assertEquals("Closed", state.toString());
+		assertEquals("Closed", state.toString());
 	}
 
 	//	Reopen an asset
@@ -159,7 +162,7 @@ public class AssetTests {
 		Asset activeStory =query(activeID.getMomentless(), assetState).getAssets()[0];
 		AssetState state = AssetState.valueOf(((Integer) activeStory.getAttribute(assetState).getValue()).intValue());
 
-		Assert.assertEquals("Active", state.toString());
+		assertEquals("Active", state.toString());
 	}
 
 	//	Update an scalar
@@ -174,7 +177,7 @@ public class AssetTests {
         story.setAttributeValue(nameAttribute, "AssetTests: Update an Scalar - Name updated");
         _services.save(story);
 
-        Assert.assertNotSame("Values:", oldName, story.getAttribute(nameAttribute).getValue().toString());
+        assertNotSame("Values:", oldName, story.getAttribute(nameAttribute).getValue().toString());
     }
 
 
@@ -190,7 +193,7 @@ public class AssetTests {
 
 		Asset story =  query(newStory.getOid(), sourceAttribute).getAssets()[0];
 
-		Assert.assertNotNull(story.getAttribute(sourceAttribute).getValue().toString());
+		assertNotNull(story.getAttribute(sourceAttribute).getValue().toString());
 	}
 
 	//	Add multi-relation
@@ -208,14 +211,14 @@ public class AssetTests {
 
 		Asset story =  query(parentStory.getOid().getMomentless(), dependantsAttribute).getAssets()[0];
 
-		Assert.assertEquals(1, story.getAttribute(dependantsAttribute).getValues().length);
+		assertEquals(1, story.getAttribute(dependantsAttribute).getValues().length);
 
 		parentStory.addAttributeValue(dependantsAttribute,  childStory2.getOid());
         _services.save(parentStory);
 
       	story =  query(parentStory.getOid().getMomentless(), dependantsAttribute).getAssets()[0];
 
-      	Assert.assertEquals(2, story.getAttribute(dependantsAttribute).getValues().length);
+      	assertEquals(2, story.getAttribute(dependantsAttribute).getValues().length);
 	}
 
 	//	Remove multi-relation
