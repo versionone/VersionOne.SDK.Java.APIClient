@@ -1,0 +1,25 @@
+{
+  "name": "versionone.sdk.java.apiclient.util",
+  "version": "1.0.0",
+  "description": "Copyright (c) 2008-2020 [VersionOne](http://versionone.com/).\r All rights reserved.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/versionone/VersionOne.SDK.Java.APIClient.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/versionone/VersionOne.SDK.Java.APIClient/issues"
+  },
+  "homepage": "https://github.com/versionone/VersionOne.SDK.Java.APIClient#readme",
+  "dependencies": {
+    "puppeteer": "^13.5.2"
+  },
+  "volta": {
+    "node": "16.14.2"
+  }
+}
