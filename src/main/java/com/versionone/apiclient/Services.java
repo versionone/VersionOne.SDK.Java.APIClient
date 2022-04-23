@@ -505,7 +505,7 @@ public class Services implements IServices {
 
 		int total = -1;
 		String totalStr = element.getAttribute("total");
-		if (totalStr != null && !totalStr.isBlank()) {
+		if (totalStr != null && !totalStr.isEmpty()) {
 			total = Integer.parseInt(element.getAttribute("total"));
 		}
 
