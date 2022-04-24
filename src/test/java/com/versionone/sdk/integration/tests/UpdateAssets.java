@@ -95,7 +95,7 @@ public class UpdateAssets {
         parentStory.addAttributeValue(dependantsAttribute, child1Story.getOid());
         _services.save(parentStory);
 
-        Query query = new Query(parentStory.getOid());
+        Query query = new Query(parentStory.getOid().getMomentless());
         query.getSelection().add(dependantsAttribute);
         Asset story = _services.retrieve(query).getAssets()[0];
 
@@ -104,7 +104,7 @@ public class UpdateAssets {
         parentStory.addAttributeValue(dependantsAttribute, child2Story.getOid());
         _services.save(parentStory);
 
-        Query query2 = new Query(parentStory.getOid());
+        Query query2 = new Query(parentStory.getOid().getMomentless());
         query2.getSelection().add(dependantsAttribute);
         story = _services.retrieve(query2).getAssets()[0];
 

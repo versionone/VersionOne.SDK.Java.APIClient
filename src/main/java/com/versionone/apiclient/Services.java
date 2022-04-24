@@ -483,7 +483,7 @@ public class Services implements IServices {
 		}
 		return asset;
 	}
-	
+
 	private void removeEmptyTextNodes(Element element) throws APIException{
 		try {
 			XPath xpath = XPathFactory.newInstance().newXPath();
@@ -497,16 +497,16 @@ public class Services implements IServices {
 			}
 		} catch (XPathExpressionException e) {
 			throw new APIException("Error trying to remove empty text from nodes", e);
-		}		
+		}
 	}
 
 	private QueryResult parseAssetListQueryResult(Element element, Query query) throws APIException, OidException {
 		List<Asset> list = new ArrayList<Asset>();
-		
-		String totalValue = element.getAttribute("total");
+
 		int total = -1;
-		if (totalValue != null && !totalValue.isEmpty()) {
-			total = Integer.parseInt(totalValue);
+		String totalStr = element.getAttribute("total");
+		if (totalStr != null && !totalStr.isEmpty()) {
+			total = Integer.parseInt(element.getAttribute("total"));
 		}
 
 		XPath xpath = XPathFactory.newInstance().newXPath();
@@ -515,7 +515,7 @@ public class Services implements IServices {
 			removeEmptyTextNodes(element);
 			String nodeName = query.isHistorical() ? "History" : "Assets";
 			nodes = (NodeList) xpath.compile(String.format("/%s/Asset", nodeName)).evaluate(element, XPathConstants.NODESET);
-			
+
 		} catch (XPathExpressionException e) {
 			throw new APIException("Error reading nodes", "Asset", e);
 		}
@@ -652,12 +652,12 @@ public class Services implements IServices {
 	public Oid saveAttachment(String filePath, Asset asset, String attachmentName) throws V1Exception, IOException {
 		if (StringUtils.isEmpty(filePath))
              throw new NullArgumentException("filePath");
-		
+
 		File file = new File(filePath);
         if (!file.exists())
        	 	throw new FileNotFoundException(String.format("File \"%s\" does not exist.", filePath));
-       
-        String mimeType = MimeType.resolve(filePath);        
+
+        String mimeType = MimeType.resolve(filePath);
         IAssetType attachmentType = _meta.getAssetType("Attachment");
         IAttributeDefinition attachmentAssetDef = attachmentType.getAttributeDefinition("Asset");
         IAttributeDefinition attachmentContent = attachmentType.getAttributeDefinition("Content");
@@ -682,7 +682,7 @@ public class Services implements IServices {
  	        	break;
  	        output.write(buffer, 0, read);
  	    }
-         
+
          if (_connector != null){
              _connector.endRequest(key.substring(key.lastIndexOf('/') + 1));
          }
@@ -694,8 +694,8 @@ public class Services implements IServices {
 
          return attachment.getOid();
      }
-	
-	
+
+
 	@Override
 	public InputStream getAttachment(Oid attachmentOid) throws V1Exception{
 		InputStream result = null;
@@ -708,16 +708,16 @@ public class Services implements IServices {
 
 		return result;
 	}
-     
+
 	@Override
 	public Oid saveEmbeddedImage(String filePath, Asset asset) throws V1Exception, IOException {
 		if (StringUtils.isEmpty(filePath))
 			throw new NullArgumentException("Null value " + filePath);
-		
+
 		File file = new File(filePath);
         if (!file.exists())
        	 	throw new FileNotFoundException(String.format("File \"%s\" does not exist.", filePath));
-		
+
         String mimeType = MimeType.resolve(filePath);
 		IAssetType embeddedImageType = _meta.getAssetType("EmbeddedImage");
 		Asset newEmbeddedImage = createNew(embeddedImageType, Oid.Null);

@@ -33,3 +33,6 @@ pom.xml.asc
 .svn
 
 .eclipse-pmd
+
+## Node Modules ##
+node_modules/
