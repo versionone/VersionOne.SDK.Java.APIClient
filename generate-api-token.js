@@ -23,10 +23,13 @@ const fsPromises = require('fs/promises');
     await page.type('input[name="username"]', env.V1_USERNAME);
     await page.type('input[name="password"]', env.V1_PASSWORD);
     await page.click('button[type="submit"]');
-    // await page.screenshot({path: 'screenshot1.png'});
     const accessTokenPath = '/Member.mvc/AccessTokenClient?oidToken=Member%3A20';
     await page.goto(`${env.V1_INSTANCE_URL}${accessTokenPath}`);
-    await page.waitForSelector('input[name="client_name"]');
+    try {
+        await page.waitForSelector('input[name="client_name"]', {timeout: 90000});
+    } catch (e) {
+        await page.screenshot({path: 'timed_out_waiting_for_application_page.png'});
+    }
     await page.type('input[name="client_name"]', 'Java SDK Test');
     await page.click('button[type="submit"]');
     await page.waitForNetworkIdle({ timeout: 2000 });
