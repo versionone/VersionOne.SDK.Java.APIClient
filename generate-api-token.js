@@ -22,7 +22,10 @@ const fsPromises = require('fs/promises');
     await page.goto(env.V1_INSTANCE_URL);
     await page.type('input[name="username"]', env.V1_USERNAME);
     await page.type('input[name="password"]', env.V1_PASSWORD);
-    await page.click('button[type="submit"]');
+    await Promise.all([
+        page.waitForNavigation(),
+        page.click('button[type="submit"]'),
+      ]);
     await page.screenshot({path: 'after_logout.png'});
     const accessTokenPath = '/Member.mvc/AccessTokenClient?oidToken=Member%3A20';
     await page.goto(`${env.V1_INSTANCE_URL}${accessTokenPath}`);
