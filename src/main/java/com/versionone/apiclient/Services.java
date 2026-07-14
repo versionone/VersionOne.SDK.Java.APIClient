@@ -23,8 +23,7 @@ import javax.xml.xpath.XPathExpressionException;
 import javax.xml.xpath.XPathFactory;
 
 import org.apache.commons.io.IOUtils;
-import org.apache.commons.lang.NullArgumentException;
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.json.JSONObject;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -87,27 +86,27 @@ public class Services implements IServices {
 		_connector = connector;
 	}
 
-	public Services(V1Connector v1Connector) throws NullArgumentException {
+	public Services(V1Connector v1Connector) {
 		if (v1Connector == null)
-			throw new NullArgumentException("v1Connector");
+			throw new IllegalArgumentException("v1Connector");
 
 		_v1Connector = v1Connector;
 		_meta = new MetaModel(_v1Connector);
 	}
 
-	public Services(V1Connector connector, IMetaModel metaModel) throws NullArgumentException {
+	public Services(V1Connector connector, IMetaModel metaModel) {
 		if (connector == null)
-			throw new NullArgumentException("connector");
+			throw new IllegalArgumentException("connector");
 		if (metaModel == null)
-			throw new NullArgumentException("metaModel");
+			throw new IllegalArgumentException("metaModel");
 
 		_v1Connector = connector;
 		_meta = metaModel;
 	}
 
-	public Services(V1Connector connector, boolean preLoadMeta) throws NullArgumentException {
+	public Services(V1Connector connector, boolean preLoadMeta) {
 		if (connector == null)
-			throw new NullArgumentException("connector");
+			throw new IllegalArgumentException("connector");
 
 		_v1Connector = connector;
 		_meta = new MetaModel(connector, preLoadMeta);
@@ -576,7 +575,7 @@ public class Services implements IServices {
 		if (null != attribute) {
 			return getStringData("?" + attribute.getDisplayName());
 		} else {
-			throw new NullArgumentException("IAttributeDefinition");
+			throw new IllegalArgumentException("IAttributeDefinition");
 		}
 	}
 
@@ -651,7 +650,7 @@ public class Services implements IServices {
 	@Override
 	public Oid saveAttachment(String filePath, Asset asset, String attachmentName) throws V1Exception, IOException {
 		if (StringUtils.isEmpty(filePath))
-             throw new NullArgumentException("filePath");
+			 throw new IllegalArgumentException("filePath");
 
 		File file = new File(filePath);
         if (!file.exists())
@@ -712,7 +711,7 @@ public class Services implements IServices {
 	@Override
 	public Oid saveEmbeddedImage(String filePath, Asset asset) throws V1Exception, IOException {
 		if (StringUtils.isEmpty(filePath))
-			throw new NullArgumentException("Null value " + filePath);
+			throw new IllegalArgumentException("Null value " + filePath);
 
 		File file = new File(filePath);
         if (!file.exists())

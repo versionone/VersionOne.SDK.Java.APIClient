@@ -8,7 +8,6 @@ import javax.xml.xpath.XPathExpression;
 import javax.xml.xpath.XPathExpressionException;
 import javax.xml.xpath.XPathFactory;
 
-import org.apache.commons.lang.NullArgumentException;
 import org.w3c.dom.Document;
 
 import com.versionone.apiclient.exceptions.APIException;
@@ -38,13 +37,13 @@ public class V1Configuration implements IV1Configuration {
      */
     public V1Configuration(IAPIConnector connector) {
     	if (connector == null)
-    		throw new NullArgumentException("connector");
+            throw new IllegalArgumentException("connector");
     	this._connector = connector;
     }
 
     public V1Configuration(V1Connector connector) {
     	if (connector == null)
-    		throw new NullArgumentException("_v1connector");
+            throw new IllegalArgumentException("_v1connector");
 
         this._v1connector = connector;
     }

@@ -6,8 +6,7 @@ import javax.xml.xpath.XPath;
 import javax.xml.xpath.XPathConstants;
 import javax.xml.xpath.XPathFactory;
 
-import org.apache.commons.lang.NullArgumentException;
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.w3c.dom.Element;
 
 import com.versionone.DB;
@@ -119,7 +118,7 @@ class AttributeDefinition implements IAttributeDefinition {
                 return value;
             case Guid:
                 if (value == null || StringUtils.isEmpty(value.toString()))
-                    throw new NullArgumentException("value");
+					throw new IllegalArgumentException("value");
                 return UUID.fromString(new DB.Str(value).getValue());    
 			default:
 				throw new MetaException("Unsupported AttributeType ", getAttributeType().toString());
