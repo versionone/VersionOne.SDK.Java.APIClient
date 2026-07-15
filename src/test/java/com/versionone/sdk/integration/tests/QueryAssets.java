@@ -10,7 +10,7 @@ import java.io.OutputStream;
 import java.util.Calendar;
 import java.util.Date;
 
-import org.apache.commons.lang.time.DateUtils;
+import org.apache.commons.lang3.time.DateUtils;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
