@@ -10,7 +10,6 @@ import com.versionone.apiclient.exceptions.OidException;
 import com.versionone.apiclient.exceptions.V1Exception;
 import com.versionone.apiclient.filters.FilterTerm;
 
-import org.apache.commons.lang.NullArgumentException;
 import org.junit.Assert;
 import org.junit.Rule;
 import org.junit.Test;
@@ -198,14 +197,14 @@ public class ServicesTests extends ServicesTesterBase {
 
 		try {
 			subject.retrieve(query);
-		} catch (NullArgumentException ex) {
+		} catch (IllegalArgumentException ex) {
 			Assert.assertEquals(
-					"value must not be null.",
+					"value",
 					ex.getMessage());
 			return;
 		}
 
-		Assert.fail("Expected to raise NullArgumentException, but did not.");
+		Assert.fail("Expected to raise IllegalArgumentException, but did not.");
 	}
 	 
 }
