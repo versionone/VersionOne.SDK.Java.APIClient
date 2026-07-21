@@ -14,19 +14,35 @@ const fsPromises = require('fs/promises');
     env.V1_PASSWORD = process.env.V1_PASSWORD || env.V1_PASSWORD;
     env.V1_INSTANCE_URL = process.env.V1_INSTANCE_URL || env.V1_INSTANCE_URL;
 
+    const executablePath = "PUPPETEER_EXECUTABLE_PATH" in process.env ? process.env.PUPPETEER_EXECUTABLE_PATH : undefined;
     const browser = await puppeteer.launch({
         headless: true,
-        args: ['--no-sandbox', '--disable-setuid-sandbox']
+        executablePath,
+        args: [
+            '--no-sandbox',
+            '--disable-setuid-sandbox',
+            '--disable-features=AutomaticHttpsRewrites,HttpsUpgrades,HSTSPreloadedList,IsolatedWebApps',
+            '--test-type',
+            '--disable-extensions',
+            '--disable-blink-features=AutomationControlled',
+            '--disable-device-discovery-notifications',
+            '--unsafely-treat-insecure-origin-as-secure=http://v1ultimate01.deftcn.net'
+        ]
     });
     const page = await browser.newPage();
-    await page.goto(env.V1_INSTANCE_URL);
+
+    page.on('requestfailed', (req) => {
+        console.error('REQUEST FAILED:', req.url(), req.failure().errorText);
+    });
+
+    await page.goto(env.V1_INSTANCE_URL, { waitUntil: 'networkidle0' });
     await page.type('input[name="username"]', env.V1_USERNAME);
     await page.type('input[name="password"]', env.V1_PASSWORD);
     await Promise.all([
         page.waitForNavigation(),
         page.click('button[type="submit"]'),
       ]);
-    await page.screenshot({path: 'after_logout.png'});
+    await page.screenshot({path: 'after_login.png'});
     const accessTokenPath = '/Member.mvc/AccessTokenClient?oidToken=Member%3A20';
     await page.goto(`${env.V1_INSTANCE_URL}${accessTokenPath}`);
     try {
@@ -37,7 +53,7 @@ const fsPromises = require('fs/promises');
     }
     await page.type('input[name="client_name"]', 'Java SDK Test');
     await page.click('button[type="submit"]');
-    await page.waitForNetworkIdle({ timeout: 2000 });
+    await page.waitForNetworkIdle({ timeout: 15000 });
     await page.waitForSelector('input.access-token-value');
     const accessTokenInput = await page.$('input.access-token-value');
     const accessToken = await page.evaluate(accessTokenInput => accessTokenInput.value, accessTokenInput);
