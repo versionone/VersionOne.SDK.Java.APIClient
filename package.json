@@ -17,9 +17,12 @@
   },
   "homepage": "https://github.com/versionone/VersionOne.SDK.Java.APIClient#readme",
   "dependencies": {
-    "puppeteer": "^13.6.0"
+    "puppeteer": "^25.3.0"
   },
   "volta": {
-    "node": "16.14.2"
+    "node": "24.18.0"
+  },
+  "allowScripts": {
+    "puppeteer@25.3.0": true
   }
 }
