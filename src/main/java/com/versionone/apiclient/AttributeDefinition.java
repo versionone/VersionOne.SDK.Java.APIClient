@@ -118,7 +118,7 @@ class AttributeDefinition implements IAttributeDefinition {
                 return value;
             case Guid:
                 if (value == null || StringUtils.isEmpty(value.toString()))
-					throw new IllegalArgumentException("value");
+					throw new IllegalArgumentException("value must not be null.");
                 return UUID.fromString(new DB.Str(value).getValue());    
 			default:
 				throw new MetaException("Unsupported AttributeType ", getAttributeType().toString());

@@ -199,7 +199,7 @@ public class ServicesTests extends ServicesTesterBase {
 			subject.retrieve(query);
 		} catch (IllegalArgumentException ex) {
 			Assert.assertEquals(
-					"value",
+					"value must not be null.",
 					ex.getMessage());
 			return;
 		}

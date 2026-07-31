@@ -37,13 +37,13 @@ public class V1Configuration implements IV1Configuration {
      */
     public V1Configuration(IAPIConnector connector) {
     	if (connector == null)
-            throw new IllegalArgumentException("connector");
+            throw new IllegalArgumentException("connector must not be null.");
     	this._connector = connector;
     }
 
     public V1Configuration(V1Connector connector) {
     	if (connector == null)
-            throw new IllegalArgumentException("_v1connector");
+            throw new IllegalArgumentException("connector must not be null.");
 
         this._v1connector = connector;
     }

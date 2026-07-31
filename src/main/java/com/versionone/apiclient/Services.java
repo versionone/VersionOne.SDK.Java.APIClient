@@ -88,7 +88,7 @@ public class Services implements IServices {
 
 	public Services(V1Connector v1Connector) {
 		if (v1Connector == null)
-			throw new IllegalArgumentException("v1Connector");
+			throw new IllegalArgumentException("v1Connector must not be null.");
 
 		_v1Connector = v1Connector;
 		_meta = new MetaModel(_v1Connector);
@@ -96,9 +96,9 @@ public class Services implements IServices {
 
 	public Services(V1Connector connector, IMetaModel metaModel) {
 		if (connector == null)
-			throw new IllegalArgumentException("connector");
+			throw new IllegalArgumentException("connector must not be null.");
 		if (metaModel == null)
-			throw new IllegalArgumentException("metaModel");
+			throw new IllegalArgumentException("metaModel must not be null.");
 
 		_v1Connector = connector;
 		_meta = metaModel;
@@ -106,7 +106,7 @@ public class Services implements IServices {
 
 	public Services(V1Connector connector, boolean preLoadMeta) {
 		if (connector == null)
-			throw new IllegalArgumentException("connector");
+			throw new IllegalArgumentException("connector must not be null.");
 
 		_v1Connector = connector;
 		_meta = new MetaModel(connector, preLoadMeta);
@@ -575,7 +575,7 @@ public class Services implements IServices {
 		if (null != attribute) {
 			return getStringData("?" + attribute.getDisplayName());
 		} else {
-			throw new IllegalArgumentException("IAttributeDefinition");
+			throw new IllegalArgumentException("attribute must not be null.");
 		}
 	}
 
@@ -650,7 +650,7 @@ public class Services implements IServices {
 	@Override
 	public Oid saveAttachment(String filePath, Asset asset, String attachmentName) throws V1Exception, IOException {
 		if (StringUtils.isEmpty(filePath))
-			 throw new IllegalArgumentException("filePath");
+			 throw new IllegalArgumentException("filePath must not be null.");
 
 		File file = new File(filePath);
         if (!file.exists())
@@ -711,7 +711,7 @@ public class Services implements IServices {
 	@Override
 	public Oid saveEmbeddedImage(String filePath, Asset asset) throws V1Exception, IOException {
 		if (StringUtils.isEmpty(filePath))
-			throw new IllegalArgumentException("Null value " + filePath);
+			throw new IllegalArgumentException("filePath must not be null.");
 
 		File file = new File(filePath);
         if (!file.exists())
